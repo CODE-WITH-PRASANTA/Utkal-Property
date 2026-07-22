@@ -4,6 +4,8 @@ import Home from "./Pages/Home/Home";
 import PropertyGrid from "./Pages/PropertyGrid/PropertyGrid";
 
 
+import './App.css'
+import AboutUs from './Pages/AboutUs/AboutUs'
 
 function App() {
   return (
@@ -11,9 +13,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/grid" element={<PropertyGrid/>}/>
+        <Route path="/" element={<AboutUs/>} />
+
+
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
 export default App;
