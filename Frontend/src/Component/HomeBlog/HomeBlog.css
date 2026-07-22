@@ -1,0 +1,187 @@
+/* Main Outer Container */
+.HomeBlog {
+  width: 100%;
+  padding: 70px 20px;
+  background-color: #f9f9fb;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+.HomeBlog-container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.HomeBlog-header {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.HomeBlog-main-title {
+  font-size: 38px;
+  font-weight: 800;
+  color: #121026;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+}
+
+.HomeBlog-subtitle {
+  font-size: 14px;
+  color: #8c8c9a;
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* 3-Column Grid */
+.HomeBlog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* Card Styling */
+.HomeBlog-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Image Wrapper with Hover Zoom */
+.HomeBlog-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: #e4e4e7;
+}
+
+.HomeBlog-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+/* Image Hover Zoom Animation */
+.HomeBlog-img-wrapper:hover .HomeBlog-img {
+  transform: scale(1.06);
+}
+
+/* Overlay Badge at Bottom Center of Image */
+.HomeBlog-badge {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.HomeBlog-badge-date {
+  font-size: 13px;
+  font-weight: 700;
+  color: #121026;
+}
+
+.HomeBlog-badge-divider {
+  width: 1px;
+  height: 12px;
+  background-color: #e4e4e7;
+}
+
+.HomeBlog-badge-category {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f5a623;
+}
+
+.HomeBlog-folder-icon {
+  font-size: 14px;
+}
+
+/* Card Text Content */
+.HomeBlog-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 20px;
+  flex-grow: 1;
+}
+
+.HomeBlog-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #121026;
+  line-height: 1.4;
+  margin: 0 0 16px 0;
+  max-width: 310px;
+}
+
+/* Read More Link */
+.HomeBlog-read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f5a623;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  margin-top: auto;
+}
+
+.HomeBlog-read-more:hover {
+  opacity: 0.85;
+}
+
+.HomeBlog-read-more:hover .HomeBlog-arrow-icon {
+  transform: translateX(4px);
+}
+
+.HomeBlog-arrow-icon {
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 992px) {
+  .HomeBlog-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .HomeBlog {
+    padding: 40px 16px;
+  }
+
+  .HomeBlog-main-title {
+    font-size: 28px;
+  }
+
+  .HomeBlog-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .HomeBlog-img-wrapper {
+    height: 210px;
+  }
+}

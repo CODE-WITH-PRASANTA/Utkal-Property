@@ -1,0 +1,319 @@
+/* Component Container */
+.GridBreadcrum {
+  width: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.GridBreadcrum-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+/* Rent / Buy Tabs */
+.GridBreadcrum-tab-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.GridBreadcrum-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  background-color: #fff8eb;
+  color: #121026;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.GridBreadcrum-tab-btn.active {
+  background-color: #f5a623;
+  color: #ffffff;
+}
+
+.GridBreadcrum-check-icon {
+  font-size: 16px;
+}
+
+/* Main Search Filter Bar */
+.GridBreadcrum-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Keyword Box */
+.GridBreadcrum-input-box {
+  position: relative;
+  flex: 1.2;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+}
+
+.GridBreadcrum-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #8c8c9a;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.GridBreadcrum-input {
+  width: 100%;
+  padding: 12px 14px 12px 38px;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #121026;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+.GridBreadcrum-input::placeholder {
+  color: #121026;
+}
+
+/* Dropdown Boxes */
+.GridBreadcrum-select-box {
+  position: relative;
+  flex: 1;
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+}
+
+.GridBreadcrum-select {
+  width: 100%;
+  padding: 12px 32px 12px 14px;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #121026;
+  outline: none;
+  background-color: #ffffff;
+  appearance: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.GridBreadcrum-select-icon {
+  position: absolute;
+  right: 12px;
+  color: #8c8c9a;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* Filters Button */
+.GridBreadcrum-filters-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background-color: #fff8eb;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #121026;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.GridBreadcrum-filters-toggle-btn:hover,
+.GridBreadcrum-filters-toggle-btn.active {
+  background-color: #ffecc8;
+}
+
+.GridBreadcrum-sliders-icon {
+  font-size: 15px;
+}
+
+/* Search Now Button */
+.GridBreadcrum-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 8px;
+  background-color: #fff8eb;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #121026;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.GridBreadcrum-search-btn:hover {
+  background-color: #f5a623;
+  color: #ffffff;
+}
+
+.GridBreadcrum-btn-search-icon {
+  font-size: 15px;
+}
+
+/* Extended Filter Panel (2nd Reference Image) */
+.GridBreadcrum-extended-panel {
+  background-color: #ffffff;
+  border: 1px solid #f0f0f3;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.GridBreadcrum-extended-header-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.GridBreadcrum-extended-select-box {
+  position: relative;
+  width: 220px;
+}
+
+.GridBreadcrum-filter-range-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #121026;
+}
+
+.GridBreadcrum-divider {
+  height: 1px;
+  background-color: #ededf2;
+  margin: 20px 0;
+}
+
+/* Checkboxes Grid Layout */
+.GridBreadcrum-checkboxes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px 24px;
+}
+
+.GridBreadcrum-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #121026;
+  cursor: pointer;
+  user-select: none;
+}
+
+.GridBreadcrum-checkbox-label input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: #f5a623;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Hero House Banner Section */
+.GridBreadcrum-hero-banner {
+  width: 100%;
+  height: 480px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  margin-top: 10px;
+}
+
+.GridBreadcrum-hero-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 24px;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+.GridBreadcrum-hero-title {
+  font-size: 42px;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.GridBreadcrum-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.GridBreadcrum-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.GridBreadcrum-meta-icon {
+  font-size: 18px;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  .GridBreadcrum-checkboxes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .GridBreadcrum-search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .GridBreadcrum-checkboxes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .GridBreadcrum-extended-select-box {
+    width: 100%;
+  }
+
+  .GridBreadcrum-hero-title {
+    font-size: 30px;
+  }
+
+  .GridBreadcrum-hero-banner {
+    height: 380px;
+  }
+}
+
+@media (max-width: 480px) {
+  .GridBreadcrum-checkboxes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .GridBreadcrum-hero-title {
+    font-size: 24px;
+  }
+
+  .GridBreadcrum-hero-meta {
+    gap: 12px;
+    font-size: 12px;
+  }
+}
