@@ -1,0 +1,130 @@
+.TrustedBrands-section {
+  width: 100%;
+  padding: 70px 24px;
+  background-color: #ffffff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+}
+
+.TrustedBrands-container {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.TrustedBrands-header-wrapper {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.TrustedBrands-heading {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.TrustedBrands-highlight {
+  color: #f9a01b;
+  position: relative;
+}
+
+.TrustedBrands-divider {
+  width: 50px;
+  height: 4px;
+  background-color: #f9a01b;
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.TrustedBrands-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.TrustedBrands-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.TrustedBrands-logo-box {
+  width: 100%;
+  height: 70px;
+  background: #fdfaf4;
+  border: 1px solid rgba(249, 160, 27, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.TrustedBrands-img {
+  max-width: 120px;
+  height: auto;
+  max-height: 44px;
+  object-fit: contain;
+  opacity: 0.55;
+  filter: grayscale(100%);
+  transition: all 0.35s ease;
+}
+
+.TrustedBrands-logo-box:hover {
+  background: #ffffff;
+  border-color: rgba(249, 160, 27, 0.35);
+  box-shadow: 0 10px 25px rgba(249, 160, 27, 0.08);
+  transform: translateY(-3px);
+}
+
+.TrustedBrands-logo-box:hover .TrustedBrands-img {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: scale(1.04);
+}
+
+/* iPad Pro (1024px width) & Facebook In-App Browser on Android */
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .TrustedBrands-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .TrustedBrands-section {
+    padding: 45px 20px;
+  }
+
+  .TrustedBrands-header-wrapper {
+    margin-bottom: 36px;
+  }
+
+  .TrustedBrands-heading {
+    font-size: 1.5rem;
+  }
+
+  .TrustedBrands-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .TrustedBrands-logo-box {
+    height: 64px;
+  }
+
+  .TrustedBrands-img {
+    max-width: 105px;
+    max-height: 38px;
+    filter: grayscale(0%);
+    opacity: 0.8;
+  }
+}
