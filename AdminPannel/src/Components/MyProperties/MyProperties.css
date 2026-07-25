@@ -1,0 +1,379 @@
+/* Container Box */
+.MyProperties {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.MyProperties-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #0f172a;
+}
+
+/* Base Card Style */
+.MyProperties-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+}
+
+.MyProperties-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+/* Upload Section */
+.MyProperties-upload-box {
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 32px 16px;
+  text-align: center;
+  background-color: #f8fafc;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.MyProperties-upload-box:hover {
+  border-color: #2563eb;
+  background-color: #f0f6ff;
+}
+
+.MyProperties-upload-icon {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.MyProperties-btn-select-photos {
+  display: inline-block;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.MyProperties-btn-select-photos:hover {
+  text-decoration: underline;
+}
+
+.MyProperties-upload-subtext {
+  display: inline;
+  color: #64748b;
+  font-size: 15px;
+  margin-left: 4px;
+}
+
+.MyProperties-upload-limit {
+  display: block;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 6px;
+}
+
+/* Image Thumbnails */
+.MyProperties-photos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.MyProperties-photo-item {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.MyProperties-photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.MyProperties-btn-delete-photo {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(15, 23, 42, 0.7);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.MyProperties-btn-delete-photo:hover {
+  background: #ef4444;
+}
+
+/* Form Layout Grids */
+.MyProperties-field-group {
+  margin-bottom: 20px;
+}
+
+.MyProperties-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.MyProperties-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.MyProperties-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.MyProperties-input,
+.MyProperties-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #0f172a;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.MyProperties-input:focus,
+.MyProperties-select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.MyProperties-input::placeholder {
+  color: #94a3b8;
+}
+
+/* Duration Counter */
+.MyProperties-duration-counter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 12px;
+  background-color: #ffffff;
+  height: 42px;
+  box-sizing: border-box;
+}
+
+.MyProperties-duration-sublabel {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.MyProperties-counter-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.MyProperties-counter-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.MyProperties-counter-btn:hover {
+  color: #1d4ed8;
+}
+
+.MyProperties-counter-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Label Toggle (Rent / Buy) */
+.MyProperties-label-toggle-group {
+  display: flex;
+  gap: 8px;
+}
+
+.MyProperties-btn-rent,
+.MyProperties-btn-buy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.MyProperties-btn-rent.active {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.MyProperties-btn-buy.active {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.MyProperties-rent-check-icon {
+  margin-right: 6px;
+  display: flex;
+  align-items: center;
+}
+
+/* Amenities Grid */
+.MyProperties-amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.MyProperties-amenities-subtitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.MyProperties-checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.MyProperties-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.MyProperties-custom-checkbox {
+  height: 18px;
+  width: 18px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  margin-right: 10px;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.MyProperties-checkbox-label:hover .MyProperties-custom-checkbox {
+  border-color: #2563eb;
+}
+
+.MyProperties-checkbox-input:checked ~ .MyProperties-custom-checkbox {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.MyProperties-checkbox-input:checked ~ .MyProperties-custom-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.MyProperties-checkbox-text {
+  font-size: 14px;
+  color: #334155;
+}
+
+/* Action Bar */
+.MyProperties-action-bar {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+.MyProperties-btn-list-now {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.MyProperties-btn-list-now:hover {
+  background-color: #1d4ed8;
+}
+
+.MyProperties-btn-save-preview {
+  background-color: #ffffff;
+  color: #0f172a;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.MyProperties-btn-save-preview:hover {
+  background-color: #f1f5f9;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .MyProperties-grid-2,
+  .MyProperties-grid-3,
+  .MyProperties-amenities-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,209 @@
+.dashboardReview{
+    width:100%;
+    padding:28px;
+    background:#f6f8fc;
+    box-sizing:border-box;
+}
+
+.dashboardReviewTitle{
+    font-size:30px;
+    font-weight:700;
+    color:#08142d;
+    margin-bottom:20px;
+    text-transform:capitalize;
+}
+
+.dashboardReviewWrapper{
+    width:100%;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(15,23,42,.06);
+    overflow:hidden;
+}
+
+.dashboardReviewCard{
+    padding:22px 36px;
+    border-bottom:1px solid #edf2f7;
+    transition:.3s;
+}
+
+.dashboardReviewCard:last-child{
+    border-bottom:none;
+}
+
+.dashboardReviewCard:hover{
+    background:#fbfdff;
+}
+
+.dashboardReviewHeader{
+    display:flex;
+    align-items:flex-start;
+}
+
+.dashboardReviewImage{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+    flex-shrink:0;
+    margin-right:16px;
+}
+
+.dashboardReviewContent{
+    flex:1;
+}
+
+.dashboardReviewTop{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:8px;
+}
+
+.dashboardReviewTop h4{
+    margin:0;
+    font-size:16px;
+    font-weight:700;
+    color:#08142d;
+}
+
+.dashboardReviewTop span{
+    font-size:13px;
+    color:#8b93a6;
+}
+
+.dashboardReviewContent p{
+    margin:0;
+    font-size:15px;
+    line-height:1.8;
+    color:#2d3748;
+    text-align:left;
+    word-break:break-word;
+}
+
+.dashboardReviewStar{
+    margin-top:12px;
+    color:#ffb400;
+    font-size:18px;
+    letter-spacing:1px;
+}
+
+
+
+
+
+
+/* Laptop */
+
+@media(max-width:1200px){
+
+.dashboardReviewCard{
+    padding:20px 28px;
+}
+
+}
+
+
+
+
+
+/* Tablet */
+
+@media(max-width:768px){
+
+.dashboardReview{
+    padding:18px;
+}
+
+.dashboardReviewTitle{
+    font-size:28px;
+}
+
+.dashboardReviewCard{
+    padding:18px;
+}
+
+.dashboardReviewImage{
+    width:40px;
+    height:40px;
+    margin-right:14px;
+}
+
+.dashboardReviewTop{
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.dashboardReviewTop h4{
+    font-size:15px;
+}
+
+.dashboardReviewTop span{
+    font-size:12px;
+}
+
+.dashboardReviewContent p{
+    font-size:14px;
+    line-height:1.7;
+}
+
+.dashboardReviewStar{
+    font-size:17px;
+}
+
+}
+
+
+
+
+
+/* Mobile */
+
+@media(max-width:480px){
+
+.dashboardReview{
+    padding:14px;
+}
+
+.dashboardReviewTitle{
+    font-size:24px;
+}
+
+.dashboardReviewCard{
+    padding:16px;
+}
+
+.dashboardReviewHeader{
+    align-items:flex-start;
+}
+
+.dashboardReviewImage{
+    width:36px;
+    height:36px;
+    margin-right:12px;
+}
+
+.dashboardReviewTop{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:3px;
+}
+
+.dashboardReviewTop h4{
+    font-size:15px;
+}
+
+.dashboardReviewTop span{
+    font-size:12px;
+}
+
+.dashboardReviewContent p{
+    font-size:13px;
+    line-height:1.6;
+}
+
+.dashboardReviewStar{
+    font-size:16px;
+}
+
+}
