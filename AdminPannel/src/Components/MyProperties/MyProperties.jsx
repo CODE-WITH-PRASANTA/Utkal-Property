@@ -82,50 +82,52 @@ const MyProperties = () => {
       <h1 className="MyProperties-title">Add properties</h1>
 
       {/* Upload Photo Section */}
-      <div className="MyProperties-card">
-        <h2 className="MyProperties-card-title">Upload photo</h2>
-        <div className="MyProperties-upload-box">
-          <div className="MyProperties-upload-icon">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-          </div>
-          <label className="MyProperties-btn-select-photos">
-            Select photos
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handlePhotoUpload}
-              hidden
-            />
-          </label>
-          <p className="MyProperties-upload-subtext">or drag photos here</p>
-          <span className="MyProperties-upload-limit">(Up to 10 photos)</span>
-        </div>
+     <div className="MyProperties-card">
+  <h2 className="MyProperties-card-title">Upload photo</h2>
+  <div className="MyProperties-upload-box">
+    <div className="MyProperties-upload-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#201cff" strokeWidth="2">
+        <rect x="3" y="3" width="18" height="18" rx="3" ry="3" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <polyline points="21 15 16 10 5 21" />
+      </svg>
+    </div>
+    
+    <label className="MyProperties-btn-select-photos">
+      Select photos
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        onChange={handlePhotoUpload}
+        hidden
+      />
+    </label>
 
-        {/* Thumbnail Preview Grid */}
-        <div className="MyProperties-photos-grid">
-          {photos.map((src, index) => (
-            <div key={index} className="MyProperties-photo-item">
-              <img src={src} alt={`Property preview ${index + 1}`} />
-              <button
-                type="button"
-                className="MyProperties-btn-delete-photo"
-                onClick={() => handleRemovePhoto(index)}
-                title="Delete photo"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polyline points="3 6 5 6 21 6" />
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                </svg>
-              </button>
-            </div>
-          ))}
-        </div>
+    <p className="MyProperties-upload-subtext">or drag photos here</p>
+    <span className="MyProperties-upload-limit">(Up to 10 photos)</span>
+  </div>
+
+  {/* Thumbnail Preview Grid */}
+  <div className="MyProperties-photos-grid">
+    {photos.map((src, index) => (
+      <div key={index} className="MyProperties-photo-item">
+        <img src={src} alt={`Property preview ${index + 1}`} />
+        <button
+          type="button"
+          className="MyProperties-btn-delete-photo"
+          onClick={() => handleRemovePhoto(index)}
+          title="Delete photo"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          </svg>
+        </button>
       </div>
+    ))}
+  </div>
+</div>
 
       {/* Information Section */}
       <div className="MyProperties-card">
@@ -251,29 +253,36 @@ const MyProperties = () => {
             </select>
           </div>
 
-          <div className="MyProperties-field-group">
-            <label className="MyProperties-label">Minimum rental time *</label>
-            <div className="MyProperties-duration-counter-row">
-              <span className="MyProperties-duration-sublabel">Minimum duration (in months)</span>
-              <div className="MyProperties-counter-box">
-                <button
-                  type="button"
-                  className="MyProperties-counter-btn"
-                  onClick={handleMonthIncrement}
-                >
-                  +
-                </button>
-                <span className="MyProperties-counter-value">{rentalMonths}</span>
-                <button
-                  type="button"
-                  className="MyProperties-counter-btn"
-                  onClick={handleMonthDecrement}
-                >
-                  −
-                </button>
-              </div>
-            </div>
-          </div>
+         <div className="MyProperties-field-group">
+  <label className="MyProperties-label">Minimum rental time *</label>
+  <div className="MyProperties-duration-counter-row">
+    <span className="MyProperties-duration-sublabel">Minimum duration (in months)</span>
+    <div className="MyProperties-counter-box">
+      {/* Minus Button on Left */}
+      <button
+        type="button"
+        className="MyProperties-counter-btn"
+        onClick={handleMonthDecrement}
+        aria-label="Decrease rental months"
+      >
+        −
+      </button>
+
+      {/* Value in Center */}
+      <span className="MyProperties-counter-value">{rentalMonths}</span>
+
+      {/* Plus Button on Right */}
+      <button
+        type="button"
+        className="MyProperties-counter-btn"
+        onClick={handleMonthIncrement}
+        aria-label="Increase rental months"
+      >
+        +
+      </button>
+    </div>
+  </div>
+</div>
         </div>
       </div>
 
@@ -310,29 +319,41 @@ const MyProperties = () => {
           </div>
 
           <div className="MyProperties-field-group">
-            <label className="MyProperties-label">Label</label>
-            <div className="MyProperties-label-toggle-group">
-              <button
-                type="button"
-                className={`MyProperties-btn-rent ${listingLabel === 'Rent' ? 'active' : ''}`}
-                onClick={() => setListingLabel('Rent')}
-              >
-                <span className="MyProperties-rent-check-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
-                Rent
-              </button>
-              <button
-                type="button"
-                className={`MyProperties-btn-buy ${listingLabel === 'Buy' ? 'active' : ''}`}
-                onClick={() => setListingLabel('Buy')}
-              >
-                Buy
-              </button>
-            </div>
-          </div>
+  <label className="MyProperties-label">Label</label>
+  <div className="MyProperties-label-toggle-group">
+    {/* Rent Button */}
+    <button
+      type="button"
+      className={`MyProperties-toggle-btn ${listingLabel === 'Rent' ? 'active' : ''}`}
+      onClick={() => setListingLabel('Rent')}
+    >
+      {listingLabel === 'Rent' && (
+        <span className="MyProperties-check-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </span>
+      )}
+      Rent
+    </button>
+
+    {/* Buy Button */}
+    <button
+      type="button"
+      className={`MyProperties-toggle-btn ${listingLabel === 'Buy' ? 'active' : ''}`}
+      onClick={() => setListingLabel('Buy')}
+    >
+      {listingLabel === 'Buy' && (
+        <span className="MyProperties-check-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </span>
+      )}
+      Buy
+    </button>
+  </div>
+</div>
         </div>
 
         <div className="MyProperties-grid-3">
