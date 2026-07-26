@@ -6,10 +6,13 @@ import PropertyGrid from "./Pages/PropertyGrid/PropertyGrid";
 
 import './App.css'
 import AboutUs from './Pages/AboutUs/AboutUs'
+import Navbar from "./Component/Navbar/Navbar";
+import Footer from "./Component/Footer/Footer";
 
 function App() {
   return (
     <BrowserRouter>
+    <Navbar />
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/grid" element={<PropertyGrid/>}/>
@@ -17,6 +20,7 @@ function App() {
 
 
       </Routes>
+      <Footer />
     </BrowserRouter>
   )
 }
