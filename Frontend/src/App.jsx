@@ -8,6 +8,7 @@ import './App.css'
 import AboutUs from './Pages/AboutUs/AboutUs'
 import Navbar from "./Component/Navbar/Navbar";
 import Footer from "./Component/Footer/Footer";
+import Faq from "./Pages/Faq/Faq";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/grid" element={<PropertyGrid/>}/>
         <Route path="/about" element={<AboutUs/>} />
+        <Route path="/Faq" element={<Faq/>} />
 
 
       </Routes>

@@ -1,0 +1,178 @@
+/* Wrapper with soft gradient background */
+.AboutFindDreamHome-wrapper {
+  width: 100%;
+  background: linear-gradient(135deg, #fdf5ea 0%, #ffffff 40%, #ffffff 70%, #fdf5ea 100%);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* Flexbox Container */
+.AboutFindDreamHome-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 500px;
+  position: relative;
+}
+
+/* =========================================
+   LEFT SIDE: TEXT CONTENT
+   ========================================= */
+.AboutFindDreamHome-content {
+  flex: 1;
+  max-width: 600px;
+  padding: 60px 0;
+  z-index: 2;
+}
+
+.AboutFindDreamHome-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #171624;
+  line-height: 1.15;
+  margin: 0 0 24px 0;
+  letter-spacing: -0.02em;
+}
+
+.AboutFindDreamHome-subtitle {
+  font-size: 1rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0 0 36px 0;
+  max-width: 500px;
+}
+
+/* Bouncy hover button */
+.AboutFindDreamHome-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #fca311;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 6px rgba(252, 163, 17, 0.2);
+}
+
+.AboutFindDreamHome-button-icon {
+  font-size: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.AboutFindDreamHome-button:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(252, 163, 17, 0.3);
+  background-color: #ffaa22;
+}
+
+/* Ringing animation on phone icon when button is hovered */
+@keyframes ringPhone {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg) scale(1.1); }
+  50% { transform: rotate(20deg) scale(1.1); }
+  75% { transform: rotate(-10deg) scale(1.1); }
+}
+
+.AboutFindDreamHome-button:hover .AboutFindDreamHome-button-icon {
+  animation: ringPhone 0.5s ease-in-out infinite;
+}
+
+/* =========================================
+   RIGHT SIDE: IMAGE & PATTERN
+   ========================================= */
+.AboutFindDreamHome-visuals {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 100%;
+  min-height: 500px;
+}
+
+.AboutFindDreamHome-image {
+  position: relative;
+  z-index: 2;
+  max-width: 100%;
+  height: 100%;
+  max-height: 600px;
+  object-fit: contain;
+  align-self: flex-end;
+}
+
+/* Yellow isometric pattern SVG wrapper */
+.AboutFindDreamHome-pattern {
+  position: absolute;
+  top: 10%;
+  right: -5%;
+  width: 400px;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* iPad Pro (1024px to 1366px width) */
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .AboutFindDreamHome-container {
+    max-width: 960px;
+  }
+  .AboutFindDreamHome-title {
+    font-size: 2.8rem;
+  }
+  .AboutFindDreamHome-image {
+    max-height: 500px;
+  }
+}
+
+/* Facebook In-App Browser on Android & Standard Mobile Devices */
+@media screen and (max-width: 900px) {
+  .AboutFindDreamHome-container {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 40px;
+  }
+  
+  .AboutFindDreamHome-content {
+    padding: 20px 0;
+    max-width: 100%;
+  }
+
+  .AboutFindDreamHome-subtitle {
+    margin: 0 auto 30px auto;
+  }
+
+  .AboutFindDreamHome-visuals {
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+    min-height: 400px;
+  }
+  
+  .AboutFindDreamHome-pattern {
+    right: 50%;
+    transform: translateX(50%);
+    width: 100%;
+  }
+}
+
+/* Hide seller image on Facebook Android In-App Browser / Smaller Mobile Screens */
+@media screen and (max-width: 600px) {
+  .AboutFindDreamHome-title {
+    font-size: 2.2rem;
+  }
+
+  .AboutFindDreamHome-visuals {
+    display: none;
+  }
+}

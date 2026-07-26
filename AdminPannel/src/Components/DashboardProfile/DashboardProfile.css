@@ -1,0 +1,250 @@
+/* Color Palette Variables */
+:root {
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --primary-blue: #0066ff;
+  --primary-blue-hover: #0052cc;
+  --text-dark: #1e293b;
+  --text-muted: #1b1c1d;
+  --border-light: #e2e8f0;
+  --focus-ring: rgba(0, 102, 255, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-page);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-dark);
+  margin: 0;
+  padding: 0;
+}
+
+/* Container */
+.DashboardProfile {
+  max-width: 1080px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.DashboardProfile-main-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+}
+
+/* Card Sections */
+.DashboardProfile-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--border-light);
+}
+
+.DashboardProfile-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Avatar Layout */
+.DashboardProfile-avatar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.DashboardProfile-avatar-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-light);
+}
+
+.DashboardProfile-avatar-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.DashboardProfile-avatar-label {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.DashboardProfile-file-input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: fit-content;
+  background-color: #f8fafc;
+}
+
+.DashboardProfile-file-name {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--text-dark);
+  background: transparent;
+}
+
+.DashboardProfile-subtext {
+  font-size: 12px;
+  color: #242525;
+}
+
+/* Standard Inputs & Form Controls */
+.DashboardProfile-field-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.DashboardProfile-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.DashboardProfile-input,
+.DashboardProfile-select {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  font-size: 14px;
+  color: var(--text-dark);
+  background-color: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Reference-Matching Textarea Style */
+.DashboardProfile-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  background-color: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  outline: none;
+  resize: vertical; /* Allows resizing while preserving maximum length flexibility */
+  transition: all 0.2s ease-in-out;
+  line-height: 1.5;
+}
+
+.DashboardProfile-input:focus,
+.DashboardProfile-select:focus,
+.DashboardProfile-textarea:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Form Layout Grids */
+.DashboardProfile-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+/* Location & Map Section */
+.DashboardProfile-map-container {
+  margin-top: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+
+/* Buttons */
+.DashboardProfile-btn-blue {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.DashboardProfile-btn-blue:hover {
+  background-color: var(--primary-blue-hover);
+}
+
+.DashboardProfile-action-row {
+  margin-top: 28px;
+}
+
+.DashboardProfile-btn-save {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  border: none;
+  padding: 12px 32px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.DashboardProfile-btn-save:hover {
+  background-color: var(--primary-blue-hover);
+}
+
+.DashboardProfile-btn-save:active {
+  transform: scale(0.99);
+}
+
+/* Responsiveness */
+@media (max-width: 992px) {
+  .DashboardProfile-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .DashboardProfile {
+    padding: 0 12px;
+    margin: 20px auto;
+  }
+
+  .DashboardProfile-card {
+    padding: 20px 16px;
+  }
+
+  .DashboardProfile-grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .DashboardProfile-avatar-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .DashboardProfile-file-input-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .DashboardProfile-btn-save {
+    width: 100%;
+  }
+}

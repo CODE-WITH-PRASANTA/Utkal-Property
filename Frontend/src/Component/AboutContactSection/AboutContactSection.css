@@ -1,0 +1,245 @@
+/* Base Container */
+.AboutContactSection-wrapper {
+  width: 100%;
+  background-color: #f9fafb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+  position: relative;
+  padding-bottom: 60px;
+}
+
+/* Orange Top Hero Area */
+.AboutContactSection-hero {
+  background: linear-gradient(180deg, #ffb834 0%, #f9a01b 100%);
+  color: #ffffff;
+  padding: 60px 24px 140px 24px;
+  text-align: center;
+}
+
+.AboutContactSection-hero-content {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.AboutContactSection-main-heading {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.01em;
+}
+
+.AboutContactSection-sub-heading {
+  font-size: 0.925rem;
+  opacity: 0.9;
+  max-width: 680px;
+  margin: 0 auto 48px auto;
+  line-height: 1.5;
+}
+
+/* Contact Info Row */
+.AboutContactSection-info-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 48px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.AboutContactSection-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-align: left;
+  flex: 1;
+}
+
+.AboutContactSection-info-icon {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  opacity: 0.95;
+}
+
+.AboutContactSection-info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.AboutContactSection-info-label {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.AboutContactSection-info-value {
+  font-size: 0.925rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.AboutContactSection-info-value.phone-highlight {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* Floating White Form Card */
+.AboutContactSection-card-container {
+  max-width: 1040px;
+  margin: -90px auto 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 10;
+}
+
+.AboutContactSection-form {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+/* Form Fields */
+.AboutContactSection-form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.AboutContactSection-field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.AboutContactSection-field-group.full-width {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.AboutContactSection-label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.AboutContactSection-input,
+.AboutContactSection-select,
+.AboutContactSection-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  color: #111827;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.AboutContactSection-input::placeholder,
+.AboutContactSection-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.AboutContactSection-input:focus,
+.AboutContactSection-select:focus,
+.AboutContactSection-textarea:focus {
+  border-color: #f9a01b;
+  box-shadow: 0 0 0 3px rgba(249, 160, 27, 0.15);
+}
+
+.AboutContactSection-select-wrapper {
+  position: relative;
+}
+
+.AboutContactSection-select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%206b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+}
+
+.AboutContactSection-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Submit Button */
+.AboutContactSection-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: #f9a01b;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.AboutContactSection-submit-btn:hover {
+  background-color: #e58f0e;
+}
+
+.AboutContactSection-submit-btn:active {
+  transform: scale(0.98);
+}
+
+.AboutContactSection-btn-icon {
+  font-size: 1.1rem;
+}
+
+/* iPad Pro (1024px to 1366px width) */
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .AboutContactSection-hero-content,
+  .AboutContactSection-card-container {
+    max-width: 960px;
+  }
+}
+
+/* Facebook In-App Browser on Android & Standard Mobile Devices */
+@media screen and (max-width: 900px) {
+  .AboutContactSection-info-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .AboutContactSection-info-item {
+    justify-content: center;
+  }
+
+  .AboutContactSection-form-row {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .AboutContactSection-hero {
+    padding: 40px 16px 120px 16px;
+  }
+
+  .AboutContactSection-main-heading {
+    font-size: 1.85rem;
+  }
+
+  .AboutContactSection-form {
+    padding: 24px 18px;
+  }
+}
