@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.css'
 import AboutUs from './Pages/AboutUs/AboutUs'
@@ -10,7 +11,7 @@ function App() {
  <BrowserRouter>
       <Routes>
         
-      <Route path="/" element={<AboutUs/>} />
+      <Route path="/abot" element={<AboutUs/>} />
 
 
       </Routes>
