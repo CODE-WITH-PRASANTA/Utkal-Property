@@ -1,0 +1,145 @@
+/* Outer Section Wrapper */
+.GridContact {
+  width: 100%;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Main Banner Card */
+.GridContact-container {
+  width: 100%;
+  max-width: 1200px;
+  background-color: #FFF9EE; /* Light warm cream background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+/* Left Content Column */
+.GridContact-content {
+  max-width: 540px;
+  padding: 60px 0;
+  z-index: 2;
+}
+
+/* Title Heading */
+.GridContact-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: #121026;
+  line-height: 1.25;
+  margin: 0 0 18px 0;
+  letter-spacing: -0.5px;
+}
+
+/* Subtitle Description Text */
+.GridContact-description {
+  font-size: 14px;
+  color: #4a4a52;
+  line-height: 1.6;
+  margin: 0 0 32px 0;
+  font-weight: 400;
+}
+
+/* Primary Action Button */
+.GridContact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #ffa827; /* Warm golden-orange button */
+  color: #ffffff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(255, 168, 39, 0.3);
+}
+
+.GridContact-btn:hover {
+  background-color: #f09713;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 168, 39, 0.4);
+}
+
+.GridContact-btn-icon {
+  font-size: 18px;
+}
+
+/* Right Image Column */
+.GridContact-image-wrapper {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  z-index: 2;
+  margin-right: -20px;
+}
+
+.GridContact-person-img {
+  max-height: 400px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 992px) {
+  .GridContact-container {
+    padding: 0 40px;
+  }
+
+  .GridContact-title {
+    font-size: 28px;
+  }
+
+  .GridContact-person-img {
+    max-height: 330px;
+  }
+}
+
+@media (max-width: 768px) {
+  .GridContact-container {
+    flex-direction: column;
+    padding: 40px 24px 0 24px;
+    text-align: center;
+  }
+
+  .GridContact-content {
+    max-width: 100%;
+    padding: 0 0 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .GridContact-title {
+    font-size: 24px;
+  }
+
+  .GridContact-description {
+    font-size: 13.5px;
+  }
+
+  .GridContact-image-wrapper {
+    margin-right: 0;
+  }
+
+  .GridContact-person-img {
+    max-height: 280px;
+  }
+}

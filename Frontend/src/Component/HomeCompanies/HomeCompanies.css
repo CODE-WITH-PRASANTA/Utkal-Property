@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+.HomeCompanies {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 50px 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  box-sizing: border-box;
+}
+
+.HomeCompanies-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+/* Heading style */
+.HomeCompanies-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  text-align: left;
+  letter-spacing: -0.2px;
+}
+
+/* Logos Horizontal Layout */
+.HomeCompanies-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* Individual Card Styling */
+.HomeCompanies-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0.45;
+  filter: grayscale(100%);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.HomeCompanies-card:hover {
+  opacity: 0.85;
+  filter: grayscale(0%);
+}
+
+/* Icon Styles */
+.HomeCompanies-logoIcon {
+  font-size: 38px;
+  color: #4b5563;
+}
+
+/* Text Group for Logos */
+.HomeCompanies-textGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.HomeCompanies-companyTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #374151;
+  line-height: 1.1;
+  letter-spacing: 0.5px;
+}
+
+.HomeCompanies-companySubtitle {
+  font-size: 8px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: lowercase;
+  margin-top: 2px;
+  letter-spacing: 0.2px;
+}
+
+/* Responsive Layout */
+@media (max-width: 1024px) {
+  .HomeCompanies-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .HomeCompanies {
+    padding: 35px 16px;
+  }
+
+  .HomeCompanies-title {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .HomeCompanies-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 16px;
+  }
+
+  .HomeCompanies-logoIcon {
+    font-size: 32px;
+  }
+
+  .HomeCompanies-companyTitle {
+    font-size: 13px;
+  }
+
+  .HomeCompanies-companySubtitle {
+    font-size: 7.5px;
+  }
+}

@@ -1,0 +1,191 @@
+/* Layout Container */
+.HomeMeetagents {
+  width: 100%;
+  padding: 60px 20px;
+  background-color: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+.HomeMeetagents-container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.HomeMeetagents-header {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.HomeMeetagents-main-heading {
+  font-size: 38px;
+  font-weight: 800;
+  color: #121026;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.5px;
+}
+
+.HomeMeetagents-subheading {
+  font-size: 14px;
+  color: #71717a;
+  margin: 0;
+}
+
+/* 3-Card Grid */
+.HomeMeetagents-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.HomeMeetagents-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Image Container */
+.HomeMeetagents-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f4f4f5;
+}
+
+.HomeMeetagents-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Orange Vertical Sidebar - Sliding Hover Overlay */
+.HomeMeetagents-social-sidebar {
+  position: absolute;
+  top: 0;
+  right: -60px; /* Hidden off to the right by default */
+  width: 60px;
+  height: 100%;
+  background-color: #f5a623; /* Bright Orange matching 2nd reference image */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 5;
+}
+
+/* Slide in orange bar on hover */
+.HomeMeetagents-img-wrapper:hover .HomeMeetagents-social-sidebar {
+  right: 0;
+}
+
+.HomeMeetagents-social-icon {
+  color: #ffffff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.HomeMeetagents-social-icon:hover {
+  transform: scale(1.2);
+}
+
+/* Card Info Footer */
+.HomeMeetagents-card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+}
+
+.HomeMeetagents-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.HomeMeetagents-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #121026;
+  margin: 0 0 4px 0;
+}
+
+.HomeMeetagents-role {
+  font-size: 13px;
+  color: #71717a;
+  margin: 0;
+}
+
+/* Phone & Email Action Buttons */
+.HomeMeetagents-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.HomeMeetagents-action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #e4e4e7;
+  background-color: #ffffff;
+  color: #71717a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Yellow/Orange highlight on hover/click */
+.HomeMeetagents-action-btn:hover,
+.HomeMeetagents-action-btn:active {
+  background-color: #f5a623;
+  border-color: #f5a623;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.35);
+}
+
+/* Bottom Callout Text */
+.HomeMeetagents-footer-text {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 13px;
+  color: #71717a;
+}
+
+.HomeMeetagents-contact-link {
+  color: #f5a623;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.HomeMeetagents-contact-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsiveness */
+@media (max-width: 992px) {
+  .HomeMeetagents-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .HomeMeetagents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .HomeMeetagents-main-heading {
+    font-size: 28px;
+  }
+}

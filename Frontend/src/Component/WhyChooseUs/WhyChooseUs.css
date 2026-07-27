@@ -1,0 +1,262 @@
+.WhyChooseUs-section {
+  width: 100%;
+  padding: 80px 24px;
+  background-color: #ffffff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+}
+
+.WhyChooseUs-container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+/* Header */
+.WhyChooseUs-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 56px auto;
+}
+
+.WhyChooseUs-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px 0;
+  line-height: 1.1;
+}
+
+.WhyChooseUs-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Grid Layout */
+.WhyChooseUs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  position: relative;
+}
+
+.WhyChooseUs-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 28px;
+  position: relative;
+}
+
+/* Vertical dividers */
+.WhyChooseUs-card:not(:last-child) {
+  border-right: 1px solid #f0f0f0;
+}
+
+/* Icon Box Container */
+.WhyChooseUs-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.WhyChooseUs-svg-icon {
+  width: 80px;
+  height: 80px;
+  overflow: visible;
+}
+
+/* ==========================================================================
+   ANIMATIONS & HOVER EFFECTS
+   ========================================================================== */
+
+/* 1. Posts / Document Icon Animation */
+.clock-hand {
+  transform-origin: 50px 48px;
+  transition: transform 0.5s ease;
+}
+
+.clock-badge {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: 50px 48px;
+}
+
+.WhyChooseUs-card:hover .clock-hand {
+  transform: rotate(360deg);
+}
+
+.WhyChooseUs-card:hover .clock-badge {
+  transform: scale(1.15);
+}
+
+.WhyChooseUs-card:hover .doc-body {
+  animation: docFloat 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes docFloat {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+/* 2. Smart Filter Icon Animation */
+.filter-paper {
+  transition: transform 0.4s ease;
+  transform-origin: 40px 15px;
+}
+
+.arrow-left, .arrow-right {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.WhyChooseUs-card:hover .filter-paper {
+  transform: translateY(-5px);
+}
+
+.WhyChooseUs-card:hover .arrow-left,
+.WhyChooseUs-card:hover .arrow-right {
+  animation: arrowPulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes arrowPulse {
+  0% {
+    transform: translateY(-2px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(3px);
+    opacity: 1;
+  }
+}
+
+/* 3. Great Support Orbit Animation */
+.orbit-ring {
+  transform-origin: 40px 40px;
+  transition: transform 0.6s ease;
+}
+
+.support-box {
+  transform-origin: 40px 40px;
+  transition: transform 0.3s ease;
+}
+
+.WhyChooseUs-card:hover .orbit-ring {
+  animation: orbitSpin 3s linear infinite;
+}
+
+.WhyChooseUs-card:hover .support-box {
+  transform: scale(1.08);
+}
+
+@keyframes orbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Card Content Typography & Images */
+.WhyChooseUs-card-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 24px 0;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.WhyChooseUs-img-wrapper {
+  width: 100%;
+  height: 185px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.WhyChooseUs-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.WhyChooseUs-card:hover .WhyChooseUs-img {
+  transform: scale(1.04);
+}
+
+.WhyChooseUs-card-desc {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #4b5563;
+  margin: 0 0 24px 0;
+  max-width: 290px;
+  min-height: 48px;
+}
+
+.WhyChooseUs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  margin-top: auto;
+}
+
+.WhyChooseUs-arrow {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.WhyChooseUs-link:hover {
+  color: #f9a01b;
+}
+
+.WhyChooseUs-link:hover .WhyChooseUs-arrow {
+  transform: translateX(4px);
+}
+
+/* iPad Pro (1024px to 1366px width) */
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .WhyChooseUs-card {
+    padding: 0 16px;
+  }
+}
+
+/* Facebook In-App Browser on Android & Standard Mobile Devices */
+@media screen and (max-width: 768px) {
+  .WhyChooseUs-section {
+    padding: 50px 20px;
+  }
+
+  .WhyChooseUs-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .WhyChooseUs-card {
+    padding: 0 0 32px 0;
+    border-right: none !important;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .WhyChooseUs-card:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
