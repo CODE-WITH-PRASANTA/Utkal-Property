@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --navbar-primary: #ff9f1c;
+  --navbar-primary-hover: #f1910e;
+  --navbar-text-dark: #121926;
+  --navbar-text-muted: #8c94a3;
+  --navbar-bg: #ffffff;
+  --navbar-font: 'Plus Jakarta Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base Header */
+.navbar-header {
+  width: 100%;
+  background-color: var(--navbar-bg);
+  border-bottom: 1px solid #f0f0f0;
+  font-family: var(--navbar-font);
+  position: relative;
+  z-index: 1000;
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Brand & Logo */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.navbar-logo-img {
+  width: 120px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+}
+
+.navbar-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-brand-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--navbar-text-dark);
+  line-height: 1;
+  letter-spacing: -0.2px;
+}
+
+.navbar-brand-subtitle {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--navbar-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+
+/* Navigation Links */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+
+.navbar-link {
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navbar-text-dark);
+  transition: color 0.2s ease;
+}
+
+.navbar-link:hover,
+.navbar-link.active {
+  color: var(--navbar-primary);
+}
+
+/* Actions Section */
+.navbar-desktop-actions {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.navbar-auth-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navbar-text-dark);
+  transition: opacity 0.2s ease;
+}
+
+.navbar-auth-link:hover {
+  opacity: 0.8;
+}
+
+.navbar-auth-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--navbar-text-dark);
+}
+
+/* CTA Sell Button */
+.navbar-sell-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--navbar-primary);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  gap: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.navbar-sell-btn:hover {
+  background-color: var(--navbar-primary-hover);
+}
+
+.navbar-sell-btn-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-sell-btn-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.navbar-sell-btn-divider {
+  width: 1px;
+  height: 16px;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Mobile Toggle Button */
+.navbar-toggle-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.navbar-toggle-icon {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--navbar-text-dark);
+  position: relative;
+}
+
+.navbar-toggle-icon::before,
+.navbar-toggle-icon::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background-color: var(--navbar-text-dark);
+  transition: transform 0.2s ease;
+}
+
+.navbar-toggle-icon::before { top: -7px; }
+.navbar-toggle-icon::after { top: 7px; }
+
+.navbar-mobile-actions {
+  display: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .navbar-links {
+    gap: 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  .navbar-desktop-actions {
+    display: none;
+  }
+
+  .navbar-toggle-btn {
+    display: block;
+  }
+
+  .navbar-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--navbar-bg);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 28px;
+    gap: 20px;
+    border-bottom: 1px solid #eaeaea;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    display: none;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .navbar-sell-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
