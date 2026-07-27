@@ -1,0 +1,242 @@
+@import '../variables.css';
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 40;
+}
+
+.sidebar-container {
+  background: linear-gradient(180deg, var(--bg-sidebar-start), var(--bg-sidebar-end));
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #ffffff;
+  padding: 24px 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Header / Logo */
+.sidebar-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px 28px;
+}
+
+.sidebar-logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--gradient-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.sidebar-logo-text {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.sidebar-logo-text span {
+  color: var(--color-gold);
+}
+
+/* Navigation */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: var(--radius-menu-item);
+  text-decoration: none;
+  color: #A0A0A0;
+  transition: background 0.2s ease;
+}
+
+.sidebar-link.center {
+  justify-content: center;
+}
+
+.sidebar-link.between {
+  justify-content: space-between;
+}
+
+.sidebar-link.active {
+  color: #fff;
+  background: var(--gradient-gold);
+}
+
+.sidebar-link:hover:not(.active) {
+  background: var(--bg-sidebar-hover);
+}
+
+.sidebar-link-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sidebar-link-text {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Accordion Submenu */
+.sidebar-submenu {
+  overflow: hidden;
+  padding-left: 38px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.sidebar-sublink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #8A8A8A;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.sidebar-sublink.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Bottom Sections */
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.support-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+
+.support-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(229, 166, 35, 0.15);
+  color: var(--color-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.support-card h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.support-card p {
+  font-size: 11px;
+  color: #7A7A7A;
+  margin-bottom: 12px;
+}
+
+.support-card-btn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--color-gold);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.profile-card.center {
+  justify-content: center;
+}
+
+.profile-card.between {
+  justify-content: space-between;
+}
+
+.profile-card-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-card-user img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-card-user h5 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.profile-card-user p {
+  font-size: 11px;
+  color: #7A7A7A;
+}
+
+.logout-icon {
+  cursor: pointer;
+  color: #7A7A7A;
+}
+
+/* Mobile Drawer Overlay styles */
+@media (max-width: 768px) {
+  .sidebar-container {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar-container.mobile-open {
+    left: 0;
+  }
+}

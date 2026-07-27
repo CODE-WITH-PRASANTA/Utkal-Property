@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-main: 'Inter', sans-serif;
+  
+  /* Color Palette */
+  --bg-sidebar-start: #161616;
+  --bg-sidebar-end: #101010;
+  --bg-sidebar-hover: rgba(255, 255, 255, 0.04);
+  --bg-main: #F7F7F8;
+  --bg-card: #ffffff;
+  
+  --color-border: #ECECEC;
+  --color-text: #1d1d1d;
+  --color-text-secondary: #7A7A7A;
+  --color-gold: #E5A623;
+  --color-gold-hover: #f0b53d;
+  --gradient-gold: linear-gradient(90deg, #e9a321, #d89216);
+
+  /* Dimensions & Radius */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 90px;
+  --topbar-height: 80px;
+
+  --radius-card: 22px;
+  --radius-button: 14px;
+  --radius-input: 12px;
+  --radius-menu-item: 12px;
+  --radius-avatar: 50%;
+
+  /* Shadows */
+  --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.06);
+  --shadow-topbar: 0 8px 25px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-main);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
