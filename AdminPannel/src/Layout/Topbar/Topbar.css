@@ -1,0 +1,344 @@
+@import '../variables.css';
+
+.topbar-header {
+  height: var(--topbar-height);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-topbar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.topbar-toggle-btn {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Search Box */
+.topbar-search-box {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+}
+
+.topbar-search-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--color-text-secondary);
+}
+
+.topbar-search-input {
+  width: 100%;
+  padding: 12px 16px 12px 46px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--color-border);
+  background-color: var(--bg-main);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.topbar-search-input:focus {
+  box-shadow: 0 0 0 4px rgba(229, 166, 35, 0.08);
+  border-color: var(--color-gold);
+}
+
+/* Right Side Actions */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  position: relative;
+}
+
+.topbar-icon-btn:hover {
+  background: #F8F8F8;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-gold);
+  border-radius: 50%;
+}
+
+.topbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 12px;
+  border-left: 1px solid var(--color-border);
+  cursor: pointer;
+}
+
+.topbar-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-avatar);
+  object-fit: cover;
+}
+
+.topbar-profile-info h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.topbar-profile-info p {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* Dropdown Positioning Container */
+.topbar-dropdown-wrapper {
+  position: relative;
+}
+
+.topbar-icon-btn.active {
+  background: var(--bg-main);
+  border-color: var(--color-gold);
+}
+
+/* Base Popover Styling */
+.topbar-popover {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  background: var(--bg-card);
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-border);
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* --- Notification Card Styles --- */
+.notification-card {
+  width: 340px;
+}
+
+.notification-header {
+  padding: 18px 20px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notification-header h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.notification-header p {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.mark-read-btn {
+  background: none;
+  border: none;
+  color: var(--color-gold);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.mark-read-btn:hover {
+  background: rgba(229, 166, 35, 0.1);
+}
+
+.notification-list {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 14px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background: var(--bg-main);
+}
+
+.notification-item.unread {
+  background: rgba(229, 166, 35, 0.03);
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.notification-item.unread .notification-dot {
+  background: var(--color-gold);
+}
+
+.notification-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.notification-time {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.notification-footer {
+  padding: 12px;
+  text-align: center;
+  background: var(--bg-main);
+  border-top: 1px solid var(--color-border);
+}
+
+.notification-footer button {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-gold);
+  cursor: pointer;
+}
+
+/* --- Profile Dropdown Menu Styles --- */
+.profile-dropdown-menu {
+  width: 220px;
+  padding: 8px;
+}
+
+.profile-dropdown-header {
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 6px;
+}
+
+.profile-dropdown-header h6 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.profile-dropdown-header span {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  display: block;
+  margin-top: 2px;
+  word-break: break-all;
+}
+
+.profile-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+  background: var(--bg-main);
+  color: var(--color-gold);
+}
+
+.menu-item.logout {
+  color: #e53e3e;
+}
+
+.menu-item.logout:hover {
+  background: rgba(229, 62, 62, 0.08);
+  color: #e53e3e;
+}
+
+.menu-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 4px 0;
+}
+
+@media (max-width: 576px) {
+  .notification-card {
+    width: 290px;
+    right: -50px;
+  }
+}
+
+/* Responsive Hide Rules */
+@media (max-width: 768px) {
+  .topbar-search-box {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .topbar-profile-info {
+    display: none;
+  }
+}
