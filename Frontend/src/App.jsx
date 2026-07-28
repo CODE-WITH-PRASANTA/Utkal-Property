@@ -25,7 +25,7 @@ function App() {
         
       <Route path="/abot" element={<AboutUs/>} />
         <Route path="/" element={<Home/>}/>
-        <Route path="/property" element={<PropertyGrid/>}/>
+        <Route path="/properties" element={<PropertyGrid/>}/>
         <Route path="/about" element={<AboutUs/>} />
         <Route path="/Faq" element={<Faq/>} />
         <Route path="/contact" element={<Contacts/>} />
