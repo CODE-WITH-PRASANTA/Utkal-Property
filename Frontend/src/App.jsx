@@ -13,6 +13,9 @@ import Footer from "./Component/Footer/Footer";
 import Faq from "./Pages/Faq/Faq";
 import Contacts from './Pages/Contacts/Contacts';
 import Blog from './Pages/Blog/Blog';
+import BlogDetails from './Component/BlogDetails/BlogDetails';
+import RealNear from './Component/RealNear/RealNear';
+import OurTeam from './Component/OurTeam/OurTeam';
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
 
 
         <Route path="/blog" element={<Blog/>} />
+        <Route path="/details" element={<BlogDetails/>} />
+        <Route path="/real" element={<RealNear/>} />
+        <Route path="/team" element={<OurTeam/>} />
 
 
       </Routes>
