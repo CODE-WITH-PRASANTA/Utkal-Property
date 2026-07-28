@@ -19,8 +19,6 @@ function App() {
         <Route path="/grid" element={<PropertyGrid/>}/>
         <Route path="/about" element={<AboutUs/>} />
         <Route path="/Faq" element={<Faq/>} />
-
-
       </Routes>
       <Footer />
     </BrowserRouter>
