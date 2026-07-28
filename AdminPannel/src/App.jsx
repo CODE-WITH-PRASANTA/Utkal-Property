@@ -8,6 +8,8 @@ import DashboardProfile from "./Components/DashboardProfile/DashboardProfile";
 import DashboardReview from "./Components/DashboardReview/DashboardReview";
 import MyProperties from "./Components/MyProperties/MyProperties";
 import MainLayout from "./Layout/MainLayout/MainLayout";
+import Categories from "./Components/Categories/Categories";
+import Locations from "./Components/Locations/Locations";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
         <Route element={<MainLayout />}>
 
           <Route path="/dashboard" element={<DashboardMain />} />
+          <Route path="/properties/categories" element={<Categories/>} />
+          <Route path="/properties/locations" element={<Locations/>} />
 
           <Route
             path="/dashboard-review"
