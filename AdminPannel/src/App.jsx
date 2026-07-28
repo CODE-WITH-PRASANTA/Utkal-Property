@@ -10,6 +10,7 @@ import MyProperties from "./Components/MyProperties/MyProperties";
 import MainLayout from "./Layout/MainLayout/MainLayout";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
+import BannerManagement from "./Components/BannerManagement/BannerManagement";
 
 const App = () => {
   return (
@@ -25,6 +26,8 @@ const App = () => {
           <Route path="/dashboard" element={<DashboardMain />} />
           <Route path="/properties/categories" element={<Categories/>} />
           <Route path="/properties/locations" element={<Locations/>} />
+
+          <Route path='/BannerManagement' element={<BannerManagement/>} />
 
           <Route
             path="/dashboard-review"
