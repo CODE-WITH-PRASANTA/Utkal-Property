@@ -106,24 +106,7 @@ const Bloglist = () => {
             </ul>
           </div>
 
-          {/* Featured Listings Widget */}
-          <div className="blog-widget featured-widget">
-            <h3 className="blog-widget-title">Featured listings</h3>
-            <div className="blog-featured-card">
-              <img 
-                src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=200&q=80" 
-                alt="Gorgeous Apartment Building in Bhubaneswar" 
-                className="blog-featured-thumb"
-                loading="lazy"
-              />
-              <div className="blog-featured-info">
-                <h4 className="blog-featured-item-title">Gorgeous Apartment Building</h4>
-                <span className="blog-featured-price">$7,500</span>
-              </div>
-              
-              
-            </div>
-          </div>
+          
 
         </aside>
 

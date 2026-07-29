@@ -24,35 +24,7 @@ const ContactSeller = () => {
             </a>
           </div>
 
-          {/* Unified Column Container for the Three Cards */}
-          <div className="utkal-mini-listings-wrapper">
-            <h3 className="utkal-sidebar-heading">Featured Properties</h3>
-            <div className="utkal-mini-listings">
-              <div className="utkal-mini-card">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=200&q=80" alt="Gorgeous Apartment Building" className="utkal-mini-thumb" />
-                <div className="utkal-mini-info">
-                  <h4 className="utkal-mini-title">Gorgeous Apartment Building</h4>
-                  <span className="utkal-mini-price">$7,500</span>
-                </div>
-              </div>
-              
-              <div className="utkal-mini-card">
-                <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=200&q=80" alt="Gorgeous Apartment Building" className="utkal-mini-thumb" />
-                <div className="utkal-mini-info">
-                  <h4 className="utkal-mini-title">Gorgeous Apartment Building</h4>
-                  <span className="utkal-mini-price">$7,500</span>
-                </div>
-              </div>
-
-              <div className="utkal-mini-card">
-                <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=200&q=80" alt="Gorgeous Apartment Building" className="utkal-mini-thumb" />
-                <div className="utkal-mini-info">
-                  <h4 className="utkal-mini-title">Gorgeous Apartment Building</h4>
-                  <span className="utkal-mini-price">$7,500</span>
-                </div>
-              </div>
-            </div>
-          </div>
+     
 
         </div>
 

@@ -1,0 +1,459 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --utkal-primary-dark: #111111;
+  --utkal-text-main: #222222;
+  --utkal-text-muted: #666666;
+  --utkal-border-color: #e5e7eb;
+  --utkal-bg-light: #f9fafb;
+  --utkal-accent: #ffb100;
+}
+
+.utkal-agents-section {
+  font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+  color: var(--utkal-text-main);
+  background-color: #ffffff;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Header & Controls Layout */
+.utkal-agents-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--utkal-border-color);
+  padding-bottom: 24px;
+}
+
+.utkal-agents-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.utkal-agents-main-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--utkal-primary-dark);
+  margin: 0;
+}
+
+.utkal-agents-subtitle {
+  font-size: 14px;
+  color: var(--utkal-text-muted);
+  margin: 0;
+}
+
+.utkal-agents-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Search Box Styling */
+.utkal-agents-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.utkal-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.utkal-agents-search-input {
+  padding: 10px 14px 10px 34px;
+  border: 1px solid var(--utkal-border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  width: 200px;
+  transition: border-color 0.2s;
+  background-color: #ffffff;
+}
+
+.utkal-agents-search-input:focus {
+  border-color: var(--utkal-primary-dark);
+}
+
+/* View Mode Toggles */
+.utkal-agents-view-toggle {
+  display: flex;
+  border: 1px solid var(--utkal-border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.utkal-view-btn {
+  background: transparent;
+  border: none;
+  padding: 9px 12px;
+  cursor: pointer;
+  color: var(--utkal-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.utkal-view-btn.active {
+  background-color: var(--utkal-bg-light);
+  color: var(--utkal-primary-dark);
+}
+
+.utkal-view-btn:hover {
+  color: var(--utkal-primary-dark);
+}
+
+/* Sort Dropdown */
+.utkal-agents-sort-select {
+  padding: 10px 16px;
+  border: 1px solid var(--utkal-border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  background-color: #ffffff;
+  color: var(--utkal-text-main);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.utkal-agents-sort-select:focus {
+  border-color: var(--utkal-primary-dark);
+}
+
+/* Agents Grid System */
+.utkal-agents-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.utkal-agents-grid.list-view-mode {
+  grid-template-columns: 1fr;
+}
+
+/* Agent Card Design */
+.utkal-agent-card {
+  background: #ffffff;
+  border: 1px solid var(--utkal-border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.utkal-agents-grid.list-view-mode .utkal-agent-card {
+  flex-direction: row;
+}
+
+.utkal-agent-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.utkal-agent-img-container {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  background-color: #f3f4f6;
+}
+
+.utkal-agents-grid.list-view-mode .utkal-agent-img-container {
+  width: 280px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.utkal-agent-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.utkal-agent-card:hover .utkal-agent-img {
+  transform: scale(1.03);
+}
+
+.utkal-agent-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 16px;
+}
+
+.utkal-agent-info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.utkal-agent-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--utkal-primary-dark);
+  margin: 0;
+}
+
+.utkal-agent-role {
+  font-size: 13px;
+  color: var(--utkal-text-muted);
+  margin: 0;
+}
+
+.utkal-agent-contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 14px 0;
+}
+
+.utkal-agent-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--utkal-text-main);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.utkal-agent-contact-row:hover {
+  color: #d97706;
+}
+
+.utkal-contact-icon {
+  font-size: 12px;
+}
+
+.utkal-email-text {
+  word-break: break-all;
+}
+
+.utkal-agent-socials {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.utkal-social-link {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--utkal-bg-light);
+  border: 1px solid var(--utkal-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--utkal-text-main);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.utkal-social-link:hover {
+  background-color: var(--utkal-primary-dark);
+  color: #ffffff;
+  border-color: var(--utkal-primary-dark);
+}
+
+.utkal-agents-no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--utkal-text-muted);
+  font-size: 15px;
+}
+
+/* Pagination Styles */
+.utkal-agents-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 50px;
+  margin-bottom: 60px;
+}
+
+.utkal-page-btn,
+.utkal-page-num {
+  padding: 8px 14px;
+  border: 1px solid var(--utkal-border-color);
+  background-color: #ffffff;
+  color: var(--utkal-text-main);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.utkal-page-num.active,
+.utkal-page-btn:hover:not(:disabled) {
+  background-color: var(--utkal-primary-dark);
+  color: #ffffff;
+  border-color: var(--utkal-primary-dark);
+}
+
+.utkal-page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Promo Banner Section Styles */
+.utkal-promo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #fffcf5 0%, #fff6e0 100%);
+  border: 1px solid #fde68a;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 40px;
+  gap: 30px;
+}
+
+.utkal-promo-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.utkal-promo-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--utkal-primary-dark);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.utkal-promo-desc {
+  font-size: 14px;
+  color: var(--utkal-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.utkal-contact-seller-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #fbbf24;
+  color: #111111;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  width: fit-content;
+  box-shadow: 0 4px 10px rgba(251, 191, 36, 0.3);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.utkal-contact-seller-btn:hover {
+  background-color: #f59e0b;
+  transform: translateY(-2px);
+}
+
+.utkal-promo-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.utkal-promo-img {
+  max-width: 60%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* SEO Footer Description */
+.utkal-team-seo-footer {
+  margin-top: 40px;
+  padding: 30px;
+  background-color: var(--utkal-bg-light);
+  border-radius: 10px;
+  border: 1px dashed var(--utkal-border-color);
+}
+
+.utkal-seo-content h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--utkal-primary-dark);
+  margin: 0 0 10px 0;
+}
+
+.utkal-seo-content p {
+  font-size: 13px;
+  color: var(--utkal-text-muted);
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+}
+
+.utkal-seo-address {
+  margin: 0 !important;
+  color: var(--utkal-text-main) !important;
+}
+
+/* Responsive Breakpoints */
+@media screen and (max-width: 968px) {
+  .utkal-agents-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .utkal-promo-banner {
+    flex-direction: column;
+    padding: 30px 20px;
+    text-align: left;
+  }
+  .utkal-promo-title {
+    font-size: 26px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .utkal-agents-header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .utkal-agents-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .utkal-agents-search-input {
+    width: 140px;
+  }
+  .utkal-agents-grid {
+    grid-template-columns: 1fr;
+  }
+  .utkal-agents-grid.list-view-mode .utkal-agent-card {
+    flex-direction: column;
+  }
+  .utkal-agents-grid.list-view-mode .utkal-agent-img-container {
+    width: 100%;
+    height: 220px;
+  }
+}
