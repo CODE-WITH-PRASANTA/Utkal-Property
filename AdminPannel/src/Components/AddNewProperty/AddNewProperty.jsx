@@ -10,63 +10,57 @@ import {
 import './AddNewProperty.css';
 
 const AddNewProperty = () => {
-  const [activeTab, setActiveTab] = useState('Basic Info');
   const [showFullPreview, setShowFullPreview] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState(['Brochure (PDF)', 'Floor Plan (PDF)', 'Agreement (PDF)']);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   
-  const [propertyImages, setPropertyImages] = useState([
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80'
-  ]);
+  const [propertyImages, setPropertyImages] = useState([]);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   
   const [formData, setFormData] = useState({
-    propertyName: 'Rudransh South Kingdom',
+    propertyName: '',
     category: 'Residential Project',
     propertyType: 'Luxury Villas',
     status: 'Active',
-    projectSize: '15000',
+    projectSize: '',
     completionStatus: 'Under Construction',
-    shortDescription: 'Rudransh South Kingdom is a thoughtfully designed luxury villa community located in the rapidly developing Info Valley corridor of Bhubaneswar.',
-    highlights: ['Premium Villas', 'Modern Amenities', 'Great Location', 'Secure Environment'],
+    shortDescription: '',
+    highlights: [],
     newHighlight: '',
-    location: '6PM9+7GX, Infosys Rd, Chandicheta, Odisha 752054, India',
-    city: 'Bhubaneswar',
-    state: 'Odisha',
-    country: 'India',
+    location: '',
+    city: '',
+    state: '',
+    country: '',
     quickStats: {
-      totalUnits: '45',
-      availableUnits: '12',
-      totalArea: '15000',
-      launchDate: 'May 2024'
+      totalUnits: '',
+      availableUnits: '',
+      totalArea: '',
+      launchDate: ''
     },
     propertyDetails: {
-      totalFloors: 'G+2',
-      bedrooms: '2-4',
-      bathrooms: '2-3',
-      plotSize: '1500-2400',
-      facing: 'North, South'
+      totalFloors: '',
+      bedrooms: '',
+      bathrooms: '',
+      plotSize: '',
+      facing: ''
     },
     amenities: [
-      { name: 'Swimming Pool', checked: true },
-      { name: 'Kids Play Area', checked: true },
-      { name: 'Club House', checked: true },
-      { name: 'Gym', checked: true },
-      { name: 'Security', checked: true },
-      { name: 'CCTV Camera', checked: true },
-      { name: 'Park & Garden', checked: true }
+      { name: 'Swimming Pool', checked: false },
+      { name: 'Kids Play Area', checked: false },
+      { name: 'Club House', checked: false },
+      { name: 'Gym', checked: false },
+      { name: 'Security', checked: false },
+      { name: 'CCTV Camera', checked: false },
+      { name: 'Park & Garden', checked: false }
     ],
     seo: {
-      metaTitle: 'Rudransh South Kingdom - Luxury Villas in Info Valley',
-      metaDescription: 'Rudransh South Kingdom offers premium luxury villas in Info Valley, Bhubaneswar with modern amenities and great connectivity.',
-      urlSlug: 'rudransh-south-kingdom'
+      metaTitle: '',
+      metaDescription: '',
+      urlSlug: ''
     },
     publishSettings: {
       publishStatus: false,
-      featuredProperty: true,
-      publishDate: '2024-05-01',
+      featuredProperty: false,
+      publishDate: '',
       promoteProperty: false
     }
   });
@@ -149,27 +143,6 @@ const AddNewProperty = () => {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="anp-tabs">
-        {[
-          { name: 'Basic Info', icon: <BiBuildingHouse /> },
-          { name: 'Images & Media', icon: <BiImages /> },
-          { name: 'Location & Surroundings', icon: <BiMap /> },
-          { name: 'Property Details', icon: <BiListUl /> },
-          { name: 'Amenities', icon: <BiCheckShield /> },
-          { name: 'Pricing & Plans', icon: <BiDollarCircle /> },
-          { name: 'SEO & Meta', icon: <BiGlobe /> }
-        ].map((tab) => (
-          <button
-            key={tab.name}
-            className={`anp-tab-item ${activeTab === tab.name ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab.name)}
-          >
-            {tab.icon} {tab.name}
-          </button>
-        ))}
-      </div>
-
       {/* Main Content Grid */}
       <div className="anp-grid-layout">
         
@@ -185,6 +158,7 @@ const AddNewProperty = () => {
               <input 
                 type="text" 
                 value={formData.propertyName} 
+                placeholder="Enter property name"
                 onChange={(e) => handleInputChange('propertyName', e.target.value)} 
               />
             </div>
@@ -242,6 +216,7 @@ const AddNewProperty = () => {
                 <input 
                   type="text" 
                   value={formData.projectSize} 
+                  placeholder="e.g. 15000"
                   onChange={(e) => handleInputChange('projectSize', e.target.value)} 
                 />
               </div>
@@ -262,22 +237,14 @@ const AddNewProperty = () => {
                   <FiChevronDown className="anp-select-icon" />
                 </div>
               </div>
-
-              <div className="anp-form-group">
-                <label>Short Description he</label>
-                <input 
-                  type="text" 
-                  value={formData.shortDescription}
-                  onChange={(e) => handleInputChange('shortDescription', e.target.value)}
-                  maxLength="160"
-                />
-              </div>
             </div>
 
             <div className="anp-form-group">
+              <label>Short Description</label>
               <textarea 
                 rows="3" 
                 value={formData.shortDescription}
+                placeholder="Enter short description"
                 onChange={(e) => handleInputChange('shortDescription', e.target.value)}
                 maxLength="160"
               ></textarea>
@@ -295,7 +262,7 @@ const AddNewProperty = () => {
                 <input 
                   type="text" 
                   className="anp-tag-input"
-                  placeholder="+ Add"
+                  placeholder="+ Add highlight"
                   value={formData.newHighlight}
                   onChange={(e) => handleInputChange('newHighlight', e.target.value)}
                   onKeyDown={addHighlight}
@@ -312,6 +279,7 @@ const AddNewProperty = () => {
               <input 
                 type="text" 
                 value={formData.location}
+                placeholder="Street address or landmark"
                 onChange={(e) => handleInputChange('location', e.target.value)}
               />
             </div>
@@ -322,6 +290,7 @@ const AddNewProperty = () => {
                 <input 
                   type="text" 
                   value={formData.city}
+                  placeholder="City"
                   onChange={(e) => handleInputChange('city', e.target.value)}
                 />
               </div>
@@ -330,6 +299,7 @@ const AddNewProperty = () => {
                 <input 
                   type="text" 
                   value={formData.state}
+                  placeholder="State"
                   onChange={(e) => handleInputChange('state', e.target.value)}
                 />
               </div>
@@ -338,6 +308,7 @@ const AddNewProperty = () => {
                 <input 
                   type="text" 
                   value={formData.country}
+                  placeholder="Country"
                   onChange={(e) => handleInputChange('country', e.target.value)}
                 />
               </div>
@@ -480,13 +451,21 @@ const AddNewProperty = () => {
             <h3>Property Images *</h3>
             <div className="anp-main-img-preview">
               <span className="anp-badge-primary">Primary</span>
-              <img src={propertyImages[activeImageIndex]} alt="Property" />
-              <button className="anp-slider-btn left" onClick={() => setActiveImageIndex((prev) => (prev === 0 ? propertyImages.length - 1 : prev - 1))}>
-                <FiChevronLeft />
-              </button>
-              <button className="anp-slider-btn right" onClick={() => setActiveImageIndex((prev) => (prev === propertyImages.length - 1 ? 0 : prev + 1))}>
-                <FiChevronRight />
-              </button>
+              {propertyImages.length > 0 ? (
+                <img src={propertyImages[activeImageIndex]} alt="Property" />
+              ) : (
+                <div className="anp-no-image-placeholder">No Image Uploaded</div>
+              )}
+              {propertyImages.length > 0 && (
+                <>
+                  <button className="anp-slider-btn left" onClick={() => setActiveImageIndex((prev) => (prev === 0 ? propertyImages.length - 1 : prev - 1))}>
+                    <FiChevronLeft />
+                  </button>
+                  <button className="anp-slider-btn right" onClick={() => setActiveImageIndex((prev) => (prev === propertyImages.length - 1 ? 0 : prev + 1))}>
+                    <FiChevronRight />
+                  </button>
+                </>
+              )}
             </div>
             
             <div className="anp-thumbnail-row">
@@ -516,25 +495,24 @@ const AddNewProperty = () => {
               </div>
             </div>
             <div className="anp-preview-card-content">
-              <img src={propertyImages[0]} alt="Live Preview" />
+              {propertyImages.length > 0 ? (
+                <img src={propertyImages[0]} alt="Live Preview" />
+              ) : (
+                <div className="anp-no-image-placeholder">No Preview Image</div>
+              )}
               <div className="anp-preview-details">
-                <h4>{formData.propertyName}</h4>
-                <p className="anp-location-sub">{formData.propertyType} in Info Valley</p>
+                <h4>{formData.propertyName || 'Property Name'}</h4>
+                <p className="anp-location-sub">{formData.propertyType} in {formData.city || 'Location'}</p>
                 <div className="anp-rating">
                   <FiStar fill="#f59e0b" color="#f59e0b" />
                   <FiStar fill="#f59e0b" color="#f59e0b" />
                   <FiStar fill="#f59e0b" color="#f59e0b" />
                   <FiStar fill="#f59e0b" color="#f59e0b" />
                   <FiStar fill="#f59e0b" color="#f59e0b" />
-                  <span>(106)</span>
+                  <span>(0)</span>
                 </div>
-                <div className="anp-price">₹ 1.86 Cr - ₹ 1.99 Cr</div>
-                <div className="anp-sqft-rate">₹6,350 / Sqft</div>
-                <ul className="anp-preview-checks">
-                  <li><FiCheck /> Premium Villas</li>
-                  <li><FiCheck /> Modern Amenities</li>
-                  <li><FiCheck /> Prime Location</li>
-                </ul>
+                <div className="anp-price">₹ -</div>
+                <div className="anp-sqft-rate">₹ - / Sqft</div>
                 <button className="anp-full-preview-btn" onClick={() => setShowFullPreview(true)}>
                   View Full Preview &rarr;
                 </button>
@@ -641,7 +619,7 @@ const AddNewProperty = () => {
 
       {/* Footer */}
       <div className="anp-footer">
-        <div>© 2024 Rudransh South Admin Panel. All rights reserved.</div>
+        <div>© 2026 Admin Panel. All rights reserved.</div>
         <div className="anp-footer-built">Built with <span>❤</span> for better living</div>
       </div>
 
@@ -658,24 +636,16 @@ const AddNewProperty = () => {
             <div className="anp-modal-body">
               <div className="anp-modal-gallery">
                 <div className="anp-modal-main-image">
-                  <img src={propertyImages[activeImageIndex]} alt="Modal Preview" />
-                </div>
-                <div className="anp-modal-thumb-row">
-                  {propertyImages.map((img, idx) => (
-                    <div 
-                      key={idx} 
-                      className={`anp-modal-thumb ${activeImageIndex === idx ? 'active' : ''}`}
-                      onClick={() => setActiveImageIndex(idx)}
-                    >
-                      <img src={img} alt={`Modal Thumb ${idx}`} />
-                    </div>
-                  ))}
+                  {propertyImages.length > 0 ? (
+                    <img src={propertyImages[activeImageIndex]} alt="Modal Preview" />
+                  ) : (
+                    <div className="anp-no-image-placeholder">No Image Available</div>
+                  )}
                 </div>
               </div>
               <div className="anp-modal-info">
-                <h3>{formData.propertyName}</h3>
-                <div className="anp-modal-price">₹ 1.86 Cr - ₹ 1.99 Cr</div>
-                <p className="anp-modal-desc">{formData.shortDescription}</p>
+                <h3>{formData.propertyName || 'Property Name'}</h3>
+                <p className="anp-modal-desc">{formData.shortDescription || 'No description available.'}</p>
                 
                 <div className="anp-modal-stats-grid">
                   <div className="anp-modal-stat-item">
@@ -687,20 +657,8 @@ const AddNewProperty = () => {
                     <span>{formData.propertyType}</span>
                   </div>
                   <div className="anp-modal-stat-item">
-                    <span>Total Units</span>
-                    <span>{formData.quickStats.totalUnits}</span>
-                  </div>
-                  <div className="anp-modal-stat-item">
-                    <span>Bedrooms</span>
-                    <span>{formData.propertyDetails.bedrooms}</span>
-                  </div>
-                  <div className="anp-modal-stat-item">
-                    <span>Total Floors</span>
-                    <span>{formData.propertyDetails.totalFloors}</span>
-                  </div>
-                  <div className="anp-modal-stat-item">
                     <span>City</span>
-                    <span>{formData.city}</span>
+                    <span>{formData.city || '-'}</span>
                   </div>
                 </div>
               </div>
@@ -708,7 +666,7 @@ const AddNewProperty = () => {
           </div>
         </div>
       )}
-    </div>
+  </div>
   );
 };
 

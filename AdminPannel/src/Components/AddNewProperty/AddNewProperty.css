@@ -88,43 +88,6 @@
   background-color: #fffbeb;
 }
 
-.full {
-  width: 100%;
-}
-
-/* Navigation Tabs */
-.anp-tabs {
-  display: flex;
-  gap: 8px;
-  background: #ffffff;
-  padding: 8px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #e2e8f0;
-  overflow-x: auto;
-}
-
-.anp-tab-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  padding: 8px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #64748b;
-  border-radius: 6px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-
-.anp-tab-item:hover, .anp-tab-item.active {
-  background-color: #fffbeb;
-  color: #d97706;
-}
-
 /* Layout Grid */
 .anp-grid-layout {
   display: grid;
@@ -221,7 +184,7 @@
   cursor: pointer;
 }
 
-.anp-select-icon {
+.anp-select-icon, .anp-right-icon {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -289,10 +252,6 @@
   .anp-row-cards {
     grid-template-columns: 1fr;
   }
-}
-
-.half-card {
-  width: 100%;
 }
 
 /* Amenities Checkboxes */
@@ -689,19 +648,6 @@
 .anp-toggle-label {
   font-weight: 500;
   color: #1e293b;
-}
-
-.anp-input-icon-wrap {
-  position: relative;
-}
-
-.anp-right-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #64748b;
-  pointer-events: none;
 }
 
 .anp-bottom-action-buttons {

@@ -10,103 +10,171 @@ import './PropertiesDashboard.css';
 export default function PropertiesDashboard() {
   const navigate = useNavigate();
 
-  const [properties, setProperties] = useState([
-    {
-      id: 1,
-      name: "Rudransh South Kingdom",
-      featured: true,
-      location: "6PM9+7GX, Infosys Rd, Chandiheta...",
-      rera: "RERA: PS/19/2026/01475",
-      type: "Luxury Villa",
-      subType: "G+2",
-      category: "Villa",
-      price: "₹ 1.86 Cr - ₹ 1.99 Cr",
-      pricePerSqft: "₹ 6,350 / Sqft",
-      status: "Active",
-      statusType: "For Sale",
-      addedDate: "20 May 2025",
-      addedTime: "10:30 AM",
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=300&q=80",
-      showDetails: false,
-      menuOpen: false
-    },
-    {
-      id: 2,
-      name: "Modern White Villa",
-      featured: false,
-      location: "58 Hullbrook Road, Billesley, B13 OLA",
-      rera: "RERA: PS/18/2026/01412",
-      type: "Villa",
-      subType: "G+1",
-      category: "Villa",
-      price: "₹ 75.00 Lac",
-      pricePerSqft: "₹ 4,500 / Sqft",
-      status: "Active",
-      statusType: "For Sale",
-      addedDate: "18 May 2025",
-      addedTime: "04:15 PM",
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80",
-      showDetails: false,
-      menuOpen: false
-    },
-    {
-      id: 3,
-      name: "Suburban Stone House",
-      featured: false,
-      location: "24 Green Avenue, Oxford, OX1 2JD",
-      rera: "RERA: PS/17/2026/01398",
-      type: "Independent House",
-      subType: "G+1",
-      category: "Independent House",
-      price: "₹ 82.00 Lac",
-      pricePerSqft: "₹ 5,000 / Sqft",
-      status: "Under Construction",
-      statusType: "For Sale",
-      addedDate: "17 May 2025",
-      addedTime: "11:20 AM",
-      image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=300&q=80",
-      showDetails: false,
-      menuOpen: false
-    },
-    {
-      id: 4,
-      name: "Minimalist Cubical Home",
-      featured: false,
-      location: "102 Sunset Boulevard, Bristol, BS1 5TY",
-      rera: "RERA: PS/17/2026/01375",
-      type: "Villa",
-      subType: "G+1",
-      category: "Villa",
-      price: "₹ 68.00 Lac",
-      pricePerSqft: "₹ 6,100 / Sqft",
-      status: "Active",
-      statusType: "For Sale",
-      addedDate: "15 May 2025",
-      addedTime: "02:45 PM",
-      image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=300&q=80",
-      showDetails: false,
-      menuOpen: false
-    },
-    {
-      id: 5,
-      name: "Tropical Coastal Estate",
-      featured: false,
-      location: "15 Ocean View Road, Brighton, BN1 3PA",
-      rera: "RERA: PS/16/2026/01322",
-      type: "Villa",
-      subType: "G+2",
-      category: "Villa",
-      price: "₹ 94.00 Lac",
-      pricePerSqft: "₹ 5,875 / Sqft",
-      status: "Sold",
-      statusType: "Sold Out",
-      addedDate: "10 May 2025",
-      addedTime: "09:30 AM",
-      image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=300&q=80",
-      showDetails: false,
-      menuOpen: false
-    }
-  ]);
+  // Master pool of dummy data categorized by page
+  const propertyPagesData = {
+    1: [
+      {
+        id: 1,
+        name: "Rudransh South Kingdom",
+        featured: true,
+        location: "6PM9+7GX, Infosys Rd, Chandiheta...",
+        rera: "RERA: PS/19/2026/01475",
+        type: "Luxury Villa",
+        subType: "G+2",
+        category: "Villa",
+        price: "₹ 1.86 Cr - ₹ 1.99 Cr",
+        pricePerSqft: "₹ 6,350 / Sqft",
+        status: "Active",
+        statusType: "For Sale",
+        addedDate: "20 May 2025",
+        addedTime: "10:30 AM",
+        image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=300&q=80",
+        showDetails: false,
+        menuOpen: false
+      },
+      {
+        id: 2,
+        name: "Modern White Villa",
+        featured: false,
+        location: "58 Hullbrook Road, Billesley, B13 OLA",
+        rera: "RERA: PS/18/2026/01412",
+        type: "Villa",
+        subType: "G+1",
+        category: "Villa",
+        price: "₹ 75.00 Lac",
+        pricePerSqft: "₹ 4,500 / Sqft",
+        status: "Active",
+        statusType: "For Sale",
+        addedDate: "18 May 2025",
+        addedTime: "04:15 PM",
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80",
+        showDetails: false,
+        menuOpen: false
+      },
+      {
+        id: 3,
+        name: "Suburban Stone House",
+        featured: false,
+        location: "24 Green Avenue, Oxford, OX1 2JD",
+        rera: "RERA: PS/17/2026/01398",
+        type: "Independent House",
+        subType: "G+1",
+        category: "Independent House",
+        price: "₹ 82.00 Lac",
+        pricePerSqft: "₹ 5,000 / Sqft",
+        status: "Under Construction",
+        statusType: "For Sale",
+        addedDate: "17 May 2025",
+        addedTime: "11:20 AM",
+        image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=300&q=80",
+        showDetails: false,
+        menuOpen: false
+      },
+      {
+        id: 4,
+        name: "Minimalist Cubical Home",
+        featured: false,
+        location: "102 Sunset Boulevard, Bristol, BS1 5TY",
+        rera: "RERA: PS/17/2026/01375",
+        type: "Villa",
+        subType: "G+1",
+        category: "Villa",
+        price: "₹ 68.00 Lac",
+        pricePerSqft: "₹ 6,100 / Sqft",
+        status: "Active",
+        statusType: "For Sale",
+        addedDate: "15 May 2025",
+        addedTime: "02:45 PM",
+        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=300&q=80",
+        showDetails: false,
+        menuOpen: false
+      },
+      {
+        id: 5,
+        name: "Tropical Coastal Estate",
+        featured: false,
+        location: "15 Ocean View Road, Brighton, BN1 3PA",
+        rera: "RERA: PS/16/2026/01322",
+        type: "Villa",
+        subType: "G+2",
+        category: "Villa",
+        price: "₹ 94.00 Lac",
+        pricePerSqft: "₹ 5,875 / Sqft",
+        status: "Sold",
+        statusType: "Sold Out",
+        addedDate: "10 May 2025",
+        addedTime: "09:30 AM",
+        image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=300&q=80",
+        showDetails: false,
+        menuOpen: false
+      }
+    ],
+    2: [
+      {
+        id: 6,
+        name: "Emerald Skyline Penthouse",
+        featured: true,
+        location: "44 Grand Avenue, Downtown, London",
+        rera: "RERA: PS/20/2026/02111",
+        type: "Penthouse",
+        subType: "G+3",
+        category: "Apartment",
+        price: "₹ 3.50 Cr",
+        pricePerSqft: "₹ 9,200 / Sqft",
+        status: "Active",
+        statusType: "For Sale",
+        addedDate: "22 May 2025",
+        addedTime: "01:00 PM",
+        image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=300&q=80",
+        showDetails: false,
+        menuOpen: false
+      },
+      {
+        id: 7,
+        name: "Azure Riverside Retreat",
+        featured: false,
+        location: "12 Riverbank Lane, Cambridge",
+        rera: "RERA: PS/21/2026/03421",
+        type: "Independent House",
+        subType: "G+1",
+        category: "Independent House",
+        price: "₹ 1.25 Cr",
+        pricePerSqft: "₹ 5,400 / Sqft",
+        status: "Under Construction",
+        statusType: "For Sale",
+        addedDate: "21 May 2025",
+        addedTime: "11:00 AM",
+        image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=300&q=80",
+        showDetails: false,
+        menuOpen: false
+      }
+    ],
+    3: [
+      {
+        id: 8,
+        name: "Maple Wood Cottage",
+        featured: false,
+        location: "98 Forest Trail, Edinburgh",
+        rera: "RERA: PS/22/2026/04512",
+        type: "Villa",
+        subType: "G+1",
+        category: "Villa",
+        price: "₹ 95.00 Lac",
+        pricePerSqft: "₹ 4,800 / Sqft",
+        status: "Active",
+        statusType: "For Sale",
+        addedDate: "19 May 2025",
+        addedTime: "09:00 AM",
+        image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=300&q=80",
+        showDetails: false,
+        menuOpen: false
+      }
+    ]
+  };
+
+  // State Management
+  const [currentPage, setCurrentPage] = useState(1);
+  const [properties, setProperties] = useState(propertyPagesData[1]);
 
   // Filter State Management
   const [searchTerm, setSearchTerm] = useState('');
@@ -114,7 +182,14 @@ export default function PropertiesDashboard() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedType, setSelectedType] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('All');
-  const [currentPage, setCurrentPage] = useState(1);
+
+  // Handle Page Change and Swap Dataset
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    // Load new dummy data for that page if available, otherwise fallback to empty or page 1 data
+    const newData = propertyPagesData[pageNumber] || [];
+    setProperties(newData);
+  };
 
   const toggleViewDetails = (id) => {
     setProperties(properties.map(prop => {
@@ -183,7 +258,7 @@ export default function PropertiesDashboard() {
         </button>
       </header>
 
-      {/* Metrics Cards */}
+      {/* Metrics Cards - 2 rows of 3 columns */}
       <section className="metrics-grid">
         <div className="metric-card">
           <div className="metric-icon orange"><FiHome /></div>
@@ -389,15 +464,25 @@ export default function PropertiesDashboard() {
 
         {/* Pagination */}
         <div className="pagination-container">
-          <span className="pagination-info">Showing 1 to {filteredProperties.length} of 156 entries</span>
+          <span className="pagination-info">Showing page {currentPage} of 16 entries</span>
           <div className="pagination-controls">
-            <button className="page-btn" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}><FiChevronLeft /></button>
-            <button className={`page-btn ${currentPage === 1 ? 'active' : ''}`} onClick={() => setCurrentPage(1)}>1</button>
-            <button className={`page-btn ${currentPage === 2 ? 'active' : ''}`} onClick={() => setCurrentPage(2)}>2</button>
-            <button className={`page-btn ${currentPage === 3 ? 'active' : ''}`} onClick={() => setCurrentPage(3)}>3</button>
+            <button 
+              className="page-btn" 
+              onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+            >
+              <FiChevronLeft />
+            </button>
+            <button className={`page-btn ${currentPage === 1 ? 'active' : ''}`} onClick={() => handlePageChange(1)}>1</button>
+            <button className={`page-btn ${currentPage === 2 ? 'active' : ''}`} onClick={() => handlePageChange(2)}>2</button>
+            <button className={`page-btn ${currentPage === 3 ? 'active' : ''}`} onClick={() => handlePageChange(3)}>3</button>
             <span className="page-dots">...</span>
-            <button className="page-btn" onClick={() => setCurrentPage(16)}>16</button>
-            <button className="page-btn" onClick={() => setCurrentPage(prev => Math.min(prev + 1, 16))}><FiChevronRight /></button>
+            <button className={`page-btn ${currentPage === 16 ? 'active' : ''}`} onClick={() => handlePageChange(16)}>16</button>
+            <button 
+              className="page-btn" 
+              onClick={() => handlePageChange(Math.min(currentPage + 1, 16))}
+            >
+              <FiChevronRight />
+            </button>
           </div>
         </div>
       </section>
