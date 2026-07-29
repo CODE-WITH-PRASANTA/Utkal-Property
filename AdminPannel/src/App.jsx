@@ -11,6 +11,7 @@ import MainLayout from "./Layout/MainLayout/MainLayout";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 import BannerManagement from "./Components/BannerManagement/BannerManagement";
+import Customers from "./Components/Customers/Customers";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/properties/locations" element={<Locations/>} />
 
           <Route path='/BannerManagement' element={<BannerManagement/>} />
+          <Route path='/Customers' element={<Customers/>} />
 
           <Route
             path="/dashboard-review"
