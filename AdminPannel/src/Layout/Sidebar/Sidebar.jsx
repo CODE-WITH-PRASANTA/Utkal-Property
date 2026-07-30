@@ -20,6 +20,9 @@ import {
 } from 'react-icons/fi';
 import './Sidebar.css';
 
+// Import your custom logo image asset here (adjust the path as needed)
+import logoImg from '../../assets/Utkal Property Outro (2).png'; 
+
 const menuItems = [
   { title: 'Dashboard', path: '/dashboard', icon: LuLayoutDashboard },
   {
@@ -27,7 +30,7 @@ const menuItems = [
     path: '/properties',
     icon: PiBuildings,
     subItems: [
-      { title: 'Add Property', path: '/properties/add', icon: FiPlus },
+      { title: 'Add Property', path: '/properties/all', icon: FiPlus },
       { title: 'Categories', path: '/properties/categories', icon: FiGrid },
       { title: 'Locations', path: '/properties/locations', icon: FiMapPin },
     ],
@@ -72,16 +75,17 @@ const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {
         <div>
           {/* Logo Header */}
           <div className="sidebar-logo-container">
-            <div className="sidebar-logo-icon">R</div>
-            {!isCollapsed && (
-              <motion.div 
+            {isCollapsed ? (
+              <div className="sidebar-logo-icon">R</div>
+            ) : (
+              <motion.img 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="sidebar-logo-text"
-              >
-                Utkal<span>Estate</span>
-              </motion.div>
+                src={logoImg} 
+                alt="Utkal Estate Logo" 
+                className="sidebar-logo-img" 
+              />
             )}
           </div>
 
