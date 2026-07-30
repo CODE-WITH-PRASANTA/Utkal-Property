@@ -30,7 +30,7 @@ const menuItems = [
     path: '/properties',
     icon: PiBuildings,
     subItems: [
-      { title: 'Add Property', path: '/properties/add', icon: FiPlus },
+      { title: 'Add Property', path: '/properties/all', icon: FiPlus },
       { title: 'Categories', path: '/properties/categories', icon: FiGrid },
       { title: 'Locations', path: '/properties/locations', icon: FiMapPin },
     ],

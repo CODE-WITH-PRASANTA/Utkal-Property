@@ -817,4 +817,30 @@
 .anp-modal-stat-item span:last-child {
   font-weight: 600;
   color: #1e293b;
+}/* Back Button Styling */
+.anp-title-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.anp-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.anp-back-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  border-color: #cbd5e1;
+  transform: translateX(-2px);
 }
