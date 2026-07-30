@@ -40,6 +40,20 @@ const App = () => {
           <Route 
             path="/dashboard" 
             element={<DashboardMain />} 
+          <Route path="/dashboard" element={<DashboardMain />} />
+          <Route path="/properties/categories" element={<Categories/>} />
+          <Route path="/properties/locations" element={<Locations/>} />
+
+          <Route path="/LeadManagement" element={<LeadManagement/>} />
+          <Route path="/ProfileSetting" element={<ProfileSetting/>} />
+          <Route path="/LeadManagement" element={<LeadManagement/>} />
+
+          <Route path="/Report" element={<Report/>}/>
+
+
+          <Route
+            path="/dashboard-review"
+            element={<DashboardReview />}
           />
 
 

@@ -1,0 +1,1674 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.leadmanagement-page {
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.desktop-only { display: inline-flex; }
+
+/* ============================= */
+/* TOP BAR                        */
+/* ============================= */
+.leadmanagement-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.leadmanagement-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.leadmanagement-mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #334155;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.leadmanagement-page-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leadmanagement-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.leadmanagement-breadcrumb .crumb-active {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.leadmanagement-topbar-search {
+  flex: 1;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #94a3b8;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.leadmanagement-topbar-search input {
+  border: none;
+  outline: none;
+  background: none;
+  flex: 1;
+  font-size: 13px;
+  color: #1e293b;
+  min-width: 0;
+}
+
+.leadmanagement-search-kbd {
+  font-size: 10px;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+}
+
+.leadmanagement-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.leadmanagement-topbar-add-btn {
+  display: none;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.leadmanagement-topbar-icon-btn {
+  position: relative;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.leadmanagement-mobile-search-btn {
+  display: none;
+}
+
+.leadmanagement-notif-dot {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leadmanagement-notif-dot.dot-blue { background: #2563eb; }
+
+.leadmanagement-topbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 10px;
+  border-left: 1px solid #e2e8f0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.leadmanagement-profile-img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.leadmanagement-profile-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.leadmanagement-profile-name-sm {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.leadmanagement-profile-role {
+  font-size: 10px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.leadmanagement-profile-caret {
+  color: #94a3b8;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* ============================= */
+/* CONTAINER                      */
+/* ============================= */
+.leadmanagement-container {
+  padding: 20px;
+  color: #1e293b;
+}
+
+/* STAT CARDS */
+.leadmanagement-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.leadmanagement-stat-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+  min-width: 0;
+}
+
+.leadmanagement-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.leadmanagement-stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.icon-blue { background: #eff6ff; color: #2563eb; }
+.icon-orange { background: #fff7ed; color: #f97316; }
+.icon-purple { background: #f3e8ff; color: #9333ea; }
+.icon-teal { background: #ccfbf1; color: #0d9488; }
+.icon-green { background: #f0fdf4; color: #16a34a; }
+.icon-pink { background: #ffe4e6; color: #e11d48; }
+
+.leadmanagement-stat-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.leadmanagement-stat-title {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leadmanagement-stat-value-container {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.leadmanagement-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.leadmanagement-stat-badge {
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-green { color: #16a34a; }
+.badge-red { color: #dc2626; }
+
+.leadmanagement-stat-sub {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+/* FILTERS BAR */
+.leadmanagement-filters-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.leadmanagement-filter-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.leadmanagement-date-picker-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.leadmanagement-select-filter {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+}
+
+.leadmanagement-more-filters-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.leadmanagement-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.leadmanagement-mobile-filter-toggle {
+  display: none;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.leadmanagement-add-lead-btn {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.leadmanagement-add-lead-btn:hover {
+  background-color: #1e40af;
+}
+
+/* MAIN LAYOUT WITH SLIDE TRANSITION */
+.leadmanagement-main-layout {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  position: relative;
+}
+
+.leadmanagement-left-panel {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0;
+}
+
+.leadmanagement-left-panel.panel-split {
+  flex: 1;
+}
+
+.leadmanagement-left-panel.panel-full {
+  flex: 1;
+  width: 100%;
+}
+
+/* TAB HEADER */
+.leadmanagement-tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.leadmanagement-status-tabs {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.leadmanagement-status-tabs::-webkit-scrollbar { display: none; }
+
+.leadmanagement-status-tab-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  padding: 6px 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.leadmanagement-status-tab-btn.active {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.leadmanagement-status-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #2563eb;
+  border-radius: 2px;
+}
+
+.leadmanagement-table-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.leadmanagement-icon-action-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.leadmanagement-export-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* TABLE */
+.leadmanagement-table-wrapper {
+  overflow-x: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.leadmanagement-table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.leadmanagement-table th {
+  background: #fafafa;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 12px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  white-space: nowrap;
+}
+
+.leadmanagement-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 13px;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.leadmanagement-table-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.leadmanagement-table-row:hover {
+  background-color: #f8fafc;
+}
+
+.leadmanagement-table-row.row-active {
+  background-color: #eff6ff;
+}
+
+.leadmanagement-checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.leadmanagement-lead-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leadmanagement-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.leadmanagement-lead-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.leadmanagement-lead-name {
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.leadmanagement-lead-id {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.leadmanagement-contact-cell,
+.leadmanagement-interest-cell,
+.leadmanagement-budget-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.leadmanagement-phone-text,
+.leadmanagement-property-text,
+.leadmanagement-budget-main {
+  font-weight: 500;
+  color: #1e293b;
+  white-space: nowrap;
+}
+
+.leadmanagement-email-text,
+.leadmanagement-project-text,
+.leadmanagement-budget-range {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.leadmanagement-source-cell,
+.leadmanagement-agent-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.leadmanagement-agent-img {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.leadmanagement-status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.status-new { background: #eff6ff; color: #2563eb; }
+.status-followup { background: #fff7ed; color: #ea580c; }
+.status-sitevisit { background: #f3e8ff; color: #9333ea; }
+.status-converted { background: #f0fdf4; color: #16a34a; }
+.status-lost { background: #ffe4e6; color: #e11d48; }
+.status-lostlead { background: #ffe4e6; color: #e11d48; }
+
+.leadmanagement-followup-text {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.followup-today { color: #dc2626; }
+.followup-tomorrow { color: #ea580c; }
+.followup-date { color: #9333ea; }
+
+.leadmanagement-actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leadmanagement-action-btn {
+  background: none;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.leadmanagement-action-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.icon-call { color: #16a34a; }
+.icon-chat { color: #0284C7; }
+
+/* ACTION MENU POPUP */
+.leadmanagement-more-popover-container {
+  position: relative;
+}
+
+.leadmanagement-action-dropdown {
+  position: absolute;
+  right: 0;
+  top: 32px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 6px;
+  z-index: 100;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.leadmanagement-action-dropdown button {
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 12px;
+  color: #334155;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.leadmanagement-action-dropdown button:hover {
+  background-color: #f1f5f9;
+}
+
+/* PAGINATION */
+.leadmanagement-pagination-footer {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.leadmanagement-showing-text {
+  font-size: 12px;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.leadmanagement-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.leadmanagement-page-num,
+.leadmanagement-page-nav-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #475569;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.leadmanagement-page-num.active {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.leadmanagement-page-size-select {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #334155;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+/* ============================= */
+/* RIGHT PANEL - DETAILS          */
+/* ============================= */
+.leadmanagement-panel-backdrop {
+  display: none;
+}
+
+.leadmanagement-right-panel {
+  width: 380px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  position: sticky;
+  top: 84px;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.leadmanagement-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 2;
+  border-radius: 12px 12px 0 0;
+}
+
+.leadmanagement-mobile-back-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #334155;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.leadmanagement-details-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  flex: 1;
+}
+
+.leadmanagement-close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.leadmanagement-details-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.leadmanagement-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.leadmanagement-avatar-large {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.leadmanagement-profile-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.leadmanagement-name-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.leadmanagement-profile-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.leadmanagement-mini-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-new { background: #dbeafe; color: #1e40af; }
+
+.leadmanagement-id-score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+
+.leadmanagement-profile-id { color: #64748b; }
+
+.leadmanagement-score-badge {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.leadmanagement-details-tabs {
+  display: flex;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.leadmanagement-details-tabs::-webkit-scrollbar { display: none; }
+
+.leadmanagement-details-tab {
+  background: none;
+  border: none;
+  padding: 6px 8px;
+  font-size: 12px;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.leadmanagement-details-tab-icon {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.leadmanagement-details-tab.active {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.leadmanagement-details-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #2563eb;
+}
+
+.leadmanagement-info-card {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.leadmanagement-section-heading {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  margin: 0 0 10px 0;
+}
+
+.leadmanagement-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.leadmanagement-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  gap: 10px;
+}
+
+.leadmanagement-label { color: #64748b; flex-shrink: 0; }
+.leadmanagement-value-bold { font-weight: 600; color: #1e293b; text-align: right; }
+.leadmanagement-value-blue { font-weight: 600; color: #2563eb; text-align: right; }
+.leadmanagement-value-red { font-weight: 600; color: #dc2626; text-align: right; }
+.leadmanagement-value-orange { font-weight: 600; color: #ea580c; text-align: right; }
+
+.leadmanagement-value-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.leadmanagement-mini-icon-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.leadmanagement-comm-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.leadmanagement-comm-btn {
+  flex: 1;
+  border: none;
+  padding: 8px 0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.comm-call { background-color: #16a34a; }
+.comm-whatsapp { background-color: #10b981; }
+.comm-email { background-color: #2563eb; }
+
+.leadmanagement-bottom-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.leadmanagement-btn-row-half {
+  display: flex;
+  gap: 8px;
+}
+
+.leadmanagement-secondary-action-btn {
+  flex: 1;
+  border: none;
+  padding: 8px 0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.action-purple { background-color: #9333ea; }
+.action-orange { background-color: #f97316; }
+
+.leadmanagement-primary-convert-btn {
+  width: 100%;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 10px 0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* MODAL / POPUP WITH SMOOTH FADE ANIMATION */
+.leadmanagement-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease-out forwards;
+  padding: 16px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.leadmanagement-modal-card {
+  background: #ffffff;
+  width: 520px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.leadmanagement-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+}
+
+.leadmanagement-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.leadmanagement-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.leadmanagement-modal-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leadmanagement-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.leadmanagement-form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.leadmanagement-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.leadmanagement-form-group label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.required { color: #dc2626; }
+
+.leadmanagement-form-group input,
+.leadmanagement-form-group select,
+.leadmanagement-form-group textarea {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+  outline: none;
+  width: 100%;
+}
+
+.leadmanagement-form-group input:focus,
+.leadmanagement-form-group select:focus,
+.leadmanagement-form-group textarea:focus {
+  border-color: #2563eb;
+}
+
+/* FIXED MOBILE INPUT PREFIX */
+.leadmanagement-phone-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.leadmanagement-country-flag {
+  background: #f8fafc;
+  padding: 8px 10px;
+  font-size: 12px;
+  border-right: 1px solid #e2e8f0;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.flag-code {
+  font-weight: 700;
+  color: #334155;
+}
+
+.dial-code {
+  color: #64748b;
+}
+
+.leadmanagement-phone-input-wrap input {
+  border: none !important;
+  width: 100%;
+  padding-left: 8px;
+}
+
+.leadmanagement-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.leadmanagement-cancel-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.leadmanagement-cancel-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+.leadmanagement-save-btn {
+  background: #2563eb;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.leadmanagement-save-btn:hover {
+  background-color: #1e40af;
+}
+
+/* ================================================================== */
+/* RESPONSIVE BREAKPOINTS                                              */
+/* Mobile-first fixes for the header, stat cards, filters, tabs and    */
+/* the leads table (which becomes a stacked card list on small screens)*/
+/* ================================================================== */
+
+/* Large desktops keep the 6-up stat grid. Laptops / small desktops */
+@media (max-width: 1280px) {
+  .leadmanagement-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .leadmanagement-right-panel {
+    width: 340px;
+  }
+}
+
+/* Tablets - details panel becomes a full overlay instead of sitting side by side */
+@media (max-width: 992px) {
+  .leadmanagement-topbar-search {
+    max-width: 260px;
+  }
+
+  .leadmanagement-main-layout {
+    display: block;
+  }
+
+  .leadmanagement-left-panel {
+    width: 100%;
+  }
+
+  .leadmanagement-panel-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 200;
+    animation: fadeIn 0.25s ease-out forwards;
+  }
+
+  .leadmanagement-right-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(400px, 100%);
+    max-height: 100vh;
+    border-radius: 0;
+    z-index: 201;
+    animation: slideInRightPanel 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideInRightPanel {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+}
+
+/* Small tablets / large phones - the header switches to its compact layout */
+@media (max-width: 768px) {
+  .leadmanagement-topbar {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .leadmanagement-mobile-menu-btn { display: flex; align-items: center; }
+
+  .leadmanagement-page-title { font-size: 15px; max-width: 46vw; }
+
+  .leadmanagement-breadcrumb { display: none; }
+
+  /* Search collapses into an icon button that reveals a full-width bar */
+  .leadmanagement-mobile-search-btn { display: flex; }
+
+  .leadmanagement-topbar-search {
+    display: none;
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 100%;
+    max-width: none;
+    margin-top: 8px;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    z-index: 60;
+  }
+
+  .leadmanagement-topbar-search.search-open {
+    display: flex;
+  }
+
+  .leadmanagement-topbar-add-btn { display: flex; }
+
+  .leadmanagement-topbar-right { gap: 6px; }
+
+  .leadmanagement-profile-text { display: none; }
+  .leadmanagement-profile-caret { display: none; }
+  .leadmanagement-topbar-profile { border-left: none; padding-left: 0; }
+
+  .leadmanagement-container { padding: 12px; }
+
+  /* Stat cards: two-up grid, wrapped values so nothing overlaps */
+  .leadmanagement-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .leadmanagement-stat-card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .leadmanagement-stat-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .leadmanagement-stat-title {
+    white-space: normal;
+    font-size: 11px;
+  }
+
+  .leadmanagement-stat-value {
+    font-size: 16px;
+  }
+
+  /* Filters: full-width toggle panel */
+  .leadmanagement-filters-bar { gap: 10px; }
+
+  .leadmanagement-filter-inputs {
+    display: none;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px;
+    order: 3;
+  }
+
+  .leadmanagement-filter-inputs.filters-open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .leadmanagement-filter-inputs select,
+  .leadmanagement-filter-inputs .leadmanagement-date-picker-btn,
+  .leadmanagement-filter-inputs .leadmanagement-more-filters-btn {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .leadmanagement-filter-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .leadmanagement-mobile-filter-toggle { display: flex; }
+
+  .leadmanagement-add-lead-btn { flex: 1; justify-content: center; }
+
+  .leadmanagement-tab-header {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .leadmanagement-status-tabs { gap: 16px; }
+
+  .leadmanagement-table-actions-right { gap: 6px; }
+
+  .leadmanagement-icon-action-btn { padding: 6px 8px; }
+
+  .leadmanagement-export-btn .btn-label { display: none; }
+
+  /* ---- Leads table becomes a stacked card list on mobile ---- */
+  .leadmanagement-table-wrapper {
+    overflow-x: visible;
+  }
+
+  .leadmanagement-table {
+    min-width: 0;
+    width: 100%;
+    display: block;
+  }
+
+  .leadmanagement-table thead {
+    display: none;
+  }
+
+  .leadmanagement-table tbody {
+    display: block;
+  }
+
+  .leadmanagement-table-row {
+    display: block;
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin: 10px 12px;
+    padding: 10px 12px 12px;
+  }
+
+  .leadmanagement-table-row:hover {
+    background-color: #ffffff;
+  }
+
+  .leadmanagement-table-row.row-active {
+    background-color: #f5f9ff;
+    border-color: #bfdbfe;
+  }
+
+  .leadmanagement-table td {
+    display: block;
+    padding: 6px 0;
+    border-bottom: none;
+    font-size: 13px;
+  }
+
+  /* Generic label/value rows for the plain data cells */
+  .leadmanagement-table td[data-label]:not([data-label=""]):not(.cell-lead-details):not(.cell-actions) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px dashed #f1f5f9;
+  }
+
+  .leadmanagement-table td[data-label]:not([data-label=""]):not(.cell-lead-details):not(.cell-actions)::before {
+    content: attr(data-label);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  .leadmanagement-contact-cell,
+  .leadmanagement-interest-cell,
+  .leadmanagement-budget-cell {
+    align-items: flex-end;
+  }
+
+  /* Checkbox sits as a small control pinned to the top-right of the card */
+  .leadmanagement-table td.cell-checkbox {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    padding: 0;
+    width: auto;
+  }
+
+  /* Lead name/avatar becomes the card header, with room reserved for the checkbox */
+  .leadmanagement-table td.cell-lead-details {
+    padding: 0 30px 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 6px;
+  }
+
+  .leadmanagement-avatar {
+    width: 38px;
+    height: 38px;
+    font-size: 13px;
+  }
+
+  .leadmanagement-lead-name {
+    font-size: 14px;
+    white-space: normal;
+  }
+
+  /* Actions become a full-width row of evenly spaced buttons */
+  .leadmanagement-table td.cell-actions {
+    padding-top: 10px;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 4px;
+  }
+
+  .leadmanagement-actions-cell {
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .leadmanagement-action-btn {
+    width: 34px;
+    height: 34px;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+  }
+
+  .leadmanagement-action-dropdown {
+    right: 0;
+    top: 38px;
+  }
+
+  .leadmanagement-status-badge {
+    font-size: 11px;
+  }
+
+  .leadmanagement-right-panel {
+    width: 100%;
+  }
+
+  .leadmanagement-mobile-back-btn { display: flex; }
+  .desktop-only { display: none; }
+
+  .leadmanagement-pagination-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .leadmanagement-pagination-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .leadmanagement-page-size-select {
+    margin-left: 0;
+  }
+}
+
+/* Phones */
+@media (max-width: 640px) {
+  .leadmanagement-page-title { max-width: 40vw; }
+
+  .leadmanagement-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .leadmanagement-form-row,
+  .leadmanagement-form-row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .leadmanagement-status-tabs {
+    gap: 14px;
+  }
+
+  .leadmanagement-comm-buttons {
+    flex-wrap: wrap;
+  }
+
+  .leadmanagement-comm-btn {
+    min-width: 30%;
+  }
+
+  .leadmanagement-btn-row-half {
+    flex-direction: column;
+  }
+}
+
+/* Small phones */
+@media (max-width: 420px) {
+  .leadmanagement-stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .leadmanagement-stat-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .leadmanagement-topbar-right { gap: 4px; }
+
+  .leadmanagement-topbar-icon-btn,
+  .leadmanagement-topbar-add-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .leadmanagement-page-title { max-width: 34vw; font-size: 14px; }
+
+  .leadmanagement-modal-form { padding: 14px; }
+
+  .leadmanagement-form-row-3,
+  .leadmanagement-form-row {
+    gap: 10px;
+  }
+}
