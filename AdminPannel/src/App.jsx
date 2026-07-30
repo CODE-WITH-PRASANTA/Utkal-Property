@@ -32,6 +32,7 @@ const App = () => {
 
           <Route path="/LeadManagement" element={<LeadManagement/>} />
           <Route path="/ProfileSetting" element={<ProfileSetting/>} />
+          <Route path="/LeadManagement" element={<LeadManagement/>} />
 
           <Route path="/Report" element={<Report/>}/>
 
