@@ -41,7 +41,7 @@ const App = () => {
           />
 
           <Route
-              path="/newproperty"
+              path="/properties/add"
               element={<AddNewProperty />}
               />
 
@@ -50,12 +50,7 @@ const App = () => {
             element={<DashboardProfile />}
           />
 
-          
-        <Route
-            path="/NewProperties"
-            element={< AddNewProperty />}
         
-          />
 
           <Route
             path="/my-properties"
@@ -69,7 +64,7 @@ const App = () => {
           />
 
           <Route
-            path="/properties/add"
+            path="/properties/all"
             element={<PropertiesDashboard />}
         
           />
