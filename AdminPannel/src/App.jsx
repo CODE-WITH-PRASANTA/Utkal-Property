@@ -10,8 +10,10 @@ import MyProperties from "./Components/MyProperties/MyProperties";
 import MainLayout from "./Layout/MainLayout/MainLayout";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
-import BannerManagement from "./Components/BannerManagement/BannerManagement";
-import Customers from "./Components/Customers/Customers";
+import LeadManagement from "./Components/LeadManagement/LeadManagement";
+import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
+import { Rotate3D } from "lucide-react";
+import Report from "./Pages/Dashboard/Report/Report";
 
 const App = () => {
   return (
@@ -28,8 +30,12 @@ const App = () => {
           <Route path="/properties/categories" element={<Categories/>} />
           <Route path="/properties/locations" element={<Locations/>} />
 
-          <Route path='/BannerManagement' element={<BannerManagement/>} />
-          <Route path='/Customers' element={<Customers/>} />
+          <Route path="/LeadManagement" element={<LeadManagement/>} />
+          <Route path="/ProfileSetting" element={<ProfileSetting/>} />
+          <Route path="/LeadManagement" element={<LeadManagement/>} />
+
+          <Route path="/Report" element={<Report/>}/>
+
 
           <Route
             path="/dashboard-review"
