@@ -1,59 +1,66 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-
-
-import DashboardMain from "./Components/DashboardMain/DashboardMain";
-import DashboardProfile from "./Components/DashboardProfile/DashboardProfile";
-import DashboardReview from "./Components/DashboardReview/DashboardReview";
-import MyProperties from "./Components/MyProperties/MyProperties";
 import MainLayout from "./Layout/MainLayout/MainLayout";
+
+// Dashboard
+import DashboardMain from "./Components/DashboardMain/DashboardMain";
+
+// Properties
+import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
+
+// Sidebar Pages
+import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
-import { Rotate3D } from "lucide-react";
 import Report from "./Pages/Dashboard/Report/Report";
+import Enquire from "./Pages/Enquire/Enquire";
+import User from "./Pages/User/User";
+import Setting from "./Pages/Setting/Setting";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* Redirect Home */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-        {/* Layout */}
+        {/* Main Layout */}
         <Route element={<MainLayout />}>
-
+          {/* Dashboard */}
           <Route path="/dashboard" element={<DashboardMain />} />
-          <Route path="/properties/categories" element={<Categories/>} />
-          <Route path="/properties/locations" element={<Locations/>} />
 
-          <Route path="/LeadManagement" element={<LeadManagement/>} />
-          <Route path="/ProfileSetting" element={<ProfileSetting/>} />
-          <Route path="/LeadManagement" element={<LeadManagement/>} />
+          {/* Properties */}
+          <Route path="/properties/add" element={<AddNewProperty />} />
+          <Route path="/properties/categories" element={<Categories />} />
+          <Route path="/properties/locations" element={<Locations />} />
 
-          <Route path="/Report" element={<Report/>}/>
+          {/* Bookings */}
+          <Route path="/bookings" element={<Bookings />} />
 
+          {/* Leads */}
+          <Route path="/leads" element={<LeadManagement />} />
 
-          <Route
-            path="/dashboard-review"
-            element={<DashboardReview />}
-          />
+          {/* Enquiry */}
+          <Route path="/enquiry" element={<Enquire />} />
 
-          <Route
-            path="/dashboard-profile"
-            element={<DashboardProfile />}
-          />
+          {/* Users */}
+          <Route path="/users" element={<User />} />
 
-          <Route
-            path="/my-properties"
-            element={<MyProperties />}
-          />
+          {/* Reports */}
+          <Route path="/reports" element={<Report />} />
 
+          {/* Settings */}
+          <Route path="/settings" element={<Setting />} />
+
+          {/* Profile */}
+          <Route path="/profile" element={<ProfileSetting />} />
+
+          {/* 404 */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );
