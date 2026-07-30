@@ -292,61 +292,61 @@ const Categories = () => {
   ];
 
   return (
-    <div className="cat-management-container">
+    <div className="categories-management-container">
       {/* Top Breadcrumb */}
-      <header className="cat-header">
+      <header className="categories-header">
         <h1>Category Management</h1>
-        <p className="breadcrumb">Dashboard &gt; <span>Categories</span></p>
+        <p className="categories-breadcrumb">Dashboard &gt; <span>Categories</span></p>
       </header>
 
       {/* 5 Stats Cards Row */}
-      <div className="cat-stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon bg-blue-light"><Folder size={20} color="#2563eb" /></div>
+      <div className="categories-stats-grid">
+        <div className="categories-stat-card">
+          <div className="categories-stat-icon categories-bg-blue-light"><Folder size={20} color="#2563eb" /></div>
           <div>
-            <span className="stat-title">Total Categories</span>
+            <span className="categories-stat-title">Total Categories</span>
             <h2>{categories.length}</h2>
-            <span className="stat-sub">All Categories</span>
+            <span className="categories-stat-sub">All Categories</span>
           </div>
         </div>
 
-        <div className="stat-card">
-          <div className="stat-icon bg-green-light"><CheckCircle2 size={20} color="#16a34a" /></div>
+        <div className="categories-stat-card">
+          <div className="categories-stat-icon categories-bg-green-light"><CheckCircle2 size={20} color="#16a34a" /></div>
           <div>
-            <span className="stat-title">Active Categories</span>
+            <span className="categories-stat-title">Active Categories</span>
             <h2>{categories.filter(c => c.status === 'Active').length}</h2>
-            <span className="stat-sub">
+            <span className="categories-stat-sub">
               {((categories.filter(c => c.status === 'Active').length / (categories.length || 1)) * 100).toFixed(1)}% Active
             </span>
           </div>
         </div>
 
-        <div className="stat-card">
-          <div className="stat-icon bg-red-light"><XCircle size={20} color="#dc2626" /></div>
+        <div className="categories-stat-card">
+          <div className="categories-stat-icon categories-bg-red-light"><XCircle size={20} color="#dc2626" /></div>
           <div>
-            <span className="stat-title">Inactive Categories</span>
+            <span className="categories-stat-title">Inactive Categories</span>
             <h2>{categories.filter(c => c.status === 'Inactive').length}</h2>
-            <span className="stat-sub">
+            <span className="categories-stat-sub">
               {((categories.filter(c => c.status === 'Inactive').length / (categories.length || 1)) * 100).toFixed(1)}% Inactive
             </span>
           </div>
         </div>
 
-        <div className="stat-card">
-          <div className="stat-icon bg-purple-light"><Home size={20} color="#9333ea" /></div>
+        <div className="categories-stat-card">
+          <div className="categories-stat-icon categories-bg-purple-light"><Home size={20} color="#9333ea" /></div>
           <div>
-            <span className="stat-title">Properties Assigned</span>
+            <span className="categories-stat-title">Properties Assigned</span>
             <h2>{categories.reduce((sum, c) => sum + (Number(c.properties) || 0), 0)}</h2>
-            <span className="stat-sub">In All Categories</span>
+            <span className="categories-stat-sub">In All Categories</span>
           </div>
         </div>
 
-        <div className="stat-card">
-          <div className="stat-icon bg-yellow-light"><Star size={20} color="#d97706" /></div>
+        <div className="categories-stat-card">
+          <div className="categories-stat-icon categories-bg-yellow-light"><Star size={20} color="#d97706" /></div>
           <div>
-            <span className="stat-title">Featured Categories</span>
+            <span className="categories-stat-title">Featured Categories</span>
             <h2>{categories.filter(c => c.featured).length}</h2>
-            <span className="stat-sub">
+            <span className="categories-stat-sub">
               {((categories.filter(c => c.featured).length / (categories.length || 1)) * 100).toFixed(1)}% Featured
             </span>
           </div>
@@ -354,41 +354,33 @@ const Categories = () => {
       </div>
 
       {/* Interactive Header Actions */}
-      <div className="cat-top-actions">
-        <button className="btn btn-primary" onClick={() => openModal()}>
+      <div className="categories-top-actions">
+        <button className="categories-btn categories-btn-primary" onClick={() => openModal()}>
           <Plus size={18} /> Add New Category
         </button>
 
-        <button className="btn btn-outline" onClick={() => setIsImportModalOpen(true)}>
-          <Upload size={16} /> Import Categories
-        </button>
-
-        <button className="btn btn-outline" onClick={handleExportCSV}>
-          <Download size={16} /> Export CSV
-        </button>
-
-        <div className="bulk-dropdown-container">
-          <button className="btn btn-outline" onClick={() => setIsBulkOpen(!isBulkOpen)}>
+        <div className="categories-bulk-dropdown-container">
+          <button className="categories-btn categories-btn-outline" onClick={() => setIsBulkOpen(!isBulkOpen)}>
             <Layers size={16} /> Bulk Actions ▾
           </button>
           {isBulkOpen && (
-            <div className="bulk-menu">
+            <div className="categories-bulk-menu">
               <button onClick={() => handleBulkAction('active')}>Set Active</button>
               <button onClick={() => handleBulkAction('inactive')}>Set Inactive</button>
-              <button className="text-danger" onClick={() => handleBulkAction('delete')}>Delete Selected</button>
+              <button className="categories-text-danger" onClick={() => handleBulkAction('delete')}>Delete Selected</button>
             </div>
           )}
         </div>
 
         {selectedIds.length > 0 && (
-          <span className="selected-count-badge">{selectedIds.length} items selected</span>
+          <span className="categories-selected-count-badge">{selectedIds.length} items selected</span>
         )}
       </div>
 
       {/* Multi-Filter Component */}
-      <div className="cat-filter-card">
-        <div className="filter-input-group">
-          <Search size={16} className="search-icon" />
+      <div className="categories-filter-card">
+        <div className="categories-filter-input-group">
+          <Search size={16} className="categories-search-icon" />
           <input 
             type="text" 
             placeholder="Search category name..." 
@@ -397,7 +389,7 @@ const Categories = () => {
           />
         </div>
 
-        <div className="filter-select-group">
+        <div className="categories-filter-select-group">
           <label>Status</label>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="All">All Statuses</option>
@@ -406,7 +398,7 @@ const Categories = () => {
           </select>
         </div>
 
-        <div className="filter-select-group">
+        <div className="categories-filter-select-group">
           <label>Parent Category</label>
           <select value={parentFilter} onChange={(e) => setParentFilter(e.target.value)}>
             <option value="All">All Parents</option>
@@ -416,7 +408,7 @@ const Categories = () => {
           </select>
         </div>
 
-        <div className="filter-select-group">
+        <div className="categories-filter-select-group">
           <label>Created Date</label>
           <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)}>
             <option value="All">All Dates</option>
@@ -425,7 +417,7 @@ const Categories = () => {
           </select>
         </div>
 
-        <div className="filter-select-group">
+        <div className="categories-filter-select-group">
           <label>Property Count</label>
           <select value={propertyFilter} onChange={(e) => setPropertyFilter(e.target.value)}>
             <option value="All">All Counts</option>
@@ -435,14 +427,14 @@ const Categories = () => {
           </select>
         </div>
 
-        <button className="btn-reset" onClick={handleResetFilters}>
+        <button className="categories-btn-reset" onClick={handleResetFilters}>
           <RotateCcw size={14} /> Reset Filter
         </button>
       </div>
 
       {/* Main Table */}
-      <div className="cat-table-wrapper">
-        <table className="cat-table">
+      <div className="categories-table-wrapper">
+        <table className="categories-table">
           <thead>
             <tr>
               <th>
@@ -466,7 +458,7 @@ const Categories = () => {
           <tbody>
             {paginatedData.length > 0 ? (
               paginatedData.map((cat) => (
-                <tr key={cat.id} className="table-row">
+                <tr key={cat.id} className="categories-table-row">
                   <td>
                     <input 
                       type="checkbox" 
@@ -474,42 +466,41 @@ const Categories = () => {
                       onChange={() => handleSelectRow(cat.id)}
                     />
                   </td>
-                  {/* Keep <td> as a normal table cell, wrap content in a span instead */}
-<td className="cell-icon">
-  <span className="cell-icon-wrapper">
-    {cat.previewImg ? (
-      <img src={cat.previewImg} alt={cat.name} className="cell-img-preview" />
-    ) : (
-      cat.icon
-    )}
-  </span>
-</td>
-                  <td className="font-semibold">{cat.name}</td>
+                  <td className="categories-cell-icon">
+                    <span className="categories-cell-icon-wrapper">
+                      {cat.previewImg ? (
+                        <img src={cat.previewImg} alt={cat.name} className="categories-cell-img-preview" />
+                      ) : (
+                        cat.icon
+                      )}
+                    </span>
+                  </td>
+                  <td className="categories-font-semibold">{cat.name}</td>
                   <td>{cat.parent}</td>
-                  <td className="text-muted">{cat.slug}</td>
-                  <td className="font-semibold">{cat.properties}</td>
+                  <td className="categories-text-muted">{cat.slug}</td>
+                  <td className="categories-font-semibold">{cat.properties}</td>
                   <td>
                     {cat.featured ? (
-                      <span className="badge-featured-yes"><Star size={12} fill="#d97706" /> Yes</span>
+                      <span className="categories-badge-featured-yes"><Star size={12} fill="#d97706" /> Yes</span>
                     ) : (
-                      <span className="badge-featured-no"><Star size={12} /> No</span>
+                      <span className="categories-badge-featured-no"><Star size={12} /> No</span>
                     )}
                   </td>
                   <td>
-                    <span className={`badge-status ${cat.status.toLowerCase()}`}>
+                    <span className={`categories-badge-status ${cat.status.toLowerCase()}`}>
                       {cat.status}
                     </span>
                   </td>
-                  <td className="text-muted">{cat.date}</td>
+                  <td className="categories-text-muted">{cat.date}</td>
                   <td>
-                    <div className="action-buttons">
-                      <button className="btn-icon view" title="View Details" onClick={() => setViewCategory(cat)}>
+                    <div className="categories-action-buttons">
+                      <button className="categories-btn-icon view" title="View Details" onClick={() => setViewCategory(cat)}>
                         <Eye size={16} />
                       </button>
-                      <button className="btn-icon edit" title="Edit Category" onClick={() => openModal(cat)}>
+                      <button className="categories-btn-icon edit" title="Edit Category" onClick={() => openModal(cat)}>
                         <Edit2 size={16} />
                       </button>
-                      <button className="btn-icon delete" title="Delete Category" onClick={() => setDeleteId(cat.id)}>
+                      <button className="categories-btn-icon delete" title="Delete Category" onClick={() => setDeleteId(cat.id)}>
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -518,19 +509,19 @@ const Categories = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="10" className="no-data">No categories matching filters found.</td>
+                <td colSpan="10" className="categories-no-data">No categories matching filters found.</td>
               </tr>
             )}
           </tbody>
         </table>
 
         {/* Dynamic Pagination Bar */}
-        <div className="cat-pagination">
+        <div className="categories-pagination">
           <span>
             Showing {paginatedData.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length} entries
           </span>
           
-          <div className="pagination-controls">
+          <div className="categories-pagination-controls">
             <button 
               disabled={currentPage === 1} 
               onClick={() => setCurrentPage(p => p - 1)}
@@ -557,7 +548,7 @@ const Categories = () => {
 
             {/* Configurable Page Size Switcher */}
             <select 
-              className="page-size-select"
+              className="categories-page-size-select"
               value={`${itemsPerPage} / page`}
               onChange={(e) => {
                 setItemsPerPage(Number(e.target.value.split(' ')[0]));
@@ -574,39 +565,39 @@ const Categories = () => {
       </div>
 
       {/* Interactive Bottom Widgets */}
-      <div className="cat-widgets-grid">
+      <div className="categories-widgets-grid">
         {/* Category Summary / Donut Chart */}
-        <div className="widget-card">
+        <div className="categories-widget-card">
           <h3>Category Summary</h3>
-          <div className="donut-chart-container">
-            <div className="donut-chart">
-              <svg viewBox="0 0 36 36" className="circular-chart">
-                <path className="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="circle" strokeDasharray="35.7, 100" stroke="#2563eb" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="circle" strokeDasharray="28.7, 100" strokeDashoffset="-35.7" stroke="#22c55e" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="circle" strokeDasharray="18.8, 100" strokeDashoffset="-64.4" stroke="#a855f7" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="circle" strokeDasharray="12.4, 100" strokeDashoffset="-83.2" stroke="#eab308" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="circle" strokeDasharray="7.7, 100" strokeDashoffset="-95.6" stroke="#ef4444" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          <div className="categories-donut-chart-container">
+            <div className="categories-donut-chart">
+              <svg viewBox="0 0 36 36" className="categories-circular-chart">
+                <path className="categories-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="categories-circle" strokeDasharray="35.7, 100" stroke="#2563eb" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="categories-circle" strokeDasharray="28.7, 100" strokeDashoffset="-35.7" stroke="#22c55e" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="categories-circle" strokeDasharray="18.8, 100" strokeDashoffset="-64.4" stroke="#a855f7" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="categories-circle" strokeDasharray="12.4, 100" strokeDashoffset="-83.2" stroke="#eab308" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="categories-circle" strokeDasharray="7.7, 100" strokeDashoffset="-95.6" stroke="#ef4444" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               </svg>
-              <div className="donut-hole">
+              <div className="categories-donut-hole">
                 <span>Total Categories</span>
                 <strong>{categories.length}</strong>
               </div>
             </div>
 
-            <div className="donut-legend">
+            <div className="categories-donut-legend">
               {chartData.map((item, index) => (
                 <div 
                   key={`chart-legend-${item.label}`} 
-                  className={`legend-item ${hoveredChartIndex === index ? 'highlight' : ''}`}
+                  className={`categories-legend-item ${hoveredChartIndex === index ? 'highlight' : ''}`}
                   onMouseEnter={() => setHoveredChartIndex(index)}
                   onMouseLeave={() => setHoveredChartIndex(null)}
                 >
-                  <span className="legend-dot" style={{ backgroundColor: item.color }}></span>
-                  <span className="legend-label">{item.label}</span>
-                  <span className="legend-value">{item.value}%</span>
+                  <span className="categories-legend-dot" style={{ backgroundColor: item.color }}></span>
+                  <span className="categories-legend-label">{item.label}</span>
+                  <span className="categories-legend-value">{item.value}%</span>
                   {hoveredChartIndex === index && (
-                    <div className="legend-tooltip">{item.label}: {item.value}% Share</div>
+                    <div className="categories-legend-tooltip">{item.label}: {item.value}% Share</div>
                   )}
                 </div>
               ))}
@@ -615,35 +606,35 @@ const Categories = () => {
         </div>
 
         {/* Quick Actions Component */}
-        <div className="widget-card">
+        <div className="categories-widget-card">
           <h3>Quick Actions</h3>
-          <div className="quick-actions-grid">
-            <div className="qa-item" onClick={() => openModal()}>
-              <div className="qa-icon blue"><Plus size={20} /></div>
+          <div className="categories-quick-actions-grid">
+            <div className="categories-qa-item" onClick={() => openModal()}>
+              <div className="categories-qa-icon blue"><Plus size={20} /></div>
               <div>
                 <strong>Add New Category</strong>
                 <p>Create a new category</p>
               </div>
             </div>
 
-            <div className="qa-item" onClick={() => setIsOrderModalOpen(true)}>
-              <div className="qa-icon green"><Layers size={20} /></div>
+            <div className="categories-qa-item" onClick={() => setIsOrderModalOpen(true)}>
+              <div className="categories-qa-icon green"><Layers size={20} /></div>
               <div>
                 <strong>Manage Category Order</strong>
                 <p>Reorder display sequence</p>
               </div>
             </div>
 
-            <div className="qa-item" onClick={() => setIsSettingsModalOpen(true)}>
-              <div className="qa-icon purple"><Settings size={20} /></div>
+            <div className="categories-qa-item" onClick={() => setIsSettingsModalOpen(true)}>
+              <div className="categories-qa-icon purple"><Settings size={20} /></div>
               <div>
                 <strong>Category Settings</strong>
                 <p>Manage defaults & rules</p>
               </div>
             </div>
 
-            <div className="qa-item" onClick={() => setIsImportModalOpen(true)}>
-              <div className="qa-icon yellow"><Upload size={20} /></div>
+            <div className="categories-qa-item" onClick={() => setIsImportModalOpen(true)}>
+              <div className="categories-qa-icon yellow"><Upload size={20} /></div>
               <div>
                 <strong>Import Categories</strong>
                 <p>Import categories from file</p>
@@ -653,20 +644,20 @@ const Categories = () => {
         </div>
 
         {/* Top Categories */}
-        <div className="widget-card">
-          <div className="widget-header">
+        <div className="categories-widget-card">
+          <div className="categories-widget-header">
             <h3>Top Categories</h3>
-            <button className="btn-link">View All</button>
+            <button className="categories-btn-link">View All</button>
           </div>
-          <ul className="top-categories-list">
+          <ul className="categories-top-categories-list">
             {[...categories]
               .sort((a, b) => b.properties - a.properties)
               .slice(0, 5)
               .map((item, idx) => (
                 <li key={`top-cat-${item.id}`}>
-                  <span className={`rank rank-${idx + 1}`}>{idx + 1}</span>
-                  <span className="cat-name">{item.name}</span>
-                  <span className="cat-props">{item.properties} Properties</span>
+                  <span className={`categories-rank categories-rank-${idx + 1}`}>{idx + 1}</span>
+                  <span className="categories-cat-name">{item.name}</span>
+                  <span className="categories-cat-props">{item.properties} Properties</span>
                 </li>
               ))}
           </ul>
@@ -675,19 +666,19 @@ const Categories = () => {
 
       {/* Add / Edit Category Dialog Modal */}
       {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
+        <div className="categories-modal-overlay">
+          <div className="categories-modal-container">
+            <div className="categories-modal-header">
               <h2>{editingCategory ? 'Edit Category' : 'Add New Category'}</h2>
-              <button className="btn-close" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
+              <button className="categories-btn-close" onClick={() => setIsModalOpen(false)}><X size={20} /></button>
             </div>
 
-            <form onSubmit={handleSaveCategory} className="modal-body">
-              <h3 className="section-subtitle">Category Information</h3>
+            <form onSubmit={handleSaveCategory} className="categories-modal-body">
+              <h3 className="categories-section-subtitle">Category Information</h3>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Category Name <span className="required">*</span></label>
+              <div className="categories-form-row">
+                <div className="categories-form-group">
+                  <label>Category Name <span className="categories-required">*</span></label>
                   <input 
                     type="text" 
                     name="name" 
@@ -698,8 +689,8 @@ const Categories = () => {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label>Slug <span className="required">*</span></label>
+                <div className="categories-form-group">
+                  <label>Slug <span className="categories-required">*</span></label>
                   <input 
                     type="text" 
                     name="slug" 
@@ -708,12 +699,12 @@ const Categories = () => {
                     onChange={handleInputChange} 
                     required 
                   />
-                  <small className="field-hint">URL-friendly slug format</small>
+                  <small className="categories-field-hint">URL-friendly slug format</small>
                 </div>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
+              <div className="categories-form-row">
+                <div className="categories-form-group">
                   <label>Parent Category</label>
                   <select name="parent" value={formData.parent} onChange={handleInputChange}>
                     <option value="">Select parent category</option>
@@ -723,7 +714,7 @@ const Categories = () => {
                 </div>
 
                 {/* Upload Section with File Preview */}
-                <div className="form-group">
+                <div className="categories-form-group">
                   <label>Category Icon / Image</label>
                   <input 
                     type="file" 
@@ -732,15 +723,15 @@ const Categories = () => {
                     accept="image/*"
                     onChange={handleFileChange}
                   />
-                  <div className="upload-box" onClick={() => fileInputRef.current?.click()}>
+                  <div className="categories-upload-box" onClick={() => fileInputRef.current?.click()}>
                     {formData.previewImg ? (
-                      <div className="uploaded-preview-container">
-                        <img src={formData.previewImg} alt="Preview" className="preview-thumb" />
+                      <div className="categories-uploaded-preview-container">
+                        <img src={formData.previewImg} alt="Preview" className="categories-preview-thumb" />
                         <span>Change Image</span>
                       </div>
                     ) : (
                       <>
-                        <Upload size={20} className="upload-icon" />
+                        <Upload size={20} className="categories-upload-icon" />
                         <span>Upload Icon File</span>
                         <small>PNG, SVG or JPG (Max. {settings.maxUploadMB}MB)</small>
                       </>
@@ -749,8 +740,8 @@ const Categories = () => {
                 </div>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
+              <div className="categories-form-row">
+                <div className="categories-form-group">
                   <label>Properties Assigned</label>
                   <input 
                     type="number" 
@@ -760,19 +751,19 @@ const Categories = () => {
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="categories-form-group">
                   <label>Featured Category</label>
-                  <div className="toggle-group">
+                  <div className="categories-toggle-group">
                     <button 
                       type="button" 
-                      className={`btn-toggle ${!formData.featured ? 'active' : ''}`}
+                      className={`categories-btn-toggle ${!formData.featured ? 'active' : ''}`}
                       onClick={() => setFormData(p => ({ ...p, featured: false }))}
                     >
                       <Star size={14} /> No
                     </button>
                     <button 
                       type="button" 
-                      className={`btn-toggle ${formData.featured ? 'active-featured' : ''}`}
+                      className={`categories-btn-toggle ${formData.featured ? 'active-featured' : ''}`}
                       onClick={() => setFormData(p => ({ ...p, featured: true }))}
                     >
                       <Star size={14} fill="#d97706" /> Yes
@@ -781,19 +772,19 @@ const Categories = () => {
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="categories-form-group">
                 <label>Status</label>
-                <div className="status-toggle-group">
+                <div className="categories-status-toggle-group">
                   <button 
                     type="button" 
-                    className={`status-btn active-btn ${formData.status === 'Active' ? 'selected' : ''}`}
+                    className={`categories-status-btn active-btn ${formData.status === 'Active' ? 'selected' : ''}`}
                     onClick={() => setFormData(p => ({ ...p, status: 'Active' }))}
                   >
                     <CheckCircle2 size={16} /> Active
                   </button>
                   <button 
                     type="button" 
-                    className={`status-btn inactive-btn ${formData.status === 'Inactive' ? 'selected' : ''}`}
+                    className={`categories-status-btn inactive-btn ${formData.status === 'Inactive' ? 'selected' : ''}`}
                     onClick={() => setFormData(p => ({ ...p, status: 'Inactive' }))}
                   >
                     <XCircle size={16} /> Inactive
@@ -801,11 +792,11 @@ const Categories = () => {
                 </div>
               </div>
 
-              <div className="modal-footer">
-                <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>
+              <div className="categories-modal-footer">
+                <button type="button" className="categories-btn-cancel" onClick={() => setIsModalOpen(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-save">
+                <button type="submit" className="categories-btn-save">
                   Save Category
                 </button>
               </div>
@@ -816,22 +807,22 @@ const Categories = () => {
 
       {/* Import File Dialog Modal */}
       {isImportModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
+        <div className="categories-modal-overlay">
+          <div className="categories-modal-container">
+            <div className="categories-modal-header">
               <h2>Import Categories</h2>
-              <button className="btn-close" onClick={() => setIsImportModalOpen(false)}><X size={20} /></button>
+              <button className="categories-btn-close" onClick={() => setIsImportModalOpen(false)}><X size={20} /></button>
             </div>
-            <form onSubmit={handleImportSubmit} className="modal-body">
+            <form onSubmit={handleImportSubmit} className="categories-modal-body">
               <p style={{ fontSize: '13px', color: '#64748b' }}>
                 Upload a CSV or JSON file with category details to quickly populate data.
               </p>
-              <div className="form-group">
+              <div className="categories-form-group">
                 <input type="file" ref={importInputRef} required accept=".csv, .json" />
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn-cancel" onClick={() => setIsImportModalOpen(false)}>Cancel</button>
-                <button type="submit" className="btn-save">Import File</button>
+              <div className="categories-modal-footer">
+                <button type="button" className="categories-btn-cancel" onClick={() => setIsImportModalOpen(false)}>Cancel</button>
+                <button type="submit" className="categories-btn-save">Import File</button>
               </div>
             </form>
           </div>
@@ -840,27 +831,27 @@ const Categories = () => {
 
       {/* Reorder Sequence Modal */}
       {isOrderModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
+        <div className="categories-modal-overlay">
+          <div className="categories-modal-container">
+            <div className="categories-modal-header">
               <h2>Manage Category Sequence</h2>
-              <button className="btn-close" onClick={() => setIsOrderModalOpen(false)}><X size={20} /></button>
+              <button className="categories-btn-close" onClick={() => setIsOrderModalOpen(false)}><X size={20} /></button>
             </div>
-            <div className="modal-body">
-              <ul className="order-list">
+            <div className="categories-modal-body">
+              <ul className="categories-order-list">
                 {categories.map((cat, idx) => (
-                  <li key={`order-${cat.id}`} className="order-item">
+                  <li key={`order-${cat.id}`} className="categories-order-item">
                     <span>{cat.name}</span>
-                    <div className="order-controls">
+                    <div className="categories-order-controls">
                       <button 
-                        className="btn-arrow" 
+                        className="categories-btn-arrow" 
                         disabled={idx === 0} 
                         onClick={() => moveCategoryOrder(idx, 'up')}
                       >
                         <ArrowUp size={14} />
                       </button>
                       <button 
-                        className="btn-arrow" 
+                        className="categories-btn-arrow" 
                         disabled={idx === categories.length - 1} 
                         onClick={() => moveCategoryOrder(idx, 'down')}
                       >
@@ -870,8 +861,8 @@ const Categories = () => {
                   </li>
                 ))}
               </ul>
-              <div className="modal-footer">
-                <button className="btn-save" onClick={() => setIsOrderModalOpen(false)}>Done</button>
+              <div className="categories-modal-footer">
+                <button className="categories-btn-save" onClick={() => setIsOrderModalOpen(false)}>Done</button>
               </div>
             </div>
           </div>
@@ -880,14 +871,14 @@ const Categories = () => {
 
       {/* Global Category Preferences Settings Modal */}
       {isSettingsModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal-header">
+        <div className="categories-modal-overlay">
+          <div className="categories-modal-container">
+            <div className="categories-modal-header">
               <h2>Category Preferences</h2>
-              <button className="btn-close" onClick={() => setIsSettingsModalOpen(false)}><X size={20} /></button>
+              <button className="categories-btn-close" onClick={() => setIsSettingsModalOpen(false)}><X size={20} /></button>
             </div>
-            <div className="modal-body">
-              <div className="form-group">
+            <div className="categories-modal-body">
+              <div className="categories-form-group">
                 <label>Default Category Status</label>
                 <select 
                   value={settings.defaultStatus} 
@@ -897,7 +888,7 @@ const Categories = () => {
                   <option value="Inactive">Inactive</option>
                 </select>
               </div>
-              <div className="form-group">
+              <div className="categories-form-group">
                 <label>Max Icon Upload Size (MB)</label>
                 <input 
                   type="number" 
@@ -905,8 +896,8 @@ const Categories = () => {
                   onChange={(e) => setSettings(s => ({ ...s, maxUploadMB: Number(e.target.value) }))} 
                 />
               </div>
-              <div className="modal-footer">
-                <button className="btn-save" onClick={() => setIsSettingsModalOpen(false)}>Save Settings</button>
+              <div className="categories-modal-footer">
+                <button className="categories-btn-save" onClick={() => setIsSettingsModalOpen(false)}>Save Settings</button>
               </div>
             </div>
           </div>
@@ -915,13 +906,13 @@ const Categories = () => {
 
       {/* Delete Confirmation Box */}
       {deleteId && (
-        <div className="modal-overlay">
-          <div className="confirm-modal">
+        <div className="categories-modal-overlay">
+          <div className="categories-confirm-modal">
             <h3>Confirm Deletion</h3>
             <p>Are you sure you want to delete this category? This action cannot be undone.</p>
-            <div className="confirm-actions">
-              <button className="btn-cancel" onClick={() => setDeleteId(null)}>Cancel</button>
-              <button className="btn-delete-confirm" onClick={handleDeleteConfirm}>Delete</button>
+            <div className="categories-confirm-actions">
+              <button className="categories-btn-cancel" onClick={() => setDeleteId(null)}>Cancel</button>
+              <button className="categories-btn-delete-confirm" onClick={handleDeleteConfirm}>Delete</button>
             </div>
           </div>
         </div>
@@ -929,8 +920,8 @@ const Categories = () => {
 
       {/* View Item Details Modal */}
       {viewCategory && (
-        <div className="modal-overlay">
-          <div className="confirm-modal align-left">
+        <div className="categories-modal-overlay">
+          <div className="categories-confirm-modal align-left">
             <h3>Category Details</h3>
             <div>
               <p><strong>Name:</strong> {viewCategory.name}</p>
@@ -940,8 +931,8 @@ const Categories = () => {
               <p><strong>Status:</strong> {viewCategory.status}</p>
               <p><strong>Created:</strong> {viewCategory.date}</p>
             </div>
-            <div className="confirm-actions">
-              <button className="btn-cancel" onClick={() => setViewCategory(null)}>Close</button>
+            <div className="categories-confirm-actions">
+              <button className="categories-btn-cancel" onClick={() => setViewCategory(null)}>Close</button>
             </div>
           </div>
         </div>
