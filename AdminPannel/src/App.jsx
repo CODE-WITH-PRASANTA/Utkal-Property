@@ -1,56 +1,106 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-
-
-import DashboardMain from "./Components/DashboardMain/DashboardMain";
-import DashboardProfile from "./Components/DashboardProfile/DashboardProfile";
-import DashboardReview from "./Components/DashboardReview/DashboardReview";
-import MyProperties from "./Components/MyProperties/MyProperties";
 import MainLayout from "./Layout/MainLayout/MainLayout";
+
+// Existing Pages
+import DashboardMain from "./Components/DashboardMain/DashboardMain";
+
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
-import BannerManagement from "./Components/BannerManagement/BannerManagement";
-import Customers from "./Components/Customers/Customers";
+import LeadManagement from "./Components/LeadManagement/LeadManagement";
+import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
+import Report from "./Pages/Dashboard/Report/Report";
+import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
+import Bookings from "./Components/Bookings/Bookings";
+
+
+// Sidebar Path Pages
+
+
 
 const App = () => {
+
   return (
     <BrowserRouter>
+
       <Routes>
 
-        {/* Redirect Home */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Default */}
+        <Route 
+          path="/" 
+          element={<Navigate to="/dashboard" replace />} 
+        />
+
 
         {/* Layout */}
         <Route element={<MainLayout />}>
 
+          {/* Dashboard */}
+         
           <Route path="/dashboard" element={<DashboardMain />} />
           <Route path="/properties/categories" element={<Categories/>} />
           <Route path="/properties/locations" element={<Locations/>} />
 
-          <Route path='/BannerManagement' element={<BannerManagement/>} />
-          <Route path='/Customers' element={<Customers/>} />
+          <Route path="/LeadManagement" element={<LeadManagement/>} />
+          <Route path="/ProfileSetting" element={<ProfileSetting/>} />
+          <Route path="/LeadManagement" element={<LeadManagement/>} />
 
-          <Route
-            path="/dashboard-review"
-            element={<DashboardReview />}
+          <Route path="/Report" element={<Report/>}/>
+
+
+          
+
+
+          {/* Properties */}
+          <Route 
+            path="/properties/add" 
+            element={<AddNewProperty />} 
           />
 
-          <Route
-            path="/dashboard-profile"
-            element={<DashboardProfile />}
+          
+          <Route 
+            path="/properties/categories" 
+            element={<Categories />} 
           />
 
-          <Route
-            path="/my-properties"
-            element={<MyProperties />}
+          <Route 
+            path="/properties/locations" 
+            element={<Locations />} 
           />
+
+
+          {/* Sidebar Pages */}
+         
+
+         
+          <Route 
+            path="/leads" 
+            element={<LeadManagement />} 
+          />
+
+          
+
+          <Route 
+            path="/reports" 
+            element={<Report />} 
+          />
+
+          <Route 
+            path="/DashboardProfile" 
+            element={<ProfileSetting />} 
+          />
+
+          <Route path="/bookings" element={<Bookings />} />
+
 
         </Route>
 
       </Routes>
+
     </BrowserRouter>
   );
 };
+
 
 export default App;
