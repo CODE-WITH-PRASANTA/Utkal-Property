@@ -242,35 +242,31 @@ const Locations = () => {
   };
 
   return (
-    <div className="loc-container">
+    <div className="locations-wrapper">
       {/* Top Header */}
-      <header className="loc-header">
+      <header className="locations-header">
         <div>
-          <h1>Locations</h1>
-          <nav className="loc-breadcrumb">
+          <h1 className="locations-title">Locations</h1>
+          <nav className="locations-breadcrumb">
             Dashboard &gt; Property Management &gt; <span>Locations</span>
           </nav>
         </div>
-        <div className="loc-header-actions">
-          <button className="btn btn-primary" onClick={() => openAddEditModal()}>
+        <div className="locations-header-actions">
+          <button className="locations-btn locations-btn-primary" onClick={() => openAddEditModal()}>
             <FiPlus /> Add New Location
           </button>
-          <button className="btn btn-outline" onClick={() => setIsImportOpen(true)}>
-            <FiUpload /> Import Locations
-          </button>
-          <button className="btn btn-outline" onClick={handleExportCSV}>
-            <FiDownload /> Export CSV
-          </button>
-          <button className="btn btn-outline" onClick={() => setIsMapModalOpen(true)}>
+          
+          
+          <button className="locations-btn locations-btn-outline" onClick={() => setIsMapModalOpen(true)}>
             <FiMapPin /> Map View
           </button>
           
-          <div className="bulk-wrapper">
-            <button className="btn btn-outline" onClick={() => setIsBulkOpen(!isBulkOpen)}>
+          <div className="locations-bulk-wrapper">
+            <button className="locations-btn locations-btn-outline" onClick={() => setIsBulkOpen(!isBulkOpen)}>
               Bulk Actions <FiChevronDown />
             </button>
             {isBulkOpen && (
-              <div className="bulk-dropdown">
+              <div className="locations-bulk-dropdown">
                 <button onClick={handleBulkDelete} disabled={selectedIds.length === 0}>
                   Delete Selected ({selectedIds.length})
                 </button>
@@ -281,61 +277,61 @@ const Locations = () => {
       </header>
 
       {/* 6 Top Stats Cards */}
-      <section className="loc-stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon icon-blue"><FiMapPin /></div>
+      <section className="locations-stats-grid">
+        <div className="locations-stat-card">
+          <div className="locations-stat-icon locations-icon-blue"><FiMapPin /></div>
           <div>
-            <span className="stat-label">Total Locations</span>
+            <span className="locations-stat-label">Total Locations</span>
             <h2>{stats.total}</h2>
-            <span className="stat-sub">All Locations</span>
+            <span className="locations-stat-sub">All Locations</span>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon icon-green"><FiGlobe /></div>
+        <div className="locations-stat-card">
+          <div className="locations-stat-icon locations-icon-green"><FiGlobe /></div>
           <div>
-            <span className="stat-label">Countries</span>
+            <span className="locations-stat-label">Countries</span>
             <h2>{stats.countries}</h2>
-            <span className="stat-sub">Active Countries</span>
+            <span className="locations-stat-sub">Active Countries</span>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon icon-emerald"><FiMap /></div>
+        <div className="locations-stat-card">
+          <div className="locations-stat-icon locations-icon-emerald"><FiMap /></div>
           <div>
-            <span className="stat-label">States</span>
+            <span className="locations-stat-label">States</span>
             <h2>{stats.states}</h2>
-            <span className="stat-sub">Active States</span>
+            <span className="locations-stat-sub">Active States</span>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon icon-purple"><FiHome /></div>
+        <div className="locations-stat-card">
+          <div className="locations-stat-icon locations-icon-purple"><FiHome /></div>
           <div>
-            <span className="stat-label">Cities</span>
+            <span className="locations-stat-label">Cities</span>
             <h2>{stats.cities}</h2>
-            <span className="stat-sub">Total Cities</span>
+            <span className="locations-stat-sub">Total Cities</span>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon icon-rose"><FiMapPin /></div>
+        <div className="locations-stat-card">
+          <div className="locations-stat-icon locations-icon-rose"><FiMapPin /></div>
           <div>
-            <span className="stat-label">Local Areas</span>
+            <span className="locations-stat-label">Local Areas</span>
             <h2>{stats.areas}</h2>
-            <span className="stat-sub">Total Areas</span>
+            <span className="locations-stat-sub">Total Areas</span>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon icon-amber"><FiHome /></div>
+        <div className="locations-stat-card">
+          <div className="locations-stat-icon locations-icon-amber"><FiHome /></div>
           <div>
-            <span className="stat-label">Properties</span>
+            <span className="locations-stat-label">Properties</span>
             <h2>{stats.properties.toLocaleString()}</h2>
-            <span className="stat-sub">In All Locations</span>
+            <span className="locations-stat-sub">In All Locations</span>
           </div>
         </div>
       </section>
 
       {/* Dynamic Filter Section */}
-      <section className="loc-filter-card">
-        <div className="search-input-wrapper">
-          <FiSearch className="search-icon" />
+      <section className="locations-filter-card">
+        <div className="locations-search-input-wrapper">
+          <FiSearch className="locations-search-icon" />
           <input 
             type="text" 
             placeholder="Search location..." 
@@ -344,35 +340,35 @@ const Locations = () => {
           />
         </div>
 
-        <div className="filter-group">
+        <div className="locations-filter-group">
           <label>Country</label>
           <select value={filters.country} onChange={(e) => setFilters({...filters, country: e.target.value})}>
             {uniqueCountries.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className="locations-filter-group">
           <label>State</label>
           <select value={filters.state} onChange={(e) => setFilters({...filters, state: e.target.value})}>
             {uniqueStates.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className="locations-filter-group">
           <label>City</label>
           <select value={filters.city} onChange={(e) => setFilters({...filters, city: e.target.value})}>
             {uniqueCities.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className="locations-filter-group">
           <label>Area</label>
           <select value={filters.area} onChange={(e) => setFilters({...filters, area: e.target.value})}>
             {uniqueAreas.map(a => <option key={a} value={a}>{a}</option>)}
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className="locations-filter-group">
           <label>Status</label>
           <select value={filters.status} onChange={(e) => setFilters({...filters, status: e.target.value})}>
             <option value="All">All</option>
@@ -381,7 +377,7 @@ const Locations = () => {
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className="locations-filter-group">
           <label>Property Count</label>
           <select value={filters.propertyCount} onChange={(e) => setFilters({...filters, propertyCount: e.target.value})}>
             <option value="All">All</option>
@@ -391,14 +387,14 @@ const Locations = () => {
           </select>
         </div>
 
-        <button className="btn-reset" onClick={resetFilters}>
+        <button className="locations-btn-reset" onClick={resetFilters}>
           <FiRotateCcw /> Reset Filter
         </button>
       </section>
 
       {/* Main Table Area */}
-      <div className="table-wrapper">
-        <table className="loc-table">
+      <div className="locations-table-wrapper">
+        <table className="locations-table">
           <thead>
             <tr>
               <th>
@@ -431,34 +427,34 @@ const Locations = () => {
                     />
                   </td>
                   <td>
-                    <span className="country-cell"><span className="flag-icon">{row.flag}</span> {row.country}</span>
+                    <span className="locations-country-cell"><span className="locations-flag-icon">{row.flag}</span> {row.country}</span>
                   </td>
                   <td>{row.state}</td>
                   <td>{row.city}</td>
-                  <td className="fw-semibold">{row.area}</td>
+                  <td className="locations-fw-semibold">{row.area}</td>
                   <td>{row.pincode}</td>
                   <td>{row.properties}</td>
                   <td>
                     {row.featured ? (
-                      <span className="badge-featured featured-yes"><FiStar /> Yes</span>
+                      <span className="locations-badge-featured locations-featured-yes"><FiStar /> Yes</span>
                     ) : (
-                      <span className="badge-featured featured-no"><FiStar /> No</span>
+                      <span className="locations-badge-featured locations-featured-no"><FiStar /> No</span>
                     )}
                   </td>
                   <td>
-                    <span className={`badge-status ${row.status.toLowerCase()}`}>
+                    <span className={`locations-badge-status locations-status-${row.status.toLowerCase()}`}>
                       {row.status}
                     </span>
                   </td>
                   <td>
-                    <div className="action-buttons">
-                      <button className="btn-action view" onClick={() => { setViewData(row); setIsViewOpen(true); }}>
+                    <div className="locations-action-buttons">
+                      <button className="locations-btn-action locations-btn-view" onClick={() => { setViewData(row); setIsViewOpen(true); }}>
                         <FiEye />
                       </button>
-                      <button className="btn-action edit" onClick={() => openAddEditModal(row)}>
+                      <button className="locations-btn-action locations-btn-edit" onClick={() => openAddEditModal(row)}>
                         <FiEdit2 />
                       </button>
-                      <button className="btn-action delete" onClick={() => setDeleteId(row.id)}>
+                      <button className="locations-btn-action locations-btn-delete" onClick={() => setDeleteId(row.id)}>
                         <FiTrash2 />
                       </button>
                     </div>
@@ -467,25 +463,25 @@ const Locations = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="10" className="no-data-cell">No matching locations found</td>
+                <td colSpan="10" className="locations-no-data-cell">No matching locations found</td>
               </tr>
             )}
           </tbody>
         </table>
 
         {/* Footer & Pagination */}
-        <div className="loc-pagination">
+        <div className="locations-pagination">
           <span>
             Showing {filteredLocations.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to{' '}
             {Math.min(currentPage * itemsPerPage, filteredLocations.length)} of {filteredLocations.length} entries
           </span>
 
-          <div className="pagination-controls">
+          <div className="locations-pagination-controls">
             <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>&lt;</button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button 
                 key={page} 
-                className={currentPage === page ? 'active' : ''}
+                className={currentPage === page ? 'locations-page-active' : ''}
                 onClick={() => setCurrentPage(page)}
               >
                 {page}
@@ -494,7 +490,7 @@ const Locations = () => {
             <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>&gt;</button>
           </div>
 
-          <div className="page-size-selector">
+          <div className="locations-page-size-selector">
             <select 
               value={itemsPerPage} 
               onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
@@ -510,12 +506,12 @@ const Locations = () => {
       </div>
 
       {/* Map Overview Section & Top Performing Locations */}
-      <div className="loc-bottom-grid">
-        <div className="map-overview-card">
-          <div className="card-header">
+      <div className="locations-bottom-grid">
+        <div className="locations-map-overview-card">
+          <div className="locations-card-header">
             <h3>Location Map Overview</h3>
           </div>
-          <div className="map-preview-wrapper">
+          <div className="locations-map-preview-wrapper">
             <iframe 
               title="Location Map"
               src="https://maps.google.com/maps?q=Bhubaneswar&t=&z=11&ie=UTF8&iwloc=&output=embed"
@@ -525,19 +521,19 @@ const Locations = () => {
               allowFullScreen="" 
               loading="lazy"
             ></iframe>
-            <button className="btn-open-map" onClick={() => setIsMapModalOpen(true)}>
+            <button className="locations-btn-open-map" onClick={() => setIsMapModalOpen(true)}>
               <FiMaximize2 /> Open Full Map
             </button>
           </div>
         </div>
 
-        <div className="top-locations-card">
+        <div className="locations-top-card">
           <h3>Top Performing Locations</h3>
-          <ul className="top-locations-list">
+          <ul className="locations-top-list">
             {locations.slice().sort((a,b) => b.properties - a.properties).slice(0, 4).map((item, idx) => (
               <li key={item.id}>
-                <span className={`rank-badge rank-${idx + 1}`}>{idx + 1}</span>
-                <div className="top-loc-info">
+                <span className={`locations-rank-badge locations-rank-${idx + 1}`}>{idx + 1}</span>
+                <div className="locations-top-info">
                   <strong>{item.area}, {item.city}</strong>
                   <span>{item.properties} Properties</span>
                 </div>
@@ -549,26 +545,26 @@ const Locations = () => {
 
       {/* POPUP 1: Add/Edit Location Modal */}
       {isAddEditOpen && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <div className="modal-header">
+        <div className="locations-modal-overlay">
+          <div className="locations-modal-box">
+            <div className="locations-modal-header">
               <h2>{editingLocation ? 'Edit Location' : 'Add New Location'}</h2>
-              <button className="btn-close" onClick={() => setIsAddEditOpen(false)}><FiX /></button>
+              <button className="locations-btn-close" onClick={() => setIsAddEditOpen(false)}><FiX /></button>
             </div>
             <form onSubmit={handleSaveLocation}>
-              <div className="modal-body">
-                <h4 className="section-title">Location Information</h4>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Country <span className="req">*</span></label>
+              <div className="locations-modal-body">
+                <h4 className="locations-section-title">Location Information</h4>
+                <div className="locations-form-row">
+                  <div className="locations-form-group">
+                    <label>Country <span className="locations-req">*</span></label>
                     <select value={formData.country} onChange={e => setFormData({...formData, country: e.target.value})}>
                       <option value="India">India</option>
                       <option value="USA">USA</option>
                       <option value="UK">UK</option>
                     </select>
                   </div>
-                  <div className="form-group">
-                    <label>State <span className="req">*</span></label>
+                  <div className="locations-form-group">
+                    <label>State <span className="locations-req">*</span></label>
                     <input 
                       type="text" 
                       placeholder="Enter state" 
@@ -577,8 +573,8 @@ const Locations = () => {
                       onChange={e => setFormData({...formData, state: e.target.value})}
                     />
                   </div>
-                  <div className="form-group">
-                    <label>City <span className="req">*</span></label>
+                  <div className="locations-form-group">
+                    <label>City <span className="locations-req">*</span></label>
                     <input 
                       type="text" 
                       placeholder="Enter city name" 
@@ -589,9 +585,9 @@ const Locations = () => {
                   </div>
                 </div>
 
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Area / Locality <span className="req">*</span></label>
+                <div className="locations-form-row">
+                  <div className="locations-form-group">
+                    <label>Area / Locality <span className="locations-req">*</span></label>
                     <input 
                       type="text" 
                       placeholder="Enter area or locality" 
@@ -600,8 +596,8 @@ const Locations = () => {
                       onChange={e => setFormData({...formData, area: e.target.value})}
                     />
                   </div>
-                  <div className="form-group">
-                    <label>Pincode <span className="req">*</span></label>
+                  <div className="locations-form-group">
+                    <label>Pincode <span className="locations-req">*</span></label>
                     <input 
                       type="text" 
                       placeholder="Enter pincode" 
@@ -610,7 +606,7 @@ const Locations = () => {
                       onChange={e => setFormData({...formData, pincode: e.target.value})}
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="locations-form-group">
                     <label>Latitude (Optional)</label>
                     <input 
                       type="text" 
@@ -621,8 +617,8 @@ const Locations = () => {
                   </div>
                 </div>
 
-                <div className="form-row">
-                  <div className="form-group">
+                <div className="locations-form-row">
+                  <div className="locations-form-group">
                     <label>Longitude (Optional)</label>
                     <input 
                       type="text" 
@@ -631,7 +627,7 @@ const Locations = () => {
                       onChange={e => setFormData({...formData, longitude: e.target.value})}
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="locations-form-group">
                     <label>Properties Assigned</label>
                     <input 
                       type="number" 
@@ -640,19 +636,19 @@ const Locations = () => {
                       onChange={e => setFormData({...formData, properties: e.target.value})}
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="locations-form-group">
                     <label>Status</label>
-                    <div className="status-toggle-btns">
+                    <div className="locations-status-toggle-btns">
                       <button 
                         type="button" 
-                        className={`status-btn active-btn ${formData.status === 'Active' ? 'selected' : ''}`}
+                        className={`locations-status-btn locations-active-btn ${formData.status === 'Active' ? 'locations-status-selected' : ''}`}
                         onClick={() => setFormData({...formData, status: 'Active'})}
                       >
                         <FiCheck /> Active
                       </button>
                       <button 
                         type="button" 
-                        className={`status-btn inactive-btn ${formData.status === 'Inactive' ? 'selected' : ''}`}
+                        className={`locations-status-btn locations-inactive-btn ${formData.status === 'Inactive' ? 'locations-status-selected' : ''}`}
                         onClick={() => setFormData({...formData, status: 'Inactive'})}
                       >
                         <FiX /> Inactive
@@ -661,9 +657,9 @@ const Locations = () => {
                   </div>
                 </div>
 
-                <div className="form-group">
+                <div className="locations-form-group">
                   <label>Location Image (Optional)</label>
-                  <div className="file-upload-box" onClick={() => fileInputRef.current.click()}>
+                  <div className="locations-file-upload-box" onClick={() => fileInputRef.current.click()}>
                     <input 
                       type="file" 
                       ref={fileInputRef} 
@@ -672,13 +668,13 @@ const Locations = () => {
                       accept="image/*" 
                     />
                     {formData.imagePreview ? (
-                      <div className="preview-info">
-                        <img src={formData.imagePreview} alt="Preview" className="img-thumb" />
+                      <div className="locations-preview-info">
+                        <img src={formData.imagePreview} alt="Preview" className="locations-img-thumb" />
                         <span>{formData.image?.name || 'Image Uploaded'}</span>
                       </div>
                     ) : (
                       <>
-                        <FiUpload className="upload-icon" />
+                        <FiUpload className="locations-upload-icon" />
                         <span>Upload Image</span>
                         <small>JPG, PNG or WEBP (Max. 2MB)</small>
                       </>
@@ -687,9 +683,9 @@ const Locations = () => {
                 </div>
               </div>
 
-              <div className="modal-footer">
-                <button type="button" className="btn-cancel" onClick={() => setIsAddEditOpen(false)}>Cancel</button>
-                <button type="submit" className="btn-save">Save Location</button>
+              <div className="locations-modal-footer">
+                <button type="button" className="locations-btn-cancel" onClick={() => setIsAddEditOpen(false)}>Cancel</button>
+                <button type="submit" className="locations-btn-save">Save Location</button>
               </div>
             </form>
           </div>
@@ -698,24 +694,24 @@ const Locations = () => {
 
       {/* POPUP 2: Import Locations Modal */}
       {isImportOpen && (
-        <div className="modal-overlay">
-          <div className="modal-box small-modal">
-            <div className="modal-header">
+        <div className="locations-modal-overlay">
+          <div className="locations-modal-box locations-small-modal">
+            <div className="locations-modal-header">
               <h2>Import Locations</h2>
-              <button className="btn-close" onClick={() => setIsImportOpen(false)}><FiX /></button>
+              <button className="locations-btn-close" onClick={() => setIsImportOpen(false)}><FiX /></button>
             </div>
-            <div className="modal-body">
-              <p className="modal-desc">Upload a CSV or Excel file containing location data structured with Country, State, City, Area, Pincode.</p>
-              <div className="file-upload-box" onClick={() => importFileRef.current.click()}>
+            <div className="locations-modal-body">
+              <p className="locations-modal-desc">Upload a CSV or Excel file containing location data structured with Country, State, City, Area, Pincode.</p>
+              <div className="locations-file-upload-box" onClick={() => importFileRef.current.click()}>
                 <input type="file" ref={importFileRef} hidden accept=".csv, .xlsx" />
-                <FiFileText className="upload-icon" />
+                <FiFileText className="locations-upload-icon" />
                 <span>Click to Upload CSV / Excel</span>
                 <small>Max file size 5MB</small>
               </div>
             </div>
-            <div className="modal-footer">
-              <button className="btn-cancel" onClick={() => setIsImportOpen(false)}>Cancel</button>
-              <button className="btn-save" onClick={() => { alert('Import Processed!'); setIsImportOpen(false); }}>Upload & Import</button>
+            <div className="locations-modal-footer">
+              <button className="locations-btn-cancel" onClick={() => setIsImportOpen(false)}>Cancel</button>
+              <button className="locations-btn-save" onClick={() => { alert('Import Processed!'); setIsImportOpen(false); }}>Upload & Import</button>
             </div>
           </div>
         </div>
@@ -723,13 +719,13 @@ const Locations = () => {
 
       {/* POPUP 3: Delete Confirmation Modal */}
       {deleteId && (
-        <div className="modal-overlay">
-          <div className="confirm-modal-box">
+        <div className="locations-modal-overlay">
+          <div className="locations-confirm-modal-box">
             <h3>Confirm Delete</h3>
             <p>Are you sure you want to delete this location? This action cannot be undone.</p>
-            <div className="confirm-actions">
-              <button className="btn-cancel" onClick={() => setDeleteId(null)}>Cancel</button>
-              <button className="btn-danger" onClick={handleDelete}>Delete Location</button>
+            <div className="locations-confirm-actions">
+              <button className="locations-btn-cancel" onClick={() => setDeleteId(null)}>Cancel</button>
+              <button className="locations-btn-danger" onClick={handleDelete}>Delete Location</button>
             </div>
           </div>
         </div>
@@ -737,13 +733,13 @@ const Locations = () => {
 
       {/* POPUP 4: Full Map Modal */}
       {isMapModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-box large-modal">
-            <div className="modal-header">
+        <div className="locations-modal-overlay">
+          <div className="locations-modal-box locations-large-modal">
+            <div className="locations-modal-header">
               <h2>Location Map View</h2>
-              <button className="btn-close" onClick={() => setIsMapModalOpen(false)}><FiX /></button>
+              <button className="locations-btn-close" onClick={() => setIsMapModalOpen(false)}><FiX /></button>
             </div>
-            <div className="modal-body p-0">
+            <div className="locations-modal-body locations-p-0">
               <iframe 
                 title="Full Map"
                 src="https://maps.google.com/maps?q=Bhubaneswar&t=&z=12&ie=UTF8&iwloc=&output=embed"
@@ -760,23 +756,23 @@ const Locations = () => {
 
       {/* POPUP 5: View Details Modal */}
       {isViewOpen && viewData && (
-        <div className="modal-overlay">
-          <div className="modal-box small-modal">
-            <div className="modal-header">
+        <div className="locations-modal-overlay">
+          <div className="locations-modal-box locations-small-modal">
+            <div className="locations-modal-header">
               <h2>Location Details</h2>
-              <button className="btn-close" onClick={() => setIsViewOpen(false)}><FiX /></button>
+              <button className="locations-btn-close" onClick={() => setIsViewOpen(false)}><FiX /></button>
             </div>
-            <div className="modal-body view-details-grid">
+            <div className="locations-modal-body locations-view-details-grid">
               <div><strong>Country:</strong> {viewData.flag} {viewData.country}</div>
               <div><strong>State:</strong> {viewData.state}</div>
               <div><strong>City:</strong> {viewData.city}</div>
               <div><strong>Area:</strong> {viewData.area}</div>
               <div><strong>Pincode:</strong> {viewData.pincode}</div>
               <div><strong>Properties:</strong> {viewData.properties}</div>
-              <div><strong>Status:</strong> <span className={`badge-status ${viewData.status.toLowerCase()}`}>{viewData.status}</span></div>
+              <div><strong>Status:</strong> <span className={`locations-badge-status locations-status-${viewData.status.toLowerCase()}`}>{viewData.status}</span></div>
             </div>
-            <div className="modal-footer">
-              <button className="btn-save" onClick={() => setIsViewOpen(false)}>Close</button>
+            <div className="locations-modal-footer">
+              <button className="locations-btn-save" onClick={() => setIsViewOpen(false)}>Close</button>
             </div>
           </div>
         </div>

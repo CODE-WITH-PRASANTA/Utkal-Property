@@ -1,78 +1,69 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-
-
-import DashboardMain from "./Components/DashboardMain/DashboardMain";
-import DashboardProfile from "./Components/DashboardProfile/DashboardProfile";
-import DashboardReview from "./Components/DashboardReview/DashboardReview";
 import MainLayout from "./Layout/MainLayout/MainLayout";
+
+// Dashboard
+import DashboardMain from "./Components/DashboardMain/DashboardMain";
+
+// Properties
+import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
-import BannerManagement from "./Components/BannerManagement/BannerManagement";
-import Customers from "./Components/Customers/Customers";
-import Book from "./Pages/Book/Book";
-import MyProperties from "./Components/MyProperties/MyProperties";
-import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
-import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 
+// Sidebar Pages
+import Bookings from "./Components/Bookings/Bookings";
+import LeadManagement from "./Components/LeadManagement/LeadManagement";
+import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
+import Report from "./Pages/Dashboard/Report/Report";
+import Enquire from "./Pages/Enquire/Enquire";
+import User from "./Pages/User/User";
+import Setting from "./Pages/Setting/Setting";
+import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* Redirect Home */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-        {/* Layout */}
+        {/* Main Layout */}
         <Route element={<MainLayout />}>
-
+          {/* Dashboard */}
           <Route path="/dashboard" element={<DashboardMain />} />
-          <Route path="/properties/categories" element={<Categories/>} />
-          <Route path="/properties/locations" element={<Locations/>} />
 
-          <Route path='/BannerManagement' element={<BannerManagement/>} />
-          <Route path='/Customers' element={<Customers/>} />
+          {/* Properties */}
+          <Route path="/properties/add" element={<AddNewProperty />} />
+          <Route path="/properties/all" element={<PropertiesDashboard />} />
 
-          <Route
-            path="/dashboard-review"
-            element={<DashboardReview />}
-          />
+          <Route path="/properties/categories" element={<Categories />} />
+          <Route path="/properties/locations" element={<Locations />} />
 
-          <Route
-              path="/properties/add"
-              element={<AddNewProperty />}
-              />
+          {/* Bookings */}
+          <Route path="/bookings" element={<Bookings />} />
 
-          <Route
-            path="/dashboard-profile"
-            element={<DashboardProfile />}
-          />
+          {/* Leads */}
+          <Route path="/leads" element={<LeadManagement />} />
 
-        
+          {/* Enquiry */}
+          <Route path="/enquiry" element={<Enquire />} />
 
-          <Route
-            path="/my-properties"
-            element={< MyProperties />}
-          />
-           
+          {/* Users */}
+          <Route path="/users" element={<User />} />
 
-          <Route
-            path="/bookings"
-            element={<Book />}
-          />
+          {/* Reports */}
+          <Route path="/reports" element={<Report />} />
 
-          <Route
-            path="/properties/all"
-            element={<PropertiesDashboard />}
-        
-          />
-           
-          
+          {/* Settings */}
+          <Route path="/settings" element={<Setting />} />
 
+          {/* Profile */}
+          <Route path="/profile" element={<ProfileSetting />} />
+
+          {/* 404 */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );
