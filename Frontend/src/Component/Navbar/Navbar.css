@@ -21,14 +21,15 @@
   background-color: var(--navbar-bg);
   border-bottom: 1px solid #f0f0f0;
   font-family: var(--navbar-font);
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1000;
 }
 
 .navbar-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 12px 28px; /* Slightly adjusted padding to accommodate larger logo */
+  padding: 12px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,11 +43,8 @@
   text-decoration: none;
 }
 
-/* UPDATED LOGO SIZE */
 .navbar-logo-img {
-  width: 140px; /* Increased from 120px */
-  height: 68px; /* Increased from 52px */
-  
+  width: 150px;
   display: block;
 }
 
