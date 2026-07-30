@@ -14,6 +14,10 @@ import Report from "./Pages/Dashboard/Report/Report";
 import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Bookings from "./Components/Bookings/Bookings";
 
+import Enquire from "./Pages/Enquire/Enquire";
+import User from "./Pages/User/User";
+import Setting from "./Pages/Setting/Setting";
+
 
 // Sidebar Path Pages
 
@@ -85,6 +89,10 @@ const App = () => {
             path="/reports" 
             element={<Report />} 
           />
+           <Route path="/enquiry" element={<Enquire />} />
+           <Route path="/users" element={<User />} />
+           <Route path="/settings" element={<Setting />} />
+          
 
           <Route 
             path="/DashboardProfile" 
