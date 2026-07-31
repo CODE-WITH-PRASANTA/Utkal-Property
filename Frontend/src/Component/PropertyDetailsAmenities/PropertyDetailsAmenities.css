@@ -1,0 +1,524 @@
+/* Base & Layout */
+.PropertyDetailsAmenities-wrapper {
+  background-color: #f1ebd9;
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.PropertyDetailsAmenities-main-layout {
+  display: flex;
+  gap: 25px;
+  align-items: flex-start;
+}
+
+.PropertyDetailsAmenities-left-col {
+  flex: 2.2;
+  display: flex;
+  flex-direction: column;
+}
+
+.PropertyDetailsAmenities-right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Headers */
+.PropertyDetailsAmenities-section-header {
+  margin-bottom: 15px;
+}
+
+.PropertyDetailsAmenities-title {
+  color: #3b4e56;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.PropertyDetailsAmenities-underline {
+  height: 3px;
+  width: 50px;
+  background-color: #f4b41a;
+}
+
+/* Common Card Styling */
+.PropertyDetailsAmenities-card,
+.PropertyDetailsAmenities-sidebar-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+/* --- Amenities Grid --- */
+.PropertyDetailsAmenities-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+}
+
+.PropertyDetailsAmenities-grid-item {
+  border: 1px dashed #3a7584;
+  border-radius: 6px;
+  padding: 15px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.PropertyDetailsAmenities-grid-item:hover, 
+.PropertyDetailsAmenities-grid-item.active {
+  background-color: #f2f8fa;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(58, 117, 132, 0.15);
+}
+
+.PropertyDetailsAmenities-icon {
+  color: #3a7584;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.PropertyDetailsAmenities-name {
+  color: #556970;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* --- Key Features --- */
+.PropertyDetailsAmenities-features-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.PropertyDetailsAmenities-feature-pill {
+  background-color: #3a7584;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.PropertyDetailsAmenities-feature-icon {
+  font-size: 16px;
+}
+
+/* --- Floor Plans --- */
+.PropertyDetailsAmenities-floor-plan-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.PropertyDetailsAmenities-tabs {
+  display: flex;
+  border-bottom: 1px solid #e1e8ed;
+  background-color: #ffffff;
+}
+
+.PropertyDetailsAmenities-tab {
+  padding: 15px 25px;
+  font-size: 15px;
+  color: #7b8e96;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.PropertyDetailsAmenities-tab.active {
+  color: #2b56ff;
+  border-bottom: 2px solid #2b56ff;
+}
+
+.PropertyDetailsAmenities-tab-content {
+  padding: 25px;
+  background-color: #f9f9f9;
+  margin: 20px;
+  border-radius: 8px;
+}
+
+.PropertyDetailsAmenities-content-title {
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+}
+
+.PropertyDetailsAmenities-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px 25px;
+  font-size: 13px;
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+.PropertyDetailsAmenities-stats-row strong {
+  font-weight: 600;
+  color: #1a252f;
+}
+
+.PropertyDetailsAmenities-floor-image-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e1e8ed;
+  border-radius: 6px;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.PropertyDetailsAmenities-floor-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  object-fit: contain;
+  max-height: 500px;
+  transition: transform 0.2s ease;
+}
+
+.PropertyDetailsAmenities-floor-image:hover {
+  transform: scale(1.02);
+}
+
+.PropertyDetailsAmenities-fullscreen-btn {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: transparent;
+  color: #3a7584;
+  border: 2px solid #3a7584;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.PropertyDetailsAmenities-fullscreen-btn:hover {
+  background-color: #3a7584;
+  color: #ffffff;
+}
+
+/* ================= FULL SCREEN MODAL ================= */
+.PropertyDetailsAmenities-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+.PropertyDetailsAmenities-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.PropertyDetailsAmenities-modal-title {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.PropertyDetailsAmenities-modal-image {
+  max-width: 100%;
+  max-height: calc(90vh - 100px); 
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.PropertyDetailsAmenities-modal-close {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 10000;
+  transition: background-color 0.2s;
+}
+
+.PropertyDetailsAmenities-modal-close:hover {
+  background-color: #d9363e;
+}
+
+/* --- Explore Neighbourhood Section --- */
+.PropertyDetailsAmenities-neighbourhood-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.PropertyDetailsAmenities-neighbourhood-item {
+  background-color: #3a7584; /* Matches the teal color from the image */
+  border-radius: 6px;
+  padding: 5px; /* Outer padding to show solid border */
+}
+
+.PropertyDetailsAmenities-neighbourhood-inner {
+  border: 1.5px dashed rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  box-sizing: border-box;
+  min-height: 80px;
+}
+
+.PropertyDetailsAmenities-neighbourhood-title {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.PropertyDetailsAmenities-neighbourhood-desc {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+/* --- Right Sidebar Common --- */
+.PropertyDetailsAmenities-sidebar-title {
+  color: #2c3e50;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+}
+
+.PropertyDetailsAmenities-form,
+.PropertyDetailsAmenities-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.PropertyDetailsAmenities-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.PropertyDetailsAmenities-input-group label {
+  font-size: 13px;
+  color: #3b4e56;
+  font-weight: 600;
+}
+
+.PropertyDetailsAmenities-input,
+.PropertyDetailsAmenities-textarea {
+  width: 100%;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #4a4a4a;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.PropertyDetailsAmenities-textarea {
+  resize: vertical;
+}
+
+.PropertyDetailsAmenities-input:focus,
+.PropertyDetailsAmenities-textarea:focus {
+  border-color: #3a7584;
+}
+
+.PropertyDetailsAmenities-submit-btn {
+  background-color: #3a7584;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.PropertyDetailsAmenities-submit-btn:hover {
+  background-color: #2c5965;
+}
+
+/* Stars Rating */
+.PropertyDetailsAmenities-stars-container {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+.PropertyDetailsAmenities-radio-input {
+  display: none;
+}
+.PropertyDetailsAmenities-star-label {
+  cursor: pointer;
+}
+
+/* Expanded Contact Form Specifics */
+.PropertyDetailsAmenities-contact-heading {
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 20px 0;
+  line-height: 1.4;
+}
+
+.PropertyDetailsAmenities-captcha-row {
+  display: flex;
+  gap: 10px;
+}
+
+.PropertyDetailsAmenities-captcha-box {
+  flex: 1;
+  background-color: #f0f2f5;
+  border: 1px solid #e1e8ed;
+  color: #3a7584;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.PropertyDetailsAmenities-refresh-btn {
+  background-color: #3a7584;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN 
+   ========================================= */
+
+/* iPad Pro (1024px width) */
+@media screen and (max-width: 1024px) {
+  .PropertyDetailsAmenities-main-layout {
+    flex-direction: column;
+  }
+  
+  .PropertyDetailsAmenities-left-col,
+  .PropertyDetailsAmenities-right-col {
+    width: 100%;
+  }
+
+  .PropertyDetailsAmenities-grid {
+    grid-template-columns: repeat(4, 1fr); 
+  }
+
+  .PropertyDetailsAmenities-neighbourhood-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Facebook in-app browser on Android (~360px - 414px) */
+@media screen and (max-width: 480px) {
+  .PropertyDetailsAmenities-wrapper {
+    padding: 15px;
+  }
+
+  .PropertyDetailsAmenities-title {
+    font-size: 18px;
+  }
+
+  .PropertyDetailsAmenities-card,
+  .PropertyDetailsAmenities-sidebar-card,
+  .PropertyDetailsAmenities-tab-content {
+    padding: 15px;
+  }
+
+  .PropertyDetailsAmenities-grid {
+    grid-template-columns: repeat(2, 1fr); 
+  }
+
+  .PropertyDetailsAmenities-features-container {
+    flex-direction: column;
+  }
+
+  .PropertyDetailsAmenities-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .PropertyDetailsAmenities-tab {
+    padding: 10px 15px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .PropertyDetailsAmenities-floor-image-container {
+    padding: 5px;
+  }
+
+  .PropertyDetailsAmenities-stats-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .PropertyDetailsAmenities-modal-content {
+    padding: 15px;
+    max-width: 95vw;
+  }
+
+  .PropertyDetailsAmenities-modal-title {
+    font-size: 16px;
+  }
+
+  .PropertyDetailsAmenities-neighbourhood-grid {
+    grid-template-columns: 1fr;
+  }
+}

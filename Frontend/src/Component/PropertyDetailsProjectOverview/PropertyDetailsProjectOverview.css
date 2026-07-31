@@ -1,0 +1,211 @@
+/* Wrapper to match the page background if needed */
+.PropertyDetailsProjectOverview-wrapper {
+  background-color: #f7f6f1; /* Matching typical beige property backgrounds */
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main Container */
+.PropertyDetailsProjectOverview-container {
+  background: #ffffff;
+  max-width: 1800px;
+  width: 100%;
+  padding: 32px 40px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+/* Header & Social Icons */
+.PropertyDetailsProjectOverview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.PropertyDetailsProjectOverview-title {
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.PropertyDetailsProjectOverview-social {
+  display: flex;
+  gap: 6px;
+}
+
+.PropertyDetailsProjectOverview-social-btn {
+  border: none;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.PropertyDetailsProjectOverview-social-btn:hover {
+  opacity: 0.85;
+}
+
+/* Social Network Colors matching image */
+.fb { background-color: #1877F2; }
+.tw { background-color: #1DA1F2; }
+.wa { background-color: #25D366; }
+.tg { background-color: #0088cc; }
+.li { background-color: #0A66C2; }
+.em { background-color: #888888; }
+.pl { background-color: #0056b3; }
+
+/* Features Grid */
+.PropertyDetailsProjectOverview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 32px;
+  column-gap: 20px;
+  margin-bottom: 48px;
+}
+
+.PropertyDetailsProjectOverview-grid-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.PropertyDetailsProjectOverview-icon {
+  color: #3f7b8f; /* Teal blue color matching image */
+  font-size: 24px;
+  margin-top: 4px;
+}
+
+.PropertyDetailsProjectOverview-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.PropertyDetailsProjectOverview-label {
+  color: #555;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.PropertyDetailsProjectOverview-value {
+  color: #222;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Text Sections (Description & Location) */
+.PropertyDetailsProjectOverview-section {
+  margin-bottom: 40px;
+}
+
+.PropertyDetailsProjectOverview-section-title {
+  color: #333;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+/* Custom Orange Underline */
+.PropertyDetailsProjectOverview-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: #F99A22; /* Matches the orange underline */
+}
+
+.PropertyDetailsProjectOverview-content p {
+  color: #444;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0 0 20px 0;
+}
+
+.PropertyDetailsProjectOverview-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN 
+========================================================= */
+
+/* iPad Pro (Portrait & Landscape targeting) */
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
+  .PropertyDetailsProjectOverview-container {
+    padding: 32px;
+  }
+  /* Change to 3 columns on standard tablets/smaller desktops */
+  .PropertyDetailsProjectOverview-grid {
+    grid-template-columns: repeat(3, 1fr); 
+  }
+}
+
+/* Facebook App on Android / Mobile Devices */
+@media only screen and (max-width: 768px) {
+  .PropertyDetailsProjectOverview-wrapper {
+    padding: 12px;
+  }
+
+  .PropertyDetailsProjectOverview-container {
+    padding: 20px 16px;
+  }
+
+  .PropertyDetailsProjectOverview-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .PropertyDetailsProjectOverview-social {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .PropertyDetailsProjectOverview-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+    row-gap: 24px;
+    column-gap: 12px;
+  }
+
+  .PropertyDetailsProjectOverview-icon {
+    font-size: 20px;
+  }
+
+  .PropertyDetailsProjectOverview-label {
+    font-size: 12px;
+  }
+
+  .PropertyDetailsProjectOverview-value {
+    font-size: 14px;
+  }
+  
+  .PropertyDetailsProjectOverview-section-title {
+    font-size: 20px;
+  }
+
+  .PropertyDetailsProjectOverview-content p {
+    font-size: 14px;
+  }
+}
+
+/* Extra small devices (very narrow android screens) */
+@media only screen and (max-width: 400px) {
+  .PropertyDetailsProjectOverview-grid {
+    grid-template-columns: 1fr; /* 1 column on extremely small screens */
+  }
+}

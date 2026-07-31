@@ -1,0 +1,279 @@
+/* Base & Layout */
+.PropertyDetailsPeopleSay-wrapper {
+  background-color: #f1ebd9; /* Beige background to match previous sections */
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.PropertyDetailsPeopleSay-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 35px 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.PropertyDetailsPeopleSay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.PropertyDetailsPeopleSay-title {
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.PropertyDetailsPeopleSay-google-logo {
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  letter-spacing: -0.5px;
+}
+
+.PropertyDetailsPeopleSay-reviews-text {
+  color: #7b8e96;
+  font-weight: 400;
+  margin-left: 6px;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+/* Summary Section */
+.PropertyDetailsPeopleSay-summary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 35px;
+}
+
+.PropertyDetailsPeopleSay-summary-score {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.PropertyDetailsPeopleSay-summary-stars {
+  display: flex;
+  gap: 3px;
+}
+
+.PropertyDetailsPeopleSay-star {
+  font-size: 18px;
+}
+
+.PropertyDetailsPeopleSay-star.filled {
+  color: #fbbc05;
+}
+
+.PropertyDetailsPeopleSay-star.empty {
+  color: #e0e0e0;
+}
+
+.PropertyDetailsPeopleSay-summary-count {
+  color: #556970;
+  font-size: 15px;
+}
+
+.PropertyDetailsPeopleSay-view-all {
+  color: #2b56ff;
+  font-size: 15px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.PropertyDetailsPeopleSay-view-all:hover {
+  text-decoration: underline;
+}
+
+/* Reviews Grid */
+.PropertyDetailsPeopleSay-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.PropertyDetailsPeopleSay-review-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.PropertyDetailsPeopleSay-review-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.PropertyDetailsPeopleSay-avatar {
+  width: 42px;
+  height: 42px;
+  background-color: #25d366; /* Green matching the image */
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.PropertyDetailsPeopleSay-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.PropertyDetailsPeopleSay-reviewer-name {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.PropertyDetailsPeopleSay-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.PropertyDetailsPeopleSay-review-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.PropertyDetailsPeopleSay-review-stars .PropertyDetailsPeopleSay-star {
+  font-size: 13px;
+}
+
+.PropertyDetailsPeopleSay-date {
+  color: #7b8e96;
+  font-size: 13px;
+}
+
+.PropertyDetailsPeopleSay-review-text {
+  color: #556970;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Pagination Controls */
+.PropertyDetailsPeopleSay-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.PropertyDetailsPeopleSay-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.PropertyDetailsPeopleSay-nav-btn.disabled {
+  background-color: #e1e8ed;
+  color: #7b8e96;
+  cursor: not-allowed;
+}
+
+.PropertyDetailsPeopleSay-nav-btn.active,
+.PropertyDetailsPeopleSay-nav-btn:not(.disabled) {
+  background-color: #4a5568;
+  color: #ffffff;
+}
+
+.PropertyDetailsPeopleSay-nav-btn:not(.disabled):hover {
+  background-color: #2d3748;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN 
+   ========================================= */
+
+/* iPad Pro (1024px) */
+@media screen and (max-width: 1024px) {
+  .PropertyDetailsPeopleSay-wrapper {
+    padding: 20px;
+  }
+
+  .PropertyDetailsPeopleSay-card {
+    padding: 30px;
+  }
+
+  .PropertyDetailsPeopleSay-grid {
+    gap: 30px;
+  }
+}
+
+/* Tablets (Portrait) */
+@media screen and (max-width: 768px) {
+  .PropertyDetailsPeopleSay-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Facebook in-app browser on Android (~360px - 414px) */
+@media screen and (max-width: 480px) {
+  .PropertyDetailsPeopleSay-wrapper {
+    padding: 15px;
+  }
+
+  .PropertyDetailsPeopleSay-card {
+    padding: 20px 15px;
+  }
+
+  .PropertyDetailsPeopleSay-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .PropertyDetailsPeopleSay-title {
+    font-size: 20px;
+  }
+
+  .PropertyDetailsPeopleSay-summary {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+  }
+
+  .PropertyDetailsPeopleSay-summary-score {
+    font-size: 26px;
+  }
+
+  .PropertyDetailsPeopleSay-grid {
+    gap: 25px;
+    margin-bottom: 25px;
+  }
+
+  .PropertyDetailsPeopleSay-review-text {
+    font-size: 14px;
+  }
+
+  .PropertyDetailsPeopleSay-nav-btn {
+    width: 42px;
+    height: 42px; /* Slightly larger for easier tapping on mobile */
+  }
+}

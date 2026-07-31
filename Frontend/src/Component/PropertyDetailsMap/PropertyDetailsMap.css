@@ -1,0 +1,73 @@
+/* Base & Layout */
+.PropertyDetailsMap-wrapper {
+  /* Matching the background color of your previous sections */
+  background-color: #f1ebd9; 
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.PropertyDetailsMap-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* Adjust max-width if you want to constrain it in a larger container */
+  max-width: 100%; 
+  margin: 0 auto;
+}
+
+/* Location Text Styling */
+.PropertyDetailsMap-location-text {
+  margin: 0;
+  color: #3b4e56;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.PropertyDetailsMap-location-text strong {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Map Container Styling */
+.PropertyDetailsMap-iframe-container {
+  width: 100%;
+  height: 350px; /* Adjust this value to change map height */
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e1e8ed;
+  position: relative;
+}
+
+.PropertyDetailsMap-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN 
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+  .PropertyDetailsMap-wrapper {
+    padding: 15px;
+  }
+  
+  .PropertyDetailsMap-card {
+    padding: 15px;
+  }
+  
+  .PropertyDetailsMap-location-text {
+    font-size: 14px;
+  }
+
+  .PropertyDetailsMap-iframe-container {
+    height: 250px;
+  }
+}
