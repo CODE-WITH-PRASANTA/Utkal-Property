@@ -1,7 +1,7 @@
-/* Wrapper with soft gradient background */
+/* Wrapper with soft mint-green gradient background */
 .AboutFindDreamHome-wrapper {
   width: 100%;
-  background: linear-gradient(135deg, #fdf5ea 0%, #ffffff 40%, #ffffff 70%, #fdf5ea 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f2f9f5 50%, #e8f5ed 100%);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
   padding: 0 24px;
@@ -32,15 +32,20 @@
 .AboutFindDreamHome-title {
   font-size: 3.2rem;
   font-weight: 800;
-  color: #171624;
+  color: #0f172a;
   line-height: 1.15;
   margin: 0 0 24px 0;
   letter-spacing: -0.02em;
 }
 
+/* Half Green Text Highlight */
+.AboutFindDreamHome-highlight-text {
+  color: #10532e;
+}
+
 .AboutFindDreamHome-subtitle {
   font-size: 1rem;
-  color: #4b5563;
+  color: #475569;
   line-height: 1.6;
   margin: 0 0 36px 0;
   max-width: 500px;
@@ -51,7 +56,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background-color: #fca311;
+  background-color: #10532e;
   color: #ffffff;
   font-size: 1.1rem;
   font-weight: 600;
@@ -61,7 +66,7 @@
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 6px rgba(252, 163, 17, 0.2);
+  box-shadow: 0 4px 12px rgba(16, 83, 46, 0.25);
 }
 
 .AboutFindDreamHome-button-icon {
@@ -71,8 +76,8 @@
 
 .AboutFindDreamHome-button:hover {
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 10px 20px rgba(252, 163, 17, 0.3);
-  background-color: #ffaa22;
+  box-shadow: 0 10px 20px rgba(16, 83, 46, 0.35);
+  background-color: #0b3b20;
 }
 
 /* Ringing animation on phone icon when button is hovered */
@@ -110,7 +115,7 @@
   align-self: flex-end;
 }
 
-/* Yellow isometric pattern SVG wrapper */
+/* Green isometric pattern SVG wrapper */
 .AboutFindDreamHome-pattern {
   position: absolute;
   top: 10%;
@@ -118,7 +123,7 @@
   width: 400px;
   height: 100%;
   z-index: 1;
-  opacity: 0.15;
+  opacity: 0.12;
   pointer-events: none;
 }
 
