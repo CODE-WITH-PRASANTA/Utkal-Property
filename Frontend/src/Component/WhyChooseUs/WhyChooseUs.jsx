@@ -16,7 +16,7 @@ export function WhyChooseUs() {
       linkText: 'See all listings',
       linkUrl: '#listings',
       icon: (
-        <svg className="WhyChooseUs-svg-icon icon-posts" viewBox="0 0 80 80" fill="none" stroke="#f9a01b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="WhyChooseUs-svg-icon icon-posts" viewBox="0 0 80 80" fill="none" stroke="#18522e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <g className="doc-body">
             <rect x="22" y="10" width="30" height="42" rx="4" fill="#ffffff" />
             <path d="M22 10h30a4 4 0 0 1 4 4v34a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V14a4 4 0 0 1 4-4z" />
@@ -47,7 +47,7 @@ export function WhyChooseUs() {
       linkText: 'See all listings',
       linkUrl: '#listings',
       icon: (
-        <svg className="WhyChooseUs-svg-icon icon-filter" viewBox="0 0 80 80" fill="none" stroke="#f9a01b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="WhyChooseUs-svg-icon icon-filter" viewBox="0 0 80 80" fill="none" stroke="#18522e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <g className="filter-paper">
             <rect x="30" y="8" width="20" height="14" rx="2" fill="#ffffff" />
             <rect x="30" y="8" width="20" height="14" rx="2" />
@@ -75,7 +75,7 @@ export function WhyChooseUs() {
       linkText: 'See all listings',
       linkUrl: '#listings',
       icon: (
-        <svg className="WhyChooseUs-svg-icon icon-support" viewBox="0 0 80 80" fill="none" stroke="#f9a01b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="WhyChooseUs-svg-icon icon-support" viewBox="0 0 80 80" fill="none" stroke="#18522e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <g className="support-box">
             <path d="M40 22l14 8v16l-14 8-14-8V30l14-8z" fill="#ffffff" />
             <path d="M40 22l14 8v16l-14 8-14-8V30l14-8z" />
@@ -89,8 +89,8 @@ export function WhyChooseUs() {
             <path d="M40 68a28 28 0 0 1-25-14" />
             <path d="M13 53l0 7" />
             <path d="M13 53l7 0" />
-            <circle cx="68" cy="40" r="1.5" fill="#f9a01b" />
-            <circle cx="12" cy="40" r="1.5" fill="#f9a01b" />
+            <circle cx="68" cy="40" r="1.5" fill="#18522e" />
+            <circle cx="12" cy="40" r="1.5" fill="#18522e" />
           </g>
         </svg>
       ),
@@ -102,7 +102,11 @@ export function WhyChooseUs() {
       <div className="WhyChooseUs-container">
         
         <div className="WhyChooseUs-header">
-          <h2 className="WhyChooseUs-title">Why choose us</h2>
+          {/* Title styled matching second image: "Why" (Dark Navy) + "choose us" (Dark Green) */}
+          <h2 className="WhyChooseUs-title">
+            <span className="WhyChooseUs-title-dark">Why</span>{' '}
+            <span className="WhyChooseUs-title-green">choose us</span>
+          </h2>
           <p className="WhyChooseUs-subtitle">Save your time and effort with our tools</p>
         </div>
 

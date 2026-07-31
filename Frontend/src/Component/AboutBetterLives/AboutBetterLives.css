@@ -21,13 +21,21 @@
   max-width: 500px;
 }
 
+/* Section Title Styled as Reference Image 2 */
 .about-modern-title {
   font-size: clamp(2.25rem, 4vw, 3.25rem);
   font-weight: 800;
-  line-height: 1.1;
-  color: #111827;
+  line-height: 1.15;
   letter-spacing: -0.02em;
   margin: 0 0 24px 0;
+}
+
+.about-modern-title-dark {
+  color: #0a1420; /* Dark navy / black */
+}
+
+.about-modern-title-green {
+  color: #18522e; /* Dark green accent */
 }
 
 .about-modern-bold-text {
@@ -54,7 +62,7 @@
 
 .about-modern-quote-bar {
   width: 4px;
-  background-color: #f99f1b;
+  background-color: #18522e; /* Dark green replacing orange/yellow */
   flex-shrink: 0;
   border-radius: 4px;
 }
@@ -140,8 +148,8 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
- -webkit-appearance: none;
-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .about-modern-play-btn:hover,
@@ -151,7 +159,7 @@ appearance: none;
 }
 
 .about-modern-play-icon {
-  color: #f99f1b;
+  color: #18522e; /* Dark green play icon replacing orange/yellow */
   font-size: 1.25rem;
   margin-left: 3px;
 }
@@ -210,19 +218,19 @@ appearance: none;
   margin-top: 2px;
 }
 
-.card-orange {
-  background-color: #f99f1b;
+.card-green {
+  background-color: #18522e; /* Dark green background card replacing orange */
   color: #ffffff;
-  box-shadow: 0 10px 25px rgba(249, 159, 27, 0.2);
+  box-shadow: 0 10px 25px rgba(24, 82, 46, 0.25);
 }
 
-.card-orange .stat-card-img {
+.card-green .stat-card-img {
   filter: brightness(0) invert(1);
 }
 
 .card-cream {
-  background-color: #fdf6e7;
-  color: #111827;
+  background-color: #eef7f2; /* Light mint/green tone replacing cream/yellow tint */
+  color: #0a1420;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
 }
 

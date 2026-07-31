@@ -1,7 +1,7 @@
 .ServicesWeOffer-section {
   width: 100%;
   padding: 100px 24px;
-  background-color: #fdf6e7;
+  background-color: #eef7f2; /* Light green background replacing yellow/cream */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   box-sizing: border-box;
   -webkit-text-size-adjust: 100%;
@@ -21,14 +21,18 @@
 .ServicesWeOffer-title {
   font-size: 3rem;
   font-weight: 800;
-  color: #111827;
   letter-spacing: -0.02em;
   margin: 0 0 12px 0;
   line-height: 1.1;
 }
 
-.ServicesWeOffer-title-highlight {
-  color: #f9a01b;
+/* Dual-color typography classes matching reference image 2 */
+.ServicesWeOffer-title-dark {
+  color: #0a1420; /* Dark navy / black */
+}
+
+.ServicesWeOffer-title-green {
+  color: #18522e; /* Dark green replacing yellow */
 }
 
 .ServicesWeOffer-subtitle {
@@ -48,14 +52,14 @@
 .ServicesWeOffer-card {
   position: relative;
   background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(24, 82, 46, 0.08);
   border-radius: 20px;
   padding: 36px 30px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 30px rgba(24, 82, 46, 0.04);
 }
 
 .ServicesWeOffer-card-accent {
@@ -64,7 +68,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #f9a01b, #f59e0b);
+  background: linear-gradient(90deg, #18522e, #237242); /* Dark green gradient replacing yellow */
   opacity: 1;
 }
 
@@ -97,7 +101,7 @@
 .ServicesWeOffer-card-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
+  color: #0a1420;
   margin: 0 0 12px 0;
 }
 
@@ -115,11 +119,12 @@
   position: relative;
 }
 
+/* Animations updated with Dark Green Base Colors */
 @keyframes portalWarp {
   0% {
     transform: translateX(0) scale(1) rotate(0deg);
     opacity: 1;
-    color: #f9a01b;
+    color: #18522e;
   }
   45% {
     transform: translateX(150px) scale(0.1) rotate(360deg);
@@ -133,7 +138,7 @@
   100% {
     transform: translateX(0) scale(1) rotate(0deg);
     opacity: 1;
-    color: #f9a01b;
+    color: #18522e;
   }
 }
 
@@ -145,11 +150,11 @@
   0% {
     transform: translateX(0px) rotateY(0deg) scale(1);
     opacity: 1;
-    color: #111827;
+    color: #0a1420;
   }
   30% {
     transform: translateX(130px) rotateY(180deg) scale(1.3);
-    color: #f43f5e;
+    color: #18522e;
   }
   50% {
     transform: translateX(180px) rotateY(360deg) scale(0);
@@ -168,7 +173,7 @@
   100% {
     transform: translateX(0px) rotateY(720deg) scale(1);
     opacity: 1;
-    color: #111827;
+    color: #0a1420;
   }
 }
 
@@ -180,7 +185,7 @@
 @keyframes waveTraversal {
   0%, 100% {
     transform: translate(0, 0) rotate(0deg);
-    color: #f59e0b;
+    color: #18522e;
   }
   30% {
     transform: translate(90px, -10px) rotate(180deg) scale(1.2);

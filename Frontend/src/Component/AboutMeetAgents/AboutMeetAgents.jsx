@@ -2,7 +2,7 @@ import React from 'react';
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import './AboutMeetAgents.css';
 
-// Image Imports (Adjust relative paths as needed)
+// Image Imports
 import agent1Img from '../../assets/agent1.webp';
 import agent2Img from '../../assets/agent2.webp';
 import agent3Img from '../../assets/agent3.webp';
@@ -57,9 +57,12 @@ export function AboutMeetAgents() {
     <section className="AboutMeetAgents-wrapper">
       <div className="AboutMeetAgents-container">
         
-        {/* Header Section */}
+        {/* Header Section with Dual-Color Typography */}
         <div className="AboutMeetAgents-header">
-          <h2 className="AboutMeetAgents-title">Meet the agents</h2>
+          <h2 className="AboutMeetAgents-title">
+            <span className="AboutMeetAgents-title-dark">Meet</span>{' '}
+            <span className="AboutMeetAgents-title-green">the agents</span>
+          </h2>
           <p className="AboutMeetAgents-subtitle">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel lobortis justo
           </p>

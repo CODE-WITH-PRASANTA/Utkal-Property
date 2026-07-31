@@ -24,8 +24,11 @@ export function TrustedBrands() {
       <div className="TrustedBrands-container">
         
         <div className="TrustedBrands-header-wrapper">
+          {/* Title styled matching second image: Dark Navy text + Dark Green highlight */}
           <h2 className="TrustedBrands-heading">
-            Trusted by over <span className="TrustedBrands-highlight">150+</span> major companies
+            <span className="TrustedBrands-title-dark">Trusted by over </span>
+            <span className="TrustedBrands-highlight">150+</span>
+            <span className="TrustedBrands-title-dark"> major companies</span>
           </h2>
           <div className="TrustedBrands-divider"></div>
         </div>

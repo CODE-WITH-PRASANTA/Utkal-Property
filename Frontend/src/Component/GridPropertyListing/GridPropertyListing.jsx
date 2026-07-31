@@ -161,7 +161,6 @@ const PROPERTY_DATABASE = [
       'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800'
     ]
   },
-  // Additional Page 2 & 3 Items
   ...Array.from({ length: 16 }).map((_, index) => ({
     id: index + 9,
     title: `Exclusive Residence #${index + 9}`,
@@ -182,7 +181,7 @@ const PROPERTY_DATABASE = [
   }))
 ];
 
-const ITEMS_PER_PAGE = 8; // Exactly 8 items per page (4 items in 2 rows)
+const ITEMS_PER_PAGE = 8;
 
 const PropertyCard = ({ property }) => {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
@@ -205,7 +204,7 @@ const PropertyCard = ({ property }) => {
   return (
     <div className="GridPropertyListing-card">
       
-      {/* Image Container with Hover Controls */}
+      {/* Image Container */}
       <div className="GridPropertyListing-image-container">
         <img
           src={property.images[currentImgIndex]}
@@ -223,7 +222,7 @@ const PropertyCard = ({ property }) => {
           )}
         </div>
 
-        {/* Ribbon Bookmark Button */}
+        {/* Bookmark Button */}
         <button
           className={`GridPropertyListing-bookmark-btn ${
             isBookmarked ? 'active' : ''
@@ -233,7 +232,7 @@ const PropertyCard = ({ property }) => {
           <BsBookmarkFill />
         </button>
 
-        {/* Hover Controls (3rd Reference Image) */}
+        {/* Hover Controls */}
         <div className="GridPropertyListing-overlay">
           <button className="GridPropertyListing-plus-icon-btn">
             <BsPlusLg />
@@ -330,7 +329,11 @@ const GridPropertyListing = () => {
         {/* Top Header Controls */}
         <div className="GridPropertyListing-header">
           <div className="GridPropertyListing-header-left">
-            <h2 className="GridPropertyListing-main-title">Property Listing</h2>
+            {/* Title styled matching reference image: "Property" (Green) + "Listing" (Dark Navy/Black) */}
+            <h2 className="GridPropertyListing-main-title">
+              <span className="GridPropertyListing-title-green">Property</span>{' '}
+              <span className="GridPropertyListing-title-dark">Listing</span>
+            </h2>
             <span className="GridPropertyListing-count-text">
               There are currently 164,814 properties.
             </span>
@@ -372,14 +375,14 @@ const GridPropertyListing = () => {
           </div>
         </div>
 
-        {/* Grid (4 Cards Per Row on Desktop) */}
+        {/* Grid Layout */}
         <div className={`GridPropertyListing-grid ${viewMode}`}>
           {currentProperties.map((property) => (
             <PropertyCard key={property.id} property={property} />
           ))}
         </div>
 
-        {/* 8-Item Pagination Bar */}
+        {/* Pagination Bar */}
         <div className="GridPropertyListing-pagination">
           <button
             className="GridPropertyListing-page-nav"

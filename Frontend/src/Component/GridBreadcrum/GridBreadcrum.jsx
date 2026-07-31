@@ -22,7 +22,7 @@ const GridBreadcrum = () => {
   // Toggle Rent / Buy Tabs
   const [activeTab, setActiveTab] = useState('Rent');
 
-  // Toggle Extended Filter Panel (2nd Reference Image)
+  // Toggle Extended Filter Panel
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // Form Field States
@@ -56,15 +56,15 @@ const GridBreadcrum = () => {
     }));
   };
 
-  // Fallback background image if src/assets/hero-bg.jpg is not found
+  // Fallback background image if local asset fails
   const bgStyle = {
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url(${heroBg || 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600'})`
+    backgroundImage: `linear-gradient(rgba(11, 59, 36, 0.45), rgba(0, 0, 0, 0.65)), url(${heroBg || 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600'})`
   };
 
   return (
     <div className="GridBreadcrum">
       
-      {/* Top Search & Filter Bar Bar Area */}
+      {/* Top Search & Filter Bar Area */}
       <div className="GridBreadcrum-filter-section">
         <div className="GridBreadcrum-container">
           
@@ -181,7 +181,7 @@ const GridBreadcrum = () => {
 
           </div>
 
-          {/* Extended Filters Drawer (Shown in 2nd Reference Image) */}
+          {/* Extended Filters Drawer */}
           {isFilterOpen && (
             <div className="GridBreadcrum-extended-panel">
               
@@ -359,7 +359,7 @@ const GridBreadcrum = () => {
         </div>
       </div>
 
-      {/* Hero Banner Section with House Background */}
+      {/* Hero Banner Section with Dark Green Tint Overlay */}
       <div className="GridBreadcrum-hero-banner" style={bgStyle}>
         <div className="GridBreadcrum-hero-container">
           

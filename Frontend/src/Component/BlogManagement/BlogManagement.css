@@ -1,0 +1,436 @@
+/* Base Layout Variables & Colors matching the provided images */
+:root {
+  --bm-dark-green: #062c18;
+  --bm-dark-green-hover: #0a3d22;
+  --bm-text-gray: #4a5568;
+  --bm-border-color: #e2e8f0;
+  --bm-bg-light: #f8fafc;
+  --bm-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.bm-container {
+  font-family: var(--bm-font-family);
+  padding: 20px;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+/* Redesigned Toolbar Area Styles */
+.bm-toolbar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.bm-main-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Shared fields styling */
+.bm-search-wrapper, .bm-select-wrapper, .bm-date-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 160px;
+}
+
+.bm-search-field, .bm-dropdown-select, .bm-date-field {
+  width: 100%;
+  height: 40px;
+  padding: 0 36px 0 12px;
+  border: 1px solid var(--bm-border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: var(--bm-font-family);
+  color: #2d3748;
+  background-color: #ffffff;
+  outline: none;
+  box-sizing: border-box;
+  appearance: none;
+  cursor: text;
+}
+
+.bm-dropdown-select {
+  padding-right: 32px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%234a5568' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 12px) center;
+}
+
+.bm-search-icon-right, .bm-calendar-icon {
+  position: absolute;
+  right: 12px;
+  color: #a0aec0;
+  pointer-events: none;
+  font-size: 14px;
+}
+
+.bm-date-field {
+  cursor: pointer;
+}
+
+/* View Mode Toggles layout styling */
+.bm-view-toggle-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.bm-toggle-view-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--bm-border-color);
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #2d3748;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bm-toggle-view-btn.selected {
+  background-color: var(--bm-dark-green);
+  color: #ffffff;
+  border-color: var(--bm-dark-green);
+}
+
+.bm-btn-icon {
+  font-size: 15px;
+}
+
+/* Action Buttons Sub Row placement styling */
+.bm-action-sub-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 100%;
+}
+
+.bm-utility-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--bm-border-color);
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #2d3748;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.bm-utility-btn:hover {
+  background-color: var(--bm-bg-light);
+}
+
+/* Table Design Section Styles */
+.bm-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--bm-border-color);
+  border-radius: 8px;
+  background: white;
+}
+
+.bm-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.bm-table thead tr {
+  background-color: var(--bm-dark-green);
+  color: #ffffff;
+}
+
+.bm-table th {
+  padding: 14px 16px;
+  font-weight: 600;
+}
+
+.bm-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--bm-border-color);
+  vertical-align: middle;
+}
+
+.bm-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.bm-table-img {
+  width: 100px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.bm-table-title {
+  font-weight: 600;
+  max-width: 280px;
+  line-height: 1.4;
+}
+
+/* Badges UI styling */
+.bm-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.cat-housing { background-color: #fff3db; color: #b7791f; }
+.cat-business { background-color: #ebf4ff; color: #2b6cb0; }
+.cat-apartments { background-color: #faf5ff; color: #6b46c1; }
+.cat-villa { background-color: #f0fff4; color: #38a169; }
+.cat-duplex { background-color: #fff5f5; color: #e53e3e; }
+
+.bm-author-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bm-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.bm-table-date div {
+  font-weight: 500;
+}
+.bm-table-date small {
+  color: #718096;
+}
+
+/* Status Indicator Pill tags */
+.bm-status-label {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.bm-status-label.published {
+  background-color: #e6fffa;
+  color: #319795;
+}
+.bm-status-label.draft {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+/* Actions cell buttons styling */
+.bm-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.bm-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid var(--bm-border-color);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.bm-action-btn.view:hover { background-color: #edf2f7; }
+.bm-action-btn.edit:hover { background-color: #e6fffa; border-color: #319795; }
+.bm-action-btn.delete:hover { background-color: #fff5f5; border-color: #e53e3e; }
+
+/* Table Pagination Styling */
+.bm-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+  background-color: #ffffff;
+}
+
+.bm-footer-info {
+  font-size: 13px;
+  color: var(--bm-text-gray);
+}
+
+.bm-pagination {
+  display: flex;
+  gap: 4px;
+}
+
+.bm-page-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--bm-border-color);
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.bm-page-btn.active-page {
+  background-color: var(--bm-dark-green);
+  color: white;
+  border-color: var(--bm-dark-green);
+}
+
+/* Grid View Layout UI */
+.bm-grid-wrapper {
+  margin-top: 10px;
+}
+
+.bm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.bm-card {
+  background: #ffffff;
+  border: 1px solid var(--bm-border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.bm-card-banner {
+  position: relative;
+  width: 100%;
+  height: 180px;
+}
+
+.bm-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bm-card-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+}
+
+.bm-card-save-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bm-card-body {
+  padding: 16px;
+  flex-grow: 1;
+}
+
+.bm-card-date {
+  font-size: 12px;
+  color: #718096;
+  margin-bottom: 8px;
+}
+
+.bm-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  color: #1a202c;
+}
+
+.bm-card-desc {
+  font-size: 13px;
+  color: var(--bm-text-gray);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.bm-card-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--bm-border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fafafa;
+}
+
+.bm-grid-load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.bm-load-btn {
+  padding: 10px 24px;
+  border: 1px solid var(--bm-dark-green);
+  background: transparent;
+  color: var(--bm-dark-green);
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bm-load-btn:hover {
+  background-color: var(--bm-dark-green);
+  color: white;
+}
+
+/* Responsive Media queries styling */
+@media (max-width: 1024px) {
+  .bm-search-wrapper, .bm-select-wrapper, .bm-date-wrapper {
+    min-width: calc(33.33% - 8px);
+  }
+  .bm-view-toggle-buttons {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .bm-search-wrapper, .bm-select-wrapper, .bm-date-wrapper {
+    min-width: 100%;
+  }
+  .bm-action-sub-row {
+    justify-content: space-between;
+  }
+  .bm-utility-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
