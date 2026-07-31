@@ -8,7 +8,9 @@ dotenv.config();
 const connectDB = require("./src/config/db");
 const testimonialRoutes = require("./src/routes/testimonialRoutes");
 const galleryRoutes = require("./src/routes/galleryRoutes");
+const teamRoutes = require("./src/routes/teamRoutes");
 
+// Initialize MongoDB Connection
 connectDB();
 
 const app = express();
@@ -17,17 +19,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static uploaded webp assets
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// API Routes
 app.use("/api/testimonials", testimonialRoutes);
 app.use('/api/gallery', galleryRoutes);
+app.use("/api/team", teamRoutes);
 
 app.get("/", (req, res) => {
-  res.json({ message: "Server Running" });
+  res.json({ message: "Server Running Successfully" });
 });
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

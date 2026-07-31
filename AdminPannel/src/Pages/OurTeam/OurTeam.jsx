@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './OurTeam.css';
+import API, { IMG_URL } from '../../api/axios'; // Adjust relative import path if needed
 
 // React Icons
 import {
@@ -14,56 +15,18 @@ import {
   FaTwitter,
   FaLinkedinIn,
   FaPhoneAlt,
-  FaEnvelope
+  FaEnvelope,
+  FaImage
 } from 'react-icons/fa';
 
-const INITIAL_TEAM = [
-  {
-    id: 1,
-    fullName: 'Rajesh Kumar Mohanty',
-    designation: 'Property Advisor',
-    email: 'rajesh.utkalproperty@gmail.com',
-    phone: '+91-98615-66735',
-    facebook: 'https://facebook.com',
-    twitter: 'https://twitter.com',
-    linkedin: 'https://linkedin.com',
-    displayOrder: 1,
-    status: 'Active',
-    photo: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=300'
-  },
-  {
-    id: 2,
-    fullName: 'Priyanka Das',
-    designation: 'Residential Specialist',
-    email: 'priyanka.das@gmail.com',
-    phone: '+91-98615-66735',
-    facebook: 'https://facebook.com',
-    twitter: 'https://twitter.com',
-    linkedin: 'https://linkedin.com',
-    displayOrder: 2,
-    status: 'Active',
-    photo: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=300'
-  },
-  {
-    id: 3,
-    fullName: 'Santosh Kumar Jena',
-    designation: 'Commercial Consultant',
-    email: 'santosh.jena@gmail.com',
-    phone: '+91-98615-66735',
-    facebook: '',
-    twitter: '',
-    linkedin: 'https://linkedin.com',
-    displayOrder: 3,
-    status: 'Inactive',
-    photo: 'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=300'
-  }
-];
-
 const OurTeam = () => {
-  const [teamMembers, setTeamMembers] = useState(INITIAL_TEAM);
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [viewingMember, setViewingMember] = useState(null);
   const [dragActive, setDragActive] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [brokenImages, setBrokenImages] = useState({});
 
   // Form State
   const [formData, setFormData] = useState({
@@ -75,12 +38,73 @@ const OurTeam = () => {
     twitter: '',
     linkedin: '',
     displayOrder: 1,
-    status: 'Active',
-    photo: null
+    status: 'Active'
   });
 
   const [previewImage, setPreviewImage] = useState(null);
   const fileInputRef = useRef(null);
+
+  /**
+   * Universal Image URL Resolver
+   * Resolves absolute backend server paths for static WebP files (/uploads/team/filename.webp)
+   */
+  const getImageUrl = (photoPath) => {
+    if (!photoPath) return '';
+
+    // 1. Direct Blob previews or absolute web URLs
+    if (
+      photoPath.startsWith('http://') ||
+      photoPath.startsWith('https://') ||
+      photoPath.startsWith('blob:')
+    ) {
+      return photoPath;
+    }
+
+    // 2. Normalize Windows backslashes
+    let clean = photoPath.replace(/\\/g, '/');
+
+    // 3. Isolate path starting from uploads/
+    const uploadsIndex = clean.indexOf('uploads/');
+    if (uploadsIndex !== -1) {
+      clean = '/' + clean.substring(uploadsIndex);
+    } else {
+      clean = clean.startsWith('/') ? clean : `/${clean}`;
+    }
+
+    // 4. Attach base URL safely without double slashes
+    const baseUrl = (IMG_URL || 'http://localhost:5000').replace(/\/+$/, '');
+    return `${baseUrl}${clean}`;
+  };
+
+  // Fetch Team Members from API
+  const fetchTeamMembers = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get('/team');
+      let data = [];
+
+      if (response.data && response.data.data) {
+        data = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        data = response.data;
+      }
+
+      setTeamMembers(data);
+    } catch (error) {
+      console.error('Error fetching team members:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTeamMembers();
+  }, []);
+
+  // Track broken images
+  const handleImageError = (id) => {
+    setBrokenImages((prev) => ({ ...prev, [id]: true }));
+  };
 
   // Input Change Handler
   const handleInputChange = (e) => {
@@ -91,13 +115,13 @@ const OurTeam = () => {
   // Process File Upload
   const processFile = (file) => {
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        alert('File size exceeds 2MB limit. Please upload a smaller image.');
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size exceeds 5MB limit. Please upload a smaller image.');
         return;
       }
-      const imageUrl = URL.createObjectURL(file);
-      setFormData((prev) => ({ ...prev, photo: imageUrl }));
-      setPreviewImage(imageUrl);
+      setSelectedFile(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewImage(objectUrl);
     }
   };
 
@@ -129,8 +153,11 @@ const OurTeam = () => {
 
   // Remove Selected Image
   const handleRemoveImage = () => {
+    if (previewImage && previewImage.startsWith('blob:')) {
+      URL.revokeObjectURL(previewImage);
+    }
     setPreviewImage(null);
-    setFormData((prev) => ({ ...prev, photo: null }));
+    setSelectedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -145,71 +172,101 @@ const OurTeam = () => {
       twitter: '',
       linkedin: '',
       displayOrder: 1,
-      status: 'Active',
-      photo: null
+      status: 'Active'
     });
-    setPreviewImage(null);
+    handleRemoveImage();
     setEditingId(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // Form Submit Handler (Add / Edit)
-  const handleSubmit = (e) => {
+  // Submit Handler (Create or Update API calls)
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (editingId) {
-      setTeamMembers((prev) =>
-        prev.map((item) =>
-          item.id === editingId
-            ? { ...item, ...formData, photo: previewImage || item.photo }
-            : item
-        )
-      );
-    } else {
-      const newItem = {
-        id: Date.now(),
-        ...formData,
-        photo:
-          previewImage ||
-          'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=300'
-      };
-      setTeamMembers((prev) => [newItem, ...prev]);
+    if (!selectedFile && !editingId) {
+      alert('Please select or drag & drop a profile photo.');
+      return;
     }
 
-    resetForm();
+    const payload = new FormData();
+    payload.append('fullName', formData.fullName);
+    payload.append('designation', formData.designation);
+    payload.append('email', formData.email);
+    payload.append('phone', formData.phone);
+    payload.append('facebook', formData.facebook);
+    payload.append('twitter', formData.twitter);
+    payload.append('linkedin', formData.linkedin);
+    payload.append('displayOrder', formData.displayOrder);
+    payload.append('status', formData.status);
+
+    if (selectedFile) {
+      payload.append('photo', selectedFile);
+    }
+
+    try {
+      let response;
+      if (editingId) {
+        // PUT: Update team member
+        response = await API.put(`/team/${editingId}`, payload, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      } else {
+        // POST: Create team member
+        response = await API.post('/team', payload, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      }
+
+      if (response.status === 200 || response.status === 201) {
+        await fetchTeamMembers();
+        resetForm();
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert(error.response?.data?.message || 'Failed to save team member.');
+    }
   };
 
-  // Edit Action
+  // Trigger Edit Action
   const handleEdit = (item) => {
-    setEditingId(item.id);
+    const itemId = item._id || item.id;
+    setEditingId(itemId);
     setFormData({
-      fullName: item.fullName,
-      designation: item.designation,
-      email: item.email,
-      phone: item.phone,
+      fullName: item.fullName || '',
+      designation: item.designation || '',
+      email: item.email || '',
+      phone: item.phone || '',
       facebook: item.facebook || '',
       twitter: item.twitter || '',
       linkedin: item.linkedin || '',
       displayOrder: item.displayOrder || 1,
-      status: item.status,
-      photo: item.photo
+      status: item.status || 'Active'
     });
-    setPreviewImage(item.photo);
+    setPreviewImage(getImageUrl(item.photo));
+    setSelectedFile(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Delete Action
-  const handleDelete = (id) => {
+  // Trigger Delete Action
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this team member?')) {
-      setTeamMembers((prev) => prev.filter((item) => item.id !== id));
-      if (editingId === id) resetForm();
+      try {
+        const response = await API.delete(`/team/${id}`);
+        if (response.status === 200) {
+          setTeamMembers((prev) =>
+            prev.filter((item) => (item._id || item.id) !== id)
+          );
+          if (editingId === id) resetForm();
+        }
+      } catch (error) {
+        console.error('Error deleting team member:', error);
+        alert(error.response?.data?.message || 'Failed to delete team member.');
+      }
     }
   };
 
   return (
     <section className="utkal-team-section">
       <div className="utkal-team-container">
-        
         {/* Page Header */}
         <div className="utkal-team-header">
           <span className="utkal-team-tag">Our Team</span>
@@ -227,14 +284,16 @@ const OurTeam = () => {
               <h2>{editingId ? 'Edit Team Member' : 'Add Team Member'}</h2>
             </div>
             {editingId && (
-              <button className="utkal-team-cancel-edit-btn" onClick={resetForm}>
+              <button
+                className="utkal-team-cancel-edit-btn"
+                onClick={resetForm}
+              >
                 <FaTimes /> Cancel Edit
               </button>
             )}
           </div>
 
           <form onSubmit={handleSubmit} className="utkal-team-form">
-            
             {/* Profile Photo Upload & Preview Row */}
             <div className="utkal-team-upload-row">
               {/* Dropzone */}
@@ -248,7 +307,9 @@ const OurTeam = () => {
                   onDragLeave={handleDrag}
                   onDragOver={handleDrag}
                   onDrop={handleDrop}
-                  onClick={() => fileInputRef.current.click()}
+                  onClick={() =>
+                    fileInputRef.current && fileInputRef.current.click()
+                  }
                 >
                   <input
                     type="file"
@@ -264,7 +325,7 @@ const OurTeam = () => {
                     Drag & Drop or Browse
                   </p>
                   <span className="utkal-team-dropzone-note">
-                    JPG • PNG • WEBP (Max Size 2MB)
+                    JPG • PNG • WEBP (Auto converted to WEBP)
                   </span>
                 </div>
               </div>
@@ -315,7 +376,7 @@ const OurTeam = () => {
                 />
               </div>
 
-              {/* Designation Text Input Box */}
+              {/* Designation */}
               <div className="utkal-team-form-group">
                 <label className="utkal-team-label">
                   Designation <span>*</span>
@@ -461,7 +522,6 @@ const OurTeam = () => {
                 {editingId ? 'Update Team Member' : 'Save Team Member'}
               </button>
             </div>
-
           </form>
         </div>
 
@@ -485,73 +545,103 @@ const OurTeam = () => {
                 </tr>
               </thead>
               <tbody>
-                {teamMembers.length > 0 ? (
-                  teamMembers.map((member) => (
-                    <tr key={member.id}>
-                      {/* Photo */}
-                      <td>
-                        <div className="utkal-team-avatar-cell">
-                          <img src={member.photo} alt={member.fullName} />
-                        </div>
-                      </td>
+                {loading ? (
+                  <tr>
+                    <td colSpan="7" className="utkal-team-empty-td">
+                      Loading team members...
+                    </td>
+                  </tr>
+                ) : teamMembers.length > 0 ? (
+                  teamMembers.map((member) => {
+                    const memberId = member._id || member.id;
+                    const photoUrl = getImageUrl(member.photo);
+                    const isBroken = brokenImages[memberId];
 
-                      {/* Name */}
-                      <td>
-                        <span className="utkal-team-name-cell">{member.fullName}</span>
-                      </td>
+                    return (
+                      <tr key={memberId}>
+                        {/* Photo */}
+                        <td>
+                          <div className="utkal-team-avatar-cell">
+                            {!isBroken ? (
+                              <img
+                                src={photoUrl}
+                                alt={member.fullName}
+                                onError={() => handleImageError(memberId)}
+                              />
+                            ) : (
+                              <div className="utkal-team-broken-placeholder">
+                                <FaUserCircle />
+                              </div>
+                            )}
+                          </div>
+                        </td>
 
-                      {/* Designation */}
-                      <td>
-                        <span className="utkal-team-role-cell">{member.designation}</span>
-                      </td>
+                        {/* Name */}
+                        <td>
+                          <span className="utkal-team-name-cell">
+                            {member.fullName}
+                          </span>
+                        </td>
 
-                      {/* Email */}
-                      <td>
-                        <span className="utkal-team-email-cell">{member.email}</span>
-                      </td>
+                        {/* Designation */}
+                        <td>
+                          <span className="utkal-team-role-cell">
+                            {member.designation}
+                          </span>
+                        </td>
 
-                      {/* Phone */}
-                      <td>
-                        <span className="utkal-team-phone-cell">{member.phone}</span>
-                      </td>
+                        {/* Email */}
+                        <td>
+                          <span className="utkal-team-email-cell">
+                            {member.email}
+                          </span>
+                        </td>
 
-                      {/* Status */}
-                      <td>
-                        <span
-                          className={`utkal-team-status-badge ${member.status.toLowerCase()}`}
-                        >
-                          {member.status}
-                        </span>
-                      </td>
+                        {/* Phone */}
+                        <td>
+                          <span className="utkal-team-phone-cell">
+                            {member.phone}
+                          </span>
+                        </td>
 
-                      {/* Actions */}
-                      <td>
-                        <div className="utkal-team-actions-cell">
-                          <button
-                            className="utkal-action-btn view-btn"
-                            title="View Member Details"
-                            onClick={() => setViewingMember(member)}
+                        {/* Status */}
+                        <td>
+                          <span
+                            className={`utkal-team-status-badge ${member.status?.toLowerCase()}`}
                           >
-                            <FaEye />
-                          </button>
-                          <button
-                            className="utkal-action-btn edit-btn"
-                            title="Edit Member"
-                            onClick={() => handleEdit(member)}
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            className="utkal-action-btn delete-btn"
-                            title="Delete Member"
-                            onClick={() => handleDelete(member.id)}
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                            {member.status}
+                          </span>
+                        </td>
+
+                        {/* Actions */}
+                        <td>
+                          <div className="utkal-team-actions-cell">
+                            <button
+                              className="utkal-action-btn view-btn"
+                              title="View Member Details"
+                              onClick={() => setViewingMember(member)}
+                            >
+                              <FaEye />
+                            </button>
+                            <button
+                              className="utkal-action-btn edit-btn"
+                              title="Edit Member"
+                              onClick={() => handleEdit(member)}
+                            >
+                              <FaEdit />
+                            </button>
+                            <button
+                              className="utkal-action-btn delete-btn"
+                              title="Delete Member"
+                              onClick={() => handleDelete(memberId)}
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan="7" className="utkal-team-empty-td">
@@ -583,14 +673,16 @@ const OurTeam = () => {
 
               <div className="utkal-team-modal-header">
                 <img
-                  src={viewingMember.photo}
+                  src={getImageUrl(viewingMember.photo)}
                   alt={viewingMember.fullName}
                   className="utkal-team-modal-avatar"
                 />
                 <h3>{viewingMember.fullName}</h3>
-                <p className="utkal-team-modal-role">{viewingMember.designation}</p>
+                <p className="utkal-team-modal-role">
+                  {viewingMember.designation}
+                </p>
                 <span
-                  className={`utkal-team-status-badge ${viewingMember.status.toLowerCase()}`}
+                  className={`utkal-team-status-badge ${viewingMember.status?.toLowerCase()}`}
                 >
                   {viewingMember.status}
                 </span>
@@ -640,7 +732,6 @@ const OurTeam = () => {
             </div>
           </div>
         )}
-
       </div>
     </section>
   );
