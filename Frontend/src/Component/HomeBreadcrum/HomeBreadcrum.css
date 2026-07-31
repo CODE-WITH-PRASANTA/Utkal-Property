@@ -1,17 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* Color Variables extracted from Utkal Property Logo */
+:root {
+  --utkal-green: #0a682c;
+  --utkal-green-hover: #074e20;
+  --utkal-navy: #0c1b33;
+  --utkal-green-light: #eef7f2;
+  --utkal-green-border: #cde4d6;
+  --utkal-gray-subtle: #5a6b82;
+}
 
 .HomeBreadcrum {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #fffcf5 0%, #fff8e7 50%, #fff3d6 100%);
+  background: radial-gradient(circle at 10% 20%, #ffffff 0%, #f4faf6 70%, #e8f5ed 100%);
   font-family: 'Plus Jakarta Sans', sans-serif;
-  color: #1a1a1a;
+  color: var(--utkal-navy);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 50px 24px;
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
+}
+
+/* Subtle background accent glow */
+.HomeBreadcrum::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: rgba(10, 104, 44, 0.05);
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
 }
 
 .HomeBreadcrum-container {
@@ -19,7 +44,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  gap: 40px;
+  gap: 48px;
   align-items: center;
   position: relative;
 }
@@ -31,37 +56,60 @@
   z-index: 5;
 }
 
-.HomeBreadcrum-title {
-  font-size: 54px;
+.HomeBreadcrum-badgeTag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 6px 14px;
+  background-color: var(--utkal-green-light);
+  border: 1px solid var(--utkal-green-border);
+  color: var(--utkal-green);
+  font-size: 12px;
   font-weight: 700;
-  line-height: 1.15;
-  color: #111827;
+  border-radius: 30px;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.HomeBreadcrum-title {
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--utkal-navy);
   margin: 0 0 20px 0;
-  letter-spacing: -1px;
+  letter-spacing: -1.2px;
+}
+
+.HomeBreadcrum-title .highlight-green {
+  color: var(--utkal-green);
+  position: relative;
+  display: inline-block;
 }
 
 .HomeBreadcrum-subtitle {
-  font-size: 14px;
-  line-height: 1.6;
-  color: #555555;
-  max-width: 460px;
-  margin: 0 0 35px 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--utkal-gray-subtle);
+  max-width: 480px;
+  margin: 0 0 36px 0;
 }
 
 /* Search Container & Tabs */
 .HomeBreadcrum-searchCardContainer {
   position: relative;
   width: 100%;
-  max-width: 700px;
+  max-width: 720px;
   margin-bottom: 40px;
 }
 
 .HomeBreadcrum-tabs {
   display: inline-flex;
-  background-color: #fcecd7;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  overflow: hidden;
+  background-color: var(--utkal-green-light);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 4px 4px 0 4px;
+  border: 1px solid var(--utkal-green-border);
+  border-bottom: none;
 }
 
 .HomeBreadcrum-tab {
@@ -69,22 +117,25 @@
   border: none;
   background: transparent;
   font-size: 14px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  color: var(--utkal-gray-subtle);
   cursor: pointer;
-  transition: all 0.2s ease;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  transition: all 0.25s ease;
 }
 
 .HomeBreadcrum-tab.active {
-  background-color: #f3a835;
+  background-color: var(--utkal-green);
   color: #ffffff;
 }
 
-/* Main Bar */
+/* Main Search Bar */
 .HomeBreadcrum-searchCard {
   background: #ffffff;
-  border-radius: 0 12px 12px 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 0 14px 14px 14px;
+  box-shadow: 0 16px 40px rgba(12, 27, 51, 0.08);
+  border: 1px solid var(--utkal-green-border);
   display: flex;
   align-items: center;
   padding: 8px 12px;
@@ -102,135 +153,145 @@
   width: 100%;
   border: none;
   outline: none;
-  padding: 12px 14px;
-  font-size: 13px;
-  color: #333;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--utkal-navy);
   font-family: inherit;
+  font-weight: 500;
 }
 
 .HomeBreadcrum-inputField input::placeholder {
-  color: #9ea3ae;
+  color: #94a3b8;
 }
 
 .HomeBreadcrum-dropdownField {
-  border-left: 1px solid #f0f0f0;
+  border-left: 1px solid #e2e8f0;
 }
 
 .HomeBreadcrum-dropdownHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
+  padding: 12px 16px;
   cursor: pointer;
-  font-size: 13px;
-  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--utkal-navy);
   user-select: none;
 }
 
 .HomeBreadcrum-arrowIcon {
-  color: #888;
+  color: var(--utkal-green);
   font-size: 16px;
+  transition: transform 0.2s ease;
 }
 
-/* Reference Image 2: Dropdown Style */
+/* Property / Location Dropdown Menu */
 .HomeBreadcrum-dropdownMenu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 12px);
   left: 0;
-  width: 200px;
+  width: 220px;
   background: #ffffff;
-  border: 1px solid #d1d5db;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  border: 1px solid var(--utkal-green-border);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(12, 27, 51, 0.12);
   z-index: 100;
+  overflow: hidden;
 }
 
 .HomeBreadcrum-dropdownTitle {
-  background-color: #6b7280;
+  background-color: var(--utkal-navy);
   color: #ffffff;
   font-weight: 700;
-  padding: 10px 16px;
-  font-size: 15px;
+  padding: 12px 18px;
+  font-size: 14px;
 }
 
 .HomeBreadcrum-dropdownMenu ul {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 6px 0;
 }
 
 .HomeBreadcrum-dropdownMenu li {
-  padding: 10px 16px;
+  padding: 10px 18px;
   font-size: 14px;
-  color: #1f2937;
+  font-weight: 500;
+  color: var(--utkal-navy);
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .HomeBreadcrum-dropdownMenu li:hover {
-  background-color: #f3f4f6;
+  background-color: var(--utkal-green-light);
+  color: var(--utkal-green);
 }
 
 /* Action Buttons */
 .HomeBreadcrum-filterBtn {
-  background: #fef5e7;
-  border: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
+  background: var(--utkal-green-light);
+  border: 1px solid var(--utkal-green-border);
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f3a835;
+  color: var(--utkal-green);
   font-size: 18px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   flex-shrink: 0;
 }
 
 .HomeBreadcrum-filterBtn:hover,
 .HomeBreadcrum-filterBtn.active {
-  background: #f3a835;
-  color: #fff;
+  background: var(--utkal-green);
+  color: #ffffff;
+  border-color: var(--utkal-green);
 }
 
 .HomeBreadcrum-searchBtn {
-  background: #f3a835;
+  background: var(--utkal-green);
   color: #ffffff;
   border: none;
-  padding: 0 22px;
-  height: 44px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 0 24px;
+  height: 46px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background 0.2s ease;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(10, 104, 44, 0.25);
   flex-shrink: 0;
 }
 
 .HomeBreadcrum-searchBtn:hover {
-  background: #e09322;
+  background: var(--utkal-green-hover);
+  transform: translateY(-1px);
 }
 
 .HomeBreadcrum-searchIcon {
-  font-size: 14px;
+  font-size: 16px;
 }
 
-/* Reference Image 3: Advanced Filter Panel */
+/* Advanced Filter Panel */
 .HomeBreadcrum-filterPanel {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(12, 27, 51, 0.12);
   padding: 24px;
-  margin-top: 12px;
+  margin-top: 14px;
   z-index: 50;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--utkal-green-border);
 }
 
 .HomeBreadcrum-filterTop {
@@ -246,8 +307,9 @@
 
 .HomeBreadcrum-filterSelect {
   position: relative;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
+  border: 1px solid var(--utkal-green-border);
+  background: var(--utkal-green-light);
+  border-radius: 6px;
   min-width: 140px;
 }
 
@@ -258,7 +320,8 @@
   outline: none;
   background: transparent;
   font-size: 13px;
-  color: #374151;
+  font-weight: 600;
+  color: var(--utkal-navy);
   appearance: none;
   cursor: pointer;
 }
@@ -269,20 +332,20 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: #6b7280;
+  color: var(--utkal-green);
   font-size: 14px;
 }
 
 .HomeBreadcrum-filterHeaderLabel {
   font-size: 13px;
   font-weight: 700;
-  color: #111827;
+  color: var(--utkal-navy);
   margin-left: 20px;
 }
 
 .HomeBreadcrum-divider {
   height: 1px;
-  background-color: #e5e7eb;
+  background-color: var(--utkal-green-border);
   margin: 20px 0;
 }
 
@@ -295,10 +358,11 @@
 .HomeBreadcrum-checkboxLabel {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
   font-size: 13px;
-  color: #374151;
+  font-weight: 500;
+  color: var(--utkal-navy);
 }
 
 .HomeBreadcrum-checkboxLabel input {
@@ -306,9 +370,10 @@
 }
 
 .HomeBreadcrum-customCheckbox {
-  width: 16px;
-  height: 16px;
-  border: 1px solid #d1d5db;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--utkal-green-border);
+  background-color: #ffffff;
   border-radius: 4px;
   display: inline-block;
   position: relative;
@@ -316,8 +381,8 @@
 }
 
 .HomeBreadcrum-checkboxLabel input:checked + .HomeBreadcrum-customCheckbox {
-  background-color: #f3a835;
-  border-color: #f3a835;
+  background-color: var(--utkal-green);
+  border-color: var(--utkal-green);
 }
 
 .HomeBreadcrum-checkboxLabel input:checked + .HomeBreadcrum-customCheckbox::after {
@@ -336,18 +401,22 @@
 .HomeBreadcrum-stats {
   display: flex;
   gap: 48px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--utkal-green-border);
+  max-width: 480px;
 }
 
 .HomeBreadcrum-statItem h3 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 4px 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--utkal-green);
+  margin: 0 0 2px 0;
 }
 
 .HomeBreadcrum-statItem p {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--utkal-navy);
   margin: 0;
 }
 
@@ -361,12 +430,13 @@
 /* Arch Image */
 .HomeBreadcrum-imageArch {
   width: 100%;
-  max-width: 420px;
-  height: 520px;
-  border-top-left-radius: 210px;
-  border-top-right-radius: 210px;
+  max-width: 430px;
+  height: 540px;
+  border-top-left-radius: 215px;
+  border-top-right-radius: 215px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 24px 48px rgba(10, 104, 44, 0.15);
+  border: 4px solid #ffffff;
 }
 
 .HomeBreadcrum-heroImage {
@@ -375,17 +445,21 @@
   object-fit: cover;
 }
 
-/* Reference Image 4: Rotating Circular Badge */
+/* Rotating Circular Badge */
 .HomeBreadcrum-badgeWrapper {
   position: absolute;
-  top: -25px;
-  left: 20px;
-  width: 120px;
-  height: 120px;
+  top: -20px;
+  left: 10px;
+  width: 130px;
+  height: 130px;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 10px 25px rgba(12, 27, 51, 0.12);
+  border: 1px solid var(--utkal-green-border);
 }
 
 .HomeBreadcrum-badgeTextContainer {
@@ -401,17 +475,17 @@
 }
 
 .HomeBreadcrum-svgText {
-  font-size: 9px;
-  font-weight: 600;
-  text-transform: lowercase;
+  font-size: 8.5px;
+  font-weight: 700;
+  text-transform: uppercase;
   letter-spacing: 2px;
-  fill: #111827;
+  fill: var(--utkal-navy);
 }
 
 .HomeBreadcrum-badgeArrow {
   position: absolute;
   font-size: 24px;
-  color: #111827;
+  color: var(--utkal-green);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -426,7 +500,7 @@
   }
 }
 
-/* Responsive Styles */
+/* Responsive Breakpoints */
 @media (max-width: 1024px) {
   .HomeBreadcrum-container {
     grid-template-columns: 1fr;
@@ -434,7 +508,7 @@
   }
 
   .HomeBreadcrum-title {
-    font-size: 42px;
+    font-size: 44px;
   }
 
   .HomeBreadcrum-right {
@@ -442,7 +516,7 @@
   }
 
   .HomeBreadcrum-badgeWrapper {
-    left: 10%;
+    left: 15%;
   }
 }
 
@@ -455,7 +529,7 @@
 
   .HomeBreadcrum-dropdownField {
     border-left: none;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #e2e8f0;
   }
 
   .HomeBreadcrum-amenitiesGrid {
@@ -474,7 +548,7 @@
 
 @media (max-width: 480px) {
   .HomeBreadcrum-title {
-    font-size: 32px;
+    font-size: 34px;
   }
 
   .HomeBreadcrum-amenitiesGrid {
@@ -482,6 +556,6 @@
   }
 
   .HomeBreadcrum-imageArch {
-    height: 380px;
+    height: 400px;
   }
 }

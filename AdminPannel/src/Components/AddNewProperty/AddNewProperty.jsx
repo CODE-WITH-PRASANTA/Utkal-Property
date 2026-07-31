@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   FiEye, FiSave, FiSend, FiChevronDown, FiChevronLeft, FiChevronRight, 
-  FiPlus, FiX, FiCheck, FiUpload, FiCalendar, FiStar 
+  FiPlus, FiX, FiCheck, FiUpload, FiCalendar, FiStar, FiArrowLeft 
 } from 'react-icons/fi';
 import { 
   BiBuildingHouse, BiImages, BiMap, BiListUl, BiCheckShield, 
@@ -120,14 +120,24 @@ const AddNewProperty = () => {
     alert('Property published successfully!');
   };
 
+  // Handler for back button action (e.g., using router navigation or window.history)
+  const handleBack = () => {
+    window.history.back(); // Or use your routing library like navigate(-1) if using react-router-dom
+  };
+
   return (
     <div className="AddNewProperty">
       {/* Top Header Bar */}
       <div className="anp-header">
         <div className="anp-title-area">
-          <h1>Add New Property</h1>
-          <div className="anp-breadcrumb">
-            Dashboard <span>&gt;</span> Properties <span>&gt;</span> Add New Property
+          <button className="anp-back-btn" onClick={handleBack} title="Go Back">
+            <FiArrowLeft size={22} />
+          </button>
+          <div>
+            <h1>Add New Property</h1>
+            <div className="anp-breadcrumb">
+              Dashboard <span>&gt;</span> Properties <span>&gt;</span> Add New Property
+            </div>
           </div>
         </div>
         <div className="anp-header-actions">
@@ -666,7 +676,7 @@ const AddNewProperty = () => {
           </div>
         </div>
       )}
-  </div>
+    </div>
   );
 };
 

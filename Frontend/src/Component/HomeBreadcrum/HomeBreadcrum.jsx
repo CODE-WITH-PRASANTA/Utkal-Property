@@ -23,7 +23,7 @@ const HomeBreadcrum = () => {
 
   const dropdownRef = useRef(null);
 
-  // Dynamic readings/stats based on selected tab (Rent vs Buy)
+  // Dynamic readings/stats based on selected tab
   const statsData = {
     Rent: {
       properties: '1,500+',
@@ -35,7 +35,6 @@ const HomeBreadcrum = () => {
     }
   };
 
-  // Property types matching Reference Image 2
   const propertyTypes = [
     'Bungalow',
     'Apartment',
@@ -45,17 +44,15 @@ const HomeBreadcrum = () => {
     'Villa'
   ];
 
-  // Dummy Location Data
   const locations = [
-    'New York, USA',
-    'Los Angeles, CA',
-    'Chicago, IL',
-    'London, UK',
-    'Dubai, UAE',
-    'Tokyo, Japan'
+    'Bhubaneswar, Odisha',
+    'Cuttack, Odisha',
+    'Puri, Odisha',
+    'Rourkela, Odisha',
+    'Sambalpur, Odisha',
+    'Bangalore, KA'
   ];
 
-  // Amenities matching Reference Image 3
   const amenitiesList = [
     'Swimming pool', 'Balcony', 'Ensuite', 'Tennis court',
     'Garage', 'Outdoor area', 'Built in robes', 'Study',
@@ -88,11 +85,12 @@ const HomeBreadcrum = () => {
         
         {/* Left Column: Hero Content & Search Bar */}
         <div className="HomeBreadcrum-left">
+          <div className="HomeBreadcrum-badgeTag">Utkal Property Services</div>
           <h1 className="HomeBreadcrum-title">
-            We will find a perfect home for you
+            We will find a <span className="highlight-green">perfect home</span> for you
           </h1>
           <p className="HomeBreadcrum-subtitle">
-            Find a variety of properties that suit you very easily, forget all difficulties in finding a residence for you
+            Find a variety of premium properties that suit your lifestyle effortlessly. Forget all difficulties in finding your dream residence.
           </p>
 
           {/* Search Card Container */}
@@ -141,7 +139,6 @@ const HomeBreadcrum = () => {
                   <FiChevronDown className="HomeBreadcrum-arrowIcon" />
                 </div>
 
-                {/* Reference Image 2: Property Type Dropdown */}
                 {showPropertyDropdown && (
                   <div className="HomeBreadcrum-dropdownMenu">
                     <div className="HomeBreadcrum-dropdownTitle">Property type</div>
@@ -175,7 +172,6 @@ const HomeBreadcrum = () => {
                   <FiChevronDown className="HomeBreadcrum-arrowIcon" />
                 </div>
 
-                {/* Location Dummy Dropdown */}
                 {showLocationDropdown && (
                   <div className="HomeBreadcrum-dropdownMenu">
                     <div className="HomeBreadcrum-dropdownTitle">Location</div>
@@ -212,7 +208,7 @@ const HomeBreadcrum = () => {
               </button>
             </div>
 
-            {/* Reference Image 3: Expanded Filter Panel */}
+            {/* Expanded Filter Panel */}
             {showAdvancedFilters && (
               <div className="HomeBreadcrum-filterPanel">
                 <div className="HomeBreadcrum-filterTop">
@@ -270,11 +266,11 @@ const HomeBreadcrum = () => {
           <div className="HomeBreadcrum-stats">
             <div className="HomeBreadcrum-statItem">
               <h3>{statsData[activeTab].properties}</h3>
-              <p>Property ready</p>
+              <p>Properties Ready</p>
             </div>
             <div className="HomeBreadcrum-statItem">
               <h3>{statsData[activeTab].customers}</h3>
-              <p>Happy customer</p>
+              <p>Happy Customers</p>
             </div>
           </div>
         </div>
@@ -282,7 +278,7 @@ const HomeBreadcrum = () => {
         {/* Right Column: Hero Image & Rotating Circular Badge */}
         <div className="HomeBreadcrum-right">
           
-          {/* Reference Image 4: Rotating Circular Badge */}
+          {/* Rotating Circular Badge */}
           <div className="HomeBreadcrum-badgeWrapper">
             <div className="HomeBreadcrum-badgeTextContainer">
               <svg viewBox="0 0 100 100" className="HomeBreadcrum-rotatingSvg">

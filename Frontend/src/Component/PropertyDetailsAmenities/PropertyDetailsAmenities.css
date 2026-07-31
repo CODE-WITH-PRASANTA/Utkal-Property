@@ -1,8 +1,8 @@
 /* Base & Layout */
 .PropertyDetailsAmenities-wrapper {
-  background-color: #f1ebd9;
+  background-color: #f5f9f6; /* Soft off-white from image */
   padding: 30px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
 }
 
@@ -31,25 +31,28 @@
 }
 
 .PropertyDetailsAmenities-title {
-  color: #3b4e56;
-  font-size: 22px;
-  font-weight: 700;
+  color: #0c2033; /* Deep navy text from image */
+  font-size: 24px;
+  font-weight: 800;
   margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
 }
 
 .PropertyDetailsAmenities-underline {
-  height: 3px;
+  height: 4px;
   width: 50px;
-  background-color: #f4b41a;
+  background-color: #176634; /* Emerald green */
+  border-radius: 2px;
 }
 
 /* Common Card Styling */
 .PropertyDetailsAmenities-card,
 .PropertyDetailsAmenities-sidebar-card {
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 12px; /* Slightly softer corners for a modern feel */
   padding: 25px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 16px rgba(12, 32, 51, 0.04); /* Adjusted shadow for the lighter background */
+  border: 1px solid rgba(204, 227, 213, 0.3);
 }
 
 /* --- Amenities Grid --- */
@@ -60,8 +63,8 @@
 }
 
 .PropertyDetailsAmenities-grid-item {
-  border: 1px dashed #3a7584;
-  border-radius: 6px;
+  border: 1px dashed #a2c9b1; /* Soft green dashed border */
+  border-radius: 8px;
   padding: 15px 10px;
   display: flex;
   flex-direction: column;
@@ -69,49 +72,53 @@
   justify-content: center;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.25s ease-in-out;
 }
 
 .PropertyDetailsAmenities-grid-item:hover, 
 .PropertyDetailsAmenities-grid-item.active {
-  background-color: #f2f8fa;
+  background-color: #e8f2ec; /* Light mint from pill background */
   transform: translateY(-2px);
-  box-shadow: 0 3px 6px rgba(58, 117, 132, 0.15);
+  box-shadow: 0 4px 12px rgba(23, 102, 52, 0.1);
+  border-color: #176634;
 }
 
 .PropertyDetailsAmenities-icon {
-  color: #3a7584;
+  color: #176634; /* Emerald green */
   font-size: 24px;
   margin-bottom: 8px;
 }
 
 .PropertyDetailsAmenities-name {
-  color: #556970;
-  font-size: 11px;
-  font-weight: 500;
+  color: #4a5c66; /* Slate gray */
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* --- Key Features --- */
 .PropertyDetailsAmenities-features-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 12px;
 }
 
 .PropertyDetailsAmenities-feature-pill {
-  background-color: #3a7584;
-  color: #ffffff;
-  padding: 10px 18px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
+  /* Styled to match the "UTKAL PROPERTY SERVICES" pill from the image */
+  background-color: #e8f2ec; 
+  color: #176634; 
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #cce3d5;
+  font-size: 13px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: 0.2px;
 }
 
 .PropertyDetailsAmenities-feature-icon {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* --- Floor Plans --- */
@@ -127,30 +134,31 @@
 }
 
 .PropertyDetailsAmenities-tab {
-  padding: 15px 25px;
+  padding: 18px 25px;
   font-size: 15px;
-  color: #7b8e96;
+  color: #6c7a87;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s;
 }
 
 .PropertyDetailsAmenities-tab.active {
-  color: #2b56ff;
-  border-bottom: 2px solid #2b56ff;
+  color: #176634;
+  border-bottom: 3px solid #176634;
 }
 
 .PropertyDetailsAmenities-tab-content {
   padding: 25px;
-  background-color: #f9f9f9;
+  background-color: #fafdfb;
   margin: 20px;
-  border-radius: 8px;
+  border-radius: 12px;
+  border: 1px solid #e8f2ec;
 }
 
 .PropertyDetailsAmenities-content-title {
-  color: #2c3e50;
+  color: #0c2033;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0 0 15px 0;
 }
 
@@ -159,13 +167,13 @@
   flex-wrap: wrap;
   gap: 15px 25px;
   font-size: 13px;
-  color: #2c3e50;
+  color: #6c7a87;
   margin-bottom: 25px;
 }
 
 .PropertyDetailsAmenities-stats-row strong {
-  font-weight: 600;
-  color: #1a252f;
+  font-weight: 700;
+  color: #0c2033;
 }
 
 .PropertyDetailsAmenities-floor-image-container {
@@ -176,7 +184,7 @@
   align-items: center;
   background: #ffffff;
   border: 1px solid #e1e8ed;
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 15px;
   box-sizing: border-box;
 }
@@ -187,7 +195,7 @@
   border-radius: 4px;
   object-fit: contain;
   max-height: 500px;
-  transition: transform 0.2s ease;
+  transition: transform 0.25s ease;
 }
 
 .PropertyDetailsAmenities-floor-image:hover {
@@ -201,18 +209,18 @@
   justify-content: center;
   gap: 8px;
   background-color: transparent;
-  color: #3a7584;
-  border: 2px solid #3a7584;
-  padding: 10px 20px;
-  border-radius: 6px;
+  color: #176634;
+  border: 2px solid #176634;
+  padding: 10px 24px;
+  border-radius: 8px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .PropertyDetailsAmenities-fullscreen-btn:hover {
-  background-color: #3a7584;
+  background-color: #176634;
   color: #ffffff;
 }
 
@@ -223,12 +231,12 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(12, 32, 51, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
 }
 
 .PropertyDetailsAmenities-modal-content {
@@ -237,20 +245,20 @@
   max-height: 90vh;
   background: #ffffff;
   padding: 25px;
-  border-radius: 8px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
 .PropertyDetailsAmenities-modal-title {
   margin-top: 0;
   margin-bottom: 15px;
-  color: #2c3e50;
+  color: #0c2033;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -265,7 +273,7 @@
   position: absolute;
   top: -15px;
   right: -15px;
-  background-color: #ff4d4f;
+  background-color: #176634; /* Shifted to theme green instead of jarring red */
   color: white;
   border: none;
   border-radius: 50%;
@@ -276,13 +284,13 @@
   align-items: center;
   font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(23, 102, 52, 0.4);
   z-index: 10000;
   transition: background-color 0.2s;
 }
 
 .PropertyDetailsAmenities-modal-close:hover {
-  background-color: #d9363e;
+  background-color: #104d26;
 }
 
 /* --- Explore Neighbourhood Section --- */
@@ -293,14 +301,15 @@
 }
 
 .PropertyDetailsAmenities-neighbourhood-item {
-  background-color: #3a7584; /* Matches the teal color from the image */
-  border-radius: 6px;
-  padding: 5px; /* Outer padding to show solid border */
+  background-color: #176634; /* Primary emerald green */
+  border-radius: 8px;
+  padding: 6px; 
+  box-shadow: 0 4px 12px rgba(23, 102, 52, 0.15);
 }
 
 .PropertyDetailsAmenities-neighbourhood-inner {
-  border: 1.5px dashed rgba(255, 255, 255, 0.8);
-  border-radius: 4px;
+  border: 1px dashed rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -315,21 +324,21 @@
 .PropertyDetailsAmenities-neighbourhood-title {
   color: #ffffff;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 4px;
 }
 
 .PropertyDetailsAmenities-neighbourhood-desc {
-  color: #ffffff;
+  color: #e8f2ec;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 /* --- Right Sidebar Common --- */
 .PropertyDetailsAmenities-sidebar-title {
-  color: #2c3e50;
-  font-size: 18px;
-  font-weight: 600;
+  color: #0c2033;
+  font-size: 20px;
+  font-weight: 800;
   margin: 0 0 15px 0;
 }
 
@@ -337,31 +346,33 @@
 .PropertyDetailsAmenities-contact-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
 }
 
 .PropertyDetailsAmenities-input-group {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .PropertyDetailsAmenities-input-group label {
   font-size: 13px;
-  color: #3b4e56;
-  font-weight: 600;
+  color: #0c2033;
+  font-weight: 700;
 }
 
 .PropertyDetailsAmenities-input,
 .PropertyDetailsAmenities-textarea {
   width: 100%;
-  border: 1px solid #e1e8ed;
-  border-radius: 4px;
-  padding: 10px 12px;
+  border: 1px solid #d1d9dd;
+  border-radius: 6px;
+  padding: 12px 14px;
   font-size: 14px;
-  color: #4a4a4a;
+  color: #0c2033;
   outline: none;
   box-sizing: border-box;
+  transition: border-color 0.2s;
+  background-color: #fbfcfc;
 }
 
 .PropertyDetailsAmenities-textarea {
@@ -370,23 +381,25 @@
 
 .PropertyDetailsAmenities-input:focus,
 .PropertyDetailsAmenities-textarea:focus {
-  border-color: #3a7584;
+  border-color: #176634;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(23, 102, 52, 0.1);
 }
 
 .PropertyDetailsAmenities-submit-btn {
-  background-color: #3a7584;
+  background-color: #176634;
   color: #ffffff;
   border: none;
-  border-radius: 4px;
-  padding: 12px;
+  border-radius: 8px; /* Matched to the 'Search Now' button on image */
+  padding: 14px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .PropertyDetailsAmenities-submit-btn:hover {
-  background-color: #2c5965;
+  background-color: #104d26;
 }
 
 /* Stars Rating */
@@ -404,12 +417,12 @@
 
 /* Expanded Contact Form Specifics */
 .PropertyDetailsAmenities-contact-heading {
-  color: #2c3e50;
+  color: #0c2033;
   font-size: 16px;
   font-weight: 700;
   text-align: center;
   margin: 0 0 20px 0;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .PropertyDetailsAmenities-captcha-row {
@@ -419,34 +432,38 @@
 
 .PropertyDetailsAmenities-captcha-box {
   flex: 1;
-  background-color: #f0f2f5;
-  border: 1px solid #e1e8ed;
-  color: #3a7584;
-  font-weight: 700;
+  background-color: #e8f2ec; /* Green tint */
+  border: 1px solid #cce3d5;
+  color: #176634;
+  font-weight: 800;
   font-size: 18px;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 8px;
 }
 
 .PropertyDetailsAmenities-refresh-btn {
-  background-color: #3a7584;
+  background-color: #176634;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 0 20px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.PropertyDetailsAmenities-refresh-btn:hover {
+  background-color: #104d26;
 }
 
 /* =========================================
    RESPONSIVE DESIGN 
    ========================================= */
 
-/* iPad Pro (1024px width) */
 @media screen and (max-width: 1024px) {
   .PropertyDetailsAmenities-main-layout {
     flex-direction: column;
@@ -466,14 +483,13 @@
   }
 }
 
-/* Facebook in-app browser on Android (~360px - 414px) */
 @media screen and (max-width: 480px) {
   .PropertyDetailsAmenities-wrapper {
     padding: 15px;
   }
 
   .PropertyDetailsAmenities-title {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .PropertyDetailsAmenities-card,
@@ -495,7 +511,7 @@
   }
   
   .PropertyDetailsAmenities-tab {
-    padding: 10px 15px;
+    padding: 12px 15px;
     flex: 1;
     text-align: center;
   }
@@ -515,7 +531,7 @@
   }
 
   .PropertyDetailsAmenities-modal-title {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .PropertyDetailsAmenities-neighbourhood-grid {

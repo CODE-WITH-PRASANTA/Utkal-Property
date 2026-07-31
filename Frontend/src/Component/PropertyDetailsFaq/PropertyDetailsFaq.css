@@ -1,8 +1,8 @@
 /* Base & Layout */
 .PropertyDetailsFaq-wrapper {
-  background-color: #f1ebd9; /* Beige background to match your global style */
+  background-color: #f5f9f6; /* Updated to match soft off-white background */
   padding: 30px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
 }
 
@@ -12,16 +12,18 @@
 }
 
 .PropertyDetailsFaq-title {
-  color: #3b4e56;
+  color: #0c2033; /* Deep navy text */
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
 }
 
 .PropertyDetailsFaq-underline {
-  height: 3px;
+  height: 4px;
   width: 50px;
-  background-color: #f4b41a; /* Yellow underline */
+  background-color: #176634; /* Emerald green accent */
+  border-radius: 2px;
 }
 
 /* Content Flex Container */
@@ -37,7 +39,7 @@
   border-radius: 12px;
   overflow: hidden;
   position: sticky;
-  top: 20px; /* Keeps the image visible while scrolling through long FAQs on desktop */
+  top: 20px; 
 }
 
 .PropertyDetailsFaq-graphic {
@@ -46,7 +48,8 @@
   display: block;
   object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(12, 32, 51, 0.08);
+  border: 1px solid rgba(204, 227, 213, 0.3);
 }
 
 /* Right Column: Accordion */
@@ -60,14 +63,20 @@
 /* Individual FAQ Item */
 .PropertyDetailsFaq-item {
   background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+  border-radius: 12px; /* Modern rounded corners */
+  box-shadow: 0 4px 16px rgba(12, 32, 51, 0.04);
+  border: 1px solid rgba(204, 227, 213, 0.3);
   overflow: hidden;
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .PropertyDetailsFaq-item:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(12, 32, 51, 0.08);
+  border-color: rgba(23, 102, 52, 0.3);
+}
+
+.PropertyDetailsFaq-item.active {
+  border-color: #176634;
 }
 
 /* Question Row (Clickable) */
@@ -81,20 +90,20 @@
 }
 
 .PropertyDetailsFaq-question-row:hover {
-  background-color: #fafbfc;
+  background-color: #fafdfb;
 }
 
 /* Number Badge */
 .PropertyDetailsFaq-number {
-  background-color: #3a7584; /* Deep teal matching image */
-  color: #ffffff;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  background-color: #e8f2ec; /* Soft mint background */
+  color: #176634; /* Emerald green text */
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   margin-right: 15px;
   flex-shrink: 0;
@@ -103,16 +112,16 @@
 /* Question Text */
 .PropertyDetailsFaq-question-text {
   flex: 1;
-  color: #3b4e56;
-  font-size: 16px;
-  font-weight: 600;
+  color: #0c2033;
+  font-size: 15px;
+  font-weight: 700;
   margin: 0;
   padding-right: 15px;
 }
 
 /* Chevron Icon */
 .PropertyDetailsFaq-icon {
-  color: #3b4e56;
+  color: #176634;
   font-size: 14px;
   flex-shrink: 0;
   transition: transform 0.3s ease;
@@ -123,6 +132,7 @@
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.3s ease;
+  background-color: #fafdfb;
 }
 
 .PropertyDetailsFaq-item.active .PropertyDetailsFaq-answer-wrapper {
@@ -136,18 +146,16 @@
 
 .PropertyDetailsFaq-answer p {
   margin: 0;
-  padding: 0 25px 20px 70px; /* Aligns exactly with the text above, skipping the circle */
-  color: #7b8e96;
-  font-size: 14.5px;
+  padding: 0 25px 20px 72px; /* Aligned neatly past the number badge */
+  color: #4a5c66;
+  font-size: 14px;
   line-height: 1.6;
 }
-
 
 /* =========================================
    RESPONSIVE DESIGN 
    ========================================= */
 
-/* iPad Pro (1024px) */
 @media screen and (max-width: 1024px) {
   .PropertyDetailsFaq-wrapper {
     padding: 20px;
@@ -170,7 +178,6 @@
   }
 }
 
-/* Facebook in-app browser on Android (~360px - 414px) */
 @media screen and (max-width: 480px) {
   .PropertyDetailsFaq-wrapper {
     padding: 15px;
@@ -190,14 +197,15 @@
   }
 
   .PropertyDetailsFaq-question-row {
-    padding: 15px 15px;
+    padding: 15px;
   }
 
   .PropertyDetailsFaq-number {
-    width: 26px;
-    height: 26px;
-    font-size: 13px;
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
     margin-right: 12px;
+    border-radius: 6px;
   }
 
   .PropertyDetailsFaq-question-text {
@@ -206,7 +214,7 @@
   }
 
   .PropertyDetailsFaq-answer p {
-    padding: 0 15px 15px 53px; /* Adjusted padding for mobile */
+    padding: 0 15px 15px 55px; 
     font-size: 13px;
   }
 }

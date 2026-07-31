@@ -15,8 +15,9 @@ const PropertyDetails = () => {
         <PropertyDetailsAmenities/>
         <PropertyDetailsMap/>
         <PropertyDetailsSimilarProjects/>
-        <PropertyDetailsPeopleSay/>
         <PropertyDetailsFaq/>
+        <PropertyDetailsPeopleSay/>
+
 
 
     </div>

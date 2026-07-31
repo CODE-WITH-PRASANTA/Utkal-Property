@@ -11,15 +11,15 @@ import {
   FaInstagram
 } from 'react-icons/fa';
 
-// 3 Agents Data matching the reference design
+// 3 Agents Data updated with Indian contact formats
 const AGENTS_DATA = [
   {
     id: 1,
     name: 'Wade Warren',
-    role: 'Salesperson',
+    role: 'Senior Property Consultant',
     image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
-    phone: '+1234567890',
-    email: 'wade.warren@example.com',
+    phone: '+91 98765 43210',
+    email: 'wade.warren@utkalproperty.com',
     socials: {
       facebook: 'https://facebook.com',
       twitter: 'https://twitter.com',
@@ -30,10 +30,10 @@ const AGENTS_DATA = [
   {
     id: 2,
     name: 'Leslie Alexander',
-    role: 'Commercial Broker',
+    role: 'Commercial Real Estate Broker',
     image: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=800',
-    phone: '+1234567891',
-    email: 'leslie.alexander@example.com',
+    phone: '+91 98765 43211',
+    email: 'leslie.alexander@utkalproperty.com',
     socials: {
       facebook: 'https://facebook.com',
       twitter: 'https://twitter.com',
@@ -44,10 +44,10 @@ const AGENTS_DATA = [
   {
     id: 3,
     name: 'Darlene Robertson',
-    role: 'Realtor',
+    role: 'Residential Property Specialist',
     image: 'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=800',
-    phone: '+1234567892',
-    email: 'darlene.robertson@example.com',
+    phone: '+91 98765 43212',
+    email: 'darlene.robertson@utkalproperty.com',
     socials: {
       facebook: 'https://facebook.com',
       twitter: 'https://twitter.com',
@@ -59,13 +59,14 @@ const AGENTS_DATA = [
 
 const HomeMeetagents = () => {
   return (
-    <div className="HomeMeetagents">
+    <section className="HomeMeetagents">
       <div className="HomeMeetagents-container">
-        {/* Header */}
+        {/* Section Header */}
         <div className="HomeMeetagents-header">
-          <h1 className="HomeMeetagents-main-heading">Meet the agents</h1>
+          <span className="HomeMeetagents-tag">Expert Team</span>
+          <h1 className="HomeMeetagents-main-heading">Meet Our Agents</h1>
           <p className="HomeMeetagents-subheading">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel lobortis justo
+            Our experienced team at Utkal Property is ready to guide you to your ideal real estate investment
           </p>
         </div>
 
@@ -81,7 +82,7 @@ const HomeMeetagents = () => {
                   className="HomeMeetagents-img"
                 />
 
-                {/* Orange Vertical Social Bar (Matches 2nd Reference Image) */}
+                {/* Utkal Green Vertical Social Bar */}
                 <div className="HomeMeetagents-social-sidebar">
                   <a
                     href={agent.socials.facebook}
@@ -152,7 +153,7 @@ const HomeMeetagents = () => {
           ))}
         </div>
 
-        {/* Footer Link */}
+        {/* Footer Callout Link */}
         <div className="HomeMeetagents-footer-text">
           Become an agent and get the commission you deserve.{' '}
           <a href="#contact" className="HomeMeetagents-contact-link">
@@ -160,7 +161,7 @@ const HomeMeetagents = () => {
           </a>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

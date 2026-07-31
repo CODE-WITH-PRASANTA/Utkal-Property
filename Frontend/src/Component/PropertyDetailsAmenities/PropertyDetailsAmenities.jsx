@@ -277,7 +277,7 @@ const PropertyDetailsAmenities = () => {
                       />
                       <FaStar 
                         className="PropertyDetailsAmenities-star" 
-                        color={ratingValue <= (hover || rating) ? "#3a7584" : "#d3d3d3"} 
+                        color={ratingValue <= (hover || rating) ? "#176634" : "#d3d3d3"} 
                         size={24}
                         onMouseEnter={() => setHover(ratingValue)}
                         onMouseLeave={() => setHover(0)}

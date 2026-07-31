@@ -19,6 +19,8 @@ import OurTeam from './Component/OurTeam/OurTeam';
 import PropertyDetails from './Pages/PropertyDetails/PropertyDetails';
 
 
+import SellProperty from './Component/SellProperty/SellProperty';
+import RentProperty from './Component/RentProperty/RentProperty';
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function App() {
         <Route path="/details" element={<BlogDetails/>} />
         <Route path="/real" element={<RealNear/>} />
         <Route path="/our-team" element={<OurTeam/>} />
+        <Route path="/sell-property" element={<SellProperty/>} />
+        <Route path="/rent-property" element={<RentProperty/>} />
 
 
 

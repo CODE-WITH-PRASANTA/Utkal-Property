@@ -1,8 +1,8 @@
 /* Base & Layout */
 .PropertyDetailsSimilarProjects-wrapper {
-  background-color: #f1ebd9; 
+  background-color: #f5f9f6; /* Updated to match soft off-white background */
   padding: 30px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
 }
 
@@ -12,16 +12,18 @@
 }
 
 .PropertyDetailsSimilarProjects-title {
-  color: #3b4e56;
+  color: #0c2033; /* Deep navy title */
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 800;
   margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
 }
 
 .PropertyDetailsSimilarProjects-underline {
-  height: 3px;
+  height: 4px;
   width: 50px;
-  background-color: #f4b41a;
+  background-color: #176634; /* Emerald green accent */
+  border-radius: 2px;
 }
 
 /* Grid Layout */
@@ -34,18 +36,19 @@
 /* Card Styling */
 .PropertyDetailsSimilarProjects-card {
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 12px; /* Smoother modern radius */
   width: 320px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(12, 32, 51, 0.04);
+  border: 1px solid rgba(204, 227, 213, 0.3);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .PropertyDetailsSimilarProjects-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 24px rgba(12, 32, 51, 0.08);
 }
 
 /* Image Section */
@@ -69,30 +72,32 @@
 
 .PropertyDetailsSimilarProjects-featured-badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #f4b41a;
+  top: 12px;
+  left: 12px;
+  background-color: #176634;
   color: #ffffff;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 4px;
-  text-transform: capitalize;
+  padding: 5px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   z-index: 2;
+  box-shadow: 0 2px 6px rgba(23, 102, 52, 0.3);
 }
 
 /* Content Section */
 .PropertyDetailsSimilarProjects-content {
-  padding: 20px;
+  padding: 22px;
   display: flex;
   flex-direction: column;
 }
 
 .PropertyDetailsSimilarProjects-card-title {
-  color: #3b4e56;
+  color: #0c2033;
   font-size: 18px;
   font-weight: 700;
-  margin: 0 0 20px 0;
+  margin: 0 0 18px 0;
 }
 
 /* Details Grid */
@@ -111,20 +116,20 @@
 }
 
 .PropertyDetailsSimilarProjects-location-row {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 /* Icons */
 .PropertyDetailsSimilarProjects-icon-box {
-  background-color: #3a7584;
-  color: #ffffff;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  background-color: #e8f2ec; /* Soft mint icon box */
+  color: #176634; /* Emerald green icon */
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 13px;
   flex-shrink: 0;
 }
 
@@ -136,40 +141,41 @@
 
 .PropertyDetailsSimilarProjects-detail-label {
   font-size: 11px;
-  color: #111111; 
+  color: #6c7a87; 
   font-weight: 700;
   margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .PropertyDetailsSimilarProjects-detail-val {
-  font-size: 12px;
-  color: #7b8e96;
-  font-weight: 500;
+  font-size: 13px;
+  color: #0c2033;
+  font-weight: 600;
 }
 
 /* Action Button */
 .PropertyDetailsSimilarProjects-view-btn {
   width: 100%;
-  background-color: #3a7584;
+  background-color: #176634;
   color: #ffffff;
   border: none;
-  border-radius: 4px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 12px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .PropertyDetailsSimilarProjects-view-btn:hover {
-  background-color: #2c5965;
+  background-color: #104d26;
 }
 
 /* =========================================
    RESPONSIVE DESIGN 
    ========================================= */
 
-/* iPad Pro Landscape and Portrait (1024px & 768px) */
 @media screen and (max-width: 1024px) {
   .PropertyDetailsSimilarProjects-wrapper {
     padding: 20px;
@@ -180,7 +186,6 @@
   }
 }
 
-/* Facebook in-app browser on Android (~360px - 414px) */
 @media screen and (max-width: 480px) {
   .PropertyDetailsSimilarProjects-wrapper {
     padding: 15px;
@@ -194,10 +199,10 @@
   
   .PropertyDetailsSimilarProjects-card {
     width: 100%;
-    max-width: 100%; /* Allows it to comfortably stretch inside the padding */
+    max-width: 100%;
   }
 
   .PropertyDetailsSimilarProjects-details-grid {
-    gap: 10px;
+    gap: 12px;
   }
 }
