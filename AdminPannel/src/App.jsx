@@ -7,7 +7,8 @@ import MainLayout from "./Layout/MainLayout/MainLayout";
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
 
 // Properties
-import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
+import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
+import AddNewProperty from "./Components/AddNewProperty/AddNewProperty"; // <-- Added import
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 
@@ -37,9 +38,8 @@ const App = () => {
           <Route path="/dashboard" element={<DashboardMain />} />
 
           {/* Properties */}
-          <Route path="/properties/add" element={<AddNewProperty />} />
           <Route path="/properties/all" element={<PropertiesDashboard />} />
-
+          <Route path="/properties/add" element={<AddNewProperty />} /> {/* <-- Added route */}
           <Route path="/properties/categories" element={<Categories />} />
           <Route path="/properties/locations" element={<Locations />} />
 
