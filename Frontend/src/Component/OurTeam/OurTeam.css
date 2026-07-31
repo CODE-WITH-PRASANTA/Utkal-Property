@@ -1,20 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --utkal-primary-dark: #111111;
-  --utkal-text-main: #222222;
-  --utkal-text-muted: #666666;
-  --utkal-border-color: #e5e7eb;
-  --utkal-bg-light: #f9fafb;
-  --utkal-accent: #ffb100;
+  --utkal-green: #126229;
+  --utkal-green-hover: #0e4c20;
+  --utkal-navy: #0c1d2e;
+  --utkal-text-main: #0c1d2e;
+  --utkal-text-muted: #64748b;
+  --utkal-border-color: #e2e8f0;
+  --utkal-bg-light: #f8fafc;
 }
 
 .utkal-agents-section {
   font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
   color: var(--utkal-text-main);
-  background-color: #ffffff;
-  padding: 40px 20px;
-  max-width: 1200px;
+  background-color: var(--utkal-bg-light);
+  padding: 60px 20px;
+  max-width: 1240px;
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -23,31 +24,46 @@
 .utkal-agents-header-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   flex-wrap: wrap;
   gap: 20px;
   margin-bottom: 40px;
   border-bottom: 1px solid var(--utkal-border-color);
-  padding-bottom: 24px;
+  padding-bottom: 28px;
 }
 
 .utkal-agents-title-wrap {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+}
+
+.utkal-agents-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  width: fit-content;
 }
 
 .utkal-agents-main-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--utkal-primary-dark);
-  margin: 0;
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--utkal-navy);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
 }
 
 .utkal-agents-subtitle {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--utkal-text-muted);
   margin: 0;
+  font-weight: 400;
 }
 
 .utkal-agents-controls {
@@ -66,32 +82,34 @@
 
 .utkal-search-icon {
   position: absolute;
-  left: 12px;
+  left: 14px;
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--utkal-green);
 }
 
 .utkal-agents-search-input {
-  padding: 10px 14px 10px 34px;
+  padding: 11px 14px 11px 38px;
   border: 1px solid var(--utkal-border-color);
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 14px;
   font-family: inherit;
   outline: none;
-  width: 200px;
-  transition: border-color 0.2s;
+  width: 220px;
+  transition: border-color 0.2s, box-shadow 0.2s;
   background-color: #ffffff;
+  color: var(--utkal-navy);
 }
 
 .utkal-agents-search-input:focus {
-  border-color: var(--utkal-primary-dark);
+  border-color: var(--utkal-green);
+  box-shadow: 0 0 0 3px rgba(18, 98, 41, 0.15);
 }
 
 /* View Mode Toggles */
 .utkal-agents-view-toggle {
   display: flex;
   border: 1px solid var(--utkal-border-color);
-  border-radius: 6px;
+  border-radius: 10px;
   overflow: hidden;
   background-color: #ffffff;
 }
@@ -99,7 +117,7 @@
 .utkal-view-btn {
   background: transparent;
   border: none;
-  padding: 9px 12px;
+  padding: 10px 14px;
   cursor: pointer;
   color: var(--utkal-text-muted);
   display: flex;
@@ -109,37 +127,37 @@
 }
 
 .utkal-view-btn.active {
-  background-color: var(--utkal-bg-light);
-  color: var(--utkal-primary-dark);
+  background-color: var(--utkal-green);
+  color: #ffffff;
 }
 
-.utkal-view-btn:hover {
-  color: var(--utkal-primary-dark);
+.utkal-view-btn:hover:not(.active) {
+  color: var(--utkal-green);
 }
 
 /* Sort Dropdown */
 .utkal-agents-sort-select {
-  padding: 10px 16px;
+  padding: 11px 16px;
   border: 1px solid var(--utkal-border-color);
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 14px;
   font-family: inherit;
   background-color: #ffffff;
-  color: var(--utkal-text-main);
+  color: var(--utkal-navy);
   outline: none;
   cursor: pointer;
   transition: border-color 0.2s;
 }
 
 .utkal-agents-sort-select:focus {
-  border-color: var(--utkal-primary-dark);
+  border-color: var(--utkal-green);
 }
 
 /* Agents Grid System */
 .utkal-agents-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 28px;
   margin-bottom: 40px;
 }
 
@@ -151,12 +169,12 @@
 .utkal-agent-card {
   background: #ffffff;
   border: 1px solid var(--utkal-border-color);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(12, 29, 46, 0.04);
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .utkal-agents-grid.list-view-mode .utkal-agent-card {
@@ -164,15 +182,16 @@
 }
 
 .utkal-agent-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(12, 29, 46, 0.1);
 }
 
 .utkal-agent-img-container {
   width: 100%;
-  height: 240px;
+  height: 250px;
+  border-radius: 12px;
   overflow: hidden;
-  background-color: #f3f4f6;
+  background-color: var(--utkal-navy);
 }
 
 .utkal-agents-grid.list-view-mode .utkal-agent-img-container {
@@ -185,15 +204,15 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .utkal-agent-card:hover .utkal-agent-img {
-  transform: scale(1.03);
+  transform: scale(1.05);
 }
 
 .utkal-agent-content {
-  padding: 20px;
+  padding: 18px 8px 8px 8px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -207,9 +226,9 @@
 }
 
 .utkal-agent-name {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
-  color: var(--utkal-primary-dark);
+  color: var(--utkal-navy);
   margin: 0;
 }
 
@@ -217,14 +236,15 @@
   font-size: 13px;
   color: var(--utkal-text-muted);
   margin: 0;
+  font-weight: 500;
 }
 
 .utkal-agent-contact-details {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  border-top: 1px solid #f3f4f6;
-  border-bottom: 1px solid #f3f4f6;
+  gap: 10px;
+  border-top: 1px solid var(--utkal-border-color);
+  border-bottom: 1px solid var(--utkal-border-color);
   padding: 14px 0;
 }
 
@@ -233,17 +253,19 @@
   align-items: center;
   gap: 10px;
   font-size: 13px;
-  color: var(--utkal-text-main);
+  color: var(--utkal-navy);
   text-decoration: none;
   transition: color 0.2s;
+  font-weight: 500;
 }
 
 .utkal-agent-contact-row:hover {
-  color: #d97706;
+  color: var(--utkal-green);
 }
 
 .utkal-contact-icon {
-  font-size: 12px;
+  font-size: 13px;
+  color: var(--utkal-green);
 }
 
 .utkal-email-text {
@@ -257,8 +279,8 @@
 }
 
 .utkal-social-link {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background-color: var(--utkal-bg-light);
   border: 1px solid var(--utkal-border-color);
@@ -267,15 +289,15 @@
   justify-content: center;
   font-size: 12px;
   font-weight: 600;
-  color: var(--utkal-text-main);
+  color: var(--utkal-navy);
   text-decoration: none;
   transition: all 0.2s;
 }
 
 .utkal-social-link:hover {
-  background-color: var(--utkal-primary-dark);
+  background-color: var(--utkal-green);
   color: #ffffff;
-  border-color: var(--utkal-primary-dark);
+  border-color: var(--utkal-green);
 }
 
 .utkal-agents-no-results {
@@ -291,28 +313,28 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 50px;
+  margin-top: 40px;
   margin-bottom: 60px;
 }
 
 .utkal-page-btn,
 .utkal-page-num {
-  padding: 8px 14px;
+  padding: 9px 16px;
   border: 1px solid var(--utkal-border-color);
   background-color: #ffffff;
-  color: var(--utkal-text-main);
+  color: var(--utkal-navy);
   font-size: 14px;
-  font-weight: 500;
-  border-radius: 6px;
+  font-weight: 600;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .utkal-page-num.active,
 .utkal-page-btn:hover:not(:disabled) {
-  background-color: var(--utkal-primary-dark);
+  background-color: var(--utkal-green);
   color: #ffffff;
-  border-color: var(--utkal-primary-dark);
+  border-color: var(--utkal-green);
 }
 
 .utkal-page-btn:disabled {
@@ -325,14 +347,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(90deg, #fffcf5 0%, #fff6e0 100%);
-  border: 1px solid #fde68a;
-  border-radius: 16px;
+  background: linear-gradient(135deg, #f0f7f2 0%, #e1efe4 100%);
+  border: 1px solid rgba(18, 98, 41, 0.2);
+  border-radius: 20px;
   overflow: hidden;
   margin-top: 40px;
   margin-bottom: 40px;
-  padding: 40px;
+  padding: 45px;
   gap: 30px;
+  box-shadow: 0 10px 30px rgba(18, 98, 41, 0.05);
 }
 
 .utkal-promo-content {
@@ -343,11 +366,12 @@
 }
 
 .utkal-promo-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--utkal-primary-dark);
-  line-height: 1.2;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--utkal-navy);
+  line-height: 1.25;
   margin: 0;
+  letter-spacing: -0.5px;
 }
 
 .utkal-promo-desc {
@@ -361,21 +385,22 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background-color: #fbbf24;
-  color: #111111;
-  font-weight: 600;
+  background-color: var(--utkal-green);
+  color: #ffffff;
+  font-weight: 700;
   font-size: 14px;
-  padding: 12px 24px;
-  border-radius: 8px;
+  padding: 14px 28px;
+  border-radius: 10px;
   text-decoration: none;
   width: fit-content;
-  box-shadow: 0 4px 10px rgba(251, 191, 36, 0.3);
-  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 4px 14px rgba(18, 98, 41, 0.3);
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .utkal-contact-seller-btn:hover {
-  background-color: #f59e0b;
+  background-color: var(--utkal-green-hover);
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(18, 98, 41, 0.4);
 }
 
 .utkal-promo-image-container {
@@ -386,7 +411,7 @@
 }
 
 .utkal-promo-img {
-  max-width: 60%;
+  max-width: 70%;
   height: auto;
   object-fit: contain;
 }
@@ -395,15 +420,15 @@
 .utkal-team-seo-footer {
   margin-top: 40px;
   padding: 30px;
-  background-color: var(--utkal-bg-light);
-  border-radius: 10px;
+  background-color: #ffffff;
+  border-radius: 16px;
   border: 1px dashed var(--utkal-border-color);
 }
 
 .utkal-seo-content h3 {
   font-size: 16px;
   font-weight: 700;
-  color: var(--utkal-primary-dark);
+  color: var(--utkal-navy);
   margin: 0 0 10px 0;
 }
 
@@ -416,7 +441,7 @@
 
 .utkal-seo-address {
   margin: 0 !important;
-  color: var(--utkal-text-main) !important;
+  color: var(--utkal-navy) !important;
 }
 
 /* Responsive Breakpoints */
@@ -430,7 +455,10 @@
     text-align: left;
   }
   .utkal-promo-title {
-    font-size: 26px;
+    font-size: 24px;
+  }
+  .utkal-promo-img {
+    max-width: 100%;
   }
 }
 

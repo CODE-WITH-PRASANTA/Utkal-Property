@@ -19,8 +19,8 @@ const SellProperty = () => {
     furnishingStatus: 'Select Status',
     propertyAge: 'Select Age',
     parking: 'Select',
-    state: 'Select State',
-    city: 'Select City',
+    state: 'Odisha',
+    city: 'Bhubaneswar',
     locality: '',
     landmark: '',
     pinCode: ''
@@ -52,8 +52,8 @@ const SellProperty = () => {
             <span>🏠</span> SALE
           </div>
           <div className="sell-property-banner-text">
-            <h1>Sell a Property</h1>
-            <p>List your property for sale and find the right buyer.</p>
+            <h1>Sell a Property with Utkal Property</h1>
+            <p>List your property for sale and connect with potential buyers across Odisha.</p>
           </div>
         </div>
         <div className="sell-property-banner-illustration">
@@ -75,7 +75,7 @@ const SellProperty = () => {
             <input 
               type="text" 
               className="sell-property-input"
-              placeholder="e.g. 3 BHK Luxury Apartment in Koramangala"
+              placeholder="e.g. 3 BHK Luxury Apartment in Patia, Bhubaneswar"
               value={formData.propertyTitle}
               onChange={(e) => handleInputChange('propertyTitle', e.target.value)}
             />
@@ -318,7 +318,7 @@ const SellProperty = () => {
                 value={formData.state}
                 onChange={(e) => handleInputChange('state', e.target.value)}
               >
-                <option value="Select State">Select State</option>
+                <option value="Odisha">Odisha</option>
                 <option value="Karnataka">Karnataka</option>
                 <option value="Maharashtra">Maharashtra</option>
                 <option value="Delhi">Delhi</option>
@@ -332,10 +332,10 @@ const SellProperty = () => {
                 value={formData.city}
                 onChange={(e) => handleInputChange('city', e.target.value)}
               >
-                <option value="Select City">Select City</option>
-                <option value="Bangalore">Bangalore</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="New Delhi">New Delhi</option>
+                <option value="Bhubaneswar">Bhubaneswar</option>
+                <option value="Cuttack">Cuttack</option>
+                <option value="Puri">Puri</option>
+                <option value="Sambalpur">Sambalpur</option>
               </select>
             </div>
 
@@ -344,7 +344,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter locality"
+                placeholder="e.g. Patia / Jayadev Vihar"
                 value={formData.locality}
                 onChange={(e) => handleInputChange('locality', e.target.value)}
               />
@@ -376,7 +376,7 @@ const SellProperty = () => {
           </div>
         </div>
 
-        {/* NEW SECTION: Upload More Images (Placed below Location) */}
+        {/* Upload Images Section */}
         <div className="sell-property-section">
           <h3 className="sell-property-section-title">
             <span className="title-indicator"></span> Upload More Images
