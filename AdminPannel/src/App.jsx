@@ -20,6 +20,9 @@ import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
 import Setting from "./Pages/Setting/Setting";
 import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
+import Testimonial from "./Pages/Testimonial/Testimonial";
+import Gallery from "./Pages/Gallery/Gallery";
+import OurTeam from "./Pages/OurTeam/OurTeam";
 
 const App = () => {
   return (
@@ -60,6 +63,9 @@ const App = () => {
 
           {/* Profile */}
           <Route path="/profile" element={<ProfileSetting />} />
+          <Route path="/testimonial"element={<Testimonial/>}/>
+          <Route path="/gallery"element={<Gallery/>}/>
+        <Route path="/team"element={<OurTeam/>}/>
 
           {/* 404 */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
