@@ -1,0 +1,74 @@
+/* Base & Layout */
+.PropertyDetailsMap-wrapper {
+  background-color: #f5f9f6; /* Updated to match the soft off-white background */
+  padding: 30px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+.PropertyDetailsMap-card {
+  background-color: #ffffff;
+  border-radius: 12px; /* Smoother modern border radius */
+  padding: 25px;
+  box-shadow: 0 4px 16px rgba(12, 32, 51, 0.04);
+  border: 1px solid rgba(204, 227, 213, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 100%; 
+  margin: 0 auto;
+}
+
+/* Location Text Styling */
+.PropertyDetailsMap-location-text {
+  margin: 0;
+  color: #4a5c66;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.PropertyDetailsMap-location-text strong {
+  font-weight: 700;
+  color: #0c2033; /* Deep navy text */
+}
+
+/* Map Container Styling */
+.PropertyDetailsMap-iframe-container {
+  width: 100%;
+  height: 350px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e1e8ed;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.PropertyDetailsMap-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN 
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+  .PropertyDetailsMap-wrapper {
+    padding: 15px;
+  }
+  
+  .PropertyDetailsMap-card {
+    padding: 15px;
+  }
+  
+  .PropertyDetailsMap-location-text {
+    font-size: 14px;
+  }
+
+  .PropertyDetailsMap-iframe-container {
+    height: 250px;
+  }
+}
