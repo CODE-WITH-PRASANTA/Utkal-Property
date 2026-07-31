@@ -6,7 +6,8 @@ const CompassCeo = () => {
   const allArticles = [
     {
       id: 1,
-      title: "We are hiring ‘moderately,’ says Compass CEO",
+      titlePart1: "We are hiring ‘moderately,’ says ",
+      titleHighlight: "Compass CEO",
       date: "January 30",
       category: "Housing",
       description: "Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market updates explore major corporate shifts, strategic residential expansions, and real estate opportunities across Odisha...",
@@ -15,7 +16,8 @@ const CompassCeo = () => {
     },
     {
       id: 2,
-      title: "We are hiring ‘moderately,’ says Compass CEO",
+      titlePart1: "We are hiring ‘moderately,’ says ",
+      titleHighlight: "Compass CEO",
       date: "January 30",
       category: "Housing",
       description: "Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market updates explore major corporate shifts, strategic residential expansions, and real estate opportunities across Odisha...",
@@ -24,7 +26,8 @@ const CompassCeo = () => {
     },
     {
       id: 3,
-      title: "We are hiring ‘moderately,’ says Compass CEO",
+      titlePart1: "We are hiring ‘moderately,’ says ",
+      titleHighlight: "Compass CEO",
       date: "January 30",
       category: "Housing",
       description: "Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market updates explore major corporate shifts, strategic residential expansions, and real estate opportunities across Odisha...",
@@ -33,7 +36,8 @@ const CompassCeo = () => {
     },
     {
       id: 4,
-      title: "We are hiring ‘moderately,’ says Compass CEO",
+      titlePart1: "We are hiring ‘moderately,’ says ",
+      titleHighlight: "Compass CEO",
       date: "January 30",
       category: "Housing",
       description: "Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market updates explore major corporate shifts, strategic residential expansions, and real estate opportunities across Odisha...",
@@ -42,7 +46,8 @@ const CompassCeo = () => {
     },
     {
       id: 5,
-      title: "We are hiring ‘moderately,’ says Compass CEO",
+      titlePart1: "We are hiring ‘moderately,’ says ",
+      titleHighlight: "Compass CEO",
       date: "January 30",
       category: "Housing",
       description: "Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market updates explore major corporate shifts, strategic residential expansions, and real estate opportunities across Odisha...",
@@ -51,7 +56,8 @@ const CompassCeo = () => {
     },
     {
       id: 6,
-      title: "We are hiring ‘moderately,’ says Compass CEO",
+      titlePart1: "We are hiring ‘moderately,’ says ",
+      titleHighlight: "Compass CEO",
       date: "January 30",
       category: "Housing",
       description: "Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market updates explore major corporate shifts, strategic residential expansions, and real estate opportunities across Odisha...",
@@ -60,7 +66,8 @@ const CompassCeo = () => {
     },
     {
       id: 7,
-      title: "We are hiring ‘moderately,’ says Compass CEO",
+      titlePart1: "We are hiring ‘moderately,’ says ",
+      titleHighlight: "Compass CEO",
       date: "January 31",
       category: "Housing",
       description: "Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market updates explore major corporate shifts, strategic residential expansions, and real estate opportunities across Odisha...",
@@ -69,7 +76,8 @@ const CompassCeo = () => {
     },
     {
       id: 8,
-      title: "We are hiring ‘moderately,’ says Compass CEO",
+      titlePart1: "We are hiring ‘moderately,’ says ",
+      titleHighlight: "Compass CEO",
       date: "January 31",
       category: "Housing",
       description: "Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market updates explore major corporate shifts, strategic residential expansions, and real estate opportunities across Odisha...",
@@ -117,7 +125,10 @@ const CompassCeo = () => {
                 </div>
               </div>
               <div className="compass-article-content">
-                <h2 className="compass-article-title">{article.title}</h2>
+                <h2 className="compass-article-title">
+                  {article.titlePart1}
+                  <span className="compass-highlight-text">{article.titleHighlight}</span>
+                </h2>
                 <p className="compass-article-desc">{article.description}</p>
                 <a href="#read-more" className="compass-read-more">
                   Read more 

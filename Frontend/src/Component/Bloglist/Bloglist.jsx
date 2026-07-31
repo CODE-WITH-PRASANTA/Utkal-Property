@@ -11,7 +11,9 @@ const Bloglist = () => {
           
           {/* Section Header */}
           <div className="blog-section-header">
-            <h1 className="blog-page-title">Blog List</h1>
+            <h1 className="blog-page-title">
+              Blog <span className="blog-highlight-text">List</span>
+            </h1>
             <div className="blog-view-toggle">
               <button type="button" className="blog-toggle-btn active" aria-label="Grid view">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -42,7 +44,7 @@ const Bloglist = () => {
 
             <div className="blog-content-wrapper">
               <h2 className="blog-post-title">
-                Real estate shifts: Prices and sales trending down in two different spheres
+                Real estate shifts: <span className="blog-highlight-text">Prices and sales</span> trending down in two different spheres
               </h2>
               <p className="blog-post-snippet">
                 Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market insights explore the intersection of property pricing, housing demand, and urban expansion across Odisha. Discover smart ways to secure budget homes and luxury villas without hassle.
@@ -105,8 +107,6 @@ const Bloglist = () => {
               </li>
             </ul>
           </div>
-
-          
 
         </aside>
 
