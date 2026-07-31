@@ -73,6 +73,8 @@ const App = () => {
           <Route path="/gallery" element={<Gallery />} />
 
           {/* Team */}
+          <Route path="/testimonial" element={<Testimonial />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/team" element={<OurTeam />} />
 
           {/* 404 */}

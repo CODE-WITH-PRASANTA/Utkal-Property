@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Testimonial.css';
+import API, { IMG_URL } from "../../api/axios";
 
 // React Icons
 import {
@@ -14,43 +15,14 @@ import {
   FaQuoteLeft
 } from 'react-icons/fa';
 
-const INITIAL_TESTIMONIALS = [
-  {
-    id: 1,
-    name: 'Rajesh Kumar Swain',
-    designation: 'IT Professional',
-    location: 'Bhubaneswar, Odisha',
-    rating: 5,
-    status: 'Active',
-    photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150',
-    description: 'Buying our 3BHK flat in Patia through Utkal Property was seamless! Their team guided us through legal verifications and loan processing.'
-  },
-  {
-    id: 2,
-    name: 'Priya Das',
-    designation: 'Business Owner',
-    location: 'Cuttack, Odisha',
-    rating: 5,
-    status: 'Active',
-    photo: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150',
-    description: 'Utkal Property helped us find a prime commercial rental space in Saheed Nagar for our office. Fast documentation and great support.'
-  },
-  {
-    id: 3,
-    name: 'Subhashish Mohanty',
-    designation: 'Government Officer',
-    location: 'Puri, Odisha',
-    rating: 4,
-    status: 'Inactive',
-    photo: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150',
-    description: 'We bought a residential plot near Puri Highway through Utkal Property. Verified listings and honest advice made it hassle-free.'
-  }
-];
-
 const Testimonial = () => {
-  const [testimonials, setTestimonials] = useState(INITIAL_TESTIMONIALS);
+  const [testimonials, setTestimonials] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [existingPhotoPath, setExistingPhotoPath] = useState('');
   const [viewingTestimonial, setViewingTestimonial] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [brokenImages, setBrokenImages] = useState({});
 
   // Form State
   const [formData, setFormData] = useState({
@@ -60,11 +32,56 @@ const Testimonial = () => {
     rating: 5,
     status: 'Active',
     description: '',
-    photo: null
   });
 
+  const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const fileInputRef = useRef(null);
+
+  // Helper to format backend uploaded photos vs external URLs safely across platforms
+  const getImageUrl = (photoPath) => {
+    if (!photoPath) return null;
+
+    if (photoPath.startsWith('http://') || photoPath.startsWith('https://')) {
+      return photoPath;
+    }
+
+    // Replace Windows backslashes (\) with forward slashes (/)
+    let clean = photoPath.replace(/\\/g, '/');
+
+    // Extract path starting from 'uploads' if full disk paths were saved in DB previously
+    const uploadsIndex = clean.indexOf('uploads/');
+    if (uploadsIndex !== -1) {
+      clean = '/' + clean.substring(uploadsIndex);
+    } else {
+      clean = clean.startsWith('/') ? clean : `/${clean}`;
+    }
+
+    const baseUrl = IMG_URL || 'http://localhost:5000';
+    return `${baseUrl}${clean}`;
+  };
+
+  // Fetch Testimonials on Mount
+  const fetchTestimonials = async () => {
+    setLoading(true);
+    try {
+      const response = await API.get('/testimonials');
+      if (response.data && response.data.data) {
+        setTestimonials(response.data.data);
+      } else if (Array.isArray(response.data)) {
+        setTestimonials(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+      alert(error.response?.data?.message || 'Failed to fetch testimonials');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
 
   // Form Change Handler
   const handleInputChange = (e) => {
@@ -72,20 +89,26 @@ const Testimonial = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Image Upload Handler
+  // Image File Upload Handler
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setFormData((prev) => ({ ...prev, photo: imageUrl }));
-      setPreviewImage(imageUrl);
+      if (previewImage && previewImage.startsWith('blob:')) {
+        URL.revokeObjectURL(previewImage);
+      }
+      setSelectedFile(file);
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
-  // Remove Selected Image
+  // Remove Selected / Existing Image
   const handleRemoveImage = () => {
-    setFormData((prev) => ({ ...prev, photo: null }));
+    if (previewImage && previewImage.startsWith('blob:')) {
+      URL.revokeObjectURL(previewImage);
+    }
+    setSelectedFile(null);
     setPreviewImage(null);
+    setExistingPhotoPath('');
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -98,63 +121,98 @@ const Testimonial = () => {
       rating: 5,
       status: 'Active',
       description: '',
-      photo: null
     });
-    setPreviewImage(null);
+    handleRemoveImage();
     setEditingId(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // Form Submit Handler (Add / Edit)
-  const handleSubmit = (e) => {
+  // Form Submit Handler (Create / Update)
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
 
-    if (editingId) {
-      setTestimonials((prev) =>
-        prev.map((item) =>
-          item.id === editingId ? { ...item, ...formData } : item
-        )
-      );
-    } else {
-      const newItem = {
-        id: Date.now(),
-        ...formData,
-        photo: previewImage || 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150'
+    try {
+      const data = new FormData();
+      data.append('name', formData.name);
+      data.append('designation', formData.designation);
+      data.append('location', formData.location);
+      data.append('rating', formData.rating);
+      data.append('status', formData.status);
+      data.append('description', formData.description);
+
+      if (selectedFile) {
+        data.append('photo', selectedFile);
+      } else if (editingId && existingPhotoPath) {
+        data.append('photo', existingPhotoPath);
+      }
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       };
-      setTestimonials((prev) => [newItem, ...prev]);
-    }
 
-    resetForm();
+      if (editingId) {
+        await API.put(`/testimonials/${editingId}`, data, config);
+        alert('Testimonial updated successfully!');
+      } else {
+        await API.post('/testimonials', data, config);
+        alert('Testimonial created successfully!');
+      }
+
+      resetForm();
+      fetchTestimonials();
+    } catch (error) {
+      console.error('Error saving testimonial:', error);
+      alert(error.response?.data?.message || 'Failed to save testimonial');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  // Edit Action
+  // Populate Form for Editing
   const handleEdit = (item) => {
-    setEditingId(item.id);
+    const id = item._id || item.id;
+    setEditingId(id);
     setFormData({
-      name: item.name,
-      designation: item.designation,
-      location: item.location,
-      rating: item.rating,
-      status: item.status,
-      description: item.description,
-      photo: item.photo
+      name: item.name || '',
+      designation: item.designation || '',
+      location: item.location || '',
+      rating: item.rating || 5,
+      status: item.status || 'Active',
+      description: item.description || '',
     });
-    setPreviewImage(item.photo);
+
+    setSelectedFile(null);
+    setExistingPhotoPath(item.photo || '');
+    setPreviewImage(getImageUrl(item.photo));
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Delete Action
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this testimonial?')) {
-      setTestimonials((prev) => prev.filter((item) => item.id !== id));
-      if (editingId === id) resetForm();
+      try {
+        await API.delete(`/testimonials/${id}`);
+        alert('Testimonial deleted successfully');
+        if (editingId === id) resetForm();
+        fetchTestimonials();
+      } catch (error) {
+        console.error('Error deleting testimonial:', error);
+        alert(error.response?.data?.message || 'Failed to delete testimonial');
+      }
     }
+  };
+
+  const handleImageError = (id) => {
+    setBrokenImages((prev) => ({ ...prev, [id]: true }));
   };
 
   return (
     <section className="utkal-testimonial-section">
       <div className="utkal-testimonial-container">
-        
+
         {/* Header Badge */}
         <div className="utkal-testimonial-header">
           <span className="utkal-testimonial-tag">Customer Feedback</span>
@@ -193,7 +251,12 @@ const Testimonial = () => {
 
                 <div className="utkal-testimonial-preview-box">
                   {previewImage ? (
-                    <img src={previewImage} alt="Customer Preview" className="utkal-testimonial-preview-img" />
+                    <img
+                      src={previewImage}
+                      alt="Customer Preview"
+                      className="utkal-testimonial-preview-img"
+                      onError={() => setPreviewImage(null)}
+                    />
                   ) : (
                     <FaUserCircle className="utkal-testimonial-placeholder-icon" />
                   )}
@@ -216,14 +279,13 @@ const Testimonial = () => {
                       <FaTrash /> Remove
                     </button>
                   )}
-                  <span className="utkal-testimonial-upload-note">Recommended: Square JPG/PNG (Up to 2MB)</span>
+                  <span className="utkal-testimonial-upload-note">Recommended: Square JPG/PNG/WEBP (Up to 5MB)</span>
                 </div>
               </div>
             </div>
 
             {/* Inputs Grid */}
             <div className="utkal-testimonial-grid-3">
-              {/* Customer Name */}
               <div className="utkal-testimonial-form-group">
                 <label className="utkal-testimonial-label">Customer Name <span>*</span></label>
                 <input
@@ -237,7 +299,6 @@ const Testimonial = () => {
                 />
               </div>
 
-              {/* Designation */}
               <div className="utkal-testimonial-form-group">
                 <label className="utkal-testimonial-label">Designation <span>*</span></label>
                 <input
@@ -251,7 +312,6 @@ const Testimonial = () => {
                 />
               </div>
 
-              {/* Location */}
               <div className="utkal-testimonial-form-group">
                 <label className="utkal-testimonial-label">Location <span>*</span></label>
                 <input
@@ -268,7 +328,6 @@ const Testimonial = () => {
 
             {/* Rating & Status Grid */}
             <div className="utkal-testimonial-grid-2">
-              {/* Rating Dropdown */}
               <div className="utkal-testimonial-form-group">
                 <label className="utkal-testimonial-label">Rating <span>*</span></label>
                 <select
@@ -285,7 +344,6 @@ const Testimonial = () => {
                 </select>
               </div>
 
-              {/* Status Dropdown */}
               <div className="utkal-testimonial-form-group">
                 <label className="utkal-testimonial-label">Status <span>*</span></label>
                 <select
@@ -319,8 +377,8 @@ const Testimonial = () => {
               <button type="button" className="utkal-testimonial-cancel-btn" onClick={resetForm}>
                 Cancel
               </button>
-              <button type="submit" className="utkal-testimonial-submit-btn">
-                <FaPlus /> {editingId ? 'Update Testimonial' : 'Save Testimonial'}
+              <button type="submit" className="utkal-testimonial-submit-btn" disabled={submitting}>
+                <FaPlus /> {submitting ? 'Saving...' : editingId ? 'Update Testimonial' : 'Save Testimonial'}
               </button>
             </div>
           </form>
@@ -345,81 +403,93 @@ const Testimonial = () => {
                 </tr>
               </thead>
               <tbody>
-                {testimonials.length > 0 ? (
-                  testimonials.map((item) => (
-                    <tr key={item.id}>
-                      {/* Customer Info */}
-                      <td>
-                        <div className="utkal-testimonial-user-cell">
-                          <img
-                            src={item.photo}
-                            alt={item.name}
-                            className="utkal-testimonial-avatar-cell"
-                          />
-                          <div>
-                            <span className="utkal-testimonial-name-cell">{item.name}</span>
-                            <span className="utkal-testimonial-role-cell">{item.designation}</span>
+                {loading ? (
+                  <tr>
+                    <td colSpan="6" className="utkal-testimonial-empty-td">
+                      Loading testimonials...
+                    </td>
+                  </tr>
+                ) : testimonials.length > 0 ? (
+                  testimonials.map((item) => {
+                    const id = item._id || item.id;
+                    const avatarSrc = getImageUrl(item.photo);
+                    const isImageBroken = brokenImages[id];
+
+                    return (
+                      <tr key={id}>
+                        {/* Customer Info */}
+                        <td>
+                          <div className="utkal-testimonial-user-cell">
+                            {avatarSrc && !isImageBroken ? (
+                              <img
+                                src={avatarSrc}
+                                alt={item.name}
+                                className="utkal-testimonial-avatar-cell"
+                                onError={() => handleImageError(id)}
+                              />
+                            ) : (
+                              <FaUserCircle className="utkal-testimonial-avatar-cell placeholder" />
+                            )}
+                            <div>
+                              <span className="utkal-testimonial-name-cell">{item.name}</span>
+                              <span className="utkal-testimonial-role-cell">{item.designation}</span>
+                            </div>
                           </div>
-                        </div>
-                      </td>
+                        </td>
 
-                      {/* Location */}
-                      <td>
-                        <span className="utkal-testimonial-loc-cell">{item.location}</span>
-                      </td>
+                        <td>
+                          <span className="utkal-testimonial-loc-cell">{item.location}</span>
+                        </td>
 
-                      {/* Rating */}
-                      <td>
-                        <div className="utkal-testimonial-stars-cell">
-                          {[...Array(5)].map((_, i) => (
-                            <FaStar
-                              key={i}
-                              className={i < item.rating ? 'star-gold' : 'star-gray'}
-                            />
-                          ))}
-                        </div>
-                      </td>
+                        <td>
+                          <div className="utkal-testimonial-stars-cell">
+                            {[...Array(5)].map((_, i) => (
+                              <FaStar
+                                key={i}
+                                className={i < item.rating ? 'star-gold' : 'star-gray'}
+                              />
+                            ))}
+                          </div>
+                        </td>
 
-                      {/* Status */}
-                      <td>
-                        <span className={`utkal-testimonial-status-badge ${item.status.toLowerCase()}`}>
-                          {item.status}
-                        </span>
-                      </td>
+                        <td>
+                          <span className={`utkal-testimonial-status-badge ${item.status ? item.status.toLowerCase() : 'active'}`}>
+                            {item.status}
+                          </span>
+                        </td>
 
-                      {/* Description Preview */}
-                      <td>
-                        <p className="utkal-testimonial-desc-cell">{item.description}</p>
-                      </td>
+                        <td>
+                          <p className="utkal-testimonial-desc-cell">{item.description}</p>
+                        </td>
 
-                      {/* Actions */}
-                      <td>
-                        <div className="utkal-testimonial-actions-cell">
-                          <button
-                            className="utkal-action-btn view-btn"
-                            title="View Testimonial"
-                            onClick={() => setViewingTestimonial(item)}
-                          >
-                            <FaEye />
-                          </button>
-                          <button
-                            className="utkal-action-btn edit-btn"
-                            title="Edit Testimonial"
-                            onClick={() => handleEdit(item)}
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            className="utkal-action-btn delete-btn"
-                            title="Delete Testimonial"
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                        <td>
+                          <div className="utkal-testimonial-actions-cell">
+                            <button
+                              className="utkal-action-btn view-btn"
+                              title="View Testimonial"
+                              onClick={() => setViewingTestimonial(item)}
+                            >
+                              <FaEye />
+                            </button>
+                            <button
+                              className="utkal-action-btn edit-btn"
+                              title="Edit Testimonial"
+                              onClick={() => handleEdit(item)}
+                            >
+                              <FaEdit />
+                            </button>
+                            <button
+                              className="utkal-action-btn delete-btn"
+                              title="Delete Testimonial"
+                              onClick={() => handleDelete(id)}
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan="6" className="utkal-testimonial-empty-td">
@@ -445,11 +515,16 @@ const Testimonial = () => {
 
               <div className="utkal-testimonial-modal-header">
                 <FaQuoteLeft className="utkal-testimonial-modal-quote-icon" />
-                <img
-                  src={viewingTestimonial.photo}
-                  alt={viewingTestimonial.name}
-                  className="utkal-testimonial-modal-avatar"
-                />
+                {viewingTestimonial.photo && !brokenImages[viewingTestimonial._id || viewingTestimonial.id] ? (
+                  <img
+                    src={getImageUrl(viewingTestimonial.photo)}
+                    alt={viewingTestimonial.name}
+                    className="utkal-testimonial-modal-avatar"
+                    onError={() => handleImageError(viewingTestimonial._id || viewingTestimonial.id)}
+                  />
+                ) : (
+                  <FaUserCircle className="utkal-testimonial-modal-avatar placeholder" />
+                )}
                 <h3>{viewingTestimonial.name}</h3>
                 <p className="utkal-testimonial-modal-sub">{viewingTestimonial.designation} • {viewingTestimonial.location}</p>
                 <div className="utkal-testimonial-stars-cell">

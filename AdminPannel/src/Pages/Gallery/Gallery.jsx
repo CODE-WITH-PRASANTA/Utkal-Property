@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Gallery.css';
+import API, { IMG_URL } from '../../api/axios'; // Adjust relative import path if needed
 
 // React Icons
 import {
@@ -12,38 +13,85 @@ import {
   FaImage
 } from 'react-icons/fa';
 
-const INITIAL_GALLERY = [
-  {
-    id: 1,
-    image: 'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=400&q=80'
-  },
-  {
-    id: 2,
-    image: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=400&q=80'
-  },
-  {
-    id: 3,
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=400&q=80'
-  }
-];
-
 const Gallery = () => {
-  const [galleryItems, setGalleryItems] = useState(INITIAL_GALLERY);
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [viewingImage, setViewingImage] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const [brokenImages, setBrokenImages] = useState({});
   const fileInputRef = useRef(null);
 
-  // Process File Upload
+  /**
+   * Universal Image URL Resolver
+   * Resolves absolute backend server paths for static files (/uploads/gallery/filename.webp)
+   */
+  const getImageUrl = (photoPath) => {
+    if (!photoPath) return '';
+    
+    // 1. Direct Blob previews or absolute web URLs
+    if (photoPath.startsWith('http://') || photoPath.startsWith('https://') || photoPath.startsWith('blob:')) {
+      return photoPath;
+    }
+
+    // 2. Normalize Windows backslashes
+    let clean = photoPath.replace(/\\/g, '/');
+
+    // 3. Isolate path starting from uploads/
+    const uploadsIndex = clean.indexOf('uploads/');
+    if (uploadsIndex !== -1) {
+      clean = '/' + clean.substring(uploadsIndex);
+    } else {
+      clean = clean.startsWith('/') ? clean : `/${clean}`;
+    }
+
+    // 4. Attach base URL safely without double slashes
+    const baseUrl = (IMG_URL || 'http://localhost:5000').replace(/\/+$/, '');
+    return `${baseUrl}${clean}`;
+  };
+
+  // Fetch all gallery items from API
+  const fetchGalleryItems = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get('/gallery');
+      let data = [];
+
+      if (response.data && response.data.data) {
+        data = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        data = response.data;
+      }
+
+      setGalleryItems(data);
+    } catch (error) {
+      console.error('Error fetching gallery assets:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchGalleryItems();
+  }, []);
+
+  // Track broken images
+  const handleImageError = (id) => {
+    setBrokenImages((prev) => ({ ...prev, [id]: true }));
+  };
+
+  // Process selected file for local preview
   const processFile = (file) => {
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         alert('File size exceeds 5MB limit. Please upload a smaller image.');
         return;
       }
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewImage(imageUrl);
+      setSelectedFile(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewImage(objectUrl);
     }
   };
 
@@ -73,53 +121,77 @@ const Gallery = () => {
     }
   };
 
-  // Remove Selected Image Preview
+  // Remove Selected Image Preview & Reset State
   const handleRemovePreview = () => {
+    if (previewImage && previewImage.startsWith('blob:')) {
+      URL.revokeObjectURL(previewImage);
+    }
     setPreviewImage(null);
+    setSelectedFile(null);
     setEditingId(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // Submit Handler (Add / Update)
-  const handleSubmit = (e) => {
+  // Submit Handler (Create or Update API calls)
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!previewImage) {
-      alert('Please select or drag & drop an image.');
+    if (!selectedFile && !editingId) {
+      alert('Please select or drag & drop an image file.');
       return;
     }
 
-    if (editingId) {
-      // Update existing item
-      setGalleryItems((prev) =>
-        prev.map((item) =>
-          item.id === editingId ? { ...item, image: previewImage } : item
-        )
-      );
-    } else {
-      // Add new item
-      const newItem = {
-        id: Date.now(),
-        image: previewImage
-      };
-      setGalleryItems((prev) => [newItem, ...prev]);
+    const formData = new FormData();
+    if (selectedFile) {
+      formData.append('image', selectedFile);
     }
 
-    handleRemovePreview();
+    try {
+      let response;
+      if (editingId) {
+        // PUT: Update existing gallery asset
+        response = await API.put(`/gallery/${editingId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      } else {
+        // POST: Create new gallery asset
+        response = await API.post('/gallery', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      }
+
+      if (response.status === 200 || response.status === 201) {
+        await fetchGalleryItems();
+        handleRemovePreview();
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert(error.response?.data?.message || 'Failed to save image asset.');
+    }
   };
 
-  // Edit Action
+  // Trigger Edit Action
   const handleEdit = (item) => {
-    setEditingId(item.id);
-    setPreviewImage(item.image);
+    const itemId = item._id || item.id;
+    setEditingId(itemId);
+    setPreviewImage(getImageUrl(item.image));
+    setSelectedFile(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Delete Action
-  const handleDelete = (id) => {
+  // Trigger Delete Action
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this gallery item?')) {
-      setGalleryItems((prev) => prev.filter((item) => item.id !== id));
-      if (editingId === id) handleRemovePreview();
+      try {
+        const response = await API.delete(`/gallery/${id}`);
+        if (response.status === 200) {
+          setGalleryItems((prev) => prev.filter((item) => (item._id || item.id) !== id));
+          if (editingId === id) handleRemovePreview();
+        }
+      } catch (error) {
+        console.error('Error deleting gallery item:', error);
+        alert(error.response?.data?.message || 'Failed to delete gallery item.');
+      }
     }
   };
 
@@ -162,7 +234,7 @@ const Gallery = () => {
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
                 onDrop={handleDrop}
-                onClick={() => fileInputRef.current.click()}
+                onClick={() => fileInputRef.current && fileInputRef.current.click()}
               >
                 <input
                   type="file"
@@ -184,7 +256,7 @@ const Gallery = () => {
                   className="utkal-gallery-choose-btn"
                   onClick={(e) => {
                     e.stopPropagation();
-                    fileInputRef.current.click();
+                    fileInputRef.current && fileInputRef.current.click();
                   }}
                 >
                   Choose Image
@@ -255,44 +327,68 @@ const Gallery = () => {
                 </tr>
               </thead>
               <tbody>
-                {galleryItems.length > 0 ? (
-                  galleryItems.map((item) => (
-                    <tr key={item.id}>
-                      {/* Image Thumbnail */}
-                      <td>
-                        <div className="utkal-gallery-thumb-wrap">
-                          <img src={item.image} alt="Gallery item" />
-                        </div>
-                      </td>
+                {loading ? (
+                  <tr>
+                    <td colSpan="2" className="utkal-gallery-empty-td">
+                      Loading gallery assets...
+                    </td>
+                  </tr>
+                ) : galleryItems.length > 0 ? (
+                  galleryItems.map((item) => {
+                    const itemId = item._id || item.id;
+                    const imageUrl = getImageUrl(item.image);
+                    const isBroken = brokenImages[itemId];
 
-                      {/* Actions Column with View, Edit & Delete */}
-                      <td>
-                        <div className="utkal-gallery-actions-cell">
-                          <button
-                            className="utkal-action-btn view-btn"
-                            title="View Image"
-                            onClick={() => setViewingImage(item)}
-                          >
-                            <FaEye />
-                          </button>
-                          <button
-                            className="utkal-action-btn edit-btn"
-                            title="Edit Image"
-                            onClick={() => handleEdit(item)}
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            className="utkal-action-btn delete-btn"
-                            title="Delete Image"
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                    return (
+                      <tr key={itemId}>
+                        {/* Image Thumbnail */}
+                        <td>
+                          <div className="utkal-gallery-thumb-wrap">
+                            {!isBroken ? (
+                              <img
+                                src={imageUrl}
+                                alt="Gallery item"
+                                onError={() => handleImageError(itemId)}
+                              />
+                            ) : (
+                              <div className="utkal-gallery-broken-placeholder">
+                                <FaImage />
+                                <span>Image Unavailable</span>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Actions Column */}
+                        <td>
+                          <div className="utkal-gallery-actions-cell">
+                            <button
+                              className="utkal-action-btn view-btn"
+                              title="View Image"
+                              onClick={() => setViewingImage(imageUrl)}
+                              disabled={isBroken}
+                            >
+                              <FaEye />
+                            </button>
+                            <button
+                              className="utkal-action-btn edit-btn"
+                              title="Edit Image"
+                              onClick={() => handleEdit(item)}
+                            >
+                              <FaEdit />
+                            </button>
+                            <button
+                              className="utkal-action-btn delete-btn"
+                              title="Delete Image"
+                              onClick={() => handleDelete(itemId)}
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan="2" className="utkal-gallery-empty-td">
@@ -317,7 +413,7 @@ const Gallery = () => {
               </button>
 
               <div className="utkal-gallery-modal-body">
-                <img src={viewingImage.image} alt="Full view" />
+                <img src={viewingImage} alt="Full view" />
               </div>
             </div>
           </div>
