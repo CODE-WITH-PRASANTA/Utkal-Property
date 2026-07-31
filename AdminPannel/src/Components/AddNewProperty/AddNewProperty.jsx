@@ -1,21 +1,37 @@
-import React, { useState } from 'react';
-import { 
-  FiEye, FiSave, FiSend, FiChevronDown, FiChevronLeft, FiChevronRight, 
-  FiPlus, FiX, FiCheck, FiUpload, FiCalendar, FiStar, FiArrowLeft 
-} from 'react-icons/fi';
-import { 
-  BiBuildingHouse, BiImages, BiMap, BiListUl, BiCheckShield, 
-  BiDollarCircle, BiGlobe 
-} from 'react-icons/bi';
+import React, { useState, useEffect } from 'react';
 import './AddNewProperty.css';
 
+// React Icons Imports
+import { 
+  FiArrowLeft, FiEye, FiBookmark, FiSend, FiPlus, 
+  FiMapPin, FiBarChart2, FiHome, FiUploadCloud, 
+  FiGrid, FiShield, FiVideo, FiSun, FiCalendar, 
+  FiStar, FiX 
+} from 'react-icons/fi';
+import { 
+  LuBuilding2, LuFolderArchive, LuSettings 
+} from 'react-icons/lu';
+
+// Default Real Estate Placeholder Images
+const DEFAULT_PREVIEW_IMAGES = [
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80'
+];
+
+// Predefined amenities list matching reference format
+const DEFAULT_AMENITIES_LIST = [
+  'Swimming Pool',
+  'Kid Play Area',
+  'Gym',
+  'Security',
+  'CCTV Camera',
+  'Park & Garden',
+  'Club House'
+];
+
 const AddNewProperty = () => {
-  const [showFullPreview, setShowFullPreview] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  
-  const [propertyImages, setPropertyImages] = useState([]);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-  
+  // Form State Management
   const [formData, setFormData] = useState({
     propertyName: '',
     category: 'Residential Project',
@@ -24,652 +40,671 @@ const AddNewProperty = () => {
     projectSize: '',
     completionStatus: 'Under Construction',
     shortDescription: '',
-    highlights: [],
-    newHighlight: '',
     location: '',
     city: '',
     state: '',
     country: '',
-    quickStats: {
-      totalUnits: '',
-      availableUnits: '',
-      totalArea: '',
-      launchDate: ''
-    },
-    propertyDetails: {
-      totalFloors: '',
-      bedrooms: '',
-      bathrooms: '',
-      plotSize: '',
-      facing: ''
-    },
-    amenities: [
-      { name: 'Swimming Pool', checked: false },
-      { name: 'Kids Play Area', checked: false },
-      { name: 'Club House', checked: false },
-      { name: 'Gym', checked: false },
-      { name: 'Security', checked: false },
-      { name: 'CCTV Camera', checked: false },
-      { name: 'Park & Garden', checked: false }
-    ],
-    seo: {
-      metaTitle: '',
-      metaDescription: '',
-      urlSlug: ''
-    },
-    publishSettings: {
-      publishStatus: false,
-      featuredProperty: false,
-      publishDate: '',
-      promoteProperty: false
-    }
+    totalUnits: '',
+    availableUnits: '',
+    totalArea: '',
+    launchDate: '',
+    totalFloors: '',
+    bedrooms: '',
+    bathrooms: '',
+    plotSize: '',
+    parking: '',
+    metaTitle: '',
+    metaDescription: '',
+    urlSlug: '',
+    publishStatus: true,
+    featuredProperty: false,
+    publishDate: '',
+    promoteProperty: false
   });
 
-  const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  // Dynamic Lists State
+  const [highlights, setHighlights] = useState(['']);
+  const [amenitiesList, setAmenitiesList] = useState(DEFAULT_AMENITIES_LIST);
+  const [selectedAmenities, setSelectedAmenities] = useState([
+    'Swimming Pool', 'Kid Play Area', 'Gym', 'Security', 'CCTV Camera', 'Park & Garden', 'Club House'
+  ]);
+  const [images, setImages] = useState([]);
+  const [documents, setDocuments] = useState([]);
 
-  const handleNestedChange = (category, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [category]: { ...prev[category], [field]: value }
-    }));
-  };
+  // Modal State for Preview
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
-  const handleAmenityToggle = (index) => {
-    const updatedAmenities = [...formData.amenities];
-    updatedAmenities[index].checked = !updatedAmenities[index].checked;
-    setFormData(prev => ({ ...prev, amenities: updatedAmenities }));
-  };
+  // Load Saved Draft on initial mount
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('property_draft');
+    if (savedDraft) {
+      try {
+        const parsed = JSON.parse(savedDraft);
+        if (parsed.formData) setFormData(parsed.formData);
+        if (parsed.highlights) setHighlights(parsed.highlights);
+        if (parsed.selectedAmenities) setSelectedAmenities(parsed.selectedAmenities);
+      } catch (e) {
+        console.error('Error loading draft data', e);
+      }
+    }
+  }, []);
 
-  const addHighlight = (e) => {
-    if (e.key === 'Enter' && formData.newHighlight.trim() !== '') {
-      e.preventDefault();
-      setFormData(prev => ({
-        ...prev,
-        highlights: [...prev.highlights, prev.newHighlight.trim()],
-        newHighlight: ''
-      }));
+  // Back Navigation Action
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      alert('Navigating back to Properties Dashboard');
     }
   };
 
-  const removeHighlight = (indexToRemove) => {
+  // Input Handler
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      highlights: prev.highlights.filter((_, index) => index !== indexToRemove)
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
-  const handleFileUpload = (e) => {
+  // Dynamic Highlight Handlers
+  const handleHighlightChange = (index, value) => {
+    const updated = [...highlights];
+    updated[index] = value;
+    setHighlights(updated);
+  };
+
+  const addHighlightField = () => {
+    setHighlights([...highlights, '']);
+  };
+
+  // Image Upload Handler
+  const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
-      const newFileNames = files.map(file => file.name);
-      setUploadedFiles(prev => [...prev, ...newFileNames]);
+      const newImages = files.map(file => URL.createObjectURL(file));
+      setImages(prev => [...prev, ...newImages]);
     }
   };
 
-  const removeFile = (indexToRemove) => {
-    setUploadedFiles(prev => prev.filter((_, index) => index !== indexToRemove));
+  // Document Upload Handler
+  const handleDocumentUpload = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      const newDocs = files.map(file => file.name);
+      setDocuments(prev => [...prev, ...newDocs]);
+    }
   };
 
+  // Toggle Amenity Selection
+  const toggleAmenity = (amenity) => {
+    if (selectedAmenities.includes(amenity)) {
+      setSelectedAmenities(selectedAmenities.filter(item => item !== amenity));
+    } else {
+      setSelectedAmenities([...selectedAmenities, amenity]);
+    }
+  };
+
+  // Dynamic Add Custom Amenity
+  const handleAddCustomAmenity = () => {
+    const customAmenity = prompt('Enter new amenity name:');
+    if (customAmenity && customAmenity.trim() !== '') {
+      const formatted = customAmenity.trim();
+      if (!amenitiesList.includes(formatted)) {
+        setAmenitiesList(prev => [...prev, formatted]);
+      }
+      if (!selectedAmenities.includes(formatted)) {
+        setSelectedAmenities(prev => [...prev, formatted]);
+      }
+    }
+  };
+
+  // Save as Draft Handler
   const handleSaveDraft = () => {
-    alert('Property saved as draft successfully!');
+    const draftData = { formData, highlights, selectedAmenities };
+    localStorage.setItem('property_draft', JSON.stringify(draftData));
+    alert('Property draft saved successfully!');
   };
 
-  const handlePublish = () => {
-    alert('Property published successfully!');
+  // Form Submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Submitted Data:', { ...formData, highlights, selectedAmenities, images, documents });
+    alert('Property details submitted successfully!');
   };
 
-  // Handler for back button action (e.g., using router navigation or window.history)
-  const handleBack = () => {
-    window.history.back(); // Or use your routing library like navigate(-1) if using react-router-dom
-  };
+  // Active or Default Image Gallery
+  const displayImages = images.length > 0 ? images : DEFAULT_PREVIEW_IMAGES;
 
   return (
     <div className="AddNewProperty">
-      {/* Top Header Bar */}
-      <div className="anp-header">
-        <div className="anp-title-area">
-          <button className="anp-back-btn" onClick={handleBack} title="Go Back">
-            <FiArrowLeft size={22} />
+      {/* Top Header Navigation */}
+      <header className="AddNewProperty-header">
+        <div className="AddNewProperty-header-left">
+          <button 
+            className="AddNewProperty-back-btn" 
+            type="button" 
+            aria-label="Go back"
+            onClick={handleGoBack}
+          >
+            <FiArrowLeft />
           </button>
           <div>
-            <h1>Add New Property</h1>
-            <div className="anp-breadcrumb">
-              Dashboard <span>&gt;</span> Properties <span>&gt;</span> Add New Property
-            </div>
+            <h1>
+              Add New Property <LuBuilding2 className="AddNewProperty-header-icon" />
+            </h1>
+            <nav className="AddNewProperty-breadcrumb">
+              <span>Dashboard</span> &gt; <span>Properties</span> &gt; <span className="active">Add New Property</span>
+            </nav>
           </div>
         </div>
-        <div className="anp-header-actions">
-          <button className="anp-btn-secondary" onClick={() => setShowFullPreview(true)}>
+
+        <div className="AddNewProperty-header-actions">
+          <button type="button" className="AddNewProperty-btn-outline" onClick={() => setIsPreviewModalOpen(true)}>
             <FiEye /> Preview
           </button>
-          <button className="anp-btn-outline" onClick={handleSaveDraft}>
-            <FiSave /> Save as Draft
+          <button type="button" className="AddNewProperty-btn-outline" onClick={handleSaveDraft}>
+            <FiBookmark /> Save as Draft
           </button>
-          <button className="anp-btn-primary" onClick={handlePublish}>
+          <button type="submit" onClick={handleSubmit} className="AddNewProperty-btn-primary">
             <FiSend /> Publish Property
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Main Content Grid */}
-      <div className="anp-grid-layout">
-        
-        {/* Left Form Section */}
-        <div className="anp-left-column">
+      {/* Main Form Body */}
+      <form onSubmit={handleSubmit} className="AddNewProperty-container">
+        {/* LEFT / CENTER COLUMN */}
+        <div className="AddNewProperty-main-content">
           
-          {/* Basic Information Card */}
-          <div className="anp-card">
-            <h3>Basic Information</h3>
-            
-            <div className="anp-form-group">
-              <label>Property Name *</label>
-              <input 
-                type="text" 
-                value={formData.propertyName} 
+          {/* Basic Information */}
+          <section className="AddNewProperty-card">
+            <div className="AddNewProperty-card-header">
+              <LuBuilding2 className="AddNewProperty-card-icon" />
+              <h2>Basic Information</h2>
+            </div>
+
+            <div className="AddNewProperty-form-group">
+              <label>Property Name <span className="required">*</span></label>
+              <input
+                type="text"
+                name="propertyName"
                 placeholder="Enter property name"
-                onChange={(e) => handleInputChange('propertyName', e.target.value)} 
+                value={formData.propertyName}
+                onChange={handleChange}
+                required
               />
             </div>
 
-            <div className="anp-form-row">
-              <div className="anp-form-group">
-                <label>Category *</label>
-                <div className="anp-select-wrapper">
-                  <select 
-                    value={formData.category} 
-                    onChange={(e) => handleInputChange('category', e.target.value)}
-                  >
-                    <option>Residential Project</option>
-                    <option>Commercial Project</option>
-                    <option>Industrial</option>
-                  </select>
-                  <FiChevronDown className="anp-select-icon" />
-                </div>
+            <div className="AddNewProperty-grid-2">
+              <div className="AddNewProperty-form-group">
+                <label>Category <span className="required">*</span></label>
+                <select name="category" value={formData.category} onChange={handleChange}>
+                  <option value="Residential Project">Residential Project</option>
+                  <option value="Commercial Project">Commercial Project</option>
+                  <option value="Industrial">Industrial</option>
+                </select>
               </div>
 
-              <div className="anp-form-group">
-                <label>Property Type *</label>
-                <div className="anp-select-wrapper">
-                  <select 
-                    value={formData.propertyType} 
-                    onChange={(e) => handleInputChange('propertyType', e.target.value)}
-                  >
-                    <option>Luxury Villas</option>
-                    <option>Apartments</option>
-                    <option>Independent House</option>
-                  </select>
-                  <FiChevronDown className="anp-select-icon" />
-                </div>
+              <div className="AddNewProperty-form-group">
+                <label>Property Type <span className="required">*</span></label>
+                <select name="propertyType" value={formData.propertyType} onChange={handleChange}>
+                  <option value="Luxury Villas">Luxury Villas</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Penthouse">Penthouse</option>
+                  <option value="Plot">Plot</option>
+                </select>
               </div>
             </div>
 
-            <div className="anp-form-row">
-              <div className="anp-form-group">
-                <label>Status *</label>
-                <div className="anp-select-wrapper">
-                  <select 
-                    value={formData.status} 
-                    onChange={(e) => handleInputChange('status', e.target.value)}
-                  >
-                    <option>Active</option>
-                    <option>Inactive</option>
-                    <option>Pending</option>
-                  </select>
-                  <FiChevronDown className="anp-select-icon" />
-                </div>
+            <div className="AddNewProperty-grid-2">
+              <div className="AddNewProperty-form-group">
+                <label>Status <span className="required">*</span></label>
+                <select name="status" value={formData.status} onChange={handleChange}>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Pending">Pending</option>
+                </select>
               </div>
 
-              <div className="anp-form-group">
+              <div className="AddNewProperty-form-group">
                 <label>Project Size (sq ft)</label>
-                <input 
-                  type="text" 
-                  value={formData.projectSize} 
+                <input
+                  type="text"
+                  name="projectSize"
                   placeholder="e.g. 15000"
-                  onChange={(e) => handleInputChange('projectSize', e.target.value)} 
+                  value={formData.projectSize}
+                  onChange={handleChange}
                 />
               </div>
             </div>
 
-            <div className="anp-form-row">
-              <div className="anp-form-group">
-                <label>Completion Status</label>
-                <div className="anp-select-wrapper">
-                  <select 
-                    value={formData.completionStatus} 
-                    onChange={(e) => handleInputChange('completionStatus', e.target.value)}
-                  >
-                    <option>Under Construction</option>
-                    <option>Ready to Move</option>
-                    <option>Upcoming</option>
-                  </select>
-                  <FiChevronDown className="anp-select-icon" />
-                </div>
-              </div>
+            <div className="AddNewProperty-form-group">
+              <label>Completion Status</label>
+              <select name="completionStatus" value={formData.completionStatus} onChange={handleChange}>
+                <option value="Under Construction">Under Construction</option>
+                <option value="Ready to Move">Ready to Move</option>
+                <option value="Upcoming">Upcoming</option>
+              </select>
             </div>
 
-            <div className="anp-form-group">
+            <div className="AddNewProperty-form-group">
               <label>Short Description</label>
-              <textarea 
-                rows="3" 
-                value={formData.shortDescription}
-                placeholder="Enter short description"
-                onChange={(e) => handleInputChange('shortDescription', e.target.value)}
-                maxLength="160"
-              ></textarea>
-              <span className="anp-char-count">{formData.shortDescription.length}/160</span>
+              <div className="AddNewProperty-textarea-wrapper">
+                <textarea
+                  name="shortDescription"
+                  placeholder="Enter short description"
+                  maxLength={120}
+                  value={formData.shortDescription}
+                  onChange={handleChange}
+                />
+                <span className="AddNewProperty-char-count">{formData.shortDescription.length}/120</span>
+              </div>
             </div>
 
-            <div className="anp-form-group">
+            <div className="AddNewProperty-form-group">
               <label>Highlights (Key Features)</label>
-              <div className="anp-tags-container">
-                {formData.highlights.map((tag, index) => (
-                  <span key={index} className="anp-tag">
-                    {tag} <FiX onClick={() => removeHighlight(index)} />
-                  </span>
-                ))}
-                <input 
-                  type="text" 
-                  className="anp-tag-input"
-                  placeholder="+ Add highlight"
-                  value={formData.newHighlight}
-                  onChange={(e) => handleInputChange('newHighlight', e.target.value)}
-                  onKeyDown={addHighlight}
+              {highlights.map((item, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  placeholder="Add key feature"
+                  value={item}
+                  onChange={(e) => handleHighlightChange(index, e.target.value)}
+                  className="AddNewProperty-highlight-input"
                 />
-              </div>
-            </div>
-          </div>
-
-          {/* Location & Details Section */}
-          <div className="anp-card">
-            <h3>Location & Details</h3>
-            <div className="anp-form-group">
-              <label>Location</label>
-              <input 
-                type="text" 
-                value={formData.location}
-                placeholder="Street address or landmark"
-                onChange={(e) => handleInputChange('location', e.target.value)}
-              />
-            </div>
-
-            <div className="anp-form-row three-col">
-              <div className="anp-form-group">
-                <label>City</label>
-                <input 
-                  type="text" 
-                  value={formData.city}
-                  placeholder="City"
-                  onChange={(e) => handleInputChange('city', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>State</label>
-                <input 
-                  type="text" 
-                  value={formData.state}
-                  placeholder="State"
-                  onChange={(e) => handleInputChange('state', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>Country</label>
-                <input 
-                  type="text" 
-                  value={formData.country}
-                  placeholder="Country"
-                  onChange={(e) => handleInputChange('country', e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Grid Cards */}
-          <div className="anp-row-cards">
-            {/* Quick Stats */}
-            <div className="anp-card half-card">
-              <h3>Quick Stats</h3>
-              <div className="anp-form-group">
-                <label>Total Units</label>
-                <input 
-                  type="text" 
-                  value={formData.quickStats.totalUnits}
-                  onChange={(e) => handleNestedChange('quickStats', 'totalUnits', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>Available Units</label>
-                <input 
-                  type="text" 
-                  value={formData.quickStats.availableUnits}
-                  onChange={(e) => handleNestedChange('quickStats', 'availableUnits', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>Total Area (sq ft)</label>
-                <input 
-                  type="text" 
-                  value={formData.quickStats.totalArea}
-                  onChange={(e) => handleNestedChange('quickStats', 'totalArea', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>Launch Date</label>
-                <input 
-                  type="text" 
-                  value={formData.quickStats.launchDate}
-                  onChange={(e) => handleNestedChange('quickStats', 'launchDate', e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Property Details */}
-            <div className="anp-card half-card">
-              <h3>Property Details</h3>
-              <div className="anp-form-group">
-                <label>Total Floors</label>
-                <input 
-                  type="text" 
-                  value={formData.propertyDetails.totalFloors}
-                  onChange={(e) => handleNestedChange('propertyDetails', 'totalFloors', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>Bedrooms</label>
-                <input 
-                  type="text" 
-                  value={formData.propertyDetails.bedrooms}
-                  onChange={(e) => handleNestedChange('propertyDetails', 'bedrooms', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>Bathrooms</label>
-                <input 
-                  type="text" 
-                  value={formData.propertyDetails.bathrooms}
-                  onChange={(e) => handleNestedChange('propertyDetails', 'bathrooms', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>Plot Size (sq ft)</label>
-                <input 
-                  type="text" 
-                  value={formData.propertyDetails.plotSize}
-                  onChange={(e) => handleNestedChange('propertyDetails', 'plotSize', e.target.value)}
-                />
-              </div>
-              <div className="anp-form-group">
-                <label>Facing</label>
-                <input 
-                  type="text" 
-                  value={formData.propertyDetails.facing}
-                  onChange={(e) => handleNestedChange('propertyDetails', 'facing', e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Amenities & Documents Section */}
-          <div className="anp-row-cards">
-            <div className="anp-card half-card">
-              <h3>Amenities</h3>
-              <label className="anp-sub-label">Select Amenities</label>
-              <div className="anp-amenities-list">
-                {formData.amenities.map((item, index) => (
-                  <label key={index} className="anp-checkbox-label">
-                    <input 
-                      type="checkbox" 
-                      checked={item.checked} 
-                      onChange={() => handleAmenityToggle(index)}
-                    />
-                    <span className="anp-custom-checkbox"><FiCheck /></span>
-                    {item.name}
-                  </label>
-                ))}
-              </div>
-              <button className="anp-add-more-btn"><FiPlus /> Add More</button>
-            </div>
-
-            <div className="anp-card half-card">
-              <h3>Documents</h3>
-              <div className="anp-dropzone">
-                <input type="file" multiple onChange={handleFileUpload} />
-                <FiUpload className="anp-upload-icon" />
-                <p>Drag & drop files here<br/><span>or click to browse</span></p>
-              </div>
-              <div className="anp-doc-list-container">
-                {uploadedFiles.map((fileName, idx) => (
-                  <div key={idx} className="anp-uploaded-file-item">
-                    <span>{fileName}</span>
-                    <button className="anp-remove-file" onClick={() => removeFile(idx)}>
-                      <FiX size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Right Preview & Settings Column */}
-        <div className="anp-right-column">
-          
-          {/* Property Images Section */}
-          <div className="anp-card">
-            <h3>Property Images *</h3>
-            <div className="anp-main-img-preview">
-              <span className="anp-badge-primary">Primary</span>
-              {propertyImages.length > 0 ? (
-                <img src={propertyImages[activeImageIndex]} alt="Property" />
-              ) : (
-                <div className="anp-no-image-placeholder">No Image Uploaded</div>
-              )}
-              {propertyImages.length > 0 && (
-                <>
-                  <button className="anp-slider-btn left" onClick={() => setActiveImageIndex((prev) => (prev === 0 ? propertyImages.length - 1 : prev - 1))}>
-                    <FiChevronLeft />
-                  </button>
-                  <button className="anp-slider-btn right" onClick={() => setActiveImageIndex((prev) => (prev === propertyImages.length - 1 ? 0 : prev + 1))}>
-                    <FiChevronRight />
-                  </button>
-                </>
-              )}
-            </div>
-            
-            <div className="anp-thumbnail-row">
-              {propertyImages.map((img, idx) => (
-                <div 
-                  key={idx} 
-                  className={`anp-thumb ${activeImageIndex === idx ? 'active' : ''}`}
-                  onClick={() => setActiveImageIndex(idx)}
-                >
-                  <img src={img} alt={`Thumb ${idx}`} />
-                </div>
               ))}
-              <div className="anp-thumb add-thumb">
-                <FiPlus />
-                <span>Add More</span>
-              </div>
-            </div>
-            <p className="anp-img-note">Recommended: 1200x800px, JPG/PNG, Max 5MB</p>
-          </div>
-
-          {/* Live Preview Box */}
-          <div className="anp-card anp-live-preview-box">
-            <div className="anp-preview-header-row">
-              <h3>Live Preview</h3>
-              <div className="anp-device-icons">
-                <span className="active"><FiStar size={14} /></span>
-              </div>
-            </div>
-            <div className="anp-preview-card-content">
-              {propertyImages.length > 0 ? (
-                <img src={propertyImages[0]} alt="Live Preview" />
-              ) : (
-                <div className="anp-no-image-placeholder">No Preview Image</div>
-              )}
-              <div className="anp-preview-details">
-                <h4>{formData.propertyName || 'Property Name'}</h4>
-                <p className="anp-location-sub">{formData.propertyType} in {formData.city || 'Location'}</p>
-                <div className="anp-rating">
-                  <FiStar fill="#f59e0b" color="#f59e0b" />
-                  <FiStar fill="#f59e0b" color="#f59e0b" />
-                  <FiStar fill="#f59e0b" color="#f59e0b" />
-                  <FiStar fill="#f59e0b" color="#f59e0b" />
-                  <FiStar fill="#f59e0b" color="#f59e0b" />
-                  <span>(0)</span>
-                </div>
-                <div className="anp-price">₹ -</div>
-                <div className="anp-sqft-rate">₹ - / Sqft</div>
-                <button className="anp-full-preview-btn" onClick={() => setShowFullPreview(true)}>
-                  View Full Preview &rarr;
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* SEO Settings */}
-          <div className="anp-card">
-            <h3>SEO Settings</h3>
-            <div className="anp-form-group">
-              <label>Meta Title</label>
-              <input 
-                type="text" 
-                value={formData.seo.metaTitle}
-                onChange={(e) => handleNestedChange('seo', 'metaTitle', e.target.value)}
-                maxLength="60"
-              />
-              <span className="anp-char-count">{formData.seo.metaTitle.length}/60</span>
-            </div>
-            <div className="anp-form-group">
-              <label>Meta Description</label>
-              <textarea 
-                rows="3"
-                value={formData.seo.metaDescription}
-                onChange={(e) => handleNestedChange('seo', 'metaDescription', e.target.value)}
-                maxLength="160"
-              ></textarea>
-              <span className="anp-char-count">{formData.seo.metaDescription.length}/160</span>
-            </div>
-            <div className="anp-form-group">
-              <label>URL Slug</label>
-              <input 
-                type="text" 
-                value={formData.seo.urlSlug}
-                onChange={(e) => handleNestedChange('seo', 'urlSlug', e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Publish Settings */}
-          <div className="anp-card">
-            <h3>Publish Settings</h3>
-            <div className="anp-toggle-row">
-              <span>Publish Status</span>
-              <label className="anp-switch">
-                <input 
-                  type="checkbox" 
-                  checked={formData.publishSettings.publishStatus}
-                  onChange={(e) => handleNestedChange('publishSettings', 'publishStatus', e.target.checked)}
-                />
-                <span className="anp-slider"></span>
-              </label>
-              <span className="anp-toggle-label">{formData.publishSettings.publishStatus ? 'Active' : 'Draft'}</span>
-            </div>
-
-            <div className="anp-toggle-row">
-              <span>Featured Property</span>
-              <label className="anp-switch">
-                <input 
-                  type="checkbox" 
-                  checked={formData.publishSettings.featuredProperty}
-                  onChange={(e) => handleNestedChange('publishSettings', 'featuredProperty', e.target.checked)}
-                />
-                <span className="anp-slider"></span>
-              </label>
-              <span className="anp-toggle-label">Yes</span>
-            </div>
-
-            <div className="anp-form-group">
-              <label>Publish Date</label>
-              <div className="anp-input-icon-wrap">
-                <input 
-                  type="date" 
-                  value={formData.publishSettings.publishDate}
-                  onChange={(e) => handleNestedChange('publishSettings', 'publishDate', e.target.value)}
-                />
-                <FiCalendar className="anp-right-icon" />
-              </div>
-            </div>
-
-            <div className="anp-toggle-row">
-              <span>Promote Property</span>
-              <label className="anp-switch">
-                <input 
-                  type="checkbox" 
-                  checked={formData.publishSettings.promoteProperty}
-                  onChange={(e) => handleNestedChange('publishSettings', 'promoteProperty', e.target.checked)}
-                />
-                <span className="anp-slider"></span>
-              </label>
-              <span className="anp-toggle-label">No</span>
-            </div>
-
-            <div className="anp-bottom-action-buttons">
-              <button className="anp-btn-outline full" onClick={handleSaveDraft}>Save as Draft</button>
-              <button className="anp-btn-primary full" onClick={handlePublish}>Publish Property</button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* Footer */}
-      <div className="anp-footer">
-        <div>© 2026 Admin Panel. All rights reserved.</div>
-        <div className="anp-footer-built">Built with <span>❤</span> for better living</div>
-      </div>
-
-      {/* FULL PREVIEW MODAL */}
-      {showFullPreview && (
-        <div className="anp-modal-overlay" onClick={() => setShowFullPreview(false)}>
-          <div className="anp-modal-container" onClick={(e) => e.stopPropagation()}>
-            <div className="anp-modal-header">
-              <h2>Property Full Preview</h2>
-              <button className="anp-modal-close-btn" onClick={() => setShowFullPreview(false)}>
-                <FiX size={20} />
+              <button type="button" onClick={addHighlightField} className="AddNewProperty-add-more-btn">
+                <FiPlus /> Add Highlight
               </button>
             </div>
-            <div className="anp-modal-body">
-              <div className="anp-modal-gallery">
-                <div className="anp-modal-main-image">
-                  {propertyImages.length > 0 ? (
-                    <img src={propertyImages[activeImageIndex]} alt="Modal Preview" />
-                  ) : (
-                    <div className="anp-no-image-placeholder">No Image Available</div>
-                  )}
+          </section>
+
+          {/* Location & Details */}
+          <section className="AddNewProperty-card">
+            <div className="AddNewProperty-card-header">
+              <FiMapPin className="AddNewProperty-card-icon" />
+              <h2>Location & Details</h2>
+            </div>
+
+            <div className="AddNewProperty-form-group">
+              <label>Location</label>
+              <input
+                type="text"
+                name="location"
+                placeholder="Street address or landmark"
+                value={formData.location}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="AddNewProperty-grid-3">
+              <div className="AddNewProperty-form-group">
+                <label>City</label>
+                <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>State</label>
+                <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Country</label>
+                <input type="text" name="country" placeholder="Country" value={formData.country} onChange={handleChange} />
+              </div>
+            </div>
+          </section>
+
+          {/* Quick Stats & Property Details Split */}
+          <div className="AddNewProperty-grid-2">
+            {/* Quick Stats */}
+            <section className="AddNewProperty-card">
+              <div className="AddNewProperty-card-header">
+                <FiBarChart2 className="AddNewProperty-card-icon" />
+                <h2>Quick Stats</h2>
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Total Units</label>
+                <input type="text" name="totalUnits" value={formData.totalUnits} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Available Units</label>
+                <input type="text" name="availableUnits" value={formData.availableUnits} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Total Area (sq ft)</label>
+                <input type="text" name="totalArea" value={formData.totalArea} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Launch Date</label>
+                <div className="AddNewProperty-date-input">
+                  <input type="date" name="launchDate" value={formData.launchDate} onChange={handleChange} />
                 </div>
               </div>
-              <div className="anp-modal-info">
-                <h3>{formData.propertyName || 'Property Name'}</h3>
-                <p className="anp-modal-desc">{formData.shortDescription || 'No description available.'}</p>
-                
-                <div className="anp-modal-stats-grid">
-                  <div className="anp-modal-stat-item">
-                    <span>Category</span>
-                    <span>{formData.category}</span>
-                  </div>
-                  <div className="anp-modal-stat-item">
-                    <span>Type</span>
-                    <span>{formData.propertyType}</span>
-                  </div>
-                  <div className="anp-modal-stat-item">
-                    <span>City</span>
-                    <span>{formData.city || '-'}</span>
-                  </div>
+            </section>
+
+            {/* Property Details */}
+            <section className="AddNewProperty-card">
+              <div className="AddNewProperty-card-header">
+                <FiHome className="AddNewProperty-card-icon" />
+                <h2>Property Details</h2>
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Total Floors</label>
+                <input type="text" name="totalFloors" value={formData.totalFloors} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Bedrooms</label>
+                <input type="text" name="bedrooms" value={formData.bedrooms} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Bathrooms</label>
+                <input type="text" name="bathrooms" value={formData.bathrooms} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Plot Size (sq ft)</label>
+                <input type="text" name="plotSize" value={formData.plotSize} onChange={handleChange} />
+              </div>
+              <div className="AddNewProperty-form-group">
+                <label>Parking</label>
+                <input type="text" name="parking" value={formData.parking} onChange={handleChange} />
+              </div>
+            </section>
+          </div>
+
+          {/* Amenities Section (Exact Reference Style) */}
+          <section className="AddNewProperty-card">
+            <div className="AddNewProperty-card-header">
+              <FiGrid className="AddNewProperty-card-icon purple-grid" />
+              <h2 className="section-title">Amenities</h2>
+            </div>
+            <label className="AddNewProperty-sublabel">Select Amenities</label>
+            <div className="AddNewProperty-amenities-container">
+              {amenitiesList.map((amenity, index) => {
+                const isSelected = selectedAmenities.includes(amenity);
+                return (
+                  <button
+                    key={index}
+                    type="button"
+                    className={`AddNewProperty-amenity-chip ${isSelected ? 'active' : ''}`}
+                    onClick={() => toggleAmenity(amenity)}
+                  >
+                    <FiGrid className="chip-icon" />
+                    <span>{amenity}</span>
+                  </button>
+                );
+              })}
+              <button 
+                type="button" 
+                className="AddNewProperty-amenity-chip add-more"
+                onClick={handleAddCustomAmenity}
+              >
+                <FiPlus className="chip-icon" />
+                <span>Add More</span>
+              </button>
+            </div>
+          </section>
+
+          {/* Documents Upload Section */}
+          <section className="AddNewProperty-card">
+            <div className="AddNewProperty-card-header">
+              <LuFolderArchive className="AddNewProperty-card-icon" />
+              <h2>Documents</h2>
+            </div>
+            <div className="AddNewProperty-upload-zone">
+              <input type="file" multiple onChange={handleDocumentUpload} id="doc-upload" hidden />
+              <label htmlFor="doc-upload" className="AddNewProperty-upload-label">
+                <FiUploadCloud className="AddNewProperty-upload-icon" />
+                <p><strong>Drag & drop files here</strong> or click to browse</p>
+                <span>PDF, DOC, DOCX (Max 10MB)</span>
+              </label>
+            </div>
+            {documents.length > 0 && (
+              <ul className="AddNewProperty-file-list">
+                {documents.map((doc, idx) => (
+                  <li key={idx}>{doc}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="AddNewProperty-side-content">
+          
+          {/* Property Images Upload */}
+          <section className="AddNewProperty-card">
+            <div className="AddNewProperty-card-header space-between">
+              <div className="AddNewProperty-card-title">
+                <FiUploadCloud className="AddNewProperty-card-icon" />
+                <h2>Property Images <span className="required">*</span></h2>
+              </div>
+              <span className="AddNewProperty-badge">Primary</span>
+            </div>
+            <div className="AddNewProperty-upload-zone">
+              <input type="file" accept="image/*" multiple onChange={handleImageUpload} id="img-upload" hidden />
+              <label htmlFor="img-upload" className="AddNewProperty-upload-label">
+                <FiUploadCloud className="AddNewProperty-upload-icon" />
+                <p><strong>Drag & drop images here</strong> or click to browse</p>
+                <span>Recommended: 1200x800px, JPG/PNG, Max 5MB</span>
+              </label>
+            </div>
+
+            {/* Thumbnail Strip with Default Fallbacks */}
+            <div className="AddNewProperty-image-preview-grid">
+              {displayImages.map((img, idx) => (
+                <div key={idx} className="AddNewProperty-thumb-wrapper">
+                  <img src={img} alt={`Thumbnail ${idx}`} />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Dynamic Live Preview Card */}
+          <section className="AddNewProperty-card">
+            <div className="AddNewProperty-card-header">
+              <FiEye className="AddNewProperty-card-icon" />
+              <h2>Live Preview</h2>
+            </div>
+            <div className="AddNewProperty-preview-card">
+              <div className="AddNewProperty-preview-image">
+                <img src={displayImages[0]} alt="Property Main Preview" />
+                {images.length === 0 && (
+                  <span className="AddNewProperty-default-badge">Default Preview</span>
+                )}
+              </div>
+              <div className="AddNewProperty-preview-details">
+                <h3>{formData.propertyName || 'Luxury Villa Title'}</h3>
+                <p className="AddNewProperty-preview-subtext">
+                  {formData.propertyType || 'Luxury Villa'} in {formData.city || formData.location || 'Location Address'}
+                </p>
+                <div className="AddNewProperty-preview-rating">
+                  {[...Array(5)].map((_, i) => (
+                    <FiStar key={i} className="star-filled" />
+                  ))}
+                  <span>(4.5)</span>
+                </div>
+                <div className="AddNewProperty-preview-price">
+                  {formData.totalArea ? `₹ ${formData.totalArea} / sq ft` : '₹ -- / sq ft'}
+                </div>
+              </div>
+              <button 
+                type="button" 
+                className="AddNewProperty-preview-btn"
+                onClick={() => setIsPreviewModalOpen(true)}
+              >
+                View Full Preview &rarr;
+              </button>
+            </div>
+          </section>
+
+          {/* SEO Settings */}
+          <section className="AddNewProperty-card">
+            <div className="AddNewProperty-card-header">
+              <LuSettings className="AddNewProperty-card-icon" />
+              <h2>SEO Settings</h2>
+            </div>
+            <div className="AddNewProperty-form-group">
+              <label>Meta Title</label>
+              <div className="AddNewProperty-textarea-wrapper">
+                <input
+                  type="text"
+                  name="metaTitle"
+                  maxLength={60}
+                  value={formData.metaTitle}
+                  onChange={handleChange}
+                />
+                <span className="AddNewProperty-char-count">{formData.metaTitle.length}/60</span>
+              </div>
+            </div>
+            <div className="AddNewProperty-form-group">
+              <label>Meta Description</label>
+              <div className="AddNewProperty-textarea-wrapper">
+                <textarea
+                  name="metaDescription"
+                  maxLength={160}
+                  value={formData.metaDescription}
+                  onChange={handleChange}
+                />
+                <span className="AddNewProperty-char-count">{formData.metaDescription.length}/160</span>
+              </div>
+            </div>
+            <div className="AddNewProperty-form-group">
+              <label>URL Slug</label>
+              <input type="text" name="urlSlug" value={formData.urlSlug} onChange={handleChange} />
+            </div>
+          </section>
+
+          {/* Publish Settings */}
+          <section className="AddNewProperty-card">
+            <div className="AddNewProperty-card-header">
+              <FiSend className="AddNewProperty-card-icon" />
+              <h2>Publish Settings</h2>
+            </div>
+
+            <div className="AddNewProperty-toggle-row">
+              <span>Publish Status</span>
+              <label className="AddNewProperty-switch">
+                <input
+                  type="checkbox"
+                  name="publishStatus"
+                  checked={formData.publishStatus}
+                  onChange={handleChange}
+                />
+                <span className="slider round"></span>
+              </label>
+              <span className="AddNewProperty-toggle-label">{formData.publishStatus ? 'Draft' : 'Public'}</span>
+            </div>
+
+            <div className="AddNewProperty-toggle-row">
+              <span>Featured Property</span>
+              <label className="AddNewProperty-switch">
+                <input
+                  type="checkbox"
+                  name="featuredProperty"
+                  checked={formData.featuredProperty}
+                  onChange={handleChange}
+                />
+                <span className="slider round"></span>
+              </label>
+              <span className="AddNewProperty-toggle-label">{formData.featuredProperty ? 'Yes' : 'No'}</span>
+            </div>
+
+            <div className="AddNewProperty-form-group">
+              <label>Publish Date</label>
+              <div className="AddNewProperty-date-input">
+                <input
+                  type="date"
+                  name="publishDate"
+                  value={formData.publishDate}
+                  onChange={handleChange}
+                />
+              </div>
+              <span className="AddNewProperty-input-subtext">Now</span>
+            </div>
+
+            <div className="AddNewProperty-toggle-row">
+              <span>Promote Property</span>
+              <label className="AddNewProperty-switch">
+                <input
+                  type="checkbox"
+                  name="promoteProperty"
+                  checked={formData.promoteProperty}
+                  onChange={handleChange}
+                />
+                <span className="slider round"></span>
+              </label>
+              <span className="AddNewProperty-toggle-label">{formData.promoteProperty ? 'Yes' : 'No'}</span>
+            </div>
+
+            <div className="AddNewProperty-side-actions">
+              <button type="button" className="AddNewProperty-btn-outline-full" onClick={handleSaveDraft}>
+                <FiBookmark /> Save as Draft
+              </button>
+              <button type="submit" onClick={handleSubmit} className="AddNewProperty-btn-primary-gradient">
+                <FiSend /> Publish Property
+              </button>
+            </div>
+          </section>
+
+        </div>
+      </form>
+
+      {/* FULL PREVIEW POPUP MODAL */}
+      {isPreviewModalOpen && (
+        <div className="AddNewProperty-modal-overlay">
+          <div className="AddNewProperty-modal">
+            <div className="AddNewProperty-modal-header">
+              <h2>Property Live Preview</h2>
+              <button className="AddNewProperty-modal-close" onClick={() => setIsPreviewModalOpen(false)}>
+                <FiX />
+              </button>
+            </div>
+            
+            <div className="AddNewProperty-modal-body">
+              {/* Image Gallery Preview */}
+              <div className="AddNewProperty-modal-gallery">
+                {displayImages.map((img, index) => (
+                  <img key={index} src={img} alt={`Property preview ${index + 1}`} />
+                ))}
+              </div>
+
+              {/* Property Main Header */}
+              <div className="AddNewProperty-modal-section">
+                <h1>{formData.propertyName || 'Untitled Property'}</h1>
+                <p className="AddNewProperty-modal-subtitle">
+                  <FiMapPin /> {formData.location || 'Location Address'}, {formData.city} {formData.state} {formData.country}
+                </p>
+                <div className="AddNewProperty-modal-tags">
+                  <span>Category: {formData.category}</span>
+                  <span>Type: {formData.propertyType}</span>
+                  <span>Status: {formData.status}</span>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="AddNewProperty-modal-section">
+                <h3>Description</h3>
+                <p>{formData.shortDescription || 'No description provided.'}</p>
+              </div>
+
+              {/* Specifications Grid */}
+              <div className="AddNewProperty-modal-grid">
+                <div><strong>Bedrooms:</strong> {formData.bedrooms || 'N/A'}</div>
+                <div><strong>Bathrooms:</strong> {formData.bathrooms || 'N/A'}</div>
+                <div><strong>Total Floors:</strong> {formData.totalFloors || 'N/A'}</div>
+                <div><strong>Total Area:</strong> {formData.totalArea ? `${formData.totalArea} sq ft` : 'N/A'}</div>
+                <div><strong>Plot Size:</strong> {formData.plotSize ? `${formData.plotSize} sq ft` : 'N/A'}</div>
+                <div><strong>Parking:</strong> {formData.parking || 'N/A'}</div>
+              </div>
+
+              {/* Amenities List */}
+              <div className="AddNewProperty-modal-section">
+                <h3>Selected Amenities</h3>
+                <div className="AddNewProperty-amenities-container">
+                  {selectedAmenities.map((amenity, idx) => (
+                    <span key={idx} className="AddNewProperty-modal-chip">{amenity}</span>
+                  ))}
                 </div>
               </div>
             </div>

@@ -7,6 +7,7 @@ import MainLayout from "./Layout/MainLayout/MainLayout";
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
 
 // Properties
+import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
 import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
@@ -19,7 +20,9 @@ import Report from "./Pages/Dashboard/Report/Report";
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
 import Setting from "./Pages/Setting/Setting";
-import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
+import Testimonial from "./Pages/Testimonial/Testimonial";
+import Gallery from "./Pages/Gallery/Gallery";
+import OurTeam from "./Pages/OurTeam/OurTeam";
 
 const App = () => {
   return (
@@ -34,9 +37,8 @@ const App = () => {
           <Route path="/dashboard" element={<DashboardMain />} />
 
           {/* Properties */}
-          <Route path="/properties/add" element={<AddNewProperty />} />
           <Route path="/properties/all" element={<PropertiesDashboard />} />
-
+          <Route path="/properties/add" element={<AddNewProperty />} />
           <Route path="/properties/categories" element={<Categories />} />
           <Route path="/properties/locations" element={<Locations />} />
 
@@ -60,6 +62,9 @@ const App = () => {
 
           {/* Profile */}
           <Route path="/profile" element={<ProfileSetting />} />
+          <Route path="/testimonial" element={<Testimonial />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/team" element={<OurTeam />} />
 
           {/* 404 */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

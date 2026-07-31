@@ -1,11 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+:root {
+  --utkal-green: #126229;
+  --utkal-green-hover: #0e4c20;
+  --utkal-navy: #0c1d2e;
+  --utkal-text-muted: #64748b;
+  --utkal-bg-light: #f8fafc;
+  --utkal-border: #e2e8f0;
+}
+
 .companies-section {
   position: relative;
   width: 100%;
-  padding: 80px 20px 140px;
-  background-color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  padding: 70px 20px 140px;
+  background-color: var(--utkal-bg-light);
+  font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -20,26 +29,40 @@
 /* Header Typography */
 .companies-header {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 45px;
+}
+
+.companies-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 12px;
 }
 
 .companies-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: #12101e;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--utkal-navy);
   margin-bottom: 10px;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
 }
 
 .companies-subtitle {
-  font-size: 14px;
-  color: #7b7d85;
-  max-width: 600px;
+  font-size: 15px;
+  color: var(--utkal-text-muted);
+  max-width: 620px;
   margin: 0 auto;
-  line-height: 1.5;
+  line-height: 1.55;
+  font-weight: 400;
 }
 
-/* Proper Visible Cards Grid Layout */
+/* Logo Cards Grid Layout */
 .companies-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -49,24 +72,24 @@
 
 .company-card {
   background: #ffffff;
-  border: 1px solid #eaeaf0;
-  border-radius: 12px;
+  border: 1px solid var(--utkal-border);
+  border-radius: 14px;
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 4px 16px rgba(12, 29, 46, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   min-height: 110px;
   box-sizing: border-box;
 }
 
 .company-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  border-color: #f39c12;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(12, 29, 46, 0.1);
+  border-color: var(--utkal-green);
 }
 
 .company-logo-wrap {
@@ -75,7 +98,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555869;
+  color: var(--utkal-navy);
+  transition: color 0.3s ease;
+}
+
+.company-card:hover .company-logo-wrap {
+  color: var(--utkal-green);
 }
 
 .company-logo-svg {
@@ -87,9 +115,14 @@
 
 .company-name {
   font-size: 11px;
-  font-weight: 600;
-  color: #9496a1;
+  font-weight: 700;
+  color: var(--utkal-text-muted);
   text-align: center;
+  transition: color 0.3s ease;
+}
+
+.company-card:hover .company-name {
+  color: var(--utkal-navy);
 }
 
 /* Skyline Bottom Graphic Styling */
@@ -99,10 +132,10 @@
   left: 0;
   width: 100%;
   height: 90px;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none' fill='%23f1f3f6'%3E%3Cpath d='M0 100 L0 60 L30 60 L30 40 L50 40 L50 60 L80 60 L80 20 L110 20 L110 60 L150 60 L150 30 L180 30 L180 60 L220 60 L220 50 L250 50 L250 60 L300 60 L300 15 L340 15 L340 60 L390 60 L390 35 L430 35 L430 60 L480 60 L480 25 L520 25 L520 60 L570 60 L570 45 L610 45 L610 60 L660 60 L660 10 L700 10 L700 60 L750 60 L750 30 L790 30 L790 60 L840 60 L840 20 L880 20 L880 60 L930 60 L930 40 L970 40 L970 60 L1020 60 L1020 25 L1060 25 L1060 60 L1110 60 L1110 50 L1150 50 L1150 60 L1200 60 L1200 100 Z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none' fill='%23e2e8f0'%3E%3Cpath d='M0 100 L0 60 L30 60 L30 40 L50 40 L50 60 L80 60 L80 20 L110 20 L110 60 L150 60 L150 30 L180 30 L180 60 L220 60 L220 50 L250 50 L250 60 L300 60 L300 15 L340 15 L340 60 L390 60 L390 35 L430 35 L430 60 L480 60 L480 25 L520 25 L520 60 L570 60 L570 45 L610 45 L610 60 L660 60 L660 10 L700 10 L700 60 L750 60 L750 30 L790 30 L790 60 L840 60 L840 20 L880 20 L880 60 L930 60 L930 40 L970 40 L970 60 L1020 60 L1020 25 L1060 25 L1060 60 L1110 60 L1110 50 L1150 50 L1150 60 L1200 60 L1200 100 Z'/%3E%3C/svg%3E");
   background-repeat: repeat-x;
   background-position: bottom;
-  opacity: 0.8;
+  opacity: 0.7;
   z-index: 1;
   pointer-events: none;
 }
@@ -111,17 +144,21 @@
 @media screen and (max-width: 1024px) {
   .companies-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 18px;
   }
 }
 
 @media screen and (max-width: 600px) {
   .companies-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 14px;
   }
   
   .companies-section {
-    padding: 60px 15px 100px;
+    padding: 50px 16px 110px;
+  }
+
+  .companies-title {
+    font-size: 26px;
   }
 }
