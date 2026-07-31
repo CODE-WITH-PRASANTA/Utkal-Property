@@ -4,29 +4,29 @@ import './HomeBlog.css';
 // React Icons
 import { FiFolder, FiArrowRight } from 'react-icons/fi';
 
-// Blog posts data
+// Localized Utkal Property Blog Posts Data
 const BLOG_POSTS = [
   {
     id: 1,
-    title: 'Building gains into housing stocks and how to trade the sector',
-    date: 'April',
-    category: 'Housing',
+    title: 'Top Prime Locations to Invest in Smart City Bhubaneswar',
+    date: 'April 2026',
+    category: 'Market Insights',
     image: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800',
     link: '#blog-1'
   },
   {
     id: 2,
-    title: '92% of millennial homebuyers say inflation has impacted their plans',
-    date: 'April',
-    category: 'Housing',
+    title: 'Understanding Home Loan Interest Rates & Taxes in India',
+    date: 'March 2026',
+    category: 'Buyers Guide',
     image: 'https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&cs=tinysrgb&w=800',
     link: '#blog-2'
   },
   {
     id: 3,
-    title: "We are hiring 'moderately,' says Compass CEO",
-    date: 'April',
-    category: 'Housing',
+    title: 'Commercial vs Residential Properties: Where Should You Invest?',
+    date: 'March 2026',
+    category: 'Real Estate',
     image: 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800',
     link: '#blog-3'
   }
@@ -39,9 +39,10 @@ const HomeBlog = () => {
         
         {/* Section Header */}
         <div className="HomeBlog-header">
-          <h2 className="HomeBlog-main-title">Form our blog</h2>
+          <span className="HomeBlog-tag">Latest Updates</span>
+          <h2 className="HomeBlog-main-title">From Our Blog</h2>
           <p className="HomeBlog-subtitle">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed tristique metus proin id lorem odio
+            Stay informed with expert insights, market updates, and home-buying advice from Utkal Property
           </p>
         </div>
 
@@ -74,7 +75,7 @@ const HomeBlog = () => {
                 <h3 className="HomeBlog-card-title">{post.title}</h3>
                 
                 <a href={post.link} className="HomeBlog-read-more">
-                  Read more <FiArrowRight className="HomeBlog-arrow-icon" />
+                  Read More <FiArrowRight className="HomeBlog-arrow-icon" />
                 </a>
               </div>
 

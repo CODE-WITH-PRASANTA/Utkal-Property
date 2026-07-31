@@ -15,19 +15,19 @@ import {
   FaTimes
 } from 'react-icons/fa';
 
-// Mock Data for the 3 Cards matching the reference images
+// Mock Data updated to Indian currency (₹ in Lakhs) and local addresses
 const PROPERTIES_DATA = [
   {
     id: 1,
-    title: 'Gorgeous Apartment Building',
-    address: '58 Hullbrook Road, Billesley, B13 0LA',
-    price: '$7,500',
-    beds: 4,
+    title: 'Luxury 3BHK Apartment Building',
+    address: 'Plot 104, Patia, Bhubaneswar, Odisha 751024',
+    price: '₹ 75,00,000',
+    beds: 3,
     baths: 2,
-    sqft: 1150,
+    sqft: 1450,
     featured: true,
     forSale: true,
-    timeAgo: '3 years ago',
+    timeAgo: '2 days ago',
     avatar: 'https://i.pravatar.cc/150?img=11',
     images: [
       'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80',
@@ -37,15 +37,15 @@ const PROPERTIES_DATA = [
   },
   {
     id: 2,
-    title: 'Gorgeous Apartment Building',
-    address: '58 Hullbrook Road, Billesley, B13 0LA',
-    price: '$7,500',
+    title: 'Modern Premium Duplex Villa',
+    address: 'Lane 4, Jayadev Vihar, Bhubaneswar, Odisha 751013',
+    price: '₹ 1,25,00,000',
     beds: 4,
-    baths: 2,
-    sqft: 1150,
+    baths: 3,
+    sqft: 2200,
     featured: true,
     forSale: true,
-    timeAgo: '3 years ago',
+    timeAgo: '1 week ago',
     avatar: 'https://i.pravatar.cc/150?img=20',
     images: [
       'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80',
@@ -55,15 +55,15 @@ const PROPERTIES_DATA = [
   },
   {
     id: 3,
-    title: 'Gorgeous Apartment Building',
-    address: '58 Hullbrook Road, Billesley, B13 0LA',
-    price: '$7,500',
-    beds: 4,
-    baths: 2,
-    sqft: 1150,
+    title: 'Royal Enclave Gated Residency',
+    address: 'Khandagiri Square, Bhubaneswar, Odisha 751030',
+    price: '₹ 95,00,000',
+    beds: 3,
+    baths: 3,
+    sqft: 1750,
     featured: true,
     forSale: true,
-    timeAgo: '3 years ago',
+    timeAgo: '3 weeks ago',
     avatar: 'https://i.pravatar.cc/150?img=33',
     images: [
       'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
@@ -73,7 +73,7 @@ const PROPERTIES_DATA = [
   }
 ];
 
-// Single Card Component with Carousel & Modal Zoom feature
+// Single Card Component with Carousel & Modal Zoom
 const PropertyCard = ({ property, onOpenModal }) => {
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
@@ -111,7 +111,7 @@ const PropertyCard = ({ property, onOpenModal }) => {
           )}
         </div>
 
-        {/* Top-Right Ribbon Icon */}
+        {/* Top-Right Bookmark Icon */}
         <div className="Propertiesforsale-bookmark-tag">
           <FaBookmark />
         </div>
@@ -121,7 +121,7 @@ const PropertyCard = ({ property, onOpenModal }) => {
           <div
             className="Propertiesforsale-crosshair-icon"
             onClick={() => onOpenModal(property.images[currentImgIndex])}
-            title="Click to view image"
+            title="Click to expand view"
           >
             +
           </div>
@@ -150,7 +150,7 @@ const PropertyCard = ({ property, onOpenModal }) => {
 
         <p className="Propertiesforsale-address">
           <FaMapMarkerAlt className="Propertiesforsale-address-icon" />
-          {property.address}
+          <span>{property.address}</span>
         </p>
 
         <div className="Propertiesforsale-price">{property.price}</div>
@@ -167,7 +167,7 @@ const PropertyCard = ({ property, onOpenModal }) => {
           </span>
         </div>
 
-        {/* Footer */}
+        {/* Card Footer */}
         <div className="Propertiesforsale-card-footer">
           <button className="Propertiesforsale-compare-btn">
             <FaPlus className="Propertiesforsale-plus-icon" /> Compare
@@ -203,13 +203,14 @@ const Propertiesforsale = () => {
   };
 
   return (
-    <div className="Propertiesforsale">
+    <section className="Propertiesforsale">
       <div className="Propertiesforsale-container">
-        {/* Main Heading & Subtitle */}
+        {/* Main Header */}
         <div className="Propertiesforsale-header">
-          <h1 className="Propertiesforsale-main-heading">Properties for sale</h1>
+          <span className="Propertiesforsale-tag">Featured Listings</span>
+          <h1 className="Propertiesforsale-main-heading">Properties For Sale</h1>
           <p className="Propertiesforsale-subheading">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel lobortis justo
+            Explore premium verified listings across prime locations by Utkal Property
           </p>
         </div>
 
@@ -259,7 +260,7 @@ const Propertiesforsale = () => {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

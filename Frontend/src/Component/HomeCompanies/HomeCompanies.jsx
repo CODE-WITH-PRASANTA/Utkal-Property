@@ -17,7 +17,6 @@ import {
 import './HomeCompanies.css';
 
 const HomeCompanies = () => {
-  // Company logos reconstructed using React Icons & text to match reference image
   const companies = [
     {
       id: 1,
@@ -41,13 +40,13 @@ const HomeCompanies = () => {
       id: 4,
       icon: <MdGraphicEq className="HomeCompanies-logoIcon" />,
       title: 'Accusaf',
-      subtitle: 'accounting & financial management'
+      subtitle: 'accounting & financial'
     },
     {
       id: 5,
       icon: <HiOutlineBuildingOffice2 className="HomeCompanies-logoIcon" />,
       title: 'COMPANY',
-      subtitle: 'TAGLINE DOES HERE'
+      subtitle: 'TAGLINE GOES HERE'
     },
     {
       id: 6,
@@ -61,12 +60,15 @@ const HomeCompanies = () => {
     <div className="HomeCompanies">
       <div className="HomeCompanies-container">
         
-        {/* Title Matching Reference Text */}
-        <h2 className="HomeCompanies-title">
-          Trusted by over 150+ major companies
-        </h2>
+        {/* Header Section */}
+        <div className="HomeCompanies-header">
+          <span className="HomeCompanies-badgeTag">Trusted Partners</span>
+          <h2 className="HomeCompanies-title">
+            Trusted by over <span className="highlight-green">150+ major companies</span> across India
+          </h2>
+        </div>
 
-        {/* Company Logos Row / Grid */}
+        {/* Company Logos Grid */}
         <div className="HomeCompanies-grid">
           {companies.map((company) => (
             <div key={company.id} className="HomeCompanies-card">

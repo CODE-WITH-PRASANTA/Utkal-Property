@@ -151,10 +151,11 @@ const OurTeam = () => {
 
   return (
     <section className="utkal-agents-section" aria-labelledby="agents-heading">
-      {/* SEO Optimized Header & Controls Bar */}
+      {/* Header & Controls Bar */}
       <div className="utkal-agents-header-container">
         <div className="utkal-agents-title-wrap">
-          <h1 id="agents-heading" className="utkal-agents-main-title">Agents</h1>
+          <span className="utkal-agents-tag">Expert Consultants</span>
+          <h1 id="agents-heading" className="utkal-agents-main-title">Our Agents</h1>
           <p className="utkal-agents-subtitle">
             Meet the expert team at <strong>Utkal Property</strong> — the best property consultant in Bhubaneswar.
           </p>
@@ -166,7 +167,7 @@ const OurTeam = () => {
             <span className="utkal-search-icon" aria-hidden="true">🔍</span>
             <input 
               type="text" 
-              placeholder="Agent's name" 
+              placeholder="Search agent's name..." 
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -301,12 +302,12 @@ const OurTeam = () => {
         </nav>
       )}
 
-      {/* New Banner Section Added Below Pagination */}
+      {/* Banner Section */}
       <section className="utkal-promo-banner" aria-label="Investment Opportunities">
         <div className="utkal-promo-content">
-          <h2 className="utkal-promo-title">Find for your dream home and increase your investment opportunities</h2>
+          <h2 className="utkal-promo-title">Find your dream home & boost your investment opportunities</h2>
           <p className="utkal-promo-desc">
-            Buying your first home can be fun and exciting but requires lots of research and visits to various brokers to find a perfect home for you and your family. With Utkal Property, the best property consultant in Bhubaneswar, now you can find the place of your dreams easily without reaching out to different brokers at the best possible market price.
+            Buying your first home can be fun and exciting, but it requires careful research. With Utkal Property, the best property consultant in Bhubaneswar, you can easily find your dream home without reaching out to multiple brokers—all at the best market prices.
           </p>
           <a href="tel:+919861566735" className="utkal-contact-seller-btn">
             <span aria-hidden="true">📞</span> Contact Seller
@@ -321,7 +322,7 @@ const OurTeam = () => {
         </div>
       </section>
 
-      {/* SEO Footer Description for Utkal Property */}
+      {/* SEO Footer Description */}
       <footer className="utkal-team-seo-footer">
         <div className="utkal-seo-content">
           <h3>Utkal Property (Best Property Consultant in Bhubaneswar)</h3>

@@ -4,7 +4,7 @@ import './ContactForm.css';
 const ContactForm = () => {
   return (
     <section className="contact-form-section" aria-label="Utkal Property Contact Section">
-      {/* Top Map Section (50% of the view height) */}
+      {/* Top Map Section (50% Viewport Height) */}
       <div className="contact-map-background">
         <iframe
           title="Utkal Property Location Map - Baramunda Bhubaneswar"
@@ -18,12 +18,13 @@ const ContactForm = () => {
         ></iframe>
       </div>
 
-      {/* Bottom White Background Section (50%) & Overlapping Card */}
+      {/* Bottom Light Section (50% Viewport Height) & Overlapping Card */}
       <div className="contact-lower-section">
         <div className="contact-form-container">
           <div className="contact-form-card">
             
             <header className="contact-form-header">
+              <span className="contact-form-tag">Get In Touch</span>
               <h2 className="contact-form-title">Contact Form</h2>
               <p className="contact-form-subtitle">
                 Utkal Property (Best Property Consultant in Bhubaneswar) – Find your dream home easily with our trusted property options tailored to your budget.
@@ -34,19 +35,19 @@ const ContactForm = () => {
               
               {/* Your Name */}
               <div className="contact-form-group">
-                <label htmlFor="contact-name" className="contact-form-label">Your name</label>
+                <label htmlFor="contact-name" className="contact-form-label">Your Name</label>
                 <input 
                   type="text" 
                   id="contact-name" 
                   className="contact-form-input" 
-                  placeholder="Your name" 
+                  placeholder="Your full name" 
                   required 
                 />
               </div>
 
               {/* Email or Phone */}
               <div className="contact-form-group">
-                <label htmlFor="contact-email-phone" className="contact-form-label">Email or phone</label>
+                <label htmlFor="contact-email-phone" className="contact-form-label">Email or Phone</label>
                 <input 
                   type="text" 
                   id="contact-email-phone" 
@@ -58,13 +59,13 @@ const ContactForm = () => {
 
               {/* Property Type Dropdown */}
               <div className="contact-form-group">
-                <label htmlFor="contact-property-type" className="contact-form-label">Property type</label>
+                <label htmlFor="contact-property-type" className="contact-form-label">Property Type</label>
                 <div className="contact-select-wrapper">
                   <select id="contact-property-type" className="contact-form-input contact-select" defaultValue="">
-                    <option value="" disabled>Choose</option>
+                    <option value="" disabled>Choose type</option>
                     <option value="apartment">Apartment</option>
-                    <option value="house">House</option>
-                    <option value="bungalow">Bungalow</option>
+                    <option value="house">Single Family House</option>
+                    <option value="duplex">Duplex & Villa</option>
                     <option value="plot">Plot / Land</option>
                   </select>
                 </div>
@@ -76,7 +77,7 @@ const ContactForm = () => {
                 <textarea 
                   id="contact-message" 
                   className="contact-form-textarea" 
-                  placeholder="Your message" 
+                  placeholder="Write your requirement or message here..." 
                   rows="4"
                   required
                 ></textarea>
@@ -89,7 +90,7 @@ const ContactForm = () => {
                     <line x1="22" y1="2" x2="11" y2="13"></line>
                     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                   </svg>
-                  Send request
+                  Send Request
                 </button>
               </div>
 

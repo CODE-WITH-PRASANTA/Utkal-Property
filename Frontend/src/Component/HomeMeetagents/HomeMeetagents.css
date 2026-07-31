@@ -1,8 +1,17 @@
+:root {
+  --utkal-green: #126229;
+  --utkal-green-hover: #0e4c20;
+  --utkal-navy: #0c1d2e;
+  --utkal-text-muted: #64748b;
+  --utkal-bg-light: #f8fafc;
+  --utkal-card-border: #e2e8f0;
+}
+
 /* Layout Container */
 .HomeMeetagents {
   width: 100%;
-  padding: 60px 20px;
-  background-color: #ffffff;
+  padding: 70px 20px;
+  background-color: var(--utkal-bg-light);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   box-sizing: border-box;
 }
@@ -18,18 +27,32 @@
   margin-bottom: 45px;
 }
 
+.HomeMeetagents-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
 .HomeMeetagents-main-heading {
   font-size: 38px;
   font-weight: 800;
-  color: #121026;
+  color: var(--utkal-navy);
   margin: 0 0 10px 0;
   letter-spacing: -0.5px;
 }
 
 .HomeMeetagents-subheading {
-  font-size: 14px;
-  color: #71717a;
+  font-size: 15px;
+  color: var(--utkal-text-muted);
   margin: 0;
+  font-weight: 400;
 }
 
 /* 3-Card Grid */
@@ -42,16 +65,27 @@
 .HomeMeetagents-card {
   display: flex;
   flex-direction: column;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--utkal-card-border);
+  box-shadow: 0 4px 16px rgba(12, 29, 46, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.HomeMeetagents-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(12, 29, 46, 0.1);
 }
 
 /* Image Container */
 .HomeMeetagents-img-wrapper {
   position: relative;
   width: 100%;
-  height: 250px;
+  height: 270px;
   border-radius: 12px;
   overflow: hidden;
-  background-color: #f4f4f5;
+  background-color: var(--utkal-navy);
 }
 
 .HomeMeetagents-img {
@@ -59,16 +93,21 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.5s ease;
 }
 
-/* Orange Vertical Sidebar - Sliding Hover Overlay */
+.HomeMeetagents-img-wrapper:hover .HomeMeetagents-img {
+  transform: scale(1.05);
+}
+
+/* Utkal Green Vertical Sidebar - Sliding Hover Overlay */
 .HomeMeetagents-social-sidebar {
   position: absolute;
   top: 0;
   right: -60px; /* Hidden off to the right by default */
-  width: 60px;
+  width: 54px;
   height: 100%;
-  background-color: #f5a623; /* Bright Orange matching 2nd reference image */
+  background-color: var(--utkal-green);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -78,22 +117,24 @@
   z-index: 5;
 }
 
-/* Slide in orange bar on hover */
+/* Slide in green bar on hover */
 .HomeMeetagents-img-wrapper:hover .HomeMeetagents-social-sidebar {
   right: 0;
 }
 
 .HomeMeetagents-social-icon {
   color: #ffffff;
-  font-size: 18px;
+  font-size: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.85;
 }
 
 .HomeMeetagents-social-icon:hover {
+  opacity: 1;
   transform: scale(1.2);
 }
 
@@ -102,7 +143,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 16px;
+  padding-top: 18px;
 }
 
 .HomeMeetagents-info {
@@ -113,14 +154,15 @@
 .HomeMeetagents-name {
   font-size: 18px;
   font-weight: 700;
-  color: #121026;
+  color: var(--utkal-navy);
   margin: 0 0 4px 0;
 }
 
 .HomeMeetagents-role {
   font-size: 13px;
-  color: #71717a;
+  color: var(--utkal-text-muted);
   margin: 0;
+  font-weight: 500;
 }
 
 /* Phone & Email Action Buttons */
@@ -134,9 +176,9 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid #e4e4e7;
+  border: 1px solid var(--utkal-card-border);
   background-color: #ffffff;
-  color: #71717a;
+  color: var(--utkal-navy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -146,30 +188,33 @@
   cursor: pointer;
 }
 
-/* Yellow/Orange highlight on hover/click */
+/* Green highlight on hover/click */
 .HomeMeetagents-action-btn:hover,
 .HomeMeetagents-action-btn:active {
-  background-color: #f5a623;
-  border-color: #f5a623;
+  background-color: var(--utkal-green);
+  border-color: var(--utkal-green);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.35);
+  box-shadow: 0 4px 12px rgba(18, 98, 41, 0.35);
+  transform: translateY(-2px);
 }
 
 /* Bottom Callout Text */
 .HomeMeetagents-footer-text {
   text-align: center;
-  margin-top: 40px;
-  font-size: 13px;
-  color: #71717a;
+  margin-top: 45px;
+  font-size: 14px;
+  color: var(--utkal-text-muted);
 }
 
 .HomeMeetagents-contact-link {
-  color: #f5a623;
+  color: var(--utkal-green);
   font-weight: 700;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .HomeMeetagents-contact-link:hover {
+  color: var(--utkal-green-hover);
   text-decoration: underline;
 }
 

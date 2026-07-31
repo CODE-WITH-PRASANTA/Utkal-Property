@@ -4,54 +4,53 @@ import './HomeRealEstate.css';
 // React Icons
 import { FaChevronUp, FaTimes } from 'react-icons/fa';
 
-// Mock Data for the 8 Area Cards matching the reference images
 const AREA_DATA = [
   {
     id: 1,
-    title: 'California',
-    listings: '1570 listing',
+    title: 'Bhubaneswar',
+    listings: '1,570 Listings',
     image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 2,
-    title: 'California',
-    listings: '1570 listing',
+    title: 'Cuttack',
+    listings: '980 Listings',
     image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 3,
-    title: 'California',
-    listings: '1570 listing',
+    title: 'Puri',
+    listings: '640 Listings',
     image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 4,
-    title: 'California',
-    listings: '1570 listing',
+    title: 'Rourkela',
+    listings: '420 Listings',
     image: 'https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 5,
-    title: 'California',
-    listings: '1570 listing',
+    title: 'Sambalpur',
+    listings: '310 Listings',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 6,
-    title: 'California',
-    listings: '1570 listing',
+    title: 'Berhampur',
+    listings: '250 Listings',
     image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 7,
-    title: 'California',
-    listings: '1570 listing',
+    title: 'Balasore',
+    listings: '190 Listings',
     image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 8,
-    title: 'California',
-    listings: '1570 listing',
+    title: 'Jharsuguda',
+    listings: '150 Listings',
     image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1000&q=80'
   }
 ];
@@ -73,15 +72,16 @@ const HomeRealEstate = () => {
 
   return (
     <section className="HomeRealEstate">
-      {/* Header Area */}
+      {/* Header Section */}
       <div className="HomeRealEstate-header">
-        <h1 className="HomeRealEstate-title">Search real estate by area</h1>
+        <span className="HomeRealEstate-tag">Explore Properties</span>
+        <h1 className="HomeRealEstate-title">Search Real Estate By Area</h1>
         <p className="HomeRealEstate-subtitle">
-          Find your dream apartment with our listing
+          Discover premium commercial and residential spaces with Utkal Property
         </p>
       </div>
 
-      {/* 4x2 Grid Container */}
+      {/* Grid Container */}
       <div className="HomeRealEstate-grid">
         {AREA_DATA.map((item) => (
           <div key={item.id} className="HomeRealEstate-card">
@@ -99,7 +99,7 @@ const HomeRealEstate = () => {
               <span className="HomeRealEstate-plus-icon">+</span>
             </div>
 
-            {/* Always Visible Text Overlay */}
+            {/* Bottom Content Overlay */}
             <div className="HomeRealEstate-card-content">
               <h3 className="HomeRealEstate-card-title">{item.title}</h3>
               <p className="HomeRealEstate-card-listings">{item.listings}</p>
@@ -117,7 +117,7 @@ const HomeRealEstate = () => {
         <FaChevronUp />
       </button>
 
-      {/* Lightbox / Fullscreen Modal when '+' is clicked */}
+      {/* Fullscreen Lightbox Modal */}
       {selectedImage && (
         <div className="HomeRealEstate-modal-overlay" onClick={handleCloseModal}>
           <div
