@@ -5,6 +5,7 @@
   --utkal-text-muted: #64748b;
   --utkal-bg-light: #f8fafc;
   --utkal-card-border: #e2e8f0;
+  --utkal-star-color: #ffc107;
 }
 
 /* Outer Section Container */
@@ -54,34 +55,43 @@
 .HomeCustomer-subtitle {
   font-size: 15px;
   color: var(--utkal-text-muted);
-  margin: 0;
+  margin: 0 auto;
   max-width: 620px;
-  margin-left: auto;
-  margin-right: auto;
   line-height: 1.5;
   font-weight: 400;
 }
 
-/* 3-Column Grid */
+/* Loading & Empty States */
+.HomeCustomer-loading,
+.HomeCustomer-empty {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--utkal-text-muted);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 3-Column Grid Layout */
 .HomeCustomer-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   width: 100%;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .HomeCustomer-card-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
 }
 
-/* White Card with Subtle Drop Shadow */
+/* White Card with Floating Shadow */
 .HomeCustomer-card {
   background-color: #ffffff;
   border-radius: 16px;
-  padding: 36px 28px 48px 28px;
+  padding: 36px 24px 50px 24px;
   text-align: center;
   border: 1px solid var(--utkal-card-border);
   box-shadow: 0 4px 20px rgba(12, 29, 46, 0.04);
@@ -92,6 +102,7 @@
   box-sizing: border-box;
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex-grow: 1;
 }
 
 .HomeCustomer-card-wrapper:hover .HomeCustomer-card {
@@ -99,48 +110,84 @@
   box-shadow: 0 12px 30px rgba(12, 29, 46, 0.08);
 }
 
-/* Utkal Green Chat Icon */
+/* Header Elements inside Card */
 .HomeCustomer-badge-icon {
   color: var(--utkal-green);
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 20px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: rgba(18, 98, 41, 0.08);
+  flex-shrink: 0;
 }
 
-/* Italicized Quote Text */
+.HomeCustomer-stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+/* Italicized Quote Text & Read More */
+.HomeCustomer-quote-container {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .HomeCustomer-quote {
-  font-size: 13.5px;
+  font-size: 14px;
   font-style: italic;
   font-weight: 500;
   color: var(--utkal-navy);
-  line-height: 1.65;
+  line-height: 1.6;
   margin: 0;
+  word-break: break-word;
 }
 
-/* Author Section Below Card */
+.HomeCustomer-readmore-btn {
+  background: none;
+  border: none;
+  color: var(--utkal-green);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 8px;
+  padding: 2px 6px;
+  transition: color 0.2s ease;
+}
+
+.HomeCustomer-readmore-btn:hover {
+  color: var(--utkal-green-hover);
+  text-decoration: underline;
+}
+
+/* Author Avatar & Meta */
 .HomeCustomer-author-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -28px; /* Overlaps circular image over bottom of the card */
+  margin-top: -30px;
   z-index: 2;
 }
 
 .HomeCustomer-avatar-wrapper {
-  width: 58px;
-  height: 58px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid var(--utkal-green);
   box-shadow: 0 4px 12px rgba(12, 29, 46, 0.12);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .HomeCustomer-avatar {
@@ -150,18 +197,81 @@
   display: block;
 }
 
+.HomeCustomer-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  color: var(--utkal-text-muted);
+}
+
 .HomeCustomer-author-name {
   font-size: 16px;
   font-weight: 700;
   color: var(--utkal-navy);
   margin: 0 0 4px 0;
+  text-align: center;
 }
 
 .HomeCustomer-author-role {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--utkal-text-muted);
   margin: 0;
   font-weight: 500;
+  text-align: center;
+}
+
+/* Controls for pagination when cards > 3 */
+.HomeCustomer-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.HomeCustomer-control-btn {
+  background-color: #ffffff;
+  border: 1px solid var(--utkal-card-border);
+  color: var(--utkal-navy);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(12, 29, 46, 0.05);
+}
+
+.HomeCustomer-control-btn:hover:not(:disabled) {
+  background-color: var(--utkal-green);
+  color: #ffffff;
+  border-color: var(--utkal-green);
+}
+
+.HomeCustomer-control-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.HomeCustomer-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.HomeCustomer-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--utkal-card-border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.HomeCustomer-dot.active {
+  background-color: var(--utkal-green);
+  width: 22px;
+  border-radius: 10px;
 }
 
 /* Bottom Callout Box */
@@ -193,7 +303,7 @@
   text-decoration: underline;
 }
 
-/* Responsive Breakpoints */
+/* Responsive Design */
 @media (max-width: 992px) {
   .HomeCustomer-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -201,9 +311,13 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
   .HomeCustomer {
     padding: 50px 16px 40px 16px;
+  }
+
+  .HomeCustomer-header {
+    margin-bottom: 36px;
   }
 
   .HomeCustomer-main-title {
@@ -216,11 +330,13 @@
   }
 
   .HomeCustomer-card {
-    padding: 30px 20px 40px 20px;
+    padding: 30px 20px 45px 20px;
   }
 
   .HomeCustomer-footer-callout {
     border-radius: 16px;
-    padding: 12px 20px;
+    padding: 14px 20px;
+    flex-direction: column;
+    text-align: center;
   }
 }

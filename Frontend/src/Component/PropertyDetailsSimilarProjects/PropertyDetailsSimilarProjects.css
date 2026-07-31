@@ -1,0 +1,208 @@
+/* Base & Layout */
+.PropertyDetailsSimilarProjects-wrapper {
+  background-color: #f5f9f6; /* Updated to match soft off-white background */
+  padding: 30px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Headers */
+.PropertyDetailsSimilarProjects-section-header {
+  margin-bottom: 25px;
+}
+
+.PropertyDetailsSimilarProjects-title {
+  color: #0c2033; /* Deep navy title */
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.PropertyDetailsSimilarProjects-underline {
+  height: 4px;
+  width: 50px;
+  background-color: #176634; /* Emerald green accent */
+  border-radius: 2px;
+}
+
+/* Grid Layout */
+.PropertyDetailsSimilarProjects-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+/* Card Styling */
+.PropertyDetailsSimilarProjects-card {
+  background-color: #ffffff;
+  border-radius: 12px; /* Smoother modern radius */
+  width: 320px;
+  box-shadow: 0 4px 16px rgba(12, 32, 51, 0.04);
+  border: 1px solid rgba(204, 227, 213, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.PropertyDetailsSimilarProjects-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(12, 32, 51, 0.08);
+}
+
+/* Image Section */
+.PropertyDetailsSimilarProjects-img-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.PropertyDetailsSimilarProjects-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.PropertyDetailsSimilarProjects-card:hover .PropertyDetailsSimilarProjects-image {
+  transform: scale(1.05);
+}
+
+.PropertyDetailsSimilarProjects-featured-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: #176634;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(23, 102, 52, 0.3);
+}
+
+/* Content Section */
+.PropertyDetailsSimilarProjects-content {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.PropertyDetailsSimilarProjects-card-title {
+  color: #0c2033;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 18px 0;
+}
+
+/* Details Grid */
+.PropertyDetailsSimilarProjects-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.PropertyDetailsSimilarProjects-detail-item,
+.PropertyDetailsSimilarProjects-location-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.PropertyDetailsSimilarProjects-location-row {
+  margin-bottom: 22px;
+}
+
+/* Icons */
+.PropertyDetailsSimilarProjects-icon-box {
+  background-color: #e8f2ec; /* Soft mint icon box */
+  color: #176634; /* Emerald green icon */
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* Detail Text Styling */
+.PropertyDetailsSimilarProjects-detail-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.PropertyDetailsSimilarProjects-detail-label {
+  font-size: 11px;
+  color: #6c7a87; 
+  font-weight: 700;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.PropertyDetailsSimilarProjects-detail-val {
+  font-size: 13px;
+  color: #0c2033;
+  font-weight: 600;
+}
+
+/* Action Button */
+.PropertyDetailsSimilarProjects-view-btn {
+  width: 100%;
+  background-color: #176634;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.PropertyDetailsSimilarProjects-view-btn:hover {
+  background-color: #104d26;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN 
+   ========================================= */
+
+@media screen and (max-width: 1024px) {
+  .PropertyDetailsSimilarProjects-wrapper {
+    padding: 20px;
+  }
+  
+  .PropertyDetailsSimilarProjects-grid {
+    gap: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .PropertyDetailsSimilarProjects-wrapper {
+    padding: 15px;
+  }
+  
+  .PropertyDetailsSimilarProjects-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .PropertyDetailsSimilarProjects-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .PropertyDetailsSimilarProjects-details-grid {
+    gap: 12px;
+  }
+}

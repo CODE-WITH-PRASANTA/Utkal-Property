@@ -9,7 +9,12 @@ import LogIn from "./Pages/login/login";
 // Dashboard Pages
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
 
+<<<<<<< HEAD
 // Properties Pages
+=======
+// Properties
+import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
@@ -23,6 +28,7 @@ import Report from "./Pages/Dashboard/Report/Report";
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
 import Setting from "./Pages/Setting/Setting";
+<<<<<<< HEAD
 
 const ProtectedRoute = ({ isAuthenticated, onLoginSuccess, children }) => {
   if (!isAuthenticated) {
@@ -30,6 +36,11 @@ const ProtectedRoute = ({ isAuthenticated, onLoginSuccess, children }) => {
   }
   return children;
 };
+=======
+import Testimonial from "./Pages/Testimonial/Testimonial";
+import Gallery from "./Pages/Gallery/Gallery";
+import OurTeam from "./Pages/OurTeam/OurTeam";
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -80,8 +91,15 @@ const App = () => {
         >
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardMain />} />
+<<<<<<< HEAD
           <Route path="/properties/add" element={<AddNewProperty />} />
           <Route path="/properties/all" element={<PropertiesDashboard />} />
+=======
+
+          {/* Properties */}
+          <Route path="/properties/all" element={<PropertiesDashboard />} />
+          <Route path="/properties/add" element={<AddNewProperty />} />
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
           <Route path="/properties/categories" element={<Categories />} />
           <Route path="/properties/locations" element={<Locations />} />
           <Route path="/bookings" element={<Bookings />} />
@@ -91,6 +109,14 @@ const App = () => {
           <Route path="/reports" element={<Report />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/profile" element={<ProfileSetting />} />
+<<<<<<< HEAD
+=======
+          <Route path="/testimonial" element={<Testimonial />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/team" element={<OurTeam />} />
+
+          {/* 404 */}
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Routes>

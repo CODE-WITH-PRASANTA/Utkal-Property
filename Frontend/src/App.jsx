@@ -16,6 +16,9 @@ import Blog from './Pages/Blog/Blog';
 import BlogDetails from './Component/BlogDetails/BlogDetails';
 import RealNear from './Component/RealNear/RealNear';
 import OurTeam from './Component/OurTeam/OurTeam';
+import PropertyDetails from './Pages/PropertyDetails/PropertyDetails';
+
+
 import SellProperty from './Component/SellProperty/SellProperty';
 import RentProperty from './Component/RentProperty/RentProperty';
 import BlogPosting from './Component/BlogPosting/BlogPosting';
@@ -34,6 +37,9 @@ function App() {
         <Route path="/about" element={<AboutUs/>} />
         <Route path="/Faq" element={<Faq/>} />
         <Route path="/contact" element={<Contacts/>} />
+        <Route path="/property-details" element={<PropertyDetails/>} />
+
+        
 
 
         <Route path="/blog" element={<Blog/>} />
@@ -44,6 +50,16 @@ function App() {
         <Route path="/rent-property" element={<RentProperty/>} />
         <Route path="/blog-posting" element={<BlogPosting/>} />
         <Route path="/blog-management" element={<BlogManagement/>} />
+
+
+
+      
+
+
+
+
+        
+  
 
 
       </Routes>

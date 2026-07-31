@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './HomeRealEstate.css';
+import API, { IMG_URL } from '../../api/axios';
 
 // React Icons
 import { FaChevronUp, FaTimes } from 'react-icons/fa';
