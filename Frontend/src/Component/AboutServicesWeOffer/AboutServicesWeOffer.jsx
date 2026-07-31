@@ -35,8 +35,10 @@ export function AboutServicesWeOffer() {
       <div className="ServicesWeOffer-container">
         
         <div className="ServicesWeOffer-header">
+          {/* Title styled matching second image color scheme */}
           <h2 className="ServicesWeOffer-title">
-            Services <span className="ServicesWeOffer-title-highlight">We Offer</span>
+            <span className="ServicesWeOffer-title-dark">Services</span>{' '}
+            <span className="ServicesWeOffer-title-green">We Offer</span>
           </h2>
           <p className="ServicesWeOffer-subtitle">
             Tailored solutions and expert guidance designed to elevate your real estate portfolio.

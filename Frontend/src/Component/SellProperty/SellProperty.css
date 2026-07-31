@@ -1,6 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
+<<<<<<< HEAD
+  --sp-bg: #f8fafc;
+  --sp-card-bg: #ffffff;
+  --sp-primary: #18522e;
+  --sp-primary-hover: #113c21;
+  --sp-primary-light: #f0fdf4;
+  --sp-indicator-blue: #2563eb;
+  --sp-border: #cbd5e1; /* Visible slate border for inputs/sections */
+  --sp-table-border: #cbd5e1; /* Visible border for summary table */
+  --sp-text-main: #0f172a;
+  --sp-text-muted: #64748b;
+  --sp-radius: 12px;
+  --sp-blue: #2563eb;
+  --sp-blue-light: #eff6ff;
+  --sp-zebra: #f8fafc;
+=======
   --utkal-green: #126229;
   --utkal-green-hover: #0e4c20;
   --utkal-navy: #0c1d2e;
@@ -9,6 +25,7 @@
   --utkal-border: #e2e8f0;
   --utkal-bg-light: #f8fafc;
   --utkal-radius: 16px;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 * {
@@ -31,10 +48,17 @@
 
 /* Full-Width Banner Styling */
 .sell-property-banner {
+<<<<<<< HEAD
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: var(--sp-radius);
+  padding: 24px 32px;
+=======
   background: linear-gradient(135deg, #f0f7f2 0%, #e1efe4 100%);
   border: 1px solid rgba(18, 98, 41, 0.2);
   border-radius: var(--utkal-radius);
   padding: 28px 40px;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -50,7 +74,11 @@
 }
 
 .sell-property-banner-badge {
+<<<<<<< HEAD
+  background: #18522e;
+=======
   background: linear-gradient(135deg, #126229 0%, #0e4c20 100%);
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
   color: #fff;
   padding: 12px 18px;
   border-radius: 12px;
@@ -60,8 +88,12 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
+<<<<<<< HEAD
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
+=======
   box-shadow: 0 4px 14px rgba(18, 98, 41, 0.3);
   letter-spacing: 0.5px;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .sell-property-banner-badge span {
@@ -69,11 +101,24 @@
 }
 
 .sell-property-banner-text h1 {
+<<<<<<< HEAD
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--sp-text-main);
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+
+.sell-property-banner-text h1 .highlight-green {
+  color: #18522e;
+  font-weight: 800;
+=======
   font-size: 26px;
   font-weight: 800;
   color: var(--utkal-navy);
   margin-bottom: 4px;
   letter-spacing: -0.3px;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .sell-property-banner-text p {
@@ -87,19 +132,31 @@
 
 /* Full-Width Main Form Wrapper */
 .sell-property-form-wrapper {
+<<<<<<< HEAD
+  background: var(--sp-card-bg);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius);
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+=======
   background: #ffffff;
   border: 1px solid var(--utkal-border);
   border-radius: var(--utkal-radius);
   padding: 40px;
   width: 100%;
   box-shadow: 0 8px 30px rgba(12, 29, 46, 0.04);
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .sell-property-section {
   margin-bottom: 32px;
   padding-bottom: 28px;
+<<<<<<< HEAD
+  border-bottom: 1px solid #e2e8f0;
+=======
   border-bottom: 1px solid #f1f5f9;
   width: 100%;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .sell-property-section:last-of-type {
@@ -109,6 +166,16 @@
 }
 
 .sell-property-section-title {
+<<<<<<< HEAD
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+=======
   font-size: 17px;
   font-weight: 700;
   color: var(--utkal-navy);
@@ -116,6 +183,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 6px;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .sell-property-section-desc {
@@ -125,10 +193,18 @@
 }
 
 .title-indicator {
+<<<<<<< HEAD
+  width: 5px;
+  height: 22px;
+  background-color: var(--sp-indicator-blue);
+  border-radius: 4px;
+  display: inline-block;
+=======
   width: 4px;
   height: 18px;
   background-color: var(--utkal-green);
   border-radius: 2px;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 /* Form Controls & Full-Width Grid Layouts */
@@ -146,30 +222,49 @@
 }
 
 .sell-property-label span {
-  color: #ef4444;
+  color: #18522e;
 }
 
 .sell-property-input, 
 .sell-property-select {
   width: 100%;
   background-color: #ffffff;
+<<<<<<< HEAD
+  border: 1.5px solid var(--sp-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--sp-text-main);
+=======
   border: 1px solid var(--utkal-border);
   border-radius: 10px;
   padding: 12px 16px;
   font-size: 14px;
   color: var(--utkal-navy);
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+<<<<<<< HEAD
+.sell-property-input:hover,
+.sell-property-select:hover {
+  border-color: #94a3b8;
+=======
 .sell-property-input::placeholder {
   color: #94a3b8;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .sell-property-input:focus, 
 .sell-property-select:focus {
+<<<<<<< HEAD
+  border-color: var(--sp-indicator-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+=======
   border-color: var(--utkal-green);
   box-shadow: 0 0 0 3px rgba(18, 98, 41, 0.15);
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .sell-property-select {
@@ -182,7 +277,11 @@
   cursor: pointer;
 }
 
+<<<<<<< HEAD
+/* Grid Variations */
+=======
 /* Full Width Grid Variations */
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 .sell-property-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -231,11 +330,18 @@
 
 /* Image Upload Zone */
 .sell-property-upload-zone {
+<<<<<<< HEAD
+  border: 2px dashed #bbf7d0;
+  background-color: var(--sp-primary-light);
+  border-radius: 10px;
+  padding: 32px;
+=======
   width: 100%;
   border: 2px dashed rgba(18, 98, 41, 0.3);
   background-color: rgba(18, 98, 41, 0.04);
   border-radius: 12px;
   padding: 40px;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
   text-align: center;
   cursor: pointer;
   display: flex;
@@ -246,8 +352,12 @@
 }
 
 .sell-property-upload-zone:hover {
+<<<<<<< HEAD
+  background-color: #dcfce7;
+=======
   background-color: rgba(18, 98, 41, 0.08);
   border-color: var(--utkal-green);
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .upload-icon {
@@ -308,7 +418,194 @@
 }
 
 .remove-img-btn:hover {
-  background: #ef4444;
+  background: #18522e;
+}
+
+/* ============================================================ */
+/* Interactive Form Summary Table                               */
+/* ============================================================ */
+
+.sp-summary-table-wrapper {
+  border: 1.5px solid var(--sp-table-border);
+  border-radius: 10px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.sp-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 650px;
+}
+
+.sp-summary-table thead th {
+  background-color: var(--sp-primary-light);
+  color: var(--sp-text-main);
+  font-weight: 800;
+  font-size: 13px;
+  text-align: left;
+  padding: 14px 18px;
+  border: 1px solid var(--sp-table-border);
+  border-top: none;
+}
+
+.sp-summary-table thead th:first-child {
+  border-left: none;
+}
+
+.sp-summary-table thead th:last-child {
+  border-right: none;
+}
+
+.sp-summary-table thead th.sp-col-section {
+  width: 22%;
+}
+
+.sp-summary-table thead th.sp-col-fields {
+  width: 28%;
+}
+
+.sp-summary-table thead th.sp-col-types {
+  width: 50%;
+}
+
+.sp-summary-table tbody td {
+  padding: 10px 14px;
+  border: 1px solid var(--sp-table-border);
+  vertical-align: middle;
+  color: var(--sp-text-main);
+}
+
+.sp-summary-table tbody tr td:first-child {
+  border-left: none;
+}
+
+.sp-summary-table tbody tr td:last-child {
+  border-right: none;
+}
+
+.sp-summary-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Input & Dropdown Styling for Summary Table */
+.sp-summary-input, 
+.sp-summary-select {
+  padding: 8px 12px;
+  font-size: 12.5px;
+  background-color: #fafafa;
+}
+
+.sp-summary-input:focus, 
+.sp-summary-select:focus {
+  background-color: #ffffff;
+}
+
+/* File Upload Button inside Table */
+.sp-summary-file-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sp-table-upload-btn {
+  background-color: var(--sp-primary-light);
+  color: var(--sp-primary);
+  border: 1.5px solid #86efac;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.2s;
+}
+
+.sp-table-upload-btn:hover {
+  background-color: #dcfce7;
+}
+
+/* Zebra shading per section */
+.sp-row-property-details td {
+  background-color: var(--sp-zebra);
+}
+
+/* Section cell (merged via rowSpan) */
+.sp-section-cell {
+  text-align: center;
+  background-color: #ffffff !important;
+}
+
+.sp-section-cell-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.sp-section-name {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--sp-text-main);
+}
+
+.sp-section-badge {
+  background: #18522e;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 4px 10px rgba(21, 128, 61, 0.25);
+}
+
+.sp-section-badge span {
+  font-size: 15px;
+}
+
+.sp-section-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--sp-blue-light);
+  color: var(--sp-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* Field / type cells */
+.sp-field-cell {
+  font-weight: 700;
+  color: var(--sp-text-main);
+  white-space: nowrap;
+}
+
+.sp-required {
+  color: #18522e;
+  font-weight: 800;
+}
+
+.sp-type-cell {
+  color: var(--sp-text-muted);
+}
+
+.sp-file-list {
+  list-style: disc;
+  margin: 4px 0 0 16px;
+  padding: 0;
+}
+
+.sp-file-list li {
+  margin-bottom: 2px;
+  color: var(--sp-text-muted);
+  font-size: 11.5px;
 }
 
 /* Footer Action Button */
@@ -320,7 +617,11 @@
 }
 
 .sell-property-submit-btn {
+<<<<<<< HEAD
+  background: #18522e;
+=======
   background: var(--utkal-green);
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
   color: #ffffff;
   border: none;
   padding: 15px 36px;
@@ -330,9 +631,15 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+<<<<<<< HEAD
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.3);
+  transition: opacity 0.2s, transform 0.1s;
+=======
   gap: 10px;
   box-shadow: 0 4px 14px rgba(18, 98, 41, 0.35);
   transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+>>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .sell-property-submit-btn:hover {
@@ -372,5 +679,18 @@
   .sell-property-submit-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .sp-summary-table {
+    font-size: 12px;
+  }
+
+  .sp-summary-table thead th,
+  .sp-summary-table tbody td {
+    padding: 10px 10px;
+  }
+
+  .sp-field-cell {
+    white-space: normal;
   }
 }

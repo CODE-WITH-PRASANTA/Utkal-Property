@@ -25,8 +25,10 @@ export function AboutContactSection() {
       {/* Top Hero Banner */}
       <div className="AboutContactSection-hero">
         <div className="AboutContactSection-hero-content">
+          {/* Main Heading styled matching reference image: White + Dark Green highlight */}
           <h2 className="AboutContactSection-main-heading">
-            We provide the most suitable and quality real estate.
+            <span className="AboutContactSection-heading-white">We provide the most </span>
+            <span className="AboutContactSection-heading-green">suitable and quality real estate.</span>
           </h2>
           <p className="AboutContactSection-sub-heading">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed tristique metus proin id lorem odio

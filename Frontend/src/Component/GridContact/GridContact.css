@@ -13,7 +13,6 @@
 .GridContact-container {
   width: 100%;
   max-width: 1200px;
-  background-color: #FFF9EE; /* Light warm cream background */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -24,34 +23,43 @@
   padding: 0 60px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
 }
 
 /* Left Content Column */
 .GridContact-content {
-  max-width: 540px;
+  max-width: 560px;
   padding: 60px 0;
   z-index: 2;
 }
 
-/* Title Heading */
+/* Title Heading Styling for Dark Overlay */
 .GridContact-title {
   font-size: 36px;
   font-weight: 800;
-  color: #121026;
   line-height: 1.25;
   margin: 0 0 18px 0;
   letter-spacing: -0.5px;
+ 
+}
+
+.GridContact-title-light {
+  color:black
+}
+
+.GridContact-title-green {
+  color:#18522e;
 }
 
 /* Subtitle Description Text */
 .GridContact-description {
   font-size: 14px;
-  color: #4a4a52;
+  color: black;
   line-height: 1.6;
   margin: 0 0 32px 0;
   font-weight: 400;
+
 }
 
 /* Primary Action Button */
@@ -59,22 +67,22 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background-color: #ffa827; /* Warm golden-orange button */
+  background-color: #18522e; /* Dark Green */
   color: #ffffff;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 14px 28px;
   border-radius: 10px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(255, 168, 39, 0.3);
+ 
 }
 
 .GridContact-btn:hover {
-  background-color: #f09713;
+  background-color: #237242;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 168, 39, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .GridContact-btn-icon {

@@ -22,10 +22,18 @@
 .AboutMeetAgents-title {
   font-size: 2.75rem;
   font-weight: 800;
-  color: #111827;
   letter-spacing: -0.02em;
   margin: 0 0 12px 0;
   line-height: 1.1;
+}
+
+/* Dual-color typography classes matching reference image 2 */
+.AboutMeetAgents-title-dark {
+  color: #0a1420; /* Dark navy / black */
+}
+
+.AboutMeetAgents-title-green {
+  color: #18522e; /* Dark green replacing yellow */
 }
 
 .AboutMeetAgents-subtitle {
@@ -65,14 +73,14 @@
   transition: transform 0.4s ease;
 }
 
-/* Social Strip (Slides out on hover) */
+/* Social Strip - Dark green background replacing yellow */
 .AboutMeetAgents-social-overlay {
   position: absolute;
   top: 0;
   right: 0;
   height: 100%;
   width: 52px;
-  background-color: #f9a01b;
+  background-color: #18522e;
   border-top-right-radius: 16px;
   border-bottom-right-radius: 16px;
   display: flex;
@@ -195,7 +203,7 @@
 .AboutMeetAgents-name {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #111827;
+  color: #0a1420;
   margin: 0 0 6px 0;
 }
 
@@ -248,7 +256,7 @@
   animation: phoneRing 0.5s ease-in-out infinite;
 }
 
-/* 6. EMAIL BUTTON: Floating Flight Bounce */
+/* 6. EMAIL BUTTON: Dark Green hover state replacing yellow */
 @keyframes floatUp {
   0% { transform: translateY(0) scale(1); }
   50% { transform: translateY(-6px) scale(1.2); }
@@ -256,10 +264,10 @@
 }
 
 .AboutMeetAgents-btn-email:hover {
-  background-color: #f9a01b;
-  border-color: #f9a01b;
+  background-color: #18522e;
+  border-color: #18522e;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(249, 160, 27, 0.4);
+  box-shadow: 0 4px 14px rgba(24, 82, 46, 0.4);
 }
 
 .AboutMeetAgents-btn-email:hover svg {
@@ -274,7 +282,7 @@
 }
 
 .AboutMeetAgents-contact-link {
-  color: #f9a01b;
+  color: #18522e; /* Dark green replacing yellow */
   font-weight: 700;
   text-decoration: none;
   transition: text-decoration 0.2s ease;
