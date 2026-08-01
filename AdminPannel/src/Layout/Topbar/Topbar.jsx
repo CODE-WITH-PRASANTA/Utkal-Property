@@ -52,6 +52,26 @@ const Topbar = ({ onLogout, user, toggleSidebar, isSidebarOpen }) => {
     setShowProfileMenu(false);
   };
 
+  // Complete & Clean Logout Procedure
+  const handleLogoutClick = async () => {
+    try {
+      setShowProfileMenu(false);
+
+      // 1. Clear session storage backup immediately
+      localStorage.removeItem('utkal_user_session');
+
+      // 2. Call parent handleLogout handler (AWS Amplify signOut / state update)
+      if (typeof onLogout === 'function') {
+        await onLogout();
+      }
+    } catch (err) {
+      console.error('Logout error during execution:', err);
+    } finally {
+      // 3. Force route change directly to login page
+      navigate('/login', { replace: true });
+    }
+  };
+
   const hasUnread = notifications.some((n) => n.unread);
 
   return (
@@ -219,14 +239,7 @@ const Topbar = ({ onLogout, user, toggleSidebar, isSidebarOpen }) => {
                   {/* Logout Action */}
                   <button 
                     className="menu-item logout"
-                    onClick={async () => {
-                      setShowProfileMenu(false);
-                      if (typeof onLogout === 'function') {
-                        await onLogout();
-                      } else {
-                        console.error("Logout failed: The 'onLogout' prop was not received by the Topbar component.");
-                      }
-                    }}
+                    onClick={handleLogoutClick}
                   >
                     <FiLogOut size={16} />
                     <span>Logout</span>
