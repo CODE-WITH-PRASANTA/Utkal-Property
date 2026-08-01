@@ -8,6 +8,7 @@ import LogIn from "./Pages/login/login";
 
 // Dashboard
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
+import DashboardReview from "./Components/DashboardReview/DashboardReview";
 
 // Properties
 import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
@@ -15,12 +16,10 @@ import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 
-// Other Components
+// Other Components & Pages
 import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
-
-// Pages
 import Report from "./Pages/Dashboard/Report/Report";
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
@@ -31,14 +30,10 @@ import OurTeam from "./Pages/OurTeam/OurTeam";
 import BlogManagement from "./Components/BlogManagement/BlogManagement";
 import BlogPosting from "./Components/BlogPosting/BlogPosting";
 
-// Protected Route Component
-const ProtectedRoute = ({
-  isAuthenticated,
-  onLoginSuccess,
-  children,
-}) => {
+// Protected Route Guard
+const ProtectedRoute = ({ isAuthenticated, children }) => {
   if (!isAuthenticated) {
-    return <LogIn onLoginSuccess={onLoginSuccess} />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
@@ -69,8 +64,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* Login */}
+        {/* Public / Auth Route */}
         <Route
           path="/login"
           element={
@@ -82,113 +76,48 @@ const App = () => {
           }
         />
 
-        {/* Protected Routes */}
+        {/* Protected Dashboard Routes Wrapped in MainLayout */}
         <Route
           element={
-            <ProtectedRoute
-              isAuthenticated={isAuthenticated}
-              onLoginSuccess={handleLoginSuccess}
-            >
-              <MainLayout
-                user={user}
-                onLogout={handleLogout}
-              />
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <MainLayout user={user} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         >
-          {/* Dashboard */}
-          <Route
-            path="/"
-            element={<Navigate to="/dashboard" replace />}
-          />
-          <Route
-            path="/dashboard"
-            element={<DashboardMain />}
-          />
+          {/* Index Redirect */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          {/* Core Dashboard */}
+          <Route path="/dashboard" element={<DashboardMain />} />
+          <Route path="/dashboard-review" element={<DashboardReview />} />
 
           {/* Properties */}
-          <Route
-            path="/properties/all"
-            element={<PropertiesDashboard />}
-          />
-          <Route
-            path="/properties/add"
-            element={<AddNewProperty />}
-          />
-          <Route
-            path="/properties/categories"
-            element={<Categories />}
-          />
-          <Route
-            path="/properties/locations"
-            element={<Locations />}
-          />
+          <Route path="/properties/all" element={<PropertiesDashboard />} />
+          <Route path="/properties/add" element={<AddNewProperty />} />
+          <Route path="/properties/categories" element={<Categories />} />
+          <Route path="/properties/locations" element={<Locations />} />
 
-          {/* Bookings */}
-          <Route
-            path="/bookings"
-            element={<Bookings />}
-          />
+          {/* Management & Operations */}
+          <Route path="/bookings" element={<Bookings />} />
+          <Route path="/leads" element={<LeadManagement />} />
+          <Route path="/LeadManagement" element={<LeadManagement />} /> {/* Alias */}
 
-          {/* Leads */}
-          <Route
-            path="/leads"
-            element={<LeadManagement />}
-          />
+          {/* General Pages */}
+          <Route path="/enquiry" element={<Enquire />} />
+          <Route path="/users" element={<User />} />
+          <Route path="/reports" element={<Report />} />
+          <Route path="/Report" element={<Report />} /> {/* Alias */}
+          <Route path="/settings" element={<Setting />} />
+          
+          {/* Profiles */}
+          <Route path="/profile" element={<ProfileSetting />} />
+          <Route path="/ProfileSetting" element={<ProfileSetting />} /> {/* Alias */}
+          <Route path="/DashboardProfile" element={<ProfileSetting />} /> {/* Alias */}
 
-          {/* Enquiry */}
-          <Route
-            path="/enquiry"
-            element={<Enquire />}
-          />
-
-          {/* Users */}
-          <Route
-            path="/users"
-            element={<User />}
-          />
-
-          {/* Reports */}
-          <Route
-            path="/reports"
-            element={<Report />}
-          />
-
-          {/* Settings */}
-          <Route
-            path="/settings"
-            element={<Setting />}
-          />
-
-          {/* Profile */}
-          <Route
-            path="/profile"
-            element={<ProfileSetting />}
-          />
-
-          {/* Testimonial */}
-          <Route
-            path="/testimonial"
-            element={<Testimonial />}
-          />
-
-          {/* Gallery */}
-          <Route
-            path="/gallery"
-            element={<Gallery />}
-          />
-
-          {/* Team */}
-          <Route
-            path="/team"
-            element={<OurTeam />}
-          />
-
-          {/* 404 */}
-          <Route
-            path="*"
-            element={<Navigate to="/dashboard" replace />}
-          />
+          {/* Additional Content */}
+          <Route path="/testimonial" element={<Testimonial />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/team" element={<OurTeam />} />
         </Route>
          <Route
             path="/blogmanagement"
@@ -199,6 +128,8 @@ const App = () => {
             element={<BlogPosting/>}
           />
 
+        {/* Global Fallback Catch-All Route */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
   );

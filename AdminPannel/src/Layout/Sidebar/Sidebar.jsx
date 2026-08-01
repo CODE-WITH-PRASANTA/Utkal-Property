@@ -23,7 +23,7 @@ import {
 import './Sidebar.css';
 
 // Import your custom logo image asset here (adjust the path as needed)
-import logoImg from '../../assets/Utkal Property Outro (2).png'; 
+import logoImg from '../../assets/Utkal Property Logo.webp'; 
 
 const menuItems = [
   { title: 'Dashboard', path: '/dashboard', icon: LuLayoutDashboard },
@@ -122,15 +122,19 @@ const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {
                       }
                     >
                       <div className="sidebar-link-content">
-                        <motion.div whileHover={{ rotate: 5 }}>
-                          <Icon size={20} color={isActive ? '#fff' : 'var(--color-gold)'} />
-                        </motion.div>
-                        {!isCollapsed && (
-                          <span className="sidebar-link-text">
-                            {item.title}
-                          </span>
-                        )}
-                      </div>
+                          <motion.div
+                            whileHover={{ rotate: 5 }}
+                            className="sidebar-icon"
+                          >
+                            <Icon size={20} />
+                          </motion.div>
+
+                          {!isCollapsed && (
+                            <span className="sidebar-link-text">
+                              {item.title}
+                            </span>
+                          )}
+                        </div>
 
                       {!isCollapsed && hasSub && (
                         <motion.div animate={{ rotate: isSubOpen ? 180 : 0 }}>
