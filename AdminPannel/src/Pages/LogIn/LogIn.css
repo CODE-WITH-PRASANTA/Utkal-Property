@@ -1,0 +1,287 @@
+/* Color System matching Utkal Property's Dark Forest Theme branding */
+:root {
+  --ul-primary-green: #062c18;
+  --ul-primary-green-hover: #0a3d22;
+  --ul-text-dark: #1a202c;
+  --ul-text-muted: #718096;
+  --ul-border-color: #e2e8f0;
+  --ul-error-bg: #fff5f5;
+  --ul-error-text: #c53030;
+  --ul-bg-gradient: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  --ul-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Page context full-screen center wrapper */
+.ul-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--ul-bg-gradient);
+  font-family: var(--ul-font-sans);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Card layout container */
+.ul-login-card {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand header section styling */
+.ul-brand-section {
+  background-color: var(--ul-primary-green);
+  color: #ffffff;
+  padding: 30px 24px;
+  text-align: center;
+}
+
+.ul-logo-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.ul-brand-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.ul-brand-subtitle {
+  margin: 6px 0 0 0;
+  font-size: 13px;
+  color: #a0aec0;
+  font-weight: 400;
+}
+
+/* Main form internal section layout */
+.ul-form {
+  padding: 32px 32px 24px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ul-form-heading {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  color: var(--ul-text-dark);
+  font-weight: 700;
+}
+
+.ul-form-subheading {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: var(--ul-text-muted);
+}
+
+/* Error banner display styles */
+.ul-error-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: var(--ul-error-bg);
+  border: 1px solid #fed7d7;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.ul-error-icon {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.ul-error-text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ul-error-text);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Fields styling controls */
+.ul-input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ul-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 6px;
+}
+
+.ul-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ul-input-icon {
+  position: absolute;
+  left: 14px;
+  color: #a0aec0;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.ul-input-field {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px 0 42px;
+  border: 1px solid var(--ul-border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--ul-text-dark);
+  background-color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.ul-input-field:focus {
+  border-color: var(--ul-primary-green);
+  box-shadow: 0 0 0 3px rgba(6, 44, 24, 0.1);
+}
+
+.ul-input-field:disabled {
+  background-color: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+/* Password eye switcher button styling */
+.ul-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.ul-toggle-password:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Form interactive layout helpers */
+.ul-form-utilities {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 13px;
+}
+
+.ul-remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4a5568;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ul-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--ul-primary-green);
+}
+
+.ul-checkbox:disabled {
+  cursor: not-allowed;
+}
+
+.ul-forgot-link {
+  color: var(--ul-primary-green);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.ul-forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Submit core action button styling */
+.ul-submit-btn {
+  width: 100%;
+  height: 46px;
+  background-color: var(--ul-primary-green);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  box-sizing: border-box;
+}
+
+.ul-submit-btn:hover:not(:disabled) {
+  background-color: var(--ul-primary-green-hover);
+}
+
+.ul-submit-btn:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.ul-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Base card bottom layout block */
+.ul-card-footer {
+  text-align: center;
+  padding: 16px;
+  background-color: #f7fafc;
+  border-top: 1px solid var(--ul-border-color);
+}
+
+.ul-card-footer p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ul-text-muted);
+}
+
+/* Media Query breakpoints for full responsive support */
+@media (max-width: 480px) {
+  .ul-page-container {
+    padding: 12px;
+  }
+  
+  .ul-login-card {
+    border-radius: 8px;
+  }
+  
+  .ul-brand-section {
+    padding: 24px 16px;
+  }
+  
+  .ul-form {
+    padding: 24px 20px 20px 20px;
+  }
+  
+  .ul-form-utilities {
+    flex-direction: row;
+    gap: 10px;
+  }
+}

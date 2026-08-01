@@ -20,21 +20,27 @@
 .TrustedBrands-heading {
   font-size: 2.25rem;
   font-weight: 800;
-  color: #111827;
   margin: 0 0 16px 0;
   letter-spacing: -0.03em;
   line-height: 1.2;
 }
 
+/* Base text color matching reference image 2 */
+.TrustedBrands-title-dark {
+  color: #0a1420; /* Dark navy / black */
+}
+
+/* Highlight text color in dark green replacing yellow */
 .TrustedBrands-highlight {
-  color: #f9a01b;
+  color: #18522e; 
   position: relative;
 }
 
+/* Underline divider in dark green */
 .TrustedBrands-divider {
   width: 50px;
   height: 4px;
-  background-color: #f9a01b;
+  background-color: #18522e;
   margin: 0 auto;
   border-radius: 2px;
 }
@@ -56,8 +62,8 @@
 .TrustedBrands-logo-box {
   width: 100%;
   height: 70px;
-  background: #fdfaf4;
-  border: 1px solid rgba(249, 160, 27, 0.1);
+  background: #eef7f2; /* Light green tint background replacing yellow/cream */
+  border: 1px solid rgba(24, 82, 46, 0.12);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -78,8 +84,8 @@
 
 .TrustedBrands-logo-box:hover {
   background: #ffffff;
-  border-color: rgba(249, 160, 27, 0.35);
-  box-shadow: 0 10px 25px rgba(249, 160, 27, 0.08);
+  border-color: rgba(24, 82, 46, 0.35);
+  box-shadow: 0 10px 25px rgba(24, 82, 46, 0.1);
   transform: translateY(-3px);
 }
 

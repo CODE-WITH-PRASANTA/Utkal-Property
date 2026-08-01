@@ -1,5 +1,144 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './SellProperty.css';
+
+// Centralized field config to ensure single source of truth
+const FIELD_CONFIG_MAP = {
+  propertyTitle: {
+    label: 'Property Title',
+    required: true,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'e.g. 3 BHK Luxury Apartment in Patia, Bhubaneswar'
+  },
+  propertyType: {
+    label: 'Property Type',
+    required: true,
+    type: 'select',
+    options: ['Select Type', 'Apartment', 'Villa', 'Independent House', 'Plot']
+  },
+  propertyFor: {
+    label: 'Property For',
+    required: true,
+    type: 'select',
+    options: ['Sell', 'Rent', 'Lease']
+  },
+  category: {
+    label: 'Category',
+    required: true,
+    type: 'select',
+    options: ['Residential', 'Commercial', 'Land', 'Others']
+  },
+  expectedPrice: {
+    label: 'Expected Price (₹)',
+    required: true,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'Enter price'
+  },
+  negotiable: {
+    label: 'Negotiable',
+    required: false,
+    type: 'radio',
+    options: ['Yes', 'No']
+  },
+  builtUpArea: {
+    label: 'Built-up Area (sq ft)',
+    required: true,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'Enter area'
+  },
+  carpetArea: {
+    label: 'Carpet Area (sq ft)',
+    required: false,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'Enter area'
+  },
+  bhk: {
+    label: 'BHK',
+    required: true,
+    type: 'select',
+    options: ['Select', '1 BHK', '2 BHK', '3 BHK', '4+ BHK']
+  },
+  bathrooms: {
+    label: 'Bathrooms',
+    required: true,
+    type: 'select',
+    options: ['Select', '1', '2', '3', '4+']
+  },
+  balconies: {
+    label: 'Balconies',
+    required: false,
+    type: 'select',
+    options: ['Select', '0', '1', '2', '3+']
+  },
+  floor: {
+    label: 'Floor',
+    required: false,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'Enter floor'
+  },
+  totalFloors: {
+    label: 'Total Floors',
+    required: false,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'Enter total'
+  },
+  furnishingStatus: {
+    label: 'Furnishing Status',
+    required: true,
+    type: 'select',
+    options: ['Select Status', 'Unfurnished', 'Semi-Furnished', 'Furnished']
+  },
+  propertyAge: {
+    label: 'Property Age',
+    required: false,
+    type: 'select',
+    options: ['Select Age', 'Under Construction', '0-1 Years', '1-5 Years', '5+ Years']
+  },
+  parking: {
+    label: 'Parking',
+    required: false,
+    type: 'select',
+    options: ['Select', 'None', 'Bike', 'Car', 'Both']
+  },
+  state: {
+    label: 'State',
+    required: true,
+    type: 'select',
+    options: ['Select State', 'Odisha', 'Karnataka', 'Maharashtra', 'Delhi']
+  },
+  city: {
+    label: 'City',
+    required: true,
+    type: 'select',
+    options: ['Select City', 'Bhubaneswar', 'Cuttack', 'Puri', 'Sambalpur', 'Bangalore', 'Mumbai', 'New Delhi']
+  },
+  locality: {
+    label: 'Locality',
+    required: true,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'e.g. Patia / Jayadev Vihar'
+  },
+  landmark: {
+    label: 'Landmark',
+    required: false,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'Enter landmark'
+  },
+  pinCode: {
+    label: 'PIN Code',
+    required: true,
+    type: 'input',
+    inputType: 'text',
+    placeholder: 'Enter PIN code'
+  }
+};
 
 const SellProperty = () => {
   const [formData, setFormData] = useState({
@@ -19,8 +158,8 @@ const SellProperty = () => {
     furnishingStatus: 'Select Status',
     propertyAge: 'Select Age',
     parking: 'Select',
-    state: 'Select State',
-    city: 'Select City',
+    state: 'Odisha',
+    city: 'Bhubaneswar',
     locality: '',
     landmark: '',
     pinCode: ''
@@ -28,6 +167,14 @@ const SellProperty = () => {
 
   const [uploadedImages, setUploadedImages] = useState([]);
   const fileInputRef = useRef(null);
+  const summaryFileInputRef = useRef(null);
+
+  // Clean up object URLs on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      uploadedImages.forEach(img => URL.revokeObjectURL(img.previewUrl));
+    };
+  }, [uploadedImages]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -35,25 +182,147 @@ const SellProperty = () => {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    const newImages = files.map(file => URL.createObjectURL(file));
-    setUploadedImages(prev => [...prev, ...newImages]);
+    if (!files.length) return;
+
+    const newImageObjs = files.map(file => ({
+      file,
+      previewUrl: URL.createObjectURL(file)
+    }));
+
+    setUploadedImages(prev => [...prev, ...newImageObjs]);
   };
 
   const removeImage = (index) => {
-    setUploadedImages(prev => prev.filter((_, i) => i !== index));
+    setUploadedImages(prev => {
+      const itemToRemove = prev[index];
+      if (itemToRemove?.previewUrl) {
+        URL.revokeObjectURL(itemToRemove.previewUrl);
+      }
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Submitting Form Data:', formData);
+    console.log('Uploaded Files:', uploadedImages.map(img => img.file));
+    alert('Property listed successfully!');
+  };
+
+  const summaryData = [
+    {
+      section: 'Basic Details',
+      iconType: 'badge',
+      icon: '🏠',
+      badgeText: 'SALE',
+      rows: ['propertyTitle', 'propertyType', 'propertyFor', 'category', 'expectedPrice', 'negotiable']
+    },
+    {
+      section: 'Property Details',
+      iconType: 'icon',
+      icon: '🏡',
+      rows: ['builtUpArea', 'carpetArea', 'bhk', 'bathrooms', 'balconies', 'floor', 'totalFloors', 'furnishingStatus', 'propertyAge', 'parking']
+    },
+    {
+      section: 'Location',
+      iconType: 'icon',
+      icon: '📍',
+      rows: ['state', 'city', 'locality', 'landmark', 'pinCode']
+    },
+    {
+      section: 'Upload More Images',
+      iconType: 'icon',
+      icon: '🖼️',
+      rows: ['uploadImages']
+    }
+  ];
+
+  const renderSummaryControl = (key) => {
+    if (key === 'uploadImages') {
+      return (
+        <div className="sp-summary-file-control">
+          <input 
+            type="file" 
+            ref={summaryFileInputRef} 
+            onChange={handleImageUpload} 
+            multiple 
+            accept="image/*" 
+            style={{ display: 'none' }} 
+          />
+          <button 
+            type="button" 
+            className="sp-table-upload-btn"
+            onClick={() => summaryFileInputRef.current.click()}
+          >
+            📷 Choose Files
+          </button>
+          <ul className="sp-file-list">
+            <li>Supported formats: PNG, JPG, WEBP</li>
+            <li>Max file size: 5MB each</li>
+            <li>Uploaded: {uploadedImages.length} image(s)</li>
+          </ul>
+        </div>
+      );
+    }
+
+    const config = FIELD_CONFIG_MAP[key];
+    if (!config) return null;
+
+    if (config.type === 'select') {
+      return (
+        <select 
+          className="sell-property-select sp-summary-select"
+          value={formData[key]}
+          onChange={(e) => handleInputChange(key, e.target.value)}
+        >
+          {config.options.map((opt, idx) => (
+            <option key={idx} value={opt}>{opt}</option>
+          ))}
+        </select>
+      );
+    }
+
+    if (config.type === 'radio') {
+      return (
+        <div className="sell-property-radio-group">
+          {config.options.map((opt, idx) => (
+            <label key={idx} className="sell-property-radio">
+              <input 
+                type="radio" 
+                name={`summary-${key}`}
+                checked={formData[key] === opt}
+                onChange={() => handleInputChange(key, opt)}
+              /> {opt}
+            </label>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <input 
+        type={config.inputType || 'text'} 
+        className="sell-property-input sp-summary-input"
+        placeholder={config.placeholder || ''}
+        value={formData[key]}
+        onChange={(e) => handleInputChange(key, e.target.value)}
+      />
+    );
   };
 
   return (
     <div className="sell-property-container">
-      {/* Top Banner Header */}
+      {/* Banner */}
       <div className="sell-property-banner">
         <div className="sell-property-banner-content">
           <div className="sell-property-banner-badge">
             <span>🏠</span> SALE
           </div>
           <div className="sell-property-banner-text">
-            <h1>Sell a Property</h1>
-            <p>List your property for sale and find the right buyer.</p>
+            <h1>
+              Sell a Property with <span className="highlight-green">Utkal Property</span>
+            </h1>
+            <p>List your property for sale and connect with potential buyers across Odisha easily.</p>
           </div>
         </div>
         <div className="sell-property-banner-illustration">
@@ -61,8 +330,7 @@ const SellProperty = () => {
         </div>
       </div>
 
-      {/* Main Single-Column Form Wrapper */}
-      <div className="sell-property-form-wrapper">
+      <form className="sell-property-form-wrapper" onSubmit={handleSubmit}>
         
         {/* Section 1: Basic Details */}
         <div className="sell-property-section">
@@ -75,7 +343,7 @@ const SellProperty = () => {
             <input 
               type="text" 
               className="sell-property-input"
-              placeholder="e.g. 3 BHK Luxury Apartment in Koramangala"
+              placeholder={FIELD_CONFIG_MAP.propertyTitle.placeholder}
               value={formData.propertyTitle}
               onChange={(e) => handleInputChange('propertyTitle', e.target.value)}
             />
@@ -89,11 +357,9 @@ const SellProperty = () => {
                 value={formData.propertyType}
                 onChange={(e) => handleInputChange('propertyType', e.target.value)}
               >
-                <option value="Select Type">Select Type</option>
-                <option value="Apartment">Apartment</option>
-                <option value="Villa">Villa</option>
-                <option value="Independent House">Independent House</option>
-                <option value="Plot">Plot</option>
+                {FIELD_CONFIG_MAP.propertyType.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
 
@@ -104,8 +370,9 @@ const SellProperty = () => {
                 value={formData.propertyFor}
                 onChange={(e) => handleInputChange('propertyFor', e.target.value)}
               >
-                <option value="Sell">Sell</option>
-                <option value="Rent">Rent</option>
+                {FIELD_CONFIG_MAP.propertyFor.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
 
@@ -116,8 +383,9 @@ const SellProperty = () => {
                 value={formData.category}
                 onChange={(e) => handleInputChange('category', e.target.value)}
               >
-                <option value="Residential">Residential</option>
-                <option value="Commercial">Commercial</option>
+                {FIELD_CONFIG_MAP.category.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -128,7 +396,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter price"
+                placeholder={FIELD_CONFIG_MAP.expectedPrice.placeholder}
                 value={formData.expectedPrice}
                 onChange={(e) => handleInputChange('expectedPrice', e.target.value)}
               />
@@ -137,22 +405,16 @@ const SellProperty = () => {
             <div className="sell-property-form-group">
               <label className="sell-property-label">Negotiable</label>
               <div className="sell-property-radio-group">
-                <label className="sell-property-radio">
-                  <input 
-                    type="radio" 
-                    name="negotiable" 
-                    checked={formData.negotiable === 'Yes'}
-                    onChange={() => handleInputChange('negotiable', 'Yes')}
-                  /> Yes
-                </label>
-                <label className="sell-property-radio">
-                  <input 
-                    type="radio" 
-                    name="negotiable" 
-                    checked={formData.negotiable === 'No'}
-                    onChange={() => handleInputChange('negotiable', 'No')}
-                  /> No
-                </label>
+                {FIELD_CONFIG_MAP.negotiable.options.map((opt, i) => (
+                  <label key={i} className="sell-property-radio">
+                    <input 
+                      type="radio" 
+                      name="negotiable" 
+                      checked={formData.negotiable === opt}
+                      onChange={() => handleInputChange('negotiable', opt)}
+                    /> {opt}
+                  </label>
+                ))}
               </div>
             </div>
           </div>
@@ -170,7 +432,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter area"
+                placeholder={FIELD_CONFIG_MAP.builtUpArea.placeholder}
                 value={formData.builtUpArea}
                 onChange={(e) => handleInputChange('builtUpArea', e.target.value)}
               />
@@ -181,7 +443,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter area"
+                placeholder={FIELD_CONFIG_MAP.carpetArea.placeholder}
                 value={formData.carpetArea}
                 onChange={(e) => handleInputChange('carpetArea', e.target.value)}
               />
@@ -194,11 +456,9 @@ const SellProperty = () => {
                 value={formData.bhk}
                 onChange={(e) => handleInputChange('bhk', e.target.value)}
               >
-                <option value="Select">Select</option>
-                <option value="1 BHK">1 BHK</option>
-                <option value="2 BHK">2 BHK</option>
-                <option value="3 BHK">3 BHK</option>
-                <option value="4+ BHK">4+ BHK</option>
+                {FIELD_CONFIG_MAP.bhk.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -211,11 +471,9 @@ const SellProperty = () => {
                 value={formData.bathrooms}
                 onChange={(e) => handleInputChange('bathrooms', e.target.value)}
               >
-                <option value="Select">Select</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4+">4+</option>
+                {FIELD_CONFIG_MAP.bathrooms.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
 
@@ -226,11 +484,9 @@ const SellProperty = () => {
                 value={formData.balconies}
                 onChange={(e) => handleInputChange('balconies', e.target.value)}
               >
-                <option value="Select">Select</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3+">3+</option>
+                {FIELD_CONFIG_MAP.balconies.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
 
@@ -239,7 +495,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter floor"
+                placeholder={FIELD_CONFIG_MAP.floor.placeholder}
                 value={formData.floor}
                 onChange={(e) => handleInputChange('floor', e.target.value)}
               />
@@ -250,7 +506,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter total"
+                placeholder={FIELD_CONFIG_MAP.totalFloors.placeholder}
                 value={formData.totalFloors}
                 onChange={(e) => handleInputChange('totalFloors', e.target.value)}
               />
@@ -265,10 +521,9 @@ const SellProperty = () => {
                 value={formData.furnishingStatus}
                 onChange={(e) => handleInputChange('furnishingStatus', e.target.value)}
               >
-                <option value="Select Status">Select Status</option>
-                <option value="Unfurnished">Unfurnished</option>
-                <option value="Semi-Furnished">Semi-Furnished</option>
-                <option value="Furnished">Furnished</option>
+                {FIELD_CONFIG_MAP.furnishingStatus.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
 
@@ -279,11 +534,9 @@ const SellProperty = () => {
                 value={formData.propertyAge}
                 onChange={(e) => handleInputChange('propertyAge', e.target.value)}
               >
-                <option value="Select Age">Select Age</option>
-                <option value="Under Construction">Under Construction</option>
-                <option value="0-1 Years">0-1 Years</option>
-                <option value="1-5 Years">1-5 Years</option>
-                <option value="5+ Years">5+ Years</option>
+                {FIELD_CONFIG_MAP.propertyAge.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
 
@@ -294,11 +547,9 @@ const SellProperty = () => {
                 value={formData.parking}
                 onChange={(e) => handleInputChange('parking', e.target.value)}
               >
-                <option value="Select">Select</option>
-                <option value="None">None</option>
-                <option value="Bike">Bike</option>
-                <option value="Car">Car</option>
-                <option value="Both">Both</option>
+                {FIELD_CONFIG_MAP.parking.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -318,10 +569,9 @@ const SellProperty = () => {
                 value={formData.state}
                 onChange={(e) => handleInputChange('state', e.target.value)}
               >
-                <option value="Select State">Select State</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Delhi">Delhi</option>
+                {FIELD_CONFIG_MAP.state.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
 
@@ -332,10 +582,9 @@ const SellProperty = () => {
                 value={formData.city}
                 onChange={(e) => handleInputChange('city', e.target.value)}
               >
-                <option value="Select City">Select City</option>
-                <option value="Bangalore">Bangalore</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="New Delhi">New Delhi</option>
+                {FIELD_CONFIG_MAP.city.options.map((opt, i) => (
+                  <option key={i} value={opt}>{opt}</option>
+                ))}
               </select>
             </div>
 
@@ -344,7 +593,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter locality"
+                placeholder={FIELD_CONFIG_MAP.locality.placeholder}
                 value={formData.locality}
                 onChange={(e) => handleInputChange('locality', e.target.value)}
               />
@@ -357,7 +606,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter landmark"
+                placeholder={FIELD_CONFIG_MAP.landmark.placeholder}
                 value={formData.landmark}
                 onChange={(e) => handleInputChange('landmark', e.target.value)}
               />
@@ -368,7 +617,7 @@ const SellProperty = () => {
               <input 
                 type="text" 
                 className="sell-property-input"
-                placeholder="Enter PIN code"
+                placeholder={FIELD_CONFIG_MAP.pinCode.placeholder}
                 value={formData.pinCode}
                 onChange={(e) => handleInputChange('pinCode', e.target.value)}
               />
@@ -376,7 +625,7 @@ const SellProperty = () => {
           </div>
         </div>
 
-        {/* NEW SECTION: Upload More Images (Placed below Location) */}
+        {/* Section 4: Image Upload */}
         <div className="sell-property-section">
           <h3 className="sell-property-section-title">
             <span className="title-indicator"></span> Upload More Images
@@ -403,9 +652,9 @@ const SellProperty = () => {
 
           {uploadedImages.length > 0 && (
             <div className="sell-property-preview-grid">
-              {uploadedImages.map((imgSrc, index) => (
+              {uploadedImages.map((imgObj, index) => (
                 <div className="sell-property-preview-item" key={index}>
-                  <img src={imgSrc} alt={`Property upload ${index + 1}`} />
+                  <img src={imgObj.previewUrl} alt={`Property upload ${index + 1}`} />
                   <button 
                     type="button" 
                     className="remove-img-btn" 
@@ -422,14 +671,69 @@ const SellProperty = () => {
           )}
         </div>
 
+        {/* Section 5: Interactive Form Summary Table */}
+        <div className="sell-property-section sell-property-summary-section">
+          <h3 className="sell-property-section-title">
+            <span className="title-indicator"></span> Form Summary
+          </h3>
+          <p className="sell-property-section-desc">Quickly view or fill out fields directly within this interactive overview table.</p>
+
+          <div className="sp-summary-table-wrapper">
+            <table className="sp-summary-table">
+              <thead>
+                <tr>
+                  <th className="sp-col-section">Section</th>
+                  <th className="sp-col-fields">Fields Included</th>
+                  <th className="sp-col-types">Field Types / Controls</th>
+                </tr>
+              </thead>
+              <tbody>
+                {summaryData.map((sec) => (
+                  sec.rows.map((rowKey, rowIndex) => {
+                    const rowConfig = FIELD_CONFIG_MAP[rowKey] || {};
+                    const isUpload = rowKey === 'uploadImages';
+
+                    return (
+                      <tr key={`${sec.section}-${rowKey}`} className={`sp-row sp-row-${sec.section.replace(/\s+/g, '-').toLowerCase()}`}>
+                        {rowIndex === 0 && (
+                          <td className="sp-section-cell" rowSpan={sec.rows.length}>
+                            <div className="sp-section-cell-inner">
+                              {sec.iconType === 'badge' ? (
+                                <div className="sp-section-badge">
+                                  <span>{sec.icon}</span>
+                                  {sec.badgeText}
+                                </div>
+                              ) : (
+                                <div className="sp-section-icon">{sec.icon}</div>
+                              )}
+                              <span className="sp-section-name">{sec.section}</span>
+                            </div>
+                          </td>
+                        )}
+                        <td className="sp-field-cell">
+                          {isUpload ? 'Upload Property Images' : rowConfig.label} 
+                          {rowConfig.required && <span className="sp-required">*</span>}
+                        </td>
+                        <td className="sp-type-cell">
+                          {renderSummaryControl(rowKey)}
+                        </td>
+                      </tr>
+                    );
+                  })
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {/* Submit Action Button */}
         <div className="sell-property-action-footer">
-          <button className="sell-property-submit-btn">
+          <button type="submit" className="sell-property-submit-btn">
             <span>✈</span> Continue to Next Step &rarr;
           </button>
         </div>
 
-      </div>
+      </form>
     </div>
   );
 };

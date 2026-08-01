@@ -90,7 +90,9 @@ export function FrequentlyAskedQuestions() {
         
         {/* Header Section */}
         <div className="FAQ-header">
-          <h2 className="FAQ-title">Frequently asked questions</h2>
+          <h2 className="FAQ-title">
+            Frequently asked <span className="FAQ-highlight-text">questions</span>
+          </h2>
           <p className="FAQ-subtitle">
             Quick answers to questions you may have. Can't find what you're looking for? Check out our{' '}
             <a href="#docs" className="FAQ-doc-link">full documentation</a>

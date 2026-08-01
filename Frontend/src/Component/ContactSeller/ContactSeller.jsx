@@ -10,7 +10,7 @@ const ContactSeller = () => {
         {/* Left Content Area */}
         <div className="utkal-contact-content">
           <h1 className="utkal-contact-title">
-            Find for your dream home and increase your investment opportunities
+            Find for your <span className="utkal-highlight-text">dream home</span> and increase your investment opportunities
           </h1>
           <p className="utkal-contact-desc">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed tristique metus proin id lorem odio.
@@ -23,8 +23,6 @@ const ContactSeller = () => {
               Contact Seller
             </a>
           </div>
-
-     
 
         </div>
 

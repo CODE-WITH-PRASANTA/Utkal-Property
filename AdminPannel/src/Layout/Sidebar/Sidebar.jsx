@@ -16,7 +16,9 @@ import {
   FiHelpCircle, 
   FiPlus, 
   FiMapPin, 
-  FiGrid 
+  FiGrid,
+  FiMessageSquare,
+  FiImage
 } from 'react-icons/fi';
 import './Sidebar.css';
 
@@ -41,6 +43,9 @@ const menuItems = [
   { title: 'Enquiry', path: '/enquiry', icon: FiHelpCircle },
   { title: 'Reports', path: '/reports', icon: FiFileText },
   { title: 'Settings', path: '/settings', icon: FiSettings },
+  { title: 'Testimonial', path: '/testimonial', icon: FiMessageSquare },
+  { title: 'Gallery', path: '/gallery', icon: FiImage },
+  { title: 'Our Team', path: '/team', icon: FiUsers },
 ];
 
 const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {

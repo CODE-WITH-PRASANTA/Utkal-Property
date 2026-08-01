@@ -6,9 +6,10 @@ const Companies = () => {
     <section className="companies-section" aria-label="Trusted Companies and Real Estate Partners of Utkal Property">
       <div className="companies-container">
         
-        {/* Header Title optimized for SEO & Best Property Consultant Branding */}
+        {/* Header Title */}
         <div className="companies-header">
-          <h2 className="companies-title">Trusted by over 150+ major companies</h2>
+          <span className="companies-tag">Partner Network</span>
+          <h2 className="companies-title">Trusted By Over 150+ Major Companies</h2>
           <p className="companies-subtitle">
             Partnering with top developers and builders to bring you the best property consultant services in Bhubaneswar, Odisha.
           </p>
@@ -21,7 +22,7 @@ const Companies = () => {
           <div className="company-card">
             <div className="company-logo-wrap">
               <svg className="company-logo-svg" viewBox="0 0 160 50" fill="currentColor">
-                <path d="M20 15 L30 5 L40 15 L35 15 L35 25 L25 25 L25 15 Z M10 28 L50 28 L50 32 L10 32 Z M15 35 L45 35 L45 45 L15 45 Z" opacity="0.7"/>
+                <path d="M20 15 L30 5 L40 15 L35 15 L35 25 L25 25 L25 15 Z M10 28 L50 28 L50 32 L10 32 Z M15 35 L45 35 L45 45 L15 45 Z" opacity="0.75"/>
                 <text x="10" y="48" fontSize="11" fontWeight="700" fontFamily="Inter, sans-serif">Real Estate</text>
               </svg>
             </div>

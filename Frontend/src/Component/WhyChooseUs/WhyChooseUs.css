@@ -22,10 +22,19 @@
 .WhyChooseUs-title {
   font-size: 2.75rem;
   font-weight: 800;
-  color: #111827;
   letter-spacing: -0.02em;
   margin: 0 0 12px 0;
   line-height: 1.1;
+}
+
+/* Base text color matching reference image 2 */
+.WhyChooseUs-title-dark {
+  color: #0a1420; /* Dark navy / black */
+}
+
+/* Highlight text color in dark green replacing yellow */
+.WhyChooseUs-title-green {
+  color: #18522e; 
 }
 
 .WhyChooseUs-subtitle {
@@ -169,7 +178,7 @@
 .WhyChooseUs-card-title {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #111827;
+  color: #0a1420;
   margin: 0 0 24px 0;
   min-height: 28px;
   display: flex;
@@ -183,7 +192,7 @@
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 12px rgba(24, 82, 46, 0.05);
 }
 
 .WhyChooseUs-img {
@@ -212,7 +221,7 @@
   gap: 8px;
   font-size: 0.875rem;
   font-weight: 700;
-  color: #111827;
+  color: #0a1420;
   text-decoration: none;
   transition: color 0.2s ease;
   margin-top: auto;
@@ -224,7 +233,7 @@
 }
 
 .WhyChooseUs-link:hover {
-  color: #f9a01b;
+  color: #18522e; /* Dark green link hover replacing yellow */
 }
 
 .WhyChooseUs-link:hover .WhyChooseUs-arrow {

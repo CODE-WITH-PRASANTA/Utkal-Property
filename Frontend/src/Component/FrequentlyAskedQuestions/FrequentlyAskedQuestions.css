@@ -2,7 +2,7 @@
 .FAQ-wrapper {
   width: 100%;
   padding: 80px 24px;
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #ffffff 0%, #f2f9f5 50%, #e8f5ed 100%);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -24,28 +24,33 @@
 .FAQ-title {
   font-size: 2.75rem;
   font-weight: 800;
-  color: #111827;
+  color: #0f172a;
   letter-spacing: -0.02em;
   margin: 0 0 16px 0;
   line-height: 1.1;
 }
 
+/* Half Green Text Highlight */
+.FAQ-highlight-text {
+  color: #10532e;
+}
+
 .FAQ-subtitle {
   font-size: 1rem;
-  color: #6b7280;
+  color: #475569;
   margin: 0;
   line-height: 1.5;
 }
 
 .FAQ-doc-link {
-  color: #4b5563;
+  color: #10532e;
   font-weight: 600;
   text-decoration: underline;
   transition: color 0.2s ease;
 }
 
 .FAQ-doc-link:hover {
-  color: #111827;
+  color: #0b3b20;
 }
 
 /* 2-Column Grid */
@@ -59,24 +64,25 @@
 /* FAQ Card Box */
 .FAQ-card {
   background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
   padding: 24px;
   cursor: pointer;
   transition: all 0.2s ease;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .FAQ-card:hover {
-  border-color: #d1d5db;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  border-color: #a7f3d0;
+  box-shadow: 0 4px 14px rgba(16, 83, 46, 0.06);
 }
 
 .FAQ-card-open {
-  border-color: #9ca3af;
-  background-color: #f9fafb;
+  border-color: #10532e;
+  background-color: #f8faf8;
 }
 
 .FAQ-card-content {
@@ -99,14 +105,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4b5563;
+  color: #10532e;
   font-size: 1.25rem;
 }
 
 .FAQ-question-text {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #0f172a;
   margin: 0;
   line-height: 1.4;
   overflow-wrap: break-word;
@@ -119,7 +125,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111827;
+  color: #10532e;
   font-size: 1.25rem;
   transition: transform 0.2s ease;
 }
@@ -128,14 +134,14 @@
 .FAQ-answer-dropdown {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #f1f5f9;
   animation: fadeInFAQ 0.25s ease forwards;
   min-width: 0;
 }
 
 .FAQ-answer-dropdown p {
   font-size: 0.95rem;
-  color: #4b5563;
+  color: #475569;
   margin: 0;
   line-height: 1.6;
   overflow-wrap: break-word;
@@ -161,13 +167,15 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: #f9fafb;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 48px 24px;
   max-width: 700px;
   margin: 0 auto;
   box-sizing: border-box;
   width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .FAQ-support-avatar-wrapper {
@@ -176,8 +184,8 @@
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 20px;
-  border: 2px solid #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  border: 3px solid #e6f4ea;
+  box-shadow: 0 4px 10px rgba(16, 83, 46, 0.1);
   flex-shrink: 0;
 }
 
@@ -190,13 +198,13 @@
 .FAQ-support-title {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #111827;
+  color: #0f172a;
   margin: 0 0 8px 0;
 }
 
 .FAQ-support-subtitle {
   font-size: 0.95rem;
-  color: #6b7280;
+  color: #475569;
   margin: 0 0 28px 0;
   line-height: 1.5;
   padding: 0 10px;
@@ -204,7 +212,7 @@
 }
 
 .FAQ-chat-link {
-  color: #fca311;
+  color: #10532e;
   font-weight: 600;
   text-decoration: none;
 }
@@ -226,7 +234,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background-color: #fca311;
+  background-color: #10532e;
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 600;
@@ -234,12 +242,12 @@
   border-radius: 8px;
   text-decoration: none;
   transition: background-color 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 4px 6px rgba(252, 163, 17, 0.2);
+  box-shadow: 0 4px 10px rgba(16, 83, 46, 0.2);
   box-sizing: border-box;
 }
 
 .FAQ-btn-documentation:hover {
-  background-color: #ffaa22;
+  background-color: #0b3b20;
   transform: translateY(-2px);
 }
 
@@ -252,8 +260,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #fef3c7;
-  color: #92400e;
+  background-color: #e6f4ea;
+  color: #0f522e;
   font-size: 0.95rem;
   font-weight: 600;
   padding: 12px 24px;
@@ -264,11 +272,11 @@
 }
 
 .FAQ-btn-touch:hover {
-  background-color: #fde68a;
+  background-color: #d1ebd8;
   transform: translateY(-2px);
 }
 
-/* iPad Pro (Portrait & Landscape: 1024px to 1366px width) */
+/* Responsive Styles */
 @media screen and (min-width: 1024px) and (max-width: 1366px) {
   .FAQ-container {
     max-width: 960px;
@@ -276,7 +284,6 @@
   }
 }
 
-/* Facebook In-App Browser on Android & Standard Mobile Devices */
 @media screen and (max-width: 900px) {
   .FAQ-grid {
     grid-template-columns: 1fr;

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './HomeMeetagents.css';
+import API, { IMG_URL } from '../../api/axios'; // Adjust relative import path if needed
 
 // React Icons
 import {
@@ -8,56 +9,82 @@ import {
   FaFacebookF,
   FaTwitter,
   FaLinkedinIn,
-  FaInstagram
+  FaInstagram,
+  FaUserCircle
 } from 'react-icons/fa';
 
-// 3 Agents Data updated with Indian contact formats
-const AGENTS_DATA = [
-  {
-    id: 1,
-    name: 'Wade Warren',
-    role: 'Senior Property Consultant',
-    image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
-    phone: '+91 98765 43210',
-    email: 'wade.warren@utkalproperty.com',
-    socials: {
-      facebook: 'https://facebook.com',
-      twitter: 'https://twitter.com',
-      linkedin: 'https://linkedin.com',
-      instagram: 'https://instagram.com'
-    }
-  },
-  {
-    id: 2,
-    name: 'Leslie Alexander',
-    role: 'Commercial Real Estate Broker',
-    image: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=800',
-    phone: '+91 98765 43211',
-    email: 'leslie.alexander@utkalproperty.com',
-    socials: {
-      facebook: 'https://facebook.com',
-      twitter: 'https://twitter.com',
-      linkedin: 'https://linkedin.com',
-      instagram: 'https://instagram.com'
-    }
-  },
-  {
-    id: 3,
-    name: 'Darlene Robertson',
-    role: 'Residential Property Specialist',
-    image: 'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=800',
-    phone: '+91 98765 43212',
-    email: 'darlene.robertson@utkalproperty.com',
-    socials: {
-      facebook: 'https://facebook.com',
-      twitter: 'https://twitter.com',
-      linkedin: 'https://linkedin.com',
-      instagram: 'https://instagram.com'
-    }
-  }
-];
-
 const HomeMeetagents = () => {
+  const [agents, setAgents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [brokenImages, setBrokenImages] = useState({});
+
+  /**
+   * Universal Image URL Resolver
+   * Resolves absolute backend server paths for static WebP files (/uploads/team/filename.webp)
+   */
+  const getImageUrl = (photoPath) => {
+    if (!photoPath) return '';
+
+    // 1. Direct Blob previews or absolute web URLs
+    if (
+      photoPath.startsWith('http://') ||
+      photoPath.startsWith('https://') ||
+      photoPath.startsWith('blob:')
+    ) {
+      return photoPath;
+    }
+
+    // 2. Normalize Windows backslashes
+    let clean = photoPath.replace(/\\/g, '/');
+
+    // 3. Isolate path starting from uploads/
+    const uploadsIndex = clean.indexOf('uploads/');
+    if (uploadsIndex !== -1) {
+      clean = '/' + clean.substring(uploadsIndex);
+    } else {
+      clean = clean.startsWith('/') ? clean : `/${clean}`;
+    }
+
+    // 4. Attach base URL safely without double slashes
+    const baseUrl = (IMG_URL || 'http://localhost:5000').replace(/\/+$/, '');
+    return `${baseUrl}${clean}`;
+  };
+
+  // Fetch Team Members from Backend API
+  const fetchAgents = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get('/team');
+      let data = [];
+
+      if (response.data && response.data.data) {
+        data = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        data = response.data;
+      }
+
+      // Filter to display active members sorted by displayOrder
+      const activeAgents = data
+        .filter((member) => member.status === 'Active')
+        .sort((a, b) => (a.displayOrder || 1) - (b.displayOrder || 1));
+
+      setAgents(activeAgents);
+    } catch (error) {
+      console.error('Error fetching team agents:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgents();
+  }, []);
+
+  // Track broken images
+  const handleImageError = (id) => {
+    setBrokenImages((prev) => ({ ...prev, [id]: true }));
+  };
+
   return (
     <section className="HomeMeetagents">
       <div className="HomeMeetagents-container">
@@ -70,87 +97,122 @@ const HomeMeetagents = () => {
           </p>
         </div>
 
-        {/* Agents 3-Card Grid */}
+        {/* Agents Grid */}
         <div className="HomeMeetagents-grid">
-          {AGENTS_DATA.map((agent) => (
-            <div key={agent.id} className="HomeMeetagents-card">
-              {/* Image Box with Hover Overlay Bar */}
-              <div className="HomeMeetagents-img-wrapper">
-                <img
-                  src={agent.image}
-                  alt={agent.name}
-                  className="HomeMeetagents-img"
-                />
-
-                {/* Utkal Green Vertical Social Bar */}
-                <div className="HomeMeetagents-social-sidebar">
-                  <a
-                    href={agent.socials.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="HomeMeetagents-social-icon"
-                    aria-label="Facebook"
-                  >
-                    <FaFacebookF />
-                  </a>
-                  <a
-                    href={agent.socials.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="HomeMeetagents-social-icon"
-                    aria-label="Twitter"
-                  >
-                    <FaTwitter />
-                  </a>
-                  <a
-                    href={agent.socials.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="HomeMeetagents-social-icon"
-                    aria-label="LinkedIn"
-                  >
-                    <FaLinkedinIn />
-                  </a>
-                  <a
-                    href={agent.socials.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="HomeMeetagents-social-icon"
-                    aria-label="Instagram"
-                  >
-                    <FaInstagram />
-                  </a>
-                </div>
-              </div>
-
-              {/* Agent Details & Buttons */}
-              <div className="HomeMeetagents-card-body">
-                <div className="HomeMeetagents-info">
-                  <h3 className="HomeMeetagents-name">{agent.name}</h3>
-                  <p className="HomeMeetagents-role">{agent.role}</p>
-                </div>
-
-                <div className="HomeMeetagents-actions">
-                  <a
-                    href={`tel:${agent.phone}`}
-                    className="HomeMeetagents-action-btn"
-                    title={`Call ${agent.name}`}
-                    aria-label="Call Agent"
-                  >
-                    <FaPhoneAlt />
-                  </a>
-                  <a
-                    href={`mailto:${agent.email}`}
-                    className="HomeMeetagents-action-btn"
-                    title={`Email ${agent.name}`}
-                    aria-label="Email Agent"
-                  >
-                    <FaEnvelope />
-                  </a>
-                </div>
-              </div>
+          {loading ? (
+            <div className="HomeMeetagents-loading">
+              <p>Loading expert team members...</p>
             </div>
-          ))}
+          ) : agents.length > 0 ? (
+            agents.map((agent) => {
+              const agentId = agent._id || agent.id;
+              const photoUrl = getImageUrl(agent.photo);
+              const isBroken = brokenImages[agentId];
+
+              return (
+                <div key={agentId} className="HomeMeetagents-card">
+                  {/* Image Box with Hover Overlay Bar */}
+                  <div className="HomeMeetagents-img-wrapper">
+                    {!isBroken ? (
+                      <img
+                        src={photoUrl}
+                        alt={agent.fullName}
+                        className="HomeMeetagents-img"
+                        onError={() => handleImageError(agentId)}
+                      />
+                    ) : (
+                      <div className="HomeMeetagents-broken-placeholder">
+                        <FaUserCircle />
+                      </div>
+                    )}
+
+                    {/* Utkal Green Vertical Social Bar */}
+                    <div className="HomeMeetagents-social-sidebar">
+                      {agent.facebook && (
+                        <a
+                          href={agent.facebook}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="HomeMeetagents-social-icon"
+                          aria-label="Facebook"
+                        >
+                          <FaFacebookF />
+                        </a>
+                      )}
+                      {agent.twitter && (
+                        <a
+                          href={agent.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="HomeMeetagents-social-icon"
+                          aria-label="Twitter"
+                        >
+                          <FaTwitter />
+                        </a>
+                      )}
+                      {agent.linkedin && (
+                        <a
+                          href={agent.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="HomeMeetagents-social-icon"
+                          aria-label="LinkedIn"
+                        >
+                          <FaLinkedinIn />
+                        </a>
+                      )}
+                      {agent.instagram && (
+                        <a
+                          href={agent.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="HomeMeetagents-social-icon"
+                          aria-label="Instagram"
+                        >
+                          <FaInstagram />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Agent Details & Action Buttons */}
+                  <div className="HomeMeetagents-card-body">
+                    <div className="HomeMeetagents-info">
+                      <h3 className="HomeMeetagents-name">{agent.fullName}</h3>
+                      <p className="HomeMeetagents-role">{agent.designation}</p>
+                    </div>
+
+                    <div className="HomeMeetagents-actions">
+                      {agent.phone && (
+                        <a
+                          href={`tel:${agent.phone}`}
+                          className="HomeMeetagents-action-btn"
+                          title={`Call ${agent.fullName}`}
+                          aria-label="Call Agent"
+                        >
+                          <FaPhoneAlt />
+                        </a>
+                      )}
+                      {agent.email && (
+                        <a
+                          href={`mailto:${agent.email}`}
+                          className="HomeMeetagents-action-btn"
+                          title={`Email ${agent.fullName}`}
+                          aria-label="Email Agent"
+                        >
+                          <FaEnvelope />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="HomeMeetagents-empty">
+              <p>No active agents found. Add team members from the admin panel!</p>
+            </div>
+          )}
         </div>
 
         {/* Footer Callout Link */}

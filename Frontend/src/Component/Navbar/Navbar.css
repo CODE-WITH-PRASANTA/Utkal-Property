@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --navbar-primary: #ff9f1c;
-  --navbar-primary-hover: #f1910e;
+  --navbar-primary:#18522e;
+  --navbar-primary-hover:#18522e;
   --navbar-text-dark: #121926;
   --navbar-text-muted: #8c94a3;
   --navbar-bg: #ffffff;

@@ -14,9 +14,10 @@ export function AboutBetterLives() {
         
         {/* Left Column: Text & Content */}
         <div className="about-modern-content">
+          {/* Title styled matching second image: "Better lives" (Dark Navy) + "with better homes" (Dark Green) */}
           <h1 className="about-modern-title">
-            Better lives with<br />
-            better homes
+            <span className="about-modern-title-dark">Better lives</span>{' '}
+            <span className="about-modern-title-green">with better homes</span>
           </h1>
 
           <p className="about-modern-bold-text">
@@ -61,7 +62,7 @@ export function AboutBetterLives() {
           </div>
 
           <div className="about-modern-stats-grid">
-            <div className="about-stat-card card-orange">
+            <div className="about-stat-card card-green">
               <div className="stat-icon-wrapper">
                 <img src={about1Img} alt="Sales rate icon" className="stat-card-img" />
               </div>
