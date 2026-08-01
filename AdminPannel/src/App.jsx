@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { signOut } from "aws-amplify/auth"; // Import Amplify signout handler
+import { signOut } from "aws-amplify/auth";
 
-// Layout & Authentication Components
+// Layout & Authentication
 import MainLayout from "./Layout/MainLayout/MainLayout";
 import LogIn from "./Pages/login/login";
 
-// Dashboard Pages
+// Dashboard
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
 
 // Properties Pages
@@ -15,11 +15,12 @@ import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 
-// Sidebar & Supplementary Pages
+// Other Components
 import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
 
+// Pages
 import Report from "./Pages/Dashboard/Report/Report";
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
@@ -52,10 +53,10 @@ const App = () => {
         await signOut();
       }
     } catch (error) {
-      console.error("Error signing out from AWS Cognito:", error);
+      console.error("AWS SignOut Error:", error);
     } finally {
-      setIsAuthenticated(false);
       setUser(null);
+      setIsAuthenticated(false);
     }
   };
 
