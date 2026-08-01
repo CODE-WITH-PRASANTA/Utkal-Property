@@ -39,21 +39,6 @@ function App() {
         <Route path="/our-team" element={<OurTeam/>} />
         <Route path="/sell-property" element={<SellProperty/>} />
         <Route path="/rent-property" element={<RentProperty/>} />
-        
-
-
-
-      
-
-
-
-
-        
-  
-
-
-        <Route path="/blog-posting" element={<BlogPosting/>} />
-        <Route path="/blog-management" element={<BlogManagement/>} />
       </Routes>
       <Footer />
     </BrowserRouter>
