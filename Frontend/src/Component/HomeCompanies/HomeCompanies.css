@@ -1,66 +1,117 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* Color Variables extracted from Utkal Property Logo */
+:root {
+  --utkal-green: #0a682c;
+  --utkal-green-hover: #074e20;
+  --utkal-navy: #0c1b33;
+  --utkal-green-light: #eef7f2;
+  --utkal-green-border: #cde4d6;
+  --utkal-gray-subtle: #5a6b82;
+}
 
 .HomeCompanies {
   width: 100%;
-  background-color: #ffffff;
-  padding: 50px 20px;
+  background: linear-gradient(180deg, #f4faf6 0%, #ffffff 100%);
+  padding: 60px 24px;
   font-family: 'Plus Jakarta Sans', sans-serif;
   box-sizing: border-box;
+  border-top: 1px solid var(--utkal-green-border);
+  border-bottom: 1px solid var(--utkal-green-border);
 }
 
 .HomeCompanies-container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 36px;
 }
 
-/* Heading style */
-.HomeCompanies-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
-  text-align: left;
-  letter-spacing: -0.2px;
+/* Header Styles */
+.HomeCompanies-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
 }
 
-/* Logos Horizontal Layout */
+.HomeCompanies-badgeTag {
+  display: inline-block;
+  padding: 4px 14px;
+  background-color: var(--utkal-green-light);
+  border: 1px solid var(--utkal-green-border);
+  color: var(--utkal-green);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 30px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.HomeCompanies-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--utkal-navy);
+  margin: 0;
+  letter-spacing: -0.4px;
+}
+
+.HomeCompanies-title .highlight-green {
+  color: var(--utkal-green);
+}
+
+/* Logos Grid Layout */
 .HomeCompanies-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
 }
 
 /* Individual Card Styling */
 .HomeCompanies-card {
+  background: #ffffff;
+  border: 1px solid var(--utkal-green-border);
+  border-radius: 14px;
+  padding: 20px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  opacity: 0.45;
-  filter: grayscale(100%);
-  transition: all 0.3s ease;
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(10, 104, 44, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   user-select: none;
 }
 
 .HomeCompanies-card:hover {
-  opacity: 0.85;
-  filter: grayscale(0%);
+  border-color: var(--utkal-green);
+  background: var(--utkal-green-light);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(10, 104, 44, 0.12);
 }
 
 /* Icon Styles */
-.HomeCompanies-logoIcon {
-  font-size: 38px;
-  color: #4b5563;
+.HomeCompanies-iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Text Group for Logos */
+.HomeCompanies-logoIcon {
+  font-size: 34px;
+  color: var(--utkal-navy);
+  transition: color 0.3s ease;
+}
+
+.HomeCompanies-card:hover .HomeCompanies-logoIcon {
+  color: var(--utkal-green);
+}
+
+/* Text Group */
 .HomeCompanies-textGroup {
   display: flex;
   flex-direction: column;
@@ -69,52 +120,59 @@
 }
 
 .HomeCompanies-companyTitle {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
-  color: #374151;
-  line-height: 1.1;
-  letter-spacing: 0.5px;
+  color: var(--utkal-navy);
+  line-height: 1.2;
+  letter-spacing: 0.3px;
+  transition: color 0.3s ease;
+}
+
+.HomeCompanies-card:hover .HomeCompanies-companyTitle {
+  color: var(--utkal-green);
 }
 
 .HomeCompanies-companySubtitle {
   font-size: 8px;
-  font-weight: 500;
-  color: #6b7280;
-  text-transform: lowercase;
-  margin-top: 2px;
-  letter-spacing: 0.2px;
+  font-weight: 600;
+  color: var(--utkal-gray-subtle);
+  text-transform: uppercase;
+  margin-top: 3px;
+  letter-spacing: 0.4px;
 }
 
 /* Responsive Layout */
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
   .HomeCompanies-grid {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 32px 20px;
+    gap: 18px;
   }
 }
 
 @media (max-width: 640px) {
   .HomeCompanies {
-    padding: 35px 16px;
+    padding: 40px 16px;
   }
 
   .HomeCompanies-title {
-    font-size: 16px;
-    text-align: center;
+    font-size: 18px;
   }
 
   .HomeCompanies-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 28px 16px;
+    gap: 14px;
+  }
+
+  .HomeCompanies-card {
+    padding: 16px 10px;
   }
 
   .HomeCompanies-logoIcon {
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .HomeCompanies-companyTitle {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .HomeCompanies-companySubtitle {

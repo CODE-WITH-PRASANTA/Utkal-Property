@@ -15,19 +15,19 @@ import {
   FaTimes
 } from 'react-icons/fa';
 
-// Mock Data for the 4 Cards
+// Mock Data updated to Indian currency (₹/month) and local Odisha rental locations
 const PROPERTIES_DATA = [
   {
     id: 1,
-    title: 'Gorgeous Apartment Building',
-    address: '58 Hullbrook Road, Billesley, B13 0LA',
-    price: '$7,500',
-    beds: 4,
+    title: 'Modern 3BHK Fully Furnished Flat',
+    address: 'Near KIIT Square, Patia, Bhubaneswar',
+    price: '₹ 28,000 / mo',
+    beds: 3,
     baths: 2,
-    sqft: 1150,
+    sqft: 1450,
     featured: true,
     forRent: true,
-    timeAgo: '3 years ago',
+    timeAgo: '1 day ago',
     avatar: 'https://i.pravatar.cc/150?img=12',
     images: [
       'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80',
@@ -37,15 +37,15 @@ const PROPERTIES_DATA = [
   },
   {
     id: 2,
-    title: 'Gorgeous Apartment Building',
-    address: '58 Hullbrook Road, Billesley, B13 0LA',
-    price: '$7,500',
-    beds: 4,
-    baths: 2,
-    sqft: 1150,
+    title: 'Luxury Residency Apartment',
+    address: 'Saheed Nagar, Bhubaneswar, Odisha',
+    price: '₹ 35,000 / mo',
+    beds: 3,
+    baths: 3,
+    sqft: 1650,
     featured: true,
     forRent: true,
-    timeAgo: '3 years ago',
+    timeAgo: '3 days ago',
     avatar: 'https://i.pravatar.cc/150?img=15',
     images: [
       'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80',
@@ -55,15 +55,15 @@ const PROPERTIES_DATA = [
   },
   {
     id: 3,
-    title: 'Gorgeous Apartment Building',
-    address: '58 Hullbrook Road, Billesley, B13 0LA',
-    price: '$7,500',
-    beds: 4,
+    title: 'Spacious 2BHK Rental Unit',
+    address: 'Chandrasekharpur, Bhubaneswar, Odisha',
+    price: '₹ 18,500 / mo',
+    beds: 2,
     baths: 2,
-    sqft: 1150,
+    sqft: 1100,
     featured: true,
     forRent: true,
-    timeAgo: '3 years ago',
+    timeAgo: '5 days ago',
     avatar: 'https://i.pravatar.cc/150?img=32',
     images: [
       'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
@@ -73,15 +73,15 @@ const PROPERTIES_DATA = [
   },
   {
     id: 4,
-    title: 'Gorgeous Apartment Building',
-    address: '58 Hullbrook Road, Billesley, B13 0LA',
-    price: '$7,500',
+    title: 'Commercial Office Space',
+    address: 'Cuttack Road, Bhubaneswar, Odisha',
+    price: '₹ 45,000 / mo',
     beds: 4,
     baths: 2,
-    sqft: 1150,
+    sqft: 2100,
     featured: true,
     forRent: true,
-    timeAgo: '3 years ago',
+    timeAgo: '1 week ago',
     avatar: 'https://i.pravatar.cc/150?img=51',
     images: [
       'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80',
@@ -129,12 +129,12 @@ const PropertyCard = ({ property, onOpenModal }) => {
           )}
         </div>
 
-        {/* Top-Right Bookmark Ribbon Icon */}
+        {/* Top-Right Bookmark Icon */}
         <div className="Propertiesforrent-bookmark-tag">
           <FaBookmark />
         </div>
 
-        {/* Dark Hover Overlay with (+) & Navigation Arrows */}
+        {/* Hover Overlay with (+) & Navigation Arrows */}
         <div className="Propertiesforrent-hover-overlay">
           <div
             className="Propertiesforrent-crosshair-icon"
@@ -169,7 +169,7 @@ const PropertyCard = ({ property, onOpenModal }) => {
 
         <p className="Propertiesforrent-address">
           <FaMapMarkerAlt className="Propertiesforrent-address-icon" />
-          {property.address}
+          <span>{property.address}</span>
         </p>
 
         <div className="Propertiesforrent-price">{property.price}</div>
@@ -222,13 +222,14 @@ const Propertiesforrent = () => {
   };
 
   return (
-    <div className="Propertiesforrent">
+    <section className="Propertiesforrent">
       <div className="Propertiesforrent-container">
-        {/* Main Section Header */}
+        {/* Header */}
         <div className="Propertiesforrent-header">
-          <h1 className="Propertiesforrent-main-heading">Properties for rent</h1>
+          <span className="Propertiesforrent-tag">Rental Spaces</span>
+          <h1 className="Propertiesforrent-main-heading">Properties For Rent</h1>
           <p className="Propertiesforrent-subheading">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel lobortis justo
+            Find premium residential and commercial rental options curated by Utkal Property
           </p>
         </div>
 
@@ -243,7 +244,7 @@ const Propertiesforrent = () => {
           ))}
         </div>
 
-        {/* Floating Scroll-to-Top Button */}
+        {/* Scroll-to-Top Button */}
         <button
           className="Propertiesforrent-scroll-top-btn"
           onClick={scrollToTop}
@@ -252,7 +253,7 @@ const Propertiesforrent = () => {
           <FaChevronUp />
         </button>
 
-        {/* Image Zoom Modal Lightbox */}
+        {/* Modal Lightbox */}
         {selectedImage && (
           <div
             className="Propertiesforrent-modal-overlay"
@@ -278,7 +279,7 @@ const Propertiesforrent = () => {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

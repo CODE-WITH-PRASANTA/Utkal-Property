@@ -21,6 +21,7 @@ import Report from "./Pages/Dashboard/Report/Report";
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
 import Setting from "./Pages/Setting/Setting";
+import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
 
 const App = () => {
   return (
@@ -37,6 +38,8 @@ const App = () => {
 
           {/* Property Routes */}
           <Route path="/properties/add" element={<AddNewProperty />} />
+          <Route path="/properties/all" element={<PropertiesDashboard />} />
+
           <Route path="/properties/categories" element={<Categories />} />
           <Route path="/properties/locations" element={<Locations />} />
 

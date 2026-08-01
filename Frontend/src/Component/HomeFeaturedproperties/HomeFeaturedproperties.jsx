@@ -7,31 +7,47 @@ import {
   FaBath,
   FaRulerCombined,
   FaBookmark,
-  FaRegBookmark,
   FaPlus,
   FaArrowLeft,
   FaArrowRight,
   FaMapMarkerAlt,
-  FaChevronUp
+  FaChevronUp,
+  FaShieldAlt,
+  FaCheckCircle
 } from 'react-icons/fa';
 
 // Categories for Tabs
 const CATEGORIES = ['Houses', 'Smart home', 'Apartments', 'Office', 'Villa', 'Bungalow'];
 
-// Mock Property Data (8 items per category to support pagination of 4 per page across 2 pages)
+// Helper to format Indian Rupee values dynamically
+const formatIndianCurrency = (amount, isRent = false) => {
+  if (isRent) {
+    return `₹${amount.toLocaleString('en-IN')} / mo`;
+  }
+  if (amount >= 10000000) {
+    return `₹${(amount / 10000000).toFixed(2)} Cr`;
+  } else if (amount >= 100000) {
+    return `₹${(amount / 100000).toFixed(2)} Lakhs`;
+  }
+  return `₹${amount.toLocaleString('en-IN')}`;
+};
+
+// Mock Property Data with numeric prices for dynamic Indian Currency formatting
 const PROPERTIES_DATA = {
   Houses: [
     {
       id: 1,
-      title: 'Gorgeous Apartment Building',
-      address: '58 Hullbrook Road, Billesley, B13 0LA',
-      price: '$7,500',
+      title: 'Gorgeous Residential Building',
+      address: 'Plot 58, Sailashree Vihar, Bhubaneswar',
+      rawPrice: 75000,
+      isRent: true,
       beds: 4,
       baths: 2,
-      sqft: 1150,
+      sqft: 1850,
       featured: true,
       forSale: false,
-      timeAgo: '3 years ago',
+      verified: true,
+      timeAgo: '2 days ago',
       avatar: 'https://i.pravatar.cc/150?img=11',
       images: [
         'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
@@ -41,15 +57,17 @@ const PROPERTIES_DATA = {
     },
     {
       id: 2,
-      title: 'Gorgeous Apartment Building',
-      address: '58 Hullbrook Road, Billesley, B13 0LA',
-      price: '$7,500',
+      title: 'Modern Luxury Villa',
+      address: 'Patia Square, Bhubaneswar, Odisha',
+      rawPrice: 12500000,
+      isRent: false,
       beds: 4,
-      baths: 2,
-      sqft: 1150,
+      baths: 3,
+      sqft: 2600,
       featured: true,
       forSale: true,
-      timeAgo: '3 years ago',
+      verified: true,
+      timeAgo: '1 week ago',
       avatar: 'https://i.pravatar.cc/150?img=20',
       images: [
         'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80',
@@ -59,15 +77,17 @@ const PROPERTIES_DATA = {
     },
     {
       id: 3,
-      title: 'Gorgeous Apartment Building',
-      address: '58 Hullbrook Road, Billesley, B13 0LA',
-      price: '$7,500',
-      beds: 4,
+      title: 'Premium Independent Duplex',
+      address: 'VIP Road, Puri, Odisha',
+      rawPrice: 8500000,
+      isRent: false,
+      beds: 3,
       baths: 2,
-      sqft: 1150,
+      sqft: 1650,
       featured: false,
-      forSale: false,
-      timeAgo: '3 years ago',
+      forSale: true,
+      verified: true,
+      timeAgo: '3 days ago',
       avatar: 'https://i.pravatar.cc/150?img=33',
       images: [
         'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
@@ -77,15 +97,17 @@ const PROPERTIES_DATA = {
     },
     {
       id: 4,
-      title: 'Gorgeous Apartment Building',
-      address: '58 Hullbrook Road, Billesley, B13 0LA',
-      price: '$7,500',
-      beds: 4,
-      baths: 2,
-      sqft: 1150,
+      title: 'Executive Smart Bungalow',
+      address: 'Jaydev Vihar, Bhubaneswar',
+      rawPrice: 21000000,
+      isRent: false,
+      beds: 5,
+      baths: 4,
+      sqft: 3400,
       featured: true,
       forSale: true,
-      timeAgo: '3 years ago',
+      verified: true,
+      timeAgo: 'Just now',
       avatar: 'https://i.pravatar.cc/150?img=60',
       images: [
         'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
@@ -93,18 +115,19 @@ const PROPERTIES_DATA = {
         'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80'
       ]
     },
-    // Page 2 items
     {
       id: 5,
-      title: 'Gorgeous Apartment Building',
-      address: '58 Hullbrook Road, Billesley, B13 0LA',
-      price: '$7,500',
-      beds: 4,
+      title: 'Suburban Family Home',
+      address: 'Khandagiri, Bhubaneswar',
+      rawPrice: 45000,
+      isRent: true,
+      beds: 3,
       baths: 2,
-      sqft: 1150,
+      sqft: 1350,
       featured: true,
-      forSale: true,
-      timeAgo: '3 years ago',
+      forSale: false,
+      verified: false,
+      timeAgo: '5 days ago',
       avatar: 'https://i.pravatar.cc/150?img=12',
       images: [
         'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
@@ -113,15 +136,17 @@ const PROPERTIES_DATA = {
     },
     {
       id: 6,
-      title: 'Gorgeous Apartment Building',
-      address: '58 Hullbrook Road, Billesley, B13 0LA',
-      price: '$7,500',
+      title: 'Classic Heritage Villa',
+      address: 'Old Town, Bhubaneswar',
+      rawPrice: 18000000,
+      isRent: false,
       beds: 4,
-      baths: 2,
-      sqft: 1150,
+      baths: 3,
+      sqft: 2900,
       featured: true,
-      forSale: false,
-      timeAgo: '3 years ago',
+      forSale: true,
+      verified: true,
+      timeAgo: '2 weeks ago',
       avatar: 'https://i.pravatar.cc/150?img=15',
       images: [
         'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
@@ -130,15 +155,17 @@ const PROPERTIES_DATA = {
     },
     {
       id: 7,
-      title: 'Gorgeous Apartment Building',
-      address: '58 Hullbrook Road, Billesley, B13 0LA',
-      price: '$7,500',
-      beds: 4,
+      title: 'Green View Residency',
+      address: 'CDA Sector 9, Cuttack',
+      rawPrice: 9500000,
+      isRent: false,
+      beds: 3,
       baths: 2,
-      sqft: 1150,
+      sqft: 1700,
       featured: true,
       forSale: true,
-      timeAgo: '3 years ago',
+      verified: true,
+      timeAgo: '1 month ago',
       avatar: 'https://i.pravatar.cc/150?img=32',
       images: [
         'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
@@ -147,15 +174,17 @@ const PROPERTIES_DATA = {
     },
     {
       id: 8,
-      title: 'Gorgeous Apartment Building',
-      address: '58 Hullbrook Road, Billesley, B13 0LA',
-      price: '$7,500',
-      beds: 4,
+      title: 'Urban Heights Complex',
+      address: 'Saheed Nagar, Bhubaneswar',
+      rawPrice: 60000,
+      isRent: true,
+      beds: 2,
       baths: 2,
-      sqft: 1150,
+      sqft: 1100,
       featured: false,
       forSale: false,
-      timeAgo: '3 years ago',
+      verified: true,
+      timeAgo: '4 days ago',
       avatar: 'https://i.pravatar.cc/150?img=47',
       images: [
         'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80',
@@ -165,12 +194,13 @@ const PROPERTIES_DATA = {
   ]
 };
 
-// Populate other categories with slight mock tweaks
+// Populate other categories with modified prices/titles
 CATEGORIES.slice(1).forEach((cat) => {
   PROPERTIES_DATA[cat] = PROPERTIES_DATA['Houses'].map((item, idx) => ({
     ...item,
     id: idx + 100,
-    title: `${cat} Modern Design ${idx + 1}`
+    title: `Utkal ${cat} Spot ${idx + 1}`,
+    rawPrice: item.rawPrice + idx * 500000
   }));
 });
 
@@ -199,7 +229,7 @@ const PropertyCard = ({ property }) => {
 
   return (
     <div className="HomeFeaturedproperties-card">
-      {/* Image Container with Hover Controls */}
+      {/* Image Wrapper */}
       <div className="HomeFeaturedproperties-card-img-wrapper">
         <img
           src={property.images[currentImgIndex]}
@@ -212,64 +242,72 @@ const PropertyCard = ({ property }) => {
           {property.featured && (
             <span className="HomeFeaturedproperties-badge-featured">Featured</span>
           )}
-          {property.forSale && (
-            <span className="HomeFeaturedproperties-badge-forsale">For Sale</span>
-          )}
+          <span className={`HomeFeaturedproperties-badge-type ${property.forSale ? 'sale' : 'rent'}`}>
+            {property.forSale ? 'For Sale' : 'For Rent'}
+          </span>
         </div>
 
-        {/* Bookmark Icon */}
+        {/* Bookmark Ribbon Button */}
         <button
           className="HomeFeaturedproperties-bookmark-btn"
           onClick={toggleBookmark}
           aria-label="Bookmark property"
         >
-          {isBookmarked ? (
-            <FaBookmark className="HomeFeaturedproperties-bookmark-filled" />
-          ) : (
-            <FaBookmark className="HomeFeaturedproperties-bookmark-outline" />
-          )}
+          <FaBookmark className={isBookmarked ? 'filled' : 'outline'} />
         </button>
 
-        {/* Hover Overlay with Crosshair (+) and Arrows */}
+        {/* Hover Overlay */}
         <div className="HomeFeaturedproperties-hover-overlay">
           <div className="HomeFeaturedproperties-crosshair-icon">+</div>
-          <div className="HomeFeaturedproperties-nav-arrows">
-            <button
-              className="HomeFeaturedproperties-arrow-btn"
-              onClick={handlePrevImage}
-            >
-              <FaArrowLeft />
-            </button>
-            <button
-              className="HomeFeaturedproperties-arrow-btn"
-              onClick={handleNextImage}
-            >
-              <FaArrowRight />
-            </button>
-          </div>
+          {property.images.length > 1 && (
+            <div className="HomeFeaturedproperties-nav-arrows">
+              <button
+                className="HomeFeaturedproperties-arrow-btn"
+                onClick={handlePrevImage}
+              >
+                <FaArrowLeft />
+              </button>
+              <button
+                className="HomeFeaturedproperties-arrow-btn"
+                onClick={handleNextImage}
+              >
+                <FaArrowRight />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Card Content */}
+      {/* Card Body */}
       <div className="HomeFeaturedproperties-card-content">
-        <h3 className="HomeFeaturedproperties-title">{property.title}</h3>
+        <div className="HomeFeaturedproperties-card-header-row">
+          <h3 className="HomeFeaturedproperties-title">{property.title}</h3>
+          {property.verified && (
+            <span className="HomeFeaturedproperties-verified" title="Verified by Utkal Property">
+              <FaCheckCircle />
+            </span>
+          )}
+        </div>
         
         <p className="HomeFeaturedproperties-address">
           <FaMapMarkerAlt className="HomeFeaturedproperties-address-icon" />
           {property.address}
         </p>
 
-        <div className="HomeFeaturedproperties-price">{property.price}</div>
+        {/* Indian Currency Formatting */}
+        <div className="HomeFeaturedproperties-price">
+          {formatIndianCurrency(property.rawPrice, property.isRent)}
+        </div>
 
         <div className="HomeFeaturedproperties-specs">
           <span className="HomeFeaturedproperties-spec-item">
-            <FaBed /> Beds: <strong>{property.beds}</strong>
+            <FaBed /> <strong>{property.beds}</strong> Beds
           </span>
           <span className="HomeFeaturedproperties-spec-item">
-            <FaBath /> Baths: <strong>{property.baths}</strong>
+            <FaBath /> <strong>{property.baths}</strong> Baths
           </span>
           <span className="HomeFeaturedproperties-spec-item">
-            <FaRulerCombined /> Sqft: <strong>{property.sqft}</strong>
+            <FaRulerCombined /> <strong>{property.sqft}</strong> sqft
           </span>
         </div>
 
@@ -306,7 +344,7 @@ const HomeFeaturedproperties = () => {
 
   const handleTabChange = (category) => {
     setActiveTab(category);
-    setCurrentPage(1); // Reset to page 1 on category change
+    setCurrentPage(1);
   };
 
   const scrollToTop = () => {
@@ -316,11 +354,17 @@ const HomeFeaturedproperties = () => {
   return (
     <div className="HomeFeaturedproperties">
       <div className="HomeFeaturedproperties-container">
+        
         {/* Header Section */}
         <div className="HomeFeaturedproperties-header">
-          <h1 className="HomeFeaturedproperties-main-heading">Featured properties</h1>
+          <span className="HomeFeaturedproperties-badgeTag">
+            <FaShieldAlt className="tag-icon" /> Utkal Verified Properties
+          </span>
+          <h1 className="HomeFeaturedproperties-main-heading">
+            Featured <span className="highlight-green">Properties</span>
+          </h1>
           <p className="HomeFeaturedproperties-subheading">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel lobortis justo
+            Explore premium homes, apartments, and commercial sites curated across Odisha with verified pricing and clear documentation.
           </p>
         </div>
 
@@ -377,8 +421,8 @@ const HomeFeaturedproperties = () => {
           </div>
         )}
 
-        {/* Floating Scroll to Top Button */}
-        <button className="HomeFeaturedproperties-scroll-top-btn" onClick={scrollToTop}>
+        {/* Scroll to Top Button */}
+        <button className="HomeFeaturedproperties-scroll-top-btn" onClick={scrollToTop} title="Back to Top">
           <FaChevronUp />
         </button>
       </div>
