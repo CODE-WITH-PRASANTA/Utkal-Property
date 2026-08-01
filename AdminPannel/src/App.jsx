@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { signOut } from "aws-amplify/auth";
 
+// Layout
 // Layout & Authentication
 import MainLayout from "./Layout/MainLayout/MainLayout";
 import LogIn from "./Pages/login/login";
@@ -16,10 +17,13 @@ import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 
-// Other Components & Pages
+// Sidebar & Page Components
+// Other Components
 import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
+
+// Pages
 import Report from "./Pages/Dashboard/Report/Report";
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
@@ -28,10 +32,14 @@ import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
 
-// Protected Route Guard
-const ProtectedRoute = ({ isAuthenticated, children }) => {
+// Protected Route Component
+const ProtectedRoute = ({
+  isAuthenticated,
+  onLoginSuccess,
+  children,
+}) => {
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <LogIn onLoginSuccess={onLoginSuccess} />;
   }
 
   return children;
@@ -62,7 +70,42 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public / Auth Route */}
+        {/* Default Redirect to Dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        {/* Main Layout Wrapper */}
+        <Route element={<MainLayout />}>
+          {/* Dashboard Routes */}
+          <Route path="/dashboard" element={<DashboardMain />} />
+          <Route path="/dashboard-review" element={<DashboardReview />} />
+
+          {/* Property Routes */}
+          <Route path="/properties/add" element={<AddNewProperty />} />
+          <Route path="/properties/all" element={<PropertiesDashboard />} />
+
+          <Route path="/properties/categories" element={<Categories />} />
+          <Route path="/properties/locations" element={<Locations />} />
+
+          {/* Management Routes */}
+          <Route path="/bookings" element={<Bookings />} />
+          <Route path="/leads" element={<LeadManagement />} />
+          <Route path="/LeadManagement" element={<LeadManagement />} /> {/* Alias route */}
+
+          {/* Pages */}
+          <Route path="/enquiry" element={<Enquire />} />
+          <Route path="/users" element={<User />} />
+          <Route path="/reports" element={<Report />} />
+          <Route path="/Report" element={<Report />} /> {/* Alias route */}
+          <Route path="/settings" element={<Setting />} />
+          <Route path="/profile" element={<ProfileSetting />} />
+          <Route path="/ProfileSetting" element={<ProfileSetting />} /> {/* Alias route */}
+          <Route path="/DashboardProfile" element={<ProfileSetting />} /> {/* Alias route */}
+        </Route>
+
+        {/* Global Fallback (Catch-All Route) */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+        {/* Login */}
         <Route
           path="/login"
           element={
@@ -74,52 +117,115 @@ const App = () => {
           }
         />
 
-        {/* Protected Dashboard Routes Wrapped in MainLayout */}
+        {/* Protected Routes */}
         <Route
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <MainLayout user={user} onLogout={handleLogout} />
+            <ProtectedRoute
+              isAuthenticated={isAuthenticated}
+              onLoginSuccess={handleLoginSuccess}
+            >
+              <MainLayout
+                user={user}
+                onLogout={handleLogout}
+              />
             </ProtectedRoute>
           }
         >
-          {/* Index Redirect */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-          {/* Core Dashboard */}
-          <Route path="/dashboard" element={<DashboardMain />} />
-          <Route path="/dashboard-review" element={<DashboardReview />} />
+          {/* Dashboard */}
+          <Route
+            path="/"
+            element={<Navigate to="/dashboard" replace />}
+          />
+          <Route
+            path="/dashboard"
+            element={<DashboardMain />}
+          />
 
           {/* Properties */}
-          <Route path="/properties/all" element={<PropertiesDashboard />} />
-          <Route path="/properties/add" element={<AddNewProperty />} />
-          <Route path="/properties/categories" element={<Categories />} />
-          <Route path="/properties/locations" element={<Locations />} />
+          <Route
+            path="/properties/all"
+            element={<PropertiesDashboard />}
+          />
+          <Route
+            path="/properties/add"
+            element={<AddNewProperty />}
+          />
+          <Route
+            path="/properties/categories"
+            element={<Categories />}
+          />
+          <Route
+            path="/properties/locations"
+            element={<Locations />}
+          />
 
-          {/* Management & Operations */}
-          <Route path="/bookings" element={<Bookings />} />
-          <Route path="/leads" element={<LeadManagement />} />
-          <Route path="/LeadManagement" element={<LeadManagement />} /> {/* Alias */}
+          {/* Bookings */}
+          <Route
+            path="/bookings"
+            element={<Bookings />}
+          />
 
-          {/* General Pages */}
-          <Route path="/enquiry" element={<Enquire />} />
-          <Route path="/users" element={<User />} />
-          <Route path="/reports" element={<Report />} />
-          <Route path="/Report" element={<Report />} /> {/* Alias */}
-          <Route path="/settings" element={<Setting />} />
-          
-          {/* Profiles */}
-          <Route path="/profile" element={<ProfileSetting />} />
-          <Route path="/ProfileSetting" element={<ProfileSetting />} /> {/* Alias */}
-          <Route path="/DashboardProfile" element={<ProfileSetting />} /> {/* Alias */}
+          {/* Leads */}
+          <Route
+            path="/leads"
+            element={<LeadManagement />}
+          />
 
-          {/* Additional Content */}
-          <Route path="/testimonial" element={<Testimonial />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/team" element={<OurTeam />} />
+          {/* Enquiry */}
+          <Route
+            path="/enquiry"
+            element={<Enquire />}
+          />
+
+          {/* Users */}
+          <Route
+            path="/users"
+            element={<User />}
+          />
+
+          {/* Reports */}
+          <Route
+            path="/reports"
+            element={<Report />}
+          />
+
+          {/* Settings */}
+          <Route
+            path="/settings"
+            element={<Setting />}
+          />
+
+          {/* Profile */}
+          <Route
+            path="/profile"
+            element={<ProfileSetting />}
+          />
+
+          {/* Testimonial */}
+          <Route
+            path="/testimonial"
+            element={<Testimonial />}
+          />
+
+          {/* Gallery */}
+          <Route
+            path="/gallery"
+            element={<Gallery />}
+          />
+
+          {/* Team */}
+          <Route
+            path="/team"
+            element={<OurTeam />}
+          />
+
+          {/* 404 */}
+          <Route
+            path="*"
+            element={<Navigate to="/dashboard" replace />}
+          />
         </Route>
 
-        {/* Global Fallback Catch-All Route */}
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
   );

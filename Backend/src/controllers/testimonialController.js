@@ -1,16 +1,39 @@
-const Testimonial = require("../models/Testimonial");
+const Testimonial = require('../models/Testimonial');
+const fs = require('fs');
+const path = require('path');
 
-// Helper to format uploaded file path safely
+// Helper function to safely delete file from disk when updated or deleted
+const deleteImageFile = (photoPath) => {
+  if (!photoPath) return;
+
+  // Strip leading slash if present to get clean relative path
+  const cleanPath = photoPath.startsWith('/') ? photoPath.substring(1) : photoPath;
+  const fullPath = path.join(process.cwd(), cleanPath);
+
+  fs.access(fullPath, fs.constants.F_OK, (err) => {
+    if (!err) {
+      fs.unlink(fullPath, (unlinkErr) => {
+        if (unlinkErr) console.error('Failed to delete image file:', unlinkErr);
+      });
+    }
+  });
+};
+
+// Helper to determine photo path attached by Multer/Sharp middleware
 const getPhotoPath = (req) => {
-  if (!req.file) return "";
-  
-  // Handle both req.file.filename (Multer) and converted webp path
-  const filename = req.file.filename || (req.file.path ? req.file.path.split("/").pop() : "");
-  if (!filename) return "";
+  if (!req.file) return '';
 
-  // Fallback gracefully if baseUrl is missing or empty
-  const folderName = req.baseUrl ? req.baseUrl.split("/").filter(Boolean).pop() : "testimonials";
-  return `/uploads/${folderName || "testimonials"}/${filename}`;
+  // Priority 1: Use relativePath attached by convertToWebp middleware (/uploads/gallery/gallery-xxx.webp)
+  if (req.file.relativePath) {
+    return req.file.relativePath;
+  }
+
+  // Priority 2: Fallback if only filename is available
+  if (req.file.filename) {
+    return `/uploads/gallery/${req.file.filename}`;
+  }
+
+  return '';
 };
 
 // @desc    Create a new testimonial
@@ -23,32 +46,33 @@ const createTestimonial = async (req, res) => {
     if (!name || !designation || !location || !description) {
       return res.status(400).json({
         success: false,
-        message: "Please fill in all required fields.",
+        message: 'Please fill in all required fields.',
       });
     }
 
-    const photo = getPhotoPath(req) || req.body.photo || "";
+    // Determine photo path from uploaded file or fallback string body
+    const photo = getPhotoPath(req) || (typeof req.body.photo === 'string' ? req.body.photo : '');
 
     const testimonial = await Testimonial.create({
       name,
       designation,
       location,
       rating: rating ? Number(rating) : 5,
-      status: status || "Active",
+      status: status || 'Active',
       description,
       photo,
     });
 
     return res.status(201).json({
       success: true,
-      message: "Testimonial created successfully",
+      message: 'Testimonial created successfully',
       data: testimonial,
     });
   } catch (error) {
-    console.error("CREATE TESTIMONIAL ERROR:", error);
+    console.error('CREATE TESTIMONIAL ERROR:', error);
     return res.status(500).json({
       success: false,
-      message: "Server Error",
+      message: 'Server Error',
       error: error.message,
     });
   }
@@ -67,10 +91,10 @@ const getAllTestimonials = async (req, res) => {
       data: testimonials,
     });
   } catch (error) {
-    console.error("GET ALL TESTIMONIALS ERROR:", error);
+    console.error('GET ALL TESTIMONIALS ERROR:', error);
     return res.status(500).json({
       success: false,
-      message: "Server Error",
+      message: 'Server Error',
       error: error.message,
     });
   }
@@ -86,7 +110,7 @@ const getTestimonialById = async (req, res) => {
     if (!testimonial) {
       return res.status(404).json({
         success: false,
-        message: "Testimonial not found",
+        message: 'Testimonial not found',
       });
     }
 
@@ -95,10 +119,10 @@ const getTestimonialById = async (req, res) => {
       data: testimonial,
     });
   } catch (error) {
-    console.error("GET TESTIMONIAL BY ID ERROR:", error);
+    console.error('GET TESTIMONIAL BY ID ERROR:', error);
     return res.status(500).json({
       success: false,
-      message: "Server Error",
+      message: 'Server Error',
       error: error.message,
     });
   }
@@ -109,10 +133,25 @@ const getTestimonialById = async (req, res) => {
 // @access  Public / Admin
 const updateTestimonial = async (req, res) => {
   try {
+    const existingTestimonial = await Testimonial.findById(req.params.id);
+
+    if (!existingTestimonial) {
+      return res.status(404).json({
+        success: false,
+        message: 'Testimonial not found',
+      });
+    }
+
     const updateData = { ...req.body };
 
+    // Handle new file upload
     if (req.file) {
+      deleteImageFile(existingTestimonial.photo);
       updateData.photo = getPhotoPath(req);
+    } else {
+      // Prevent overwriting existing photo field if no new file uploaded
+      delete updateData.photo;
+      delete updateData.existingPhoto;
     }
 
     if (updateData.rating) {
@@ -128,23 +167,16 @@ const updateTestimonial = async (req, res) => {
       }
     );
 
-    if (!testimonial) {
-      return res.status(404).json({
-        success: false,
-        message: "Testimonial not found",
-      });
-    }
-
     return res.status(200).json({
       success: true,
-      message: "Testimonial updated successfully",
+      message: 'Testimonial updated successfully',
       data: testimonial,
     });
   } catch (error) {
-    console.error("UPDATE TESTIMONIAL ERROR:", error);
+    console.error('UPDATE TESTIMONIAL ERROR:', error);
     return res.status(500).json({
       success: false,
-      message: "Server Error",
+      message: 'Server Error',
       error: error.message,
     });
   }
@@ -155,24 +187,28 @@ const updateTestimonial = async (req, res) => {
 // @access  Public / Admin
 const deleteTestimonial = async (req, res) => {
   try {
-    const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
+    const testimonial = await Testimonial.findById(req.params.id);
 
     if (!testimonial) {
       return res.status(404).json({
         success: false,
-        message: "Testimonial not found",
+        message: 'Testimonial not found',
       });
     }
 
+    // Clean up physical file from uploads folder
+    deleteImageFile(testimonial.photo);
+    await Testimonial.findByIdAndDelete(req.params.id);
+
     return res.status(200).json({
       success: true,
-      message: "Testimonial deleted successfully",
+      message: 'Testimonial deleted successfully',
     });
   } catch (error) {
-    console.error("DELETE TESTIMONIAL ERROR:", error);
+    console.error('DELETE TESTIMONIAL ERROR:', error);
     return res.status(500).json({
       success: false,
-      message: "Server Error",
+      message: 'Server Error',
       error: error.message,
     });
   }
