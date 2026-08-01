@@ -176,7 +176,7 @@ const App = () => {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/team" element={<OurTeam />} />
           <Route path="/blogmanagement" element={<BlogManagement />} />
-          <Route path="/blogposting" element={<BlogPosting />} />
+       <Route path="/blogposting/:id" element={<BlogPosting />} />
         </Route>
 
         {/* Global Catch-All Fallback */}

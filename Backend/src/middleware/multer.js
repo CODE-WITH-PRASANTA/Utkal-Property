@@ -3,11 +3,19 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure destination folder exists: uploads/gallery
-const uploadDir = path.join(__dirname, '../../uploads/gallery');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Function to ensure destination folder exists dynamically
+const ensureDirExists = (dirPath) => {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+};
+
+// Default directories setup
+const galleryDir = path.join(__dirname, '../../uploads/gallery');
+const blogDir = path.join(__dirname, '../../uploads/blogs');
+
+ensureDirExists(galleryDir);
+ensureDirExists(blogDir);
 
 // Memory storage to process buffer with Sharp
 const storage = multer.memoryStorage();
@@ -26,13 +34,22 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
-// Middleware to convert image to WebP and set clean relative path
+// Middleware to convert image to WebP and set clean relative path dynamically
 const convertToWebp = async (req, res, next) => {
   if (!req.file) return next();
 
   try {
-    const filename = `gallery-${Date.now()}-${Math.round(Math.random() * 1e9)}.webp`;
-    const outputPath = path.join(uploadDir, filename);
+    // Determine whether this upload is for blogs or gallery based on URL
+    const isBlog = req.originalUrl.includes('blog') || req.baseUrl.includes('blog');
+    
+    const targetFolder = isBlog ? 'blogs' : 'gallery';
+    const prefix = isBlog ? 'blog' : 'gallery';
+
+    const targetDir = path.join(__dirname, `../../uploads/${targetFolder}`);
+    ensureDirExists(targetDir);
+
+    const filename = `${prefix}-${Date.now()}-${Math.round(Math.random() * 1e9)}.webp`;
+    const outputPath = path.join(targetDir, filename);
 
     // Process image buffer with Sharp
     await sharp(req.file.buffer)
@@ -41,7 +58,7 @@ const convertToWebp = async (req, res, next) => {
 
     // Attach filename AND correct relative database path
     req.file.filename = filename;
-    req.file.relativePath = `/uploads/gallery/${filename}`; // <--- Correct Path with /gallery/
+    req.file.relativePath = `/uploads/${targetFolder}/${filename}`;
 
     next();
   } catch (error) {
