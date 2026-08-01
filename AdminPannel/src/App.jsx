@@ -28,6 +28,8 @@ import Setting from "./Pages/Setting/Setting";
 import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
+import BlogManagement from "./Components/BlogManagement/BlogManagement";
+import BlogPosting from "./Components/BlogPosting/BlogPosting";
 
 // Protected Route Component
 const ProtectedRoute = ({
@@ -188,6 +190,14 @@ const App = () => {
             element={<Navigate to="/dashboard" replace />}
           />
         </Route>
+         <Route
+            path="/blogmanagement"
+            element={<BlogManagement/>}
+          />
+         <Route
+            path="/blogposting"
+            element={<BlogPosting/>}
+          />
 
       </Routes>
     </BrowserRouter>

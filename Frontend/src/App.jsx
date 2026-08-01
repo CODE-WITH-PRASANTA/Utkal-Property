@@ -21,8 +21,7 @@ import PropertyDetails from './Pages/PropertyDetails/PropertyDetails';
 
 import SellProperty from './Component/SellProperty/SellProperty';
 import RentProperty from './Component/RentProperty/RentProperty';
-import BlogPosting from './Component/BlogPosting/BlogPosting';
-import BlogManagement from './Component/BlogManagement/BlogManagement';
+
 
 
 function App() {
@@ -48,8 +47,7 @@ function App() {
         <Route path="/our-team" element={<OurTeam/>} />
         <Route path="/sell-property" element={<SellProperty/>} />
         <Route path="/rent-property" element={<RentProperty/>} />
-        <Route path="/blog-posting" element={<BlogPosting/>} />
-        <Route path="/blog-management" element={<BlogManagement/>} />
+        
 
 
 
