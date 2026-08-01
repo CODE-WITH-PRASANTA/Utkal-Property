@@ -3,8 +3,8 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure destination folder exists
-const uploadDir = path.join(__dirname, '../../uploads/team');
+// Ensure destination folder exists: uploads/gallery
+const uploadDir = path.join(__dirname, '../../uploads/gallery');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -23,24 +23,26 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit before conversion
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
-// Middleware to process and convert uploaded photo to .webp format
+// Middleware to convert image to WebP and set clean relative path
 const convertToWebp = async (req, res, next) => {
   if (!req.file) return next();
 
   try {
-    const filename = `team-${Date.now()}-${Math.round(Math.random() * 1e9)}.webp`;
+    const filename = `gallery-${Date.now()}-${Math.round(Math.random() * 1e9)}.webp`;
     const outputPath = path.join(uploadDir, filename);
 
-    // Convert image buffer to WebP with 80% quality compression
+    // Process image buffer with Sharp
     await sharp(req.file.buffer)
       .webp({ quality: 80 })
       .toFile(outputPath);
 
-    // Attach processed filename to req.file for controller usage
+    // Attach filename AND correct relative database path
     req.file.filename = filename;
+    req.file.relativePath = `/uploads/gallery/${filename}`; // <--- Correct Path with /gallery/
+
     next();
   } catch (error) {
     console.error('Error converting image to WebP:', error);

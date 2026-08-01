@@ -16,10 +16,12 @@ import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 
-// Other Components & Pages
+// Sidebar & Page Components
 import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
+
+// Pages
 import Report from "./Pages/Dashboard/Report/Report";
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
@@ -139,7 +141,10 @@ const App = () => {
             </ProtectedRoute>
           }
         >
+          {/* Index Redirect */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          {/* Dashboards */}
           <Route path="/dashboard" element={<DashboardMain />} />
           <Route path="/dashboard-review" element={<DashboardReview />} />
 
@@ -152,16 +157,16 @@ const App = () => {
           {/* Management */}
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/leads" element={<LeadManagement />} />
-          <Route path="/LeadManagement" element={<LeadManagement />} />
+          <Route path="/LeadManagement" element={<LeadManagement />} /> {/* Alias route */}
 
-          {/* General */}
+          {/* General Pages */}
           <Route path="/enquiry" element={<Enquire />} />
           <Route path="/users" element={<User />} />
           <Route path="/reports" element={<Report />} />
-          <Route path="/Report" element={<Report />} />
+          <Route path="/Report" element={<Report />} /> {/* Alias route */}
           <Route path="/settings" element={<Setting />} />
 
-          {/* Profile */}
+          {/* Profile Pages & Aliases */}
           <Route path="/profile" element={<ProfileSetting />} />
           <Route path="/ProfileSetting" element={<ProfileSetting />} />
           <Route path="/DashboardProfile" element={<ProfileSetting />} />
@@ -174,7 +179,7 @@ const App = () => {
           <Route path="/blogposting" element={<BlogPosting />} />
         </Route>
 
-        {/* Catch-All */}
+        {/* Global Catch-All Fallback */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>

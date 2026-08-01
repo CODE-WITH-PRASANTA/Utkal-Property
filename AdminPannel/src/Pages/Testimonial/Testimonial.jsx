@@ -38,30 +38,46 @@ const Testimonial = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Helper to format backend uploaded photos vs external URLs safely across platforms
+  /**
+   * Helper: Extracts photo path from item
+   */
+  const getItemPhoto = (item) => {
+    if (!item) return null;
+    return item.photo || item.image || item.photoPath || item.avatar || null;
+  };
+
+  /**
+   * Clean, reliable image URL resolver
+   * Resolves absolute server path for static files (e.g., http://localhost:5000/uploads/gallery/xxx.webp)
+   */
   const getImageUrl = (photoPath) => {
     if (!photoPath) return null;
 
-    if (photoPath.startsWith('http://') || photoPath.startsWith('https://')) {
+    // 1. Direct Blob previews or absolute web URLs
+    if (photoPath.startsWith('http://') || photoPath.startsWith('https://') || photoPath.startsWith('blob:')) {
       return photoPath;
     }
 
-    // Replace Windows backslashes (\) with forward slashes (/)
+    // 2. Standardize backslashes to forward slashes
     let clean = photoPath.replace(/\\/g, '/');
 
-    // Extract path starting from 'uploads' if full disk paths were saved in DB previously
-    const uploadsIndex = clean.indexOf('uploads/');
+    // 3. Extract relative path starting from "uploads/"
+    const uploadsIndex = clean.toLowerCase().indexOf('uploads/');
     if (uploadsIndex !== -1) {
       clean = '/' + clean.substring(uploadsIndex);
     } else {
       clean = clean.startsWith('/') ? clean : `/${clean}`;
     }
 
-    const baseUrl = IMG_URL || 'http://localhost:5000';
+    // 4. Sanitize multiple consecutive leading slashes
+    clean = clean.replace(/^\/+/, '/');
+
+    // 5. Prepend BASE_URL
+    const baseUrl = (IMG_URL || 'http://localhost:5000').replace(/\/+$/, '');
     return `${baseUrl}${clean}`;
   };
 
-  // Fetch Testimonials on Mount
+  // Fetch Testimonials
   const fetchTestimonials = async () => {
     setLoading(true);
     try {
@@ -89,7 +105,7 @@ const Testimonial = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Image File Upload Handler
+  // Image Upload Handler
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -101,7 +117,7 @@ const Testimonial = () => {
     }
   };
 
-  // Remove Selected / Existing Image
+  // Remove Selected/Existing Image
   const handleRemoveImage = () => {
     if (previewImage && previewImage.startsWith('blob:')) {
       URL.revokeObjectURL(previewImage);
@@ -140,10 +156,11 @@ const Testimonial = () => {
       data.append('status', formData.status);
       data.append('description', formData.description);
 
+      // CRITICAL FIX: Only append 'photo' if a real File is selected!
       if (selectedFile) {
         data.append('photo', selectedFile);
       } else if (editingId && existingPhotoPath) {
-        data.append('photo', existingPhotoPath);
+        data.append('existingPhoto', existingPhotoPath);
       }
 
       const config = {
@@ -173,6 +190,8 @@ const Testimonial = () => {
   // Populate Form for Editing
   const handleEdit = (item) => {
     const id = item._id || item.id;
+    const photo = getItemPhoto(item);
+
     setEditingId(id);
     setFormData({
       name: item.name || '',
@@ -184,8 +203,8 @@ const Testimonial = () => {
     });
 
     setSelectedFile(null);
-    setExistingPhotoPath(item.photo || '');
-    setPreviewImage(getImageUrl(item.photo));
+    setExistingPhotoPath(photo || '');
+    setPreviewImage(getImageUrl(photo));
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -266,7 +285,7 @@ const Testimonial = () => {
                   <button
                     type="button"
                     className="utkal-testimonial-upload-btn"
-                    onClick={() => fileInputRef.current.click()}
+                    onClick={() => fileInputRef.current?.click()}
                   >
                     <FaUpload /> {previewImage ? 'Change Image' : 'Upload Image'}
                   </button>
@@ -412,7 +431,8 @@ const Testimonial = () => {
                 ) : testimonials.length > 0 ? (
                   testimonials.map((item) => {
                     const id = item._id || item.id;
-                    const avatarSrc = getImageUrl(item.photo);
+                    const rawPhotoPath = getItemPhoto(item);
+                    const avatarSrc = getImageUrl(rawPhotoPath);
                     const isImageBroken = brokenImages[id];
 
                     return (
@@ -515,9 +535,9 @@ const Testimonial = () => {
 
               <div className="utkal-testimonial-modal-header">
                 <FaQuoteLeft className="utkal-testimonial-modal-quote-icon" />
-                {viewingTestimonial.photo && !brokenImages[viewingTestimonial._id || viewingTestimonial.id] ? (
+                {getItemPhoto(viewingTestimonial) && !brokenImages[viewingTestimonial._id || viewingTestimonial.id] ? (
                   <img
-                    src={getImageUrl(viewingTestimonial.photo)}
+                    src={getImageUrl(getItemPhoto(viewingTestimonial))}
                     alt={viewingTestimonial.name}
                     className="utkal-testimonial-modal-avatar"
                     onError={() => handleImageError(viewingTestimonial._id || viewingTestimonial.id)}

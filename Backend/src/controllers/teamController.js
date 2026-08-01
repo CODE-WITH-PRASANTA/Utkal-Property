@@ -5,18 +5,21 @@ const path = require('path');
 // Helper to safely delete existing webp files on update/delete
 const deleteImageFile = (photoPath) => {
   if (!photoPath) return;
+
   // Strip leading slash if present
   const cleanPath = photoPath.startsWith('/') ? photoPath.substring(1) : photoPath;
-  const fullPath = path.join(__dirname, '../../', cleanPath);
+  const fullPath = path.join(process.cwd(), cleanPath);
 
-  if (fs.existsSync(fullPath)) {
-    fs.unlink(fullPath, (err) => {
-      if (err) console.error('Failed to delete image file:', err);
-    });
-  }
+  fs.access(fullPath, fs.constants.F_OK, (err) => {
+    if (!err) {
+      fs.unlink(fullPath, (unlinkErr) => {
+        if (unlinkErr) console.error('Failed to delete image file:', unlinkErr);
+      });
+    }
+  });
 };
 
-// GET: Fetch all members sorted by order
+// GET: Fetch all members sorted by displayOrder
 exports.getTeamMembers = async (req, res) => {
   try {
     const members = await TeamMember.find().sort({ displayOrder: 1, createdAt: -1 });
@@ -26,14 +29,15 @@ exports.getTeamMembers = async (req, res) => {
   }
 };
 
-// POST: Create member
+// POST: Create team member
 exports.createTeamMember = async (req, res) => {
   try {
     if (!req.file || !req.file.filename) {
       return res.status(400).json({ success: false, message: 'Profile photo is required.' });
     }
 
-    const relativePhotoPath = `/uploads/team/${req.file.filename}`;
+    // Uses req.file.relativePath if present, otherwise uses req.file.path or fallback
+    const photoPath = req.file.relativePath || req.file.path || `/uploads/team/${req.file.filename}`;
 
     const newMember = new TeamMember({
       fullName: req.body.fullName,
@@ -45,7 +49,7 @@ exports.createTeamMember = async (req, res) => {
       linkedin: req.body.linkedin || '',
       displayOrder: req.body.displayOrder ? Number(req.body.displayOrder) : 1,
       status: req.body.status || 'Active',
-      photo: relativePhotoPath
+      photo: photoPath
     });
 
     await newMember.save();
@@ -55,7 +59,7 @@ exports.createTeamMember = async (req, res) => {
   }
 };
 
-// PUT: Update member
+// PUT: Update team member
 exports.updateTeamMember = async (req, res) => {
   try {
     const { id } = req.params;
@@ -67,10 +71,10 @@ exports.updateTeamMember = async (req, res) => {
 
     let photoPath = existingMember.photo;
 
-    // Delete old image and set new .webp path if new file uploaded
+    // Delete old image and set new path if new file uploaded
     if (req.file && req.file.filename) {
       deleteImageFile(existingMember.photo);
-      photoPath = `/uploads/team/${req.file.filename}`;
+      photoPath = req.file.relativePath || req.file.path || `/uploads/team/${req.file.filename}`;
     }
 
     const updatedData = {
@@ -93,7 +97,7 @@ exports.updateTeamMember = async (req, res) => {
   }
 };
 
-// DELETE: Delete member
+// DELETE: Delete team member
 exports.deleteTeamMember = async (req, res) => {
   try {
     const { id } = req.params;
