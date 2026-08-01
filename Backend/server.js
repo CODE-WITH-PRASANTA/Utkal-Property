@@ -18,6 +18,7 @@ const userRoutes = require(
 
 
 
+const blogRoutes = require("./src/routes/blogRoutes");
 
 // Initialize MongoDB Connection
 connectDB();
@@ -42,6 +43,7 @@ app.use(
   "/api/users",
   userRoutes
 );
+app.use("/api/blogs", blogRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Server Running Successfully" });

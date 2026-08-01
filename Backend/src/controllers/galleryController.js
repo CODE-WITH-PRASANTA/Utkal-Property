@@ -50,8 +50,8 @@ exports.createGalleryItem = async (req, res) => {
       });
     }
 
-    // FIX: Use req.file.path set by convertToWebp middleware (/uploads/gallery/filename.webp)
-    const imagePath = req.file.path || `/uploads/${req.file.filename}`;
+    // FIX: Use req.file.relativePath set by convertToWebp, or construct /uploads/gallery/ explicitly
+    const imagePath = req.file.relativePath || `/uploads/gallery/${req.file.filename}`;
 
     const newItem = await Gallery.create({
       image: imagePath
@@ -86,8 +86,8 @@ exports.updateGalleryItem = async (req, res) => {
 
     if (req.file) {
       removeFile(item.image);
-      // FIX: Use req.file.path set by convertToWebp middleware
-      item.image = req.file.path || `/uploads/${req.file.filename}`;
+      // FIX: Use req.file.relativePath or construct /uploads/gallery/ explicitly
+      item.image = req.file.relativePath || `/uploads/gallery/${req.file.filename}`;
     }
 
     await item.save();

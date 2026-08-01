@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-/* Wrapper with soft green gradient background replacing yellow tint */
-.AboutFindDreamHome-wrapper {
-  width: 100%;
-  background:  linear-gradient(rgba(11, 59, 36, 0.45), rgba(0, 0, 0, 0.65));
-=======
 /* Wrapper with soft mint-green gradient background */
 .AboutFindDreamHome-wrapper {
   width: 100%;
   background: linear-gradient(135deg, #ffffff 0%, #f2f9f5 50%, #e8f5ed 100%);
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow: hidden;
   padding: 0 24px;
@@ -39,28 +32,15 @@
 .AboutFindDreamHome-title {
   font-size: 3.2rem;
   font-weight: 800;
-<<<<<<< HEAD
-=======
   color: #0f172a;
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
   line-height: 1.15;
   margin: 0 0 24px 0;
   letter-spacing: -0.02em;
 }
 
-<<<<<<< HEAD
-/* Dual-color typography classes matching reference image 2 */
-.AboutFindDreamHome-title-dark {
-  color: #0a1420; /* Dark navy / black */
-}
-
-.AboutFindDreamHome-title-green {
-  color: #18522e; /* Dark green replacing yellow */
-=======
 /* Half Green Text Highlight */
 .AboutFindDreamHome-highlight-text {
   color: #10532e;
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .AboutFindDreamHome-subtitle {
@@ -76,11 +56,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-<<<<<<< HEAD
-  background-color: #18522e;
-=======
   background-color: #10532e;
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
   color: #ffffff;
   font-size: 1.1rem;
   font-weight: 600;
@@ -90,11 +66,7 @@
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-<<<<<<< HEAD
-  box-shadow: 0 4px 6px rgba(24, 82, 46, 0.25);
-=======
   box-shadow: 0 4px 12px rgba(16, 83, 46, 0.25);
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 .AboutFindDreamHome-button-icon {
@@ -104,13 +76,8 @@
 
 .AboutFindDreamHome-button:hover {
   transform: translateY(-4px) scale(1.02);
-<<<<<<< HEAD
-  box-shadow: 0 10px 20px rgba(24, 82, 46, 0.35);
-  background-color: #0f3d20;
-=======
   box-shadow: 0 10px 20px rgba(16, 83, 46, 0.35);
   background-color: #0b3b20;
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 }
 
 /* Ringing animation on phone icon when button is hovered */
@@ -148,11 +115,7 @@
   align-self: flex-end;
 }
 
-<<<<<<< HEAD
-/* Dark green isometric pattern SVG wrapper */
-=======
 /* Green isometric pattern SVG wrapper */
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
 .AboutFindDreamHome-pattern {
   position: absolute;
   top: 10%;
