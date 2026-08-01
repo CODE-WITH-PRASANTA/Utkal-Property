@@ -1,143 +1,169 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import './BlogPosting.css';
+import API, { IMG_URL } from '../../api/axios';
+
 
 const BlogPosting = () => {
-  // --- Form State ---
+  
+  const navigate = useNavigate();
+const { id } = useParams();
+  // --- Form & Edit State ---
+  const [editingId, setEditingId] = useState(null);
   const [blogImage, setBlogImage] = useState('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80');
-  const [title, setTitle] = useState('Real estate shifts: Prices and sales trending down in two different spheres');
-  const [slug, setSlug] = useState('real-estate-shifts-prices-and-sales-trending');
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
   const [category, setCategory] = useState('Housing');
-  const [tags, setTags] = useState(['Real Estate', 'Market', 'Trends']);
+  const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [author, setAuthor] = useState('Admin User');
-  const [publishDate, setPublishDate] = useState('2025-05-23');
+  const [publishDate, setPublishDate] = useState('2026-07-31');
   const [publishTime, setPublishTime] = useState('10:30');
-  const [shortDesc, setShortDesc] = useState('Hosted by Utkal Property (Best Property Consultant in Bhubaneswar), our market insights explore the intersection of property pricing, housing demand, and urban expansion across Odisha...');
-  const [content, setContent] = useState(`The real estate market is constantly evolving. In recent months, we've seen a shift in both prices and sales trends across different segments. From luxury villas to budget homes, the market dynamics are changing.
+  const [shortDesc, setShortDesc] = useState('');
+  const [content, setContent] = useState('');
 
-Why is the Shift Happening?
-Several factors contribute to this changing landscape:
-• Rising interest rates
-• Changing buyer preferences
-• Economic uncertainty
-• Increased supply in certain areas`);
-  
-  const [metaTitle, setMetaTitle] = useState('Real Estate Market Trends 2025');
-  const [metaDesc, setMetaDescription] = useState('Latest insights on real estate prices and sales trends');
-  const [metaKeywords, setMetaKeywords] = useState('real estate, market trends, property');
-  
-  const [featuredPost, setFeaturedPost] = useState(true);
-  const [showOnHomepage, setShowOnHomepage] = useState(true);
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDesc, setMetaDescription] = useState('');
+  const [metaKeywords, setMetaKeywords] = useState('');
+
+  const [featuredPost, setFeaturedPost] = useState(false);
+  const [showOnHomepage, setShowOnHomepage] = useState(false);
   const [allowComments, setAllowComments] = useState(true);
 
-  // --- Table & Filter State ---
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
-  const [selectedAuthorFilter, setSelectedAuthorFilter] = useState('All');
-  const [sortBy, setSortBy] = useState('Newest First');
+  // Modal & Loading States
+  const [viewingBlog, setViewingBlog] = useState(null);
+  const [loading, setLoading] = useState(false);
+  
+
+  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  // Initial Sample Blogs Table Data
-  const [blogs, setBlogs] = useState([
-    {
-      id: 1,
-      image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=200&q=80',
-      title: 'Real estate shifts: Prices and sales trending down in two different spheres',
-      category: 'Housing',
-      categoryColor: '#fef3c7', // amber soft
-      categoryTextColor: '#92400e',
-      author: 'Admin User',
-      date: '23 May 2025 10:30 AM',
-      status: 'Published',
-      featured: true
-    },
-    {
-      id: 2,
-      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=200&q=80',
-      title: 'We are hiring "moderately," says Compass CEO',
-      category: 'Business',
-      categoryColor: '#e0e7ff', // indigo soft
-      categoryTextColor: '#3730a3',
-      author: 'Admin User',
-      date: '22 May 2025 09:15 AM',
-      status: 'Published',
-      featured: true
-    },
-    {
-      id: 3,
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=200&q=80',
-      title: 'Gorgeous Apartment Building For Sale',
-      category: 'Apartments',
-      categoryColor: '#f3e8ff', // purple soft
-      categoryTextColor: '#6b21a8',
-      author: 'Admin User',
-      date: '21 May 2025 04:45 PM',
-      status: 'Published',
-      featured: true
-    },
-    {
-      id: 4,
-      image: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=200&q=80',
-      title: 'Luxury Villas with Modern Amenities',
-      category: 'Luxury Villa',
-      categoryColor: '#dcfce7', // green soft
-      categoryTextColor: '#166534',
-      author: 'Admin User',
-      date: '20 May 2025 03:20 PM',
-      status: 'Draft',
-      featured: false
-    },
-    {
-      id: 5,
-      image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=200&q=80',
-      title: 'Best Duplex House Designs for Modern Families',
-      category: 'Duplex House',
-      categoryColor: '#ffedd5', // orange soft
-      categoryTextColor: '#9a3412',
-      author: 'Admin User',
-      date: '19 May 2025 11:10 AM',
-      status: 'Published',
-      featured: true
-    },
-    {
-      id: 6,
-      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=200&q=80',
-      title: 'How to Choose the Right Property in 2025',
-      category: 'Business',
-      categoryColor: '#e0e7ff',
-      categoryTextColor: '#3730a3',
-      author: 'Admin User',
-      date: '18 May 2025 02:05 PM',
-      status: 'Draft',
-      featured: false
-    },
-    {
-      id: 7,
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=200&q=80',
-      title: 'Top Locations to Invest in Bhubaneswar',
-      category: 'Investment',
-      categoryColor: '#fee2e2', // red soft
-      categoryTextColor: '#991b1b',
-      author: 'Admin User',
-      date: '17 May 2025 05:30 PM',
-      status: 'Published',
-      featured: true
-    },
-    {
-      id: 8,
-      image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=200&q=80',
-      title: 'Interior Design Tips for Your Dream Home',
-      category: 'Lifestyle',
-      categoryColor: '#e0f2fe', // cyan soft
-      categoryTextColor: '#075985',
-      author: 'Admin User',
-      date: '16 May 2025 01:40 PM',
-      status: 'Published',
-      featured: false
+  const fileInputRef = useRef(null);
+  const contentTextareaRef = useRef(null);
+
+  // Database State
+  const [blogs, setBlogs] = useState([]);
+  const fetchBlogById = async () => {
+  if (!id) return;
+
+  try {
+    setLoading(true);
+
+    const res = await API.get(`/blogs/${id}`);
+
+    if (res.data.success) {
+      const blog = res.data.data;
+
+      setEditingId(blog._id);
+
+      setBlogImage(getImageUrl(blog.blogImage));
+      setSelectedFile(null);
+
+      setTitle(blog.title || "");
+      setSlug(blog.slug || "");
+      setCategory(blog.category || "Housing");
+
+      setTags(Array.isArray(blog.tags) ? blog.tags : []);
+
+      setAuthor(blog.author || "Admin User");
+      setPublishDate(blog.publishDate || "");
+      setPublishTime(blog.publishTime || "");
+
+      setShortDesc(blog.shortDesc || "");
+      setContent(blog.content || "");
+
+      setMetaTitle(blog.metaTitle || "");
+      setMetaDescription(blog.metaDesc || "");
+      setMetaKeywords(blog.metaKeywords || "");
+
+      setFeaturedPost(Boolean(blog.featuredPost));
+      setShowOnHomepage(Boolean(blog.showOnHomepage));
+      setAllowComments(Boolean(blog.allowComments));
     }
-  ]);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  // --- Handlers ---
+  // --- Fetch Blogs from Backend API ---
+  const fetchBlogs = async () => {
+    try {
+      setLoading(true);
+      // Hits http://localhost:5000/api/blogs
+      const res = await API.get('/blogs');
+      if (res && res.data && res.data.success) {
+        setBlogs(res.data.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch blogs from API:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+useEffect(() => {
+  fetchBlogs();
+
+  if (id) {
+    fetchBlogById();
+  }
+}, [id]);
+
+  // Category Theme Helper
+  const getCategoryTheme = (catName) => {
+    switch (catName) {
+      case 'Housing': return { bg: '#fef3c7', text: '#92400e' };
+      case 'Business': return { bg: '#e0e7ff', text: '#3730a3' };
+      case 'Apartments': return { bg: '#f3e8ff', text: '#6b21a8' };
+      case 'Luxury Villa': return { bg: '#dcfce7', text: '#166534' };
+      case 'Duplex House': return { bg: '#ffedd5', text: '#9a3412' };
+      case 'Investment': return { bg: '#fee2e2', text: '#991b1b' };
+      default: return { bg: '#e0f2fe', text: '#075985' };
+    }
+  };
+
+  // Image URL Resolver
+  const getImageUrl = (imgObj) => {
+    if (!imgObj) return 'https://via.placeholder.com/800x400?text=No+Cover+Image';
+    if (imgObj.startsWith('http') || imgObj.startsWith('data:')) return imgObj;
+    return `${IMG_URL}${imgObj.startsWith('/') ? '' : '/'}${imgObj}`;
+  };
+
+  // --- Image Handlers ---
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setBlogImage(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setBlogImage('https://via.placeholder.com/800x400?text=Upload+Cover+Image');
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // --- Title & Slug Synchronization ---
+  const handleTitleChange = (val) => {
+    setTitle(val);
+    if (!editingId) {
+      const generatedSlug = val
+        .toLowerCase()
+        .replace(/[^a-z0-9 -]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+      setSlug(generatedSlug);
+    }
+  };
+
+  // --- Tags Management ---
   const handleAddTag = (e) => {
     if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
@@ -149,28 +175,31 @@ Several factors contribute to this changing landscape:
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setTags(tags.filter(t => t !== tagToRemove));
+    setTags(tags.filter((t) => t !== tagToRemove));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setBlogImage(URL.createObjectURL(file));
-    }
+  // --- Rich Text Format Helper ---
+  const applyTextFormat = (wrapper) => {
+    const el = contentTextareaRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = content.substring(start, end) || 'text';
+    const formatted = `${wrapper}${selected}${wrapper}`;
+    const newContent = content.substring(0, start) + formatted + content.substring(end);
+    setContent(newContent);
   };
 
-  const handleRemoveImage = () => {
-    setBlogImage('https://via.placeholder.com/600x300?text=Upload+Image');
-  };
-
+  // --- Reset Form ---
   const handleReset = () => {
+    setEditingId(null);
     setTitle('');
     setSlug('');
     setCategory('Housing');
     setTags([]);
     setAuthor('Admin User');
-    setPublishDate('');
-    setPublishTime('');
+    setPublishDate('2026-07-31');
+    setPublishTime('10:30');
     setShortDesc('');
     setContent('');
     setMetaTitle('');
@@ -179,109 +208,209 @@ Several factors contribute to this changing landscape:
     setFeaturedPost(false);
     setShowOnHomepage(false);
     setAllowComments(true);
+    setBlogImage('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80');
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handlePublish = (statusType = 'Published') => {
+  // --- Save / Update Post via API ---
+  const handlePublish = async (statusType = 'Published') => {
     if (!title.trim()) {
-      alert('Please fill in the Blog Title!');
+      alert('Please enter a blog title!');
+      return;
+    }
+    if (!shortDesc.trim()) {
+      alert('Please enter a short description!');
+      return;
+    }
+    if (!content.trim()) {
+      alert('Please enter post content!');
       return;
     }
 
-    const newBlog = {
-      id: Date.now(),
-      image: blogImage,
-      title: title,
-      category: category,
-      categoryColor: '#fef3c7',
-      categoryTextColor: '#92400e',
-      author: author || 'Admin User',
-      date: `${publishDate || '31 Jul 2026'} ${publishTime || '12:00 PM'}`,
-      status: statusType,
-      featured: featuredPost
-    };
+    try {
+      setLoading(true);
 
-    setBlogs([newBlog, ...blogs]);
-    alert(`Blog successfully ${statusType === 'Published' ? 'published' : 'saved as draft'}!`);
-  };
+      const formData = new FormData();
+      if (selectedFile) {
+        formData.append('blogImage', selectedFile);
+      } else {
+        formData.append('blogImage', blogImage);
+      }
 
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this blog post?')) {
-      setBlogs(blogs.filter(b => b.id !== id));
+      formData.append('title', title);
+      formData.append('slug', slug);
+      formData.append('category', category);
+      formData.append('tags', JSON.stringify(tags));
+      formData.append('author', author || 'Admin User');
+      formData.append('publishDate', publishDate || '2026-07-31');
+      formData.append('publishTime', publishTime || '10:30');
+      formData.append('shortDesc', shortDesc);
+      formData.append('content', content);
+      formData.append('metaTitle', metaTitle);
+      formData.append('metaDesc', metaDesc);
+      formData.append('metaKeywords', metaKeywords);
+      formData.append('featuredPost', featuredPost);
+      formData.append('showOnHomepage', showOnHomepage);
+      formData.append('allowComments', allowComments);
+      formData.append('status', statusType);
+
+      let res;
+      if (editingId) {
+        res = await API.put(`/blogs/${editingId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      } else {
+        res = await API.post('/blogs', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      }
+
+      if (res.data.success) {
+    alert(editingId ? "Blog updated successfully!" : "Blog created successfully!");
+
+    navigate("/blogmanagement", {
+        replace: true
+    });
+}
+    } catch (err) {
+      console.error('Error publishing blog:', err);
+      alert(err.response?.data?.message || 'Failed to save blog post to server.');
+    } finally {
+      setLoading(false);
     }
   };
 
+  // --- Table Actions ---
   const handleEdit = (blog) => {
-    setTitle(blog.title);
-    setCategory(blog.category);
-    setAuthor(blog.author);
-    setFeaturedPost(blog.featured);
+    setEditingId(blog._id || blog.id);
+    setBlogImage(getImageUrl(blog.blogImage));
+    setSelectedFile(null);
+    setTitle(blog.title || '');
+    setSlug(blog.slug || '');
+    setCategory(blog.category || 'Housing');
+    setTags(Array.isArray(blog.tags) ? blog.tags : []);
+    setAuthor(blog.author || 'Admin User');
+    setPublishDate(blog.publishDate || '2026-07-31');
+    setPublishTime(blog.publishTime || '10:30');
+    setShortDesc(blog.shortDesc || '');
+    setContent(blog.content || '');
+    setMetaTitle(blog.metaTitle || '');
+    setMetaDescription(blog.metaDesc || '');
+    setMetaKeywords(blog.metaKeywords || '');
+    setFeaturedPost(Boolean(blog.featuredPost));
+    setShowOnHomepage(Boolean(blog.showOnHomepage));
+    setAllowComments(blog.allowComments !== undefined ? Boolean(blog.allowComments) : true);
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleView = (blog) => {
-    alert(`Viewing Details:\n\nTitle: ${blog.title}\nCategory: ${blog.category}\nAuthor: ${blog.author}\nStatus: ${blog.status}`);
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this blog post?')) {
+      try {
+        setLoading(true);
+        const res = await API.delete(`/blogs/${id}`);
+        if (res.data.success) {
+          alert('Blog post deleted successfully!');
+          await fetchBlogs();
+          if (editingId === id) handleReset();
+        }
+      } catch (err) {
+        console.error('Delete error:', err);
+        alert('Failed to delete blog post.');
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
-  // --- Filtering Logic ---
-  const filteredBlogs = blogs.filter(blog => {
-    const matchesCategory = selectedCategoryFilter === 'All' || blog.category === selectedCategoryFilter;
-    const matchesStatus = selectedStatusFilter === 'All' || blog.status === selectedStatusFilter;
-    const matchesAuthor = selectedAuthorFilter === 'All' || blog.author.toLowerCase().includes(selectedAuthorFilter.toLowerCase());
-    return matchesCategory && matchesStatus && matchesAuthor;
-  });
+  const handleView = (blog) => {
+    setViewingBlog(blog);
+  };
+
+  // --- Pagination Computations ---
+  const totalPages = Math.ceil(blogs.length / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedBlogs = blogs.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="bm-container">
-      {/* 50 / 50 Split Layout Container */}
       <div className="bm-wrapper">
-        
         {/* ================= LEFT SIDE: FORM (50%) ================= */}
         <div className="bm-form-card">
-          
-          {/* Image Upload Banner */}
+          <div className="bm-card-header">
+            <h3>{editingId ? '✏️ Edit Blog Post' : '📝 Create New Blog Post'}</h3>
+            {editingId && (
+              <span className="bm-editing-badge">Editing Post ID #{String(editingId).slice(-6)}</span>
+            )}
+          </div>
+
+          {/* Cover Image Upload */}
           <div className="bm-form-group">
-            <label className="bm-label">Blog Image <span className="bm-required">*</span></label>
-            <div className="bm-image-preview-container">
-              <img src={blogImage} alt="Blog preview" className="bm-image-preview" />
+            <label className="bm-label">
+              Blog Cover Image <span className="bm-required">*</span>
+            </label>
+            <div
+              className="bm-image-dropzone"
+              onClick={() => fileInputRef.current && fileInputRef.current.click()}
+            >
+              <img src={blogImage} alt="Blog Cover" className="bm-image-preview" />
+              <div className="bm-dropzone-overlay">
+                <span>📷 Click to upload new image</span>
+              </div>
             </div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleImageChange}
+              hidden
+            />
             <div className="bm-image-actions">
-              <label className="bm-btn-outline">
-                📷 Change Image
-                <input type="file" accept="image/*" onChange={handleImageChange} hidden />
-              </label>
+              <button
+                type="button"
+                className="bm-btn-outline"
+                onClick={() => fileInputRef.current && fileInputRef.current.click()}
+              >
+                📁 Choose File
+              </button>
               <button type="button" className="bm-btn-danger-outline" onClick={handleRemoveImage}>
-                🗑️ Remove
+                🗑️ Remove Image
               </button>
             </div>
           </div>
 
-          {/* Title */}
+          {/* Title Field */}
           <div className="bm-form-group">
-            <label className="bm-label">Title <span className="bm-required">*</span></label>
+            <label className="bm-label">
+              Blog Title <span className="bm-required">*</span>
+            </label>
             <div className="bm-input-counter-wrapper">
-              <input 
-                type="text" 
-                className="bm-input" 
-                maxLength={100} 
-                value={title} 
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter blog title"
+              <input
+                type="text"
+                className="bm-input"
+                maxLength={100}
+                value={title}
+                onChange={(e) => handleTitleChange(e.target.value)}
+                placeholder="Enter post title..."
               />
               <span className="bm-char-counter">{title.length}/100</span>
             </div>
           </div>
 
-          {/* Slug */}
+          {/* Slug Field */}
           <div className="bm-form-group">
-            <label className="bm-label">Slug (URL) <span className="bm-required">*</span></label>
+            <label className="bm-label">
+              Slug (URL) <span className="bm-required">*</span>
+            </label>
             <div className="bm-input-counter-wrapper">
-              <input 
-                type="text" 
-                className="bm-input" 
-                maxLength={100} 
-                value={slug} 
+              <input
+                type="text"
+                className="bm-input"
+                maxLength={100}
+                value={slug}
                 onChange={(e) => setSlug(e.target.value)}
-                placeholder="e.g. real-estate-shifts"
+                placeholder="e.g. real-estate-shifts-prices"
               />
               <span className="bm-char-counter">{slug.length}/100</span>
             </div>
@@ -290,7 +419,9 @@ Several factors contribute to this changing landscape:
           {/* Category & Tags Grid */}
           <div className="bm-grid-2">
             <div className="bm-form-group">
-              <label className="bm-label">Category <span className="bm-required">*</span></label>
+              <label className="bm-label">
+                Category <span className="bm-required">*</span>
+              </label>
               <select className="bm-select" value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="Housing">Housing</option>
                 <option value="Business">Business</option>
@@ -303,17 +434,17 @@ Several factors contribute to this changing landscape:
             </div>
 
             <div className="bm-form-group">
-              <label className="bm-label">Tags</label>
+              <label className="bm-label">Tags (Press Enter)</label>
               <div className="bm-tags-input-container">
                 {tags.map((tag, idx) => (
                   <span key={idx} className="bm-tag-badge">
                     {tag} <button type="button" onClick={() => handleRemoveTag(tag)}>✕</button>
                   </span>
                 ))}
-                <input 
-                  type="text" 
-                  className="bm-tag-input" 
-                  placeholder="Type tag & press enter" 
+                <input
+                  type="text"
+                  className="bm-tag-input"
+                  placeholder="Type tag & press enter"
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={handleAddTag}
@@ -322,292 +453,277 @@ Several factors contribute to this changing landscape:
             </div>
           </div>
 
-          {/* Author Input, Publish Date, Publish Time */}
+          {/* Author, Date & Time */}
           <div className="bm-grid-3">
             <div className="bm-form-group">
-              <label className="bm-label">Author / Posted By <span className="bm-required">*</span></label>
-              {/* UPDATED: Changed from select dropdown to regular input box */}
-              <input 
-                type="text" 
-                className="bm-input" 
-                value={author} 
-                onChange={(e) => setAuthor(e.target.value)} 
+              <label className="bm-label">
+                Author / Posted By <span className="bm-required">*</span>
+              </label>
+              <input
+                type="text"
+                className="bm-input"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
                 placeholder="Enter author name"
               />
             </div>
 
             <div className="bm-form-group">
-              <label className="bm-label">Publish Date <span className="bm-required">*</span></label>
-              <input 
-                type="date" 
-                className="bm-input" 
-                value={publishDate} 
-                onChange={(e) => setPublishDate(e.target.value)} 
+              <label className="bm-label">
+                Publish Date <span className="bm-required">*</span>
+              </label>
+              <input
+                type="date"
+                className="bm-input"
+                value={publishDate}
+                onChange={(e) => setPublishDate(e.target.value)}
               />
             </div>
 
             <div className="bm-form-group">
               <label className="bm-label">Publish Time</label>
-              <input 
-                type="time" 
-                className="bm-input" 
-                value={publishTime} 
-                onChange={(e) => setPublishTime(e.target.value)} 
+              <input
+                type="time"
+                className="bm-input"
+                value={publishTime}
+                onChange={(e) => setPublishTime(e.target.value)}
               />
             </div>
           </div>
 
           {/* Short Description */}
           <div className="bm-form-group">
-            <label className="bm-label">Short Description <span className="bm-required">*</span></label>
+            <label className="bm-label">
+              Short Description <span className="bm-required">*</span>
+            </label>
             <div className="bm-input-counter-wrapper">
-              <textarea 
-                className="bm-textarea" 
-                rows={3} 
+              <textarea
+                className="bm-textarea"
+                rows={3}
                 maxLength={200}
-                value={shortDesc} 
+                value={shortDesc}
                 onChange={(e) => setShortDesc(e.target.value)}
-                placeholder="Enter a brief summary..."
+                placeholder="Brief excerpt for list cards..."
               />
               <span className="bm-char-counter">{shortDesc.length}/200</span>
             </div>
           </div>
 
-          {/* Content (TinyMCE Inspired Rich Text Editor UI) */}
+          {/* Content Area */}
           <div className="bm-form-group">
-            <label className="bm-label">Content <span className="bm-required">*</span></label>
+            <label className="bm-label">
+              Full Content <span className="bm-required">*</span>
+            </label>
             <div className="bm-editor-container">
-              {/* Rich Text Toolbar Bar */}
               <div className="bm-editor-toolbar">
                 <div className="bm-editor-actions-left">
-                  <button type="button" className="bm-editor-btn"><b>B</b></button>
-                  <button type="button" className="bm-editor-btn"><i>I</i></button>
-                  <button type="button" className="bm-editor-btn"><u>U</u></button>
+                  <button type="button" className="bm-editor-btn" onClick={() => applyTextFormat('**')}><b>B</b></button>
+                  <button type="button" className="bm-editor-btn" onClick={() => applyTextFormat('*')}><i>I</i></button>
+                  <button type="button" className="bm-editor-btn" onClick={() => applyTextFormat('<u>')}><u>U</u></button>
                   <span className="bm-toolbar-divider"></span>
-                  <button type="button" className="bm-editor-btn">≡</button>
-                  <button type="button" className="bm-editor-btn">≣</button>
-                  <span className="bm-toolbar-divider"></span>
-                  <button type="button" className="bm-editor-btn">“</button>
-                  <button type="button" className="bm-editor-btn">🔗</button>
-                  <button type="button" className="bm-editor-btn">📷</button>
-                  <button type="button" className="bm-editor-btn">🎬</button>
+                  <button type="button" className="bm-editor-btn" onClick={() => applyTextFormat('\n• ')}>≡</button>
+                  <button type="button" className="bm-editor-btn" onClick={() => applyTextFormat('\n> ')}>“</button>
                 </div>
                 <div className="bm-editor-actions-right">
                   <span className="bm-editor-mode-badge bm-active">Visual</span>
-                  <span className="bm-editor-mode-badge">Text</span>
                 </div>
               </div>
 
-              <textarea 
-                className="bm-editor-textarea" 
+              <textarea
+                ref={contentTextareaRef}
+                className="bm-editor-textarea"
                 rows={8}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                placeholder="Write your full blog content here..."
+                placeholder="Write full article body content..."
               />
             </div>
           </div>
 
-          {/* Meta Information Grid */}
+          {/* SEO Meta Fields */}
           <div className="bm-grid-3">
             <div className="bm-form-group">
               <label className="bm-label">Meta Title</label>
-              <input 
-                type="text" 
-                className="bm-input" 
-                value={metaTitle} 
-                onChange={(e) => setMetaTitle(e.target.value)} 
-                placeholder="Meta title"
+              <input
+                type="text"
+                className="bm-input"
+                value={metaTitle}
+                onChange={(e) => setMetaTitle(e.target.value)}
+                placeholder="SEO meta title"
               />
             </div>
 
             <div className="bm-form-group">
               <label className="bm-label">Meta Description</label>
-              <input 
-                type="text" 
-                className="bm-input" 
-                value={metaDesc} 
-                onChange={(e) => setMetaDescription(e.target.value)} 
-                placeholder="Meta description"
+              <input
+                type="text"
+                className="bm-input"
+                value={metaDesc}
+                onChange={(e) => setMetaDescription(e.target.value)}
+                placeholder="SEO description"
               />
             </div>
 
             <div className="bm-form-group">
               <label className="bm-label">Meta Keywords</label>
-              <input 
-                type="text" 
-                className="bm-input" 
-                value={metaKeywords} 
-                onChange={(e) => setMetaKeywords(e.target.value)} 
-                placeholder="Meta keywords"
+              <input
+                type="text"
+                className="bm-input"
+                value={metaKeywords}
+                onChange={(e) => setMetaKeywords(e.target.value)}
+                placeholder="Keywords, property"
               />
             </div>
           </div>
 
-          {/* Toggles Row */}
+          {/* Toggles */}
           <div className="bm-toggles-row">
             <label className="bm-toggle-item">
-              <input 
-                type="checkbox" 
-                checked={featuredPost} 
-                onChange={(e) => setFeaturedPost(e.target.checked)} 
+              <input
+                type="checkbox"
+                checked={featuredPost}
+                onChange={(e) => setFeaturedPost(e.target.checked)}
               />
               <span className="bm-toggle-slider"></span>
               <span className="bm-toggle-text">Featured Post</span>
             </label>
 
             <label className="bm-toggle-item">
-              <input 
-                type="checkbox" 
-                checked={showOnHomepage} 
-                onChange={(e) => setShowOnHomepage(e.target.checked)} 
+              <input
+                type="checkbox"
+                checked={showOnHomepage}
+                onChange={(e) => setShowOnHomepage(e.target.checked)}
               />
               <span className="bm-toggle-slider"></span>
               <span className="bm-toggle-text">Show on Homepage</span>
             </label>
 
             <label className="bm-toggle-item">
-              <input 
-                type="checkbox" 
-                checked={allowComments} 
-                onChange={(e) => setAllowComments(e.target.checked)} 
+              <input
+                type="checkbox"
+                checked={allowComments}
+                onChange={(e) => setAllowComments(e.target.checked)}
               />
               <span className="bm-toggle-slider"></span>
               <span className="bm-toggle-text">Allow Comments</span>
             </label>
           </div>
 
-          {/* Form Action Buttons */}
+          {/* Actions */}
           <div className="bm-form-actions">
-            <button type="button" className="bm-btn-primary" onClick={() => handlePublish('Published')}>
-              ✅ Publish Post
+            <button
+              type="button"
+              className="bm-btn-primary"
+              disabled={loading}
+              onClick={() => handlePublish('Published')}
+            >
+              {loading ? '⌛ Processing...' : editingId ? '🔄 Update Post' : '✅ Publish Post'}
             </button>
-            <button type="button" className="bm-btn-secondary" onClick={() => handlePublish('Draft')}>
+            <button
+              type="button"
+              className="bm-btn-secondary"
+              disabled={loading}
+              onClick={() => handlePublish('Draft')}
+            >
               💾 Save Draft
             </button>
             <button type="button" className="bm-btn-light" onClick={handleReset}>
-              🔄 Reset
+              🔄 Reset Form
             </button>
           </div>
-
         </div>
 
         {/* ================= RIGHT SIDE: TABLE (50%) ================= */}
         <div className="bm-table-card">
-          
-          {/* Top Filter Bar */}
-          <div className="bm-filters-grid">
-            <div className="bm-filter-group">
-              <label className="bm-filter-label">Category</label>
-              <select className="bm-select" value={selectedCategoryFilter} onChange={(e) => setSelectedCategoryFilter(e.target.value)}>
-                <option value="All">All Categories</option>
-                <option value="Housing">Housing</option>
-                <option value="Business">Business</option>
-                <option value="Apartments">Apartments</option>
-                <option value="Luxury Villa">Luxury Villa</option>
-                <option value="Duplex House">Duplex House</option>
-                <option value="Investment">Investment</option>
-                <option value="Lifestyle">Lifestyle</option>
-              </select>
-            </div>
-
-            <div className="bm-filter-group">
-              <label className="bm-filter-label">Status</label>
-              <select className="bm-select" value={selectedStatusFilter} onChange={(e) => setSelectedStatusFilter(e.target.value)}>
-                <option value="All">All Status</option>
-                <option value="Published">Published</option>
-                <option value="Draft">Draft</option>
-              </select>
-            </div>
-
-            <div className="bm-filter-group">
-              <label className="bm-filter-label">Author</label>
-              <select className="bm-select" value={selectedAuthorFilter} onChange={(e) => setSelectedAuthorFilter(e.target.value)}>
-                <option value="All">All Authors</option>
-                <option value="Admin User">Admin User</option>
-              </select>
-            </div>
-
-            <div className="bm-filter-group">
-              <label className="bm-filter-label">Date</label>
-              <select className="bm-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="Newest First">Newest First</option>
-                <option value="Oldest First">Oldest First</option>
-              </select>
-            </div>
+          <div className="bm-card-header">
+            <h3>📚 Managed Blog Posts ({blogs.length})</h3>
           </div>
 
-          {/* Table Area */}
           <div className="bm-table-responsive">
             <table className="bm-table">
               <thead>
                 <tr>
-                  <th style={{ width: '40px' }}>#</th>
+                  <th style={{ width: '35px' }}>#</th>
                   <th>Image</th>
-                  <th style={{ minWidth: '180px' }}>Title</th>
+                  <th style={{ minWidth: '160px' }}>Title</th>
                   <th>Category</th>
-                  <th>Author</th>
-                  <th>Date</th>
                   <th>Status</th>
                   <th>Featured</th>
-                  <th style={{ textAlign: 'center' }}>Action</th>
+                  <th style={{ textAlign: 'center' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredBlogs.length > 0 ? (
-                  filteredBlogs.map((blog, index) => (
-                    <tr key={blog.id}>
-                      <td>{index + 1}</td>
-                      <td>
-                        <img src={blog.image} alt={blog.title} className="bm-table-img" />
-                      </td>
-                      <td className="bm-table-title-cell">{blog.title}</td>
-                      <td>
-                        <span 
-                          className="bm-category-pill" 
-                          style={{ backgroundColor: blog.categoryColor, color: blog.categoryTextColor }}
-                        >
-                          {blog.category}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="bm-author-cell">
-                          <span className="bm-author-avatar">👤</span>
-                          <span>{blog.author}</span>
-                        </div>
-                      </td>
-                      <td className="bm-table-date">{blog.date}</td>
-                      <td>
-                        <span className={`bm-status-badge ${blog.status.toLowerCase()}`}>
-                          {blog.status}
-                        </span>
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        {blog.featured ? (
-                          <span className="bm-check-icon">✓</span>
-                        ) : (
-                          <span className="bm-dash-icon">—</span>
-                        )}
-                      </td>
-                      <td>
-                        <div className="bm-action-buttons">
-                          <button type="button" className="bm-action-btn view" title="View Blog" onClick={() => handleView(blog)}>
-                            👁️
-                          </button>
-                          <button type="button" className="bm-action-btn edit" title="Edit Blog" onClick={() => handleEdit(blog)}>
-                            ✏️
-                          </button>
-                          <button type="button" className="bm-action-btn delete" title="Delete Blog" onClick={() => handleDelete(blog.id)}>
-                            🗑️
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                {paginatedBlogs.length > 0 ? (
+                  paginatedBlogs.map((blog, index) => {
+                    const catStyle = getCategoryTheme(blog.category);
+                    const isEditing = editingId === (blog._id || blog.id);
+                    return (
+                      <tr key={blog._id || blog.id} className={isEditing ? 'bm-row-editing' : ''}>
+                        <td>{startIndex + index + 1}</td>
+                        <td>
+                          <img
+                            src={getImageUrl(blog.blogImage)}
+                            alt={blog.title}
+                            className="bm-table-img"
+                          />
+                        </td>
+                        <td className="bm-table-title-cell">
+                          <strong>{blog.title}</strong>
+                          <div className="bm-table-subtext">
+                            By {blog.author} • {blog.publishDate}
+                          </div>
+                        </td>
+                        <td>
+                          <span
+                            className="bm-category-pill"
+                            style={{ backgroundColor: catStyle.bg, color: catStyle.text }}
+                          >
+                            {blog.category}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`bm-status-badge ${(blog.status || 'Published').toLowerCase()}`}>
+                            {blog.status || 'Published'}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          {blog.featuredPost ? <span className="bm-check-icon">✓</span> : <span className="bm-dash-icon">—</span>}
+                        </td>
+                        <td>
+                          <div className="bm-action-buttons">
+                            <button
+                              type="button"
+                              className="bm-action-btn view"
+                              title="View Preview"
+                              onClick={() => handleView(blog)}
+                            >
+                              👁️
+                            </button>
+                            <button
+                              type="button"
+                              className="bm-action-btn edit"
+                              title="Edit Post"
+                              onClick={() => handleEdit(blog)}
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              type="button"
+                              className="bm-action-btn delete"
+                              title="Delete Post"
+                              onClick={() => handleDelete(blog._id || blog.id)}
+                            >
+                              🗑️
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
-                    <td colSpan={9} style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>
-                      No blogs found matching the filter criteria.
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>
+                      {loading ? 'Loading blog posts from database...' : 'No blog posts found.'}
                     </td>
                   </tr>
                 )}
@@ -615,54 +731,83 @@ Several factors contribute to this changing landscape:
             </table>
           </div>
 
-          {/* Table Pagination Footer */}
+          {/* Pagination */}
           <div className="bm-pagination-wrapper">
             <span className="bm-pagination-info">
-              Showing 1 to {filteredBlogs.length} of 24 blogs
+              Showing {blogs.length > 0 ? startIndex + 1 : 0} to {Math.min(startIndex + itemsPerPage, blogs.length)} of {blogs.length} entries
             </span>
             <div className="bm-pagination">
-              <button 
-                type="button" 
-                className="bm-page-btn" 
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              >
-                Previous
-              </button>
-              <button 
-                type="button" 
-                className={`bm-page-btn ${currentPage === 1 ? 'active' : ''}`}
-                onClick={() => setCurrentPage(1)}
-              >
-                1
-              </button>
-              <button 
-                type="button" 
-                className={`bm-page-btn ${currentPage === 2 ? 'active' : ''}`}
-                onClick={() => setCurrentPage(2)}
-              >
-                2
-              </button>
-              <button 
-                type="button" 
-                className={`bm-page-btn ${currentPage === 3 ? 'active' : ''}`}
-                onClick={() => setCurrentPage(3)}
-              >
-                3
-              </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="bm-page-btn"
-                onClick={() => setCurrentPage(prev => prev + 1)}
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              >
+                Prev
+              </button>
+              {[...Array(totalPages)].map((_, pageIdx) => (
+                <button
+                  key={pageIdx}
+                  type="button"
+                  className={`bm-page-btn ${currentPage === pageIdx + 1 ? 'active' : ''}`}
+                  onClick={() => setCurrentPage(pageIdx + 1)}
+                >
+                  {pageIdx + 1}
+                </button>
+              ))}
+              <button
+                type="button"
+                className="bm-page-btn"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               >
                 Next
               </button>
             </div>
           </div>
-
         </div>
-
       </div>
+
+      {/* Modal Preview */}
+      {viewingBlog && (
+        <div className="bm-modal-overlay" onClick={() => setViewingBlog(null)}>
+          <div className="bm-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="bm-modal-header">
+              <h4>Preview Blog Post</h4>
+              <button className="bm-modal-close" onClick={() => setViewingBlog(null)}>
+                ✕
+              </button>
+            </div>
+            <div className="bm-modal-body">
+              <img
+                src={getImageUrl(viewingBlog.blogImage)}
+                alt={viewingBlog.title}
+                className="bm-modal-image"
+              />
+              <span
+                className="bm-category-pill"
+                style={{
+                  ...getCategoryTheme(viewingBlog.category),
+                  marginTop: '12px',
+                }}
+              >
+                {viewingBlog.category}
+              </span>
+              <h2>{viewingBlog.title}</h2>
+              <div className="bm-modal-meta">
+                <span>
+                  By <strong>{viewingBlog.author}</strong>
+                </span>{' '}
+                • <span>{viewingBlog.publishDate}</span>
+              </div>
+              <p className="bm-modal-desc">
+                <strong>Excerpt:</strong> {viewingBlog.shortDesc}
+              </p>
+              <div className="bm-modal-text">{viewingBlog.content}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

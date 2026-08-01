@@ -1,5 +1,5 @@
-/* Import Google Fonts for clean typography */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Inter for body copy, Fraunces for display headings — gives the premium editorial feel */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap');
 
 :root {
   --primary-color: #111111;
@@ -8,6 +8,16 @@
   --border-color: #eaeaea;
   --bg-light: #fbfbfb;
   --accent-color: #0066cc;
+
+  /* Premium brand palette, built from the existing green/gold identity */
+  --brand-green: #10532e;
+  --brand-green-dark: #0b3a20;
+  --brand-gold: #c9a227;
+  --brand-gold-light: #e6c757;
+  --cream: #faf8f3;
+  --ink: #101613;
+  --shadow-soft: 0 8px 24px rgba(16, 22, 19, 0.06);
+  --shadow-lift: 0 14px 32px rgba(16, 22, 19, 0.12);
 }
 
 .utkal-blog-details-container {
@@ -26,17 +36,35 @@
   gap: 40px;
 }
 
+.utkal-status-text {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--muted-color);
+}
+
+.utkal-back-link {
+  color: var(--brand-green);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.utkal-back-link:hover {
+  text-decoration: underline;
+}
+
 /* Main Content Styles */
 .utkal-blog-header {
   margin-bottom: 24px;
 }
 
 .utkal-blog-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--primary-color);
-  line-height: 1.3;
+  font-family: 'Fraunces', serif;
+  font-size: 34px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.28;
   margin-bottom: 16px;
+  letter-spacing: -0.01em;
 }
 
 .utkal-blog-meta {
@@ -49,6 +77,7 @@
 
 .utkal-meta-item i {
   margin-right: 6px;
+  color: var(--brand-green);
 }
 
 .utkal-blog-body p {
@@ -60,7 +89,9 @@
 .utkal-lead-text {
   font-size: 18px;
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--ink);
+  border-left: 3px solid var(--brand-gold);
+  padding-left: 16px;
 }
 
 .utkal-blog-image-container {
@@ -70,39 +101,44 @@
 .utkal-featured-image {
   width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: 10px;
   object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.utkal-image-caption {
-  font-size: 13px;
-  color: var(--muted-color);
-  margin-top: 8px;
-  font-style: italic;
+  box-shadow: var(--shadow-soft);
 }
 
 /* Sidebar Styles */
 .utkal-blog-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 24px;
 }
 
 .utkal-sidebar-widget {
-  background: var(--bg-light);
+  background: #ffffff;
   border: 1px solid var(--border-color);
   padding: 24px;
-  border-radius: 6px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow 0.25s ease;
+}
+
+.utkal-sidebar-widget:hover {
+  box-shadow: var(--shadow-lift);
 }
 
 .utkal-widget-title {
+  font-family: 'Fraunces', serif;
   font-size: 18px;
-  font-weight: 700;
-  color: var(--primary-color);
+  font-weight: 600;
+  color: var(--ink);
   margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--brand-gold);
+}
+
+.utkal-widget-status {
+  font-size: 13px;
+  color: var(--muted-color);
 }
 
 /* Search Box */
@@ -121,17 +157,39 @@
 
 .utkal-search-input {
   width: 100%;
-  padding: 12px 14px 12px 40px;
+  padding: 12px 44px 12px 40px;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 14px;
   outline: none;
-  background: #ffffff;
-  transition: border-color 0.2s;
+  background: var(--cream);
+  transition: border-color 0.2s, background 0.2s;
 }
 
 .utkal-search-input:focus {
-  border-color: var(--primary-color);
+  border-color: var(--brand-green);
+  background: #ffffff;
+}
+
+.utkal-search-submit {
+  position: absolute;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  background: var(--brand-green);
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.utkal-search-submit:hover {
+  background: var(--brand-green-dark);
 }
 
 /* Category List */
@@ -153,19 +211,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: 12px 2px;
   color: var(--text-color);
   text-decoration: none;
   font-size: 15px;
-  transition: color 0.2s;
+  transition: color 0.2s, padding-left 0.2s;
 }
 
 .utkal-category-list a:hover {
-  color: var(--accent-color);
+  color: var(--brand-green);
+  padding-left: 6px;
 }
 
-.utkal-arrow {
-  color: var(--muted-color);
+.utkal-count-pill {
+  background: var(--cream);
+  color: var(--brand-green-dark);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
 }
 
 /* Featured Listings Widget */
@@ -174,6 +239,16 @@
   gap: 12px;
   margin-bottom: 16px;
   align-items: center;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 6px;
+  margin-left: -6px;
+  margin-right: -6px;
+  transition: background 0.2s;
+}
+
+.utkal-featured-item:hover {
+  background: var(--cream);
 }
 
 .utkal-featured-item:last-child {
@@ -184,38 +259,55 @@
   width: 70px;
   height: 60px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
 .utkal-featured-info h4 {
   font-size: 14px;
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--ink);
   margin: 0 0 4px 0;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 .utkal-price {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--primary-color);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-color);
 }
 
 /* Consultant Card Widget */
 .utkal-consultant-card {
-  background: #111111;
+  position: relative;
+  background: linear-gradient(155deg, var(--ink) 0%, var(--brand-green-dark) 100%);
   color: #ffffff;
   border: none;
+  overflow: hidden;
+}
+
+.utkal-verified-ribbon {
+  position: absolute;
+  top: 14px;
+  right: -34px;
+  background: var(--brand-gold);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 36px;
+  transform: rotate(38deg);
 }
 
 .utkal-consultant-card .utkal-widget-title {
   color: #ffffff;
-  border-bottom-color: #444444;
+  border-bottom-color: rgba(255, 255, 255, 0.25);
 }
 
 .utkal-consultant-tagline {
   font-size: 13px;
-  color: #f1c40f;
+  color: var(--brand-gold-light);
   margin-bottom: 12px;
   font-weight: 600;
 }
@@ -224,7 +316,7 @@
 .utkal-consultant-phone {
   font-size: 13px;
   margin-bottom: 10px;
-  color: #cccccc;
+  color: #d8d8d8;
 }
 
 .utkal-consultant-phone a {
@@ -235,12 +327,12 @@
 .utkal-rating-badge {
   margin-top: 12px;
   display: inline-block;
-  background: #f1c40f;
-  color: #111;
-  padding: 4px 8px;
+  background: var(--brand-gold);
+  color: var(--ink);
+  padding: 5px 10px;
   font-size: 12px;
   font-weight: 700;
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 /* Responsive Media Queries */
@@ -255,7 +347,7 @@
   .utkal-blog-title {
     font-size: 24px;
   }
-  
+
   .utkal-blog-details-container {
     padding: 20px 10px;
   }

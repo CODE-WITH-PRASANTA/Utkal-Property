@@ -1,81 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import './BlogManagement.css';
-
-// Mock Data matching the UI
-const initialBlogs = [
-  {
-    id: 1,
-    image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=400&q=80',
-    title: 'Real estate shifts: Prices and sales trending down in two different spheres',
-    description: 'Hosted by Utkal Property, our market insights explore the intersection of property pricing, housing demand...',
-    category: 'Housing',
-    categoryClass: 'cat-housing',
-    author: 'Admin User',
-    authorImage: 'https://i.pravatar.cc/150?img=11',
-    date: '23 May 2025',
-    time: '10:30 AM',
-    status: 'Published',
-    featured: true
-  },
-  {
-    id: 2,
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=400&q=80',
-    title: "We are hiring 'moderately,' says Compass CEO",
-    description: 'Our market updates explore major corporate shifts, strategic residential expansions, and real estate...',
-    category: 'Business',
-    categoryClass: 'cat-business',
-    author: 'Admin User',
-    authorImage: 'https://i.pravatar.cc/150?img=11',
-    date: '22 May 2025',
-    time: '09:15 AM',
-    status: 'Published',
-    featured: true
-  },
-  {
-    id: 3,
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80',
-    title: 'Gorgeous Apartment Building For Sale',
-    description: 'Explore premium apartments with modern amenities in prime locations. Perfect for families and investors...',
-    category: 'Apartments',
-    categoryClass: 'cat-apartments',
-    author: 'Admin User',
-    authorImage: 'https://i.pravatar.cc/150?img=11',
-    date: '21 May 2025',
-    time: '04:45 PM',
-    status: 'Published',
-    featured: true
-  },
-  {
-    id: 4,
-    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=400&q=80',
-    title: 'Luxury Villas with Modern Amenities',
-    description: 'Discover elegant villas designed for comfort and luxury. World-class facilities and beautiful environments.',
-    category: 'Luxury Villa',
-    categoryClass: 'cat-villa',
-    author: 'Admin User',
-    authorImage: 'https://i.pravatar.cc/150?img=11',
-    date: '20 May 2025',
-    time: '03:20 PM',
-    status: 'Draft',
-    featured: false
-  },
-  {
-    id: 5,
-    image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=400&q=80',
-    title: 'Best Duplex House Designs for Modern Families',
-    description: 'Stylish and functional duplex house designs that provide space, comfort, and modern living.',
-    category: 'Duplex House',
-    categoryClass: 'cat-duplex',
-    author: 'Admin User',
-    authorImage: 'https://i.pravatar.cc/150?img=11',
-    date: '19 May 2025',
-    time: '11:10 AM',
-    status: 'Published',
-    featured: true
-  }
-];
+import API, { IMG_URL } from '../../api/axios';
 
 const BlogManagement = () => {
+  const navigate = useNavigate();
+
+  // Database State
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [viewingBlog, setViewingBlog] = useState(null); // Preview Modal State
+
+  // View Mode & Filter States
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'grid'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
@@ -83,11 +19,86 @@ const BlogManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState('All Status');
   const [selectedDate, setSelectedDate] = useState('');
 
-  // Action Button Handlers
-  const handleViewAction = (id) => alert(`Viewing blog ID: ${id}`);
-  const handleEditAction = (id) => alert(`Editing blog ID: ${id}`);
-  const handleDeleteAction = (id) => alert(`Deleting blog ID: ${id}`);
-  const handleFilter = () => alert('Filtering applied based on settings.');
+  // --- Fetch Blogs from MongoDB Backend ---
+  const fetchBlogs = async (isManualRefresh = false) => {
+    try {
+      setLoading(true);
+      const res = await API.get('/blogs');
+      if (res && res.data && res.data.success) {
+        setBlogs(res.data.data);
+        if (isManualRefresh) {
+          alert('Blogs refreshed successfully!');
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch blogs in BlogManagement:', err);
+      alert('Failed to load blog posts from server.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  // Helper to resolve cover image path
+  const getImageUrl = (imgObj) => {
+    if (!imgObj) return 'https://via.placeholder.com/400x250?text=No+Cover+Image';
+    if (imgObj.startsWith('http') || imgObj.startsWith('data:')) return imgObj;
+    return `${IMG_URL}${imgObj.startsWith('/') ? '' : '/'}${imgObj}`;
+  };
+
+  // Helper for Category Badge Class
+  const getCategoryClass = (cat) => {
+    switch (cat) {
+      case 'Housing': return 'cat-housing';
+      case 'Business': return 'cat-business';
+      case 'Apartments': return 'cat-apartments';
+      case 'Luxury Villa': return 'cat-villa';
+      case 'Duplex House': return 'cat-duplex';
+      default: return 'cat-housing';
+    }
+  };
+
+  // --- Dynamic Authors List (Extracted strictly from fetched DB records) ---
+  const uniqueAuthors = Array.from(
+    new Set(blogs.map((b) => b.author?.trim()).filter(Boolean))
+  );
+
+  // --- Actions ---
+  const handleViewAction = (blog) => {
+    setViewingBlog(blog);
+  };
+
+  // STEP 2: Id-wise redirect to BlogPosting for editing
+  const handleEditAction = (blog) => {
+    const blogId = blog._id || blog.id;
+    if (!blogId) {
+      alert('This blog post has no valid ID and cannot be edited.');
+      return;
+    }
+    navigate(`/blogposting/${blogId}`);
+  };
+
+  const handleDeleteAction = async (id) => {
+    if (window.confirm('Are you sure you want to delete this blog post from database?')) {
+      try {
+        setLoading(true);
+        const res = await API.delete(`/blogs/${id}`);
+        if (res.data.success) {
+          alert('Blog post deleted successfully!');
+          await fetchBlogs();
+        }
+      } catch (err) {
+        console.error('Error deleting blog:', err);
+        alert('Failed to delete blog post.');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const handleReset = () => {
     setSearchQuery('');
     setSelectedCategory('All Categories');
@@ -96,15 +107,40 @@ const BlogManagement = () => {
     setSelectedDate('');
   };
 
+  // --- Real-time Filtering Logic ---
+  const filteredBlogs = blogs.filter((blog) => {
+    const matchesSearch =
+      searchQuery === '' ||
+      blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      blog.shortDesc?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === 'All Categories' || blog.category === selectedCategory;
+
+    // Strict author filtering using exact database author string
+    const matchesAuthor =
+      selectedAuthor === 'All Authors' || blog.author === selectedAuthor;
+
+    const matchesStatus =
+      selectedStatus === 'All Status' ||
+      (blog.status || 'Published').toLowerCase() === selectedStatus.toLowerCase();
+
+    const matchesDate =
+      selectedDate === '' || (blog.publishDate && blog.publishDate.includes(selectedDate));
+
+    return matchesSearch && matchesCategory && matchesAuthor && matchesStatus && matchesDate;
+  });
+
   return (
     <div className="bm-container">
       {/* Redesigned Toolbar */}
       <div className="bm-toolbar-container">
         <div className="bm-main-toolbar">
+          {/* Search Input */}
           <div className="bm-search-wrapper">
-            <input 
-              type="text" 
-              placeholder="Search blogs..." 
+            <input
+              type="text"
+              placeholder="Search blogs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="bm-search-field"
@@ -112,50 +148,62 @@ const BlogManagement = () => {
             <span className="bm-search-icon-right">🔍</span>
           </div>
 
+          {/* Category Filter */}
           <div className="bm-select-wrapper">
-            <select 
-              value={selectedCategory} 
+            <select
+              value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="bm-dropdown-select"
             >
-              <option>All Categories</option>
-              <option>Housing</option>
-              <option>Business</option>
-              <option>Apartments</option>
-              <option>Luxury Villa</option>
-              <option>Duplex House</option>
+              <option value="All Categories">All Categories</option>
+              <option value="Housing">Housing</option>
+              <option value="Business">Business</option>
+              <option value="Apartments">Apartments</option>
+              <option value="Luxury Villa">Luxury Villa</option>
+              <option value="Duplex House">Duplex House</option>
+              <option value="Investment">Investment</option>
+              <option value="Lifestyle">Lifestyle</option>
             </select>
           </div>
 
+          {/* Author Filter */}
           <div className="bm-select-wrapper">
-            <select 
-              value={selectedAuthor} 
+            <select
+              value={selectedAuthor}
               onChange={(e) => setSelectedAuthor(e.target.value)}
               className="bm-dropdown-select"
             >
-              <option>All Authors</option>
-              <option>Admin User</option>
+              <option value="All Authors">All Authors</option>
+              {uniqueAuthors.map((authorName, idx) => (
+                <option key={idx} value={authorName}>
+                  {authorName}
+                </option>
+              ))}
             </select>
           </div>
 
+          {/* Status Filter */}
           <div className="bm-select-wrapper">
-            <select 
-              value={selectedStatus} 
+            <select
+              value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="bm-dropdown-select"
             >
-              <option>All Status</option>
-              <option>Published</option>
-              <option>Draft</option>
+              <option value="All Status">All Status</option>
+              <option value="Published">Published</option>
+              <option value="Draft">Draft</option>
             </select>
           </div>
 
+          {/* Date Picker */}
           <div className="bm-date-wrapper">
-            <input 
+            <input
               type="text"
               placeholder="Select Date"
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => { if(!e.target.value) e.target.type = "text"; }}
+              onFocus={(e) => (e.target.type = 'date')}
+              onBlur={(e) => {
+                if (!e.target.value) e.target.type = 'text';
+              }}
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
               className="bm-date-field"
@@ -163,15 +211,16 @@ const BlogManagement = () => {
             <span className="bm-calendar-icon">📅</span>
           </div>
 
+          {/* View Toggle Buttons */}
           <div className="bm-view-toggle-buttons">
-            <button 
-              className={`bm-toggle-view-btn ${viewMode === 'list' ? 'selected' : ''}`} 
+            <button
+              className={`bm-toggle-view-btn ${viewMode === 'list' ? 'selected' : ''}`}
               onClick={() => setViewMode('list')}
             >
               <span className="bm-btn-icon">☰</span> List View
             </button>
-            <button 
-              className={`bm-toggle-view-btn ${viewMode === 'grid' ? 'selected' : ''}`} 
+            <button
+              className={`bm-toggle-view-btn ${viewMode === 'grid' ? 'selected' : ''}`}
               onClick={() => setViewMode('grid')}
             >
               <span className="bm-btn-icon">☷</span> Grid View
@@ -179,17 +228,19 @@ const BlogManagement = () => {
           </div>
         </div>
 
-        {/* Lower row action buttons aligned right (Visible when in list mode) */}
-        {viewMode === 'list' && (
-          <div className="bm-action-sub-row">
-            <button className="bm-utility-btn" onClick={handleFilter}>
-              <span className="bm-btn-icon">⏳</span> Filter
-            </button>
-            <button className="bm-utility-btn" onClick={handleReset}>
-              <span className="bm-btn-icon">🔄</span> Reset
-            </button>
-          </div>
-        )}
+        {/* Action Controls */}
+        <div className="bm-action-sub-row">
+          <button
+            className="bm-utility-btn"
+            disabled={loading}
+            onClick={() => fetchBlogs(true)}
+          >
+            <span className="bm-btn-icon">⏳</span> {loading ? 'Refreshing...' : 'Refresh'}
+          </button>
+          <button className="bm-utility-btn" onClick={handleReset}>
+            <span className="bm-btn-icon">🔄</span> Reset Filters
+          </button>
+        </div>
       </div>
 
       {/* Conditionally Render List View or Grid View */}
@@ -198,7 +249,9 @@ const BlogManagement = () => {
           <table className="bm-table">
             <thead>
               <tr>
-                <th style={{ width: '40px' }}><input type="checkbox" className="bm-checkbox" /></th>
+                <th style={{ width: '40px' }}>
+                  <input type="checkbox" className="bm-checkbox" />
+                </th>
                 <th style={{ width: '40px' }}>#</th>
                 <th>Image</th>
                 <th>Title</th>
@@ -211,102 +264,195 @@ const BlogManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {initialBlogs.map((blog, idx) => (
-                <tr key={blog.id}>
-                  <td><input type="checkbox" className="bm-checkbox" /></td>
-                  <td>{idx + 1}</td>
-                  <td>
-                    <img src={blog.image} alt={blog.title} className="bm-table-img" />
-                  </td>
-                  <td className="bm-table-title">{blog.title}</td>
-                  <td>
-                    <span className={`bm-badge ${blog.categoryClass}`}>{blog.category}</span>
-                  </td>
-                  <td>
-                    <div className="bm-author-cell">
-                      <img src={blog.authorImage} alt={blog.author} className="bm-avatar" />
-                      <span>{blog.author}</span>
-                    </div>
-                  </td>
-                  <td className="bm-table-date">
-                    <div>{blog.date}</div>
-                    <small>{blog.time}</small>
-                  </td>
-                  <td>
-                    <span className={`bm-status-label ${blog.status.toLowerCase()}`}>
-                      {blog.status}
-                    </span>
-                  </td>
-                  <td>
-                    {blog.featured ? (
-                      <span className="bm-check-icon">✅</span>
-                    ) : (
-                      <span className="bm-dash-icon">—</span>
-                    )}
-                  </td>
-                  <td>
-                    <div className="bm-actions">
-                      <button className="bm-action-btn view" onClick={() => handleViewAction(blog.id)}>👁️</button>
-                      <button className="bm-action-btn edit" onClick={() => handleEditAction(blog.id)}>📝</button>
-                      <button className="bm-action-btn delete" onClick={() => handleDeleteAction(blog.id)}>🗑️</button>
-                    </div>
+              {filteredBlogs.length > 0 ? (
+                filteredBlogs.map((blog, idx) => (
+                  <tr key={blog._id || blog.id}>
+                    <td>
+                      <input type="checkbox" className="bm-checkbox" />
+                    </td>
+                    <td>{idx + 1}</td>
+                    <td>
+                      <img
+                        src={getImageUrl(blog.blogImage)}
+                        alt={blog.title}
+                        className="bm-table-img"
+                      />
+                    </td>
+                    <td className="bm-table-title">{blog.title}</td>
+                    <td>
+                      <span className={`bm-badge ${getCategoryClass(blog.category)}`}>
+                        {blog.category}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="bm-author-cell">
+                        <img
+                          src="https://i.pravatar.cc/150?img=11"
+                          alt={blog.author}
+                          className="bm-avatar"
+                        />
+                        <span>{blog.author || 'Admin User'}</span>
+                      </div>
+                    </td>
+                    <td className="bm-table-date">
+                      <div>{blog.publishDate || '—'}</div>
+                      <small>{blog.publishTime || ''}</small>
+                    </td>
+                    <td>
+                      <span className={`bm-status-label ${(blog.status || 'Published').toLowerCase()}`}>
+                        {blog.status || 'Published'}
+                      </span>
+                    </td>
+                    <td>
+                      {blog.featuredPost ? (
+                        <span className="bm-check-icon">✅</span>
+                      ) : (
+                        <span className="bm-dash-icon">—</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="bm-actions">
+                        <button
+                          className="bm-action-btn view"
+                          title="Preview Blog"
+                          onClick={() => handleViewAction(blog)}
+                        >
+                          👁️
+                        </button>
+                        <button
+                          className="bm-action-btn edit"
+                          title="Edit Blog"
+                          onClick={() => handleEditAction(blog)}
+                        >
+                          📝
+                        </button>
+                        <button
+                          className="bm-action-btn delete"
+                          title="Delete Blog"
+                          onClick={() => handleDeleteAction(blog._id || blog.id)}
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={10} style={{ textAlign: 'center', padding: '30px', color: '#64748b' }}>
+                    {loading ? 'Loading blog posts from database...' : 'No blog posts found matching criteria.'}
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
-          
-          {/* List Footer / Pagination */}
+
+          {/* List Footer */}
           <div className="bm-footer">
-            <span className="bm-footer-info">Showing 1 to 5 of 24 blogs</span>
-            <div className="bm-pagination">
-              <button className="bm-page-btn">Previous</button>
-              <button className="bm-page-btn active-page">1</button>
-              <button className="bm-page-btn">2</button>
-              <button className="bm-page-btn">3</button>
-              <button className="bm-page-btn">4</button>
-              <button className="bm-page-btn">5</button>
-              <button className="bm-page-btn">Next</button>
-            </div>
+            <span className="bm-footer-info">
+              Showing {filteredBlogs.length} blog post(s)
+            </span>
           </div>
         </div>
       ) : (
         /* Grid View Wrapper */
         <div className="bm-grid-wrapper">
-          <div className="bm-grid">
-            {initialBlogs.map((blog) => (
-              <div className="bm-card" key={blog.id}>
-                <div className="bm-card-banner">
-                  <img src={blog.image} alt={blog.title} className="bm-card-img" />
-                  <span className={`bm-badge bm-card-badge ${blog.categoryClass}`}>{blog.category}</span>
-                  <button className="bm-card-save-btn">🔖</button>
-                </div>
-                
-                <div className="bm-card-body">
-                  <div className="bm-card-date">📅 {blog.date}</div>
-                  <h3 className="bm-card-title">{blog.title}</h3>
-                  <p className="bm-card-desc">{blog.description}</p>
-                </div>
-                
-                <div className="bm-card-footer">
-                  <div className="bm-author-cell">
-                    <img src={blog.authorImage} alt={blog.author} className="bm-avatar" />
-                    <span>{blog.author}</span>
+          {filteredBlogs.length > 0 ? (
+            <div className="bm-grid">
+              {filteredBlogs.map((blog) => (
+                <div className="bm-card" key={blog._id || blog.id}>
+                  <div className="bm-card-banner">
+                    <img
+                      src={getImageUrl(blog.blogImage)}
+                      alt={blog.title}
+                      className="bm-card-img"
+                    />
+                    <span className={`bm-badge bm-card-badge ${getCategoryClass(blog.category)}`}>
+                      {blog.category}
+                    </span>
                   </div>
-                  <div className="bm-actions">
-                    <button className="bm-action-btn view" onClick={() => handleViewAction(blog.id)}>👁️</button>
-                    <button className="bm-action-btn edit" onClick={() => handleEditAction(blog.id)}>📝</button>
-                    <button className="bm-action-btn delete" onClick={() => handleDeleteAction(blog.id)}>🗑️</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
 
-          <div className="bm-grid-load-more">
-            <button className="bm-load-btn" onClick={() => alert('Loading more blogs...')}>
-              Load More Blogs ↓
-            </button>
+                  <div className="bm-card-body">
+                    <div className="bm-card-date">📅 {blog.publishDate || '31 Jul 2026'}</div>
+                    <h3 className="bm-card-title">{blog.title}</h3>
+                    <p className="bm-card-desc">{blog.shortDesc}</p>
+                  </div>
+
+                  <div className="bm-card-footer">
+                    <div className="bm-author-cell">
+                      <img
+                        src="https://i.pravatar.cc/150?img=11"
+                        alt={blog.author}
+                        className="bm-avatar"
+                      />
+                      <span>{blog.author || 'Admin User'}</span>
+                    </div>
+                    <div className="bm-actions">
+                      <button
+                        className="bm-action-btn view"
+                        title="Preview Blog"
+                        onClick={() => handleViewAction(blog)}
+                      >
+                        👁️
+                      </button>
+                      <button
+                        className="bm-action-btn edit"
+                        title="Edit Blog"
+                        onClick={() => handleEditAction(blog)}
+                      >
+                        📝
+                      </button>
+                      <button
+                        className="bm-action-btn delete"
+                        title="Delete Blog"
+                        onClick={() => handleDeleteAction(blog._id || blog.id)}
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+              {loading ? 'Loading blog posts from server...' : 'No blog posts found matching criteria.'}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Modal Preview */}
+      {viewingBlog && (
+        <div className="bm-modal-overlay" onClick={() => setViewingBlog(null)}>
+          <div className="bm-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="bm-modal-header">
+              <h4>Preview Blog Post</h4>
+              <button className="bm-modal-close" onClick={() => setViewingBlog(null)}>
+                ✕
+              </button>
+            </div>
+            <div className="bm-modal-body">
+              <img
+                src={getImageUrl(viewingBlog.blogImage)}
+                alt={viewingBlog.title}
+                className="bm-modal-image"
+                style={{ width: '100%', height: '220px', objectFit: 'cover', borderRadius: '8px' }}
+              />
+              <span className={`bm-badge ${getCategoryClass(viewingBlog.category)}`} style={{ marginTop: '12px', display: 'inline-block' }}>
+                {viewingBlog.category}
+              </span>
+              <h2 style={{ margin: '12px 0 8px 0', fontSize: '20px' }}>{viewingBlog.title}</h2>
+              <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '16px' }}>
+                By <strong>{viewingBlog.author || 'Admin User'}</strong> • {viewingBlog.publishDate}
+              </div>
+              <p style={{ fontSize: '13px', marginBottom: '12px' }}>
+                <strong>Excerpt:</strong> {viewingBlog.shortDesc}
+              </p>
+              <div style={{ fontSize: '13px', lineHeight: '1.6', whiteSpace: 'pre-wrap', background: '#f8fafc', padding: '12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                {viewingBlog.content}
+              </div>
+            </div>
           </div>
         </div>
       )}

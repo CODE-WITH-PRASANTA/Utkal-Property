@@ -23,7 +23,45 @@
 .compass-main-feed {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
+}
+
+/* Active Tag Filter Bar */
+.compass-active-tag-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #d7ecdf;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #10532e;
+  box-shadow: 0 2px 10px rgba(16, 83, 46, 0.05);
+}
+
+.compass-active-tag-bar strong {
+  font-weight: 700;
+}
+
+.compass-active-tag-bar button {
+  background: #10532e;
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.compass-active-tag-bar button:hover {
+  background: #0c3f22;
+  transform: translateY(-1px);
 }
 
 .compass-article-card {
@@ -31,13 +69,18 @@
   grid-template-columns: 280px 1fr;
   gap: 24px;
   align-items: center;
-  padding-bottom: 40px;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 20px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e9f2ec;
+  box-shadow: 0 2px 14px rgba(15, 23, 42, 0.03);
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
 }
 
-.compass-article-card:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.compass-article-card:hover {
+  box-shadow: 0 14px 34px rgba(16, 83, 46, 0.1);
+  transform: translateY(-3px);
+  border-color: #d7ecdf;
 }
 
 .compass-article-img-wrap {
@@ -46,33 +89,34 @@
   height: 180px;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(16, 83, 46, 0.08);
+  box-shadow: 0 4px 16px rgba(16, 83, 46, 0.1);
 }
 
 .compass-article-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
 .compass-article-card:hover .compass-article-img {
-  transform: scale(1.03);
+  transform: scale(1.06);
 }
 
 .compass-badge {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  background: #ffffff;
-  padding: 4px 10px;
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(4px);
+  padding: 5px 11px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .compass-badge-date {
@@ -99,6 +143,11 @@
   line-height: 1.35;
   margin: 0;
   letter-spacing: -0.2px;
+  transition: color 0.2s ease;
+}
+
+.compass-article-card:hover .compass-article-title {
+  color: #10532e;
 }
 
 /* Half Green Text Highlight */
@@ -125,8 +174,9 @@
   font-weight: 700;
   color: #10532e;
   text-decoration: none;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, gap 0.2s ease;
   margin-top: 4px;
+  width: fit-content;
 }
 
 .compass-read-more:hover {
@@ -134,13 +184,26 @@
   color: #0b3b20;
 }
 
+/* Loading & Empty States */
+.compass-loading-state,
+.compass-empty-state {
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+}
+
+.compass-empty-state p {
+  margin: 0;
+  font-weight: 500;
+}
+
 /* Pagination Styles */
 .compass-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 20px;
-  padding-top: 20px;
+  margin-top: 12px;
+  padding-top: 24px;
   border-top: 1px solid #e2e8f0;
 }
 
@@ -148,10 +211,10 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   color: #0f172a;
-  padding: 8px 16px;
+  padding: 9px 18px;
   font-size: 13px;
-  font-weight: 600;
-  border-radius: 6px;
+  font-weight: 700;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -160,6 +223,7 @@
   background: #10532e;
   border-color: #10532e;
   color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 83, 46, 0.2);
 }
 
 .compass-page-btn:disabled {
@@ -173,8 +237,8 @@
 }
 
 .compass-page-num {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -182,8 +246,8 @@
   border: 1px solid #e2e8f0;
   color: #0f172a;
   font-size: 13px;
-  font-weight: 600;
-  border-radius: 6px;
+  font-weight: 700;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -191,12 +255,14 @@
 .compass-page-num:hover {
   border-color: #10532e;
   color: #10532e;
+  transform: translateY(-1px);
 }
 
 .compass-page-num.active {
   background: #10532e;
   border-color: #10532e;
   color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 83, 46, 0.25);
 }
 
 /* Sidebar Styling */
@@ -204,32 +270,44 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+  background: #ffffff;
+  border: 1px solid #e9f2ec;
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 10px 32px rgba(16, 83, 46, 0.06);
+  position: sticky;
+  top: 100px;
 }
 
 .compass-mini-listings {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .compass-mini-card {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #ffffff;
-  padding: 8px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  background: #f8faf8;
+  padding: 9px;
+  border-radius: 12px;
+  border: 1px solid #eef2ef;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.compass-mini-card:hover {
+  box-shadow: 0 6px 16px rgba(16, 83, 46, 0.08);
+  transform: translateY(-1px);
 }
 
 .compass-mini-thumb {
   width: 65px;
   height: 55px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 9px;
 }
 
 .compass-mini-info {
@@ -260,11 +338,22 @@
 }
 
 .compass-sidebar-heading {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   color: #0f172a;
   margin: 0;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.compass-sidebar-heading::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: linear-gradient(180deg, #10532e, #2f8f5c);
+  border-radius: 3px;
 }
 
 .compass-locations-grid {
@@ -275,29 +364,35 @@
 
 .compass-location-card {
   position: relative;
-  height: 90px;
-  border-radius: 10px;
+  height: 92px;
+  border-radius: 12px;
   overflow: hidden;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   display: block;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.compass-location-card:hover {
+  box-shadow: 0 10px 24px rgba(16, 83, 46, 0.2);
+  transform: translateY(-2px);
 }
 
 .compass-location-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
 .compass-location-card:hover .compass-location-img {
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
 .compass-location-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(16,83,46,0.85) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(16,83,46,0.88) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -319,28 +414,38 @@
 
 /* Featured Reference Card Styling */
 .compass-reference-card-wrap {
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 .compass-ref-card {
   position: relative;
   width: 100%;
   height: 380px;
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(16, 83, 46, 0.12);
+  box-shadow: 0 12px 30px rgba(16, 83, 46, 0.16);
+  transition: box-shadow 0.25s ease;
+}
+
+.compass-ref-card:hover {
+  box-shadow: 0 16px 38px rgba(16, 83, 46, 0.24);
 }
 
 .compass-ref-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.compass-ref-card:hover .compass-ref-img {
+  transform: scale(1.04);
 }
 
 .compass-ref-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(15,23,42,0.9) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(15,23,42,0.92) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -379,7 +484,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 10px;
+  padding-top: 22px;
+  border-top: 1px solid #f1f5f9;
 }
 
 .compass-tags-list {
@@ -389,39 +495,65 @@
 }
 
 .compass-tag-pill {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  color: #0f172a;
+  background: #f4faf6;
+  border: 1px solid #d7ecdf;
+  color: #10532e;
   padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12.5px;
+  font-weight: 700;
   border-radius: 24px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.compass-tag-pill::before {
+  content: '#';
+  opacity: 0.6;
+  margin-right: 1px;
 }
 
 .compass-tag-pill:hover {
   border-color: #10532e;
   background: #10532e;
   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(16, 83, 46, 0.22);
+}
+
+.compass-tag-pill.active {
+  background: #10532e;
+  border-color: #10532e;
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(16, 83, 46, 0.25);
+}
+
+.compass-tags-empty {
+  font-size: 13px;
+  color: #94a3b8;
+  font-style: italic;
 }
 
 /* Responsive Rules */
 @media screen and (max-width: 968px) {
   .compass-container {
     grid-template-columns: 1fr;
-    gap: 50px;
+    gap: 40px;
+  }
+
+  .compass-sidebar {
+    position: static;
   }
 }
 
 @media screen and (max-width: 650px) {
   .compass-section {
-    padding: 40px 15px;
+    padding: 32px 15px;
   }
 
   .compass-article-card {
     grid-template-columns: 1fr;
     gap: 16px;
+    padding: 14px;
   }
 
   .compass-article-img-wrap {
@@ -430,5 +562,10 @@
 
   .compass-locations-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .compass-pagination {
+    flex-wrap: wrap;
+    gap: 12px;
   }
 }
