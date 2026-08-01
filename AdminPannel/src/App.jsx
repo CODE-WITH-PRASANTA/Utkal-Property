@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { signOut } from "aws-amplify/auth";
+import { signOut, getCurrentUser } from "aws-amplify/auth";
 
 // Layout & Authentication
 import MainLayout from "./Layout/MainLayout/MainLayout";
-import LogIn from "./Pages/login/login";
+import LogIn from "./Pages/login/LogIn";
 
 // Dashboard Components
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
@@ -16,7 +16,7 @@ import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 
-// Management Components
+// Management & Other Components
 import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
@@ -32,8 +32,17 @@ import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
 
-// Protected Route Guard Component
-const ProtectedRoute = ({ isAuthenticated, children }) => {
+// Protected Route Guard with Loading Screen
+const ProtectedRoute = ({ isAuthenticated, isCheckingAuth, children }) => {
+  if (isCheckingAuth) {
+    return (
+      <div className="auth-loading-screen">
+        <div className="auth-spinner"></div>
+        <p>Verifying Session...</p>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -44,12 +53,54 @@ const ProtectedRoute = ({ isAuthenticated, children }) => {
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  // Check and restore existing session on reload
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        // 1. Check local storage for mock/persisted session
+        const storedUser = localStorage.getItem("utkal_user_session");
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          setIsAuthenticated(true);
+          setIsCheckingAuth(false);
+          return;
+        }
+
+        // 2. Check AWS Cognito auth session if active
+        const currentUser = await getCurrentUser();
+        if (currentUser) {
+          const sessionUser = {
+            username: currentUser.username,
+            userId: currentUser.userId,
+            isMock: false,
+          };
+          setUser(sessionUser);
+          setIsAuthenticated(true);
+          localStorage.setItem("utkal_user_session", JSON.stringify(sessionUser));
+        }
+      } catch (err) {
+        // No active session found
+        setIsAuthenticated(false);
+        setUser(null);
+        localStorage.removeItem("utkal_user_session");
+      } finally {
+        setIsCheckingAuth(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
+    localStorage.setItem("utkal_user_session", JSON.stringify(userData));
   };
 
+  // Explicit logout handler
   const handleLogout = async () => {
     try {
       if (user && !user.isMock) {
@@ -60,6 +111,7 @@ const App = () => {
     } finally {
       setUser(null);
       setIsAuthenticated(false);
+      localStorage.removeItem("utkal_user_session");
     }
   };
 
@@ -78,18 +130,21 @@ const App = () => {
           }
         />
 
-        {/* Protected Dashboard Routes Wrapped inside MainLayout */}
+        {/* Protected Admin Routes Wrapped inside MainLayout */}
         <Route
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute
+              isAuthenticated={isAuthenticated}
+              isCheckingAuth={isCheckingAuth}
+            >
               <MainLayout user={user} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         >
-          {/* Index Route */}
+          {/* Index Redirect */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-          {/* Core Dashboard */}
+          {/* Dashboards */}
           <Route path="/dashboard" element={<DashboardMain />} />
           <Route path="/dashboard-review" element={<DashboardReview />} />
 
@@ -99,14 +154,10 @@ const App = () => {
           <Route path="/properties/categories" element={<Categories />} />
           <Route path="/properties/locations" element={<Locations />} />
 
-          {/* Operations & Management */}
+          {/* Management & Operations */}
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/leads" element={<LeadManagement />} />
           <Route path="/LeadManagement" element={<LeadManagement />} /> {/* Alias */}
-
-          {/* Blog Routes */}
-          <Route path="/blogmanagement" element={<BlogManagement />} />
-          <Route path="/blogposting" element={<BlogPosting />} />
 
           {/* General Pages */}
           <Route path="/enquiry" element={<Enquire />} />
@@ -115,18 +166,20 @@ const App = () => {
           <Route path="/Report" element={<Report />} /> {/* Alias */}
           <Route path="/settings" element={<Setting />} />
 
-          {/* User Profile */}
+          {/* Profile Pages & Aliases */}
           <Route path="/profile" element={<ProfileSetting />} />
-          <Route path="/ProfileSetting" element={<ProfileSetting />} /> {/* Alias */}
-          <Route path="/DashboardProfile" element={<ProfileSetting />} /> {/* Alias */}
+          <Route path="/ProfileSetting" element={<ProfileSetting />} />
+          <Route path="/DashboardProfile" element={<ProfileSetting />} />
 
-          {/* Extra Content Pages */}
+          {/* Content, Gallery & Blogs */}
           <Route path="/testimonial" element={<Testimonial />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/team" element={<OurTeam />} />
+          <Route path="/blogmanagement" element={<BlogManagement />} />
+          <Route path="/blogposting" element={<BlogPosting />} />
         </Route>
 
-        {/* Global Fallback Catch-All Route */}
+        {/* Global Catch-All Fallback */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>

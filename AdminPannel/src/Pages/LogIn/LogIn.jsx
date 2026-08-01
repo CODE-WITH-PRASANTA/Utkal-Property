@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
 import { signIn } from 'aws-amplify/auth';
+
+// Standard & Reliable React Icons (FontAwesome & Feather)
+import { 
+  FaUser, 
+  FaLock, 
+  FaEye, 
+  FaEyeSlash, 
+  FaBuilding, 
+  FaShieldAlt, 
+  FaExclamationTriangle,
+  FaSpinner 
+} from 'react-icons/fa';
+
 import './LogIn.css';
 
 const LogIn = ({ onLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   
-  // Status and Error states
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,15 +29,16 @@ const LogIn = ({ onLoginSuccess }) => {
     setError('');
     setIsLoading(true);
 
-    // 1. Reference check condition (ID: utkal / Password: 12345)
-    if (userId.trim() === 'utkal' && password === '12345') {
+    // Mock bypass login check
+    if (userId.trim().toLowerCase() === 'utkal' && password === '12345') {
       setIsLoading(false);
-      alert('Reference login successful!');
-      if (onLoginSuccess) onLoginSuccess({ username: 'utkal', isMock: true });
+      if (onLoginSuccess) {
+        onLoginSuccess({ username: 'utkal', role: 'Super Admin', isMock: true });
+      }
       return;
     }
 
-    // 2. AWS Cognito Authentication fallback
+    // AWS Cognito Login
     try {
       const { isSignedIn, nextStep } = await signIn({
         username: userId,
@@ -33,22 +46,22 @@ const LogIn = ({ onLoginSuccess }) => {
       });
 
       if (isSignedIn) {
-        alert('AWS Authentication successful!');
-        if (onLoginSuccess) onLoginSuccess({ username: userId });
+        if (onLoginSuccess) {
+          onLoginSuccess({ username: userId, role: 'Admin', isMock: false });
+        }
       } else if (nextStep && nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED') {
-        setError('New password required. Please reset via AWS console.');
+        setError('New password required. Please reset password.');
       } else {
         setError('Additional authentication steps required.');
       }
     } catch (err) {
       console.error('AWS Auth Error:', err);
-      // Friendly messaging based on common Cognito exceptions
       if (err.name === 'UserNotFoundException' || err.name === 'NotAuthorizedException') {
-        setError('Incorrect User ID or Password.');
+        setError('Invalid User ID or Password.');
       } else if (err.name === 'UserNotConfirmedException') {
-        setError('This user account is not confirmed yet.');
+        setError('Account is not confirmed yet.');
       } else {
-        setError(err.message || 'An error occurred during AWS authentication.');
+        setError(err.message || 'An error occurred during authentication.');
       }
     } finally {
       setIsLoading(false);
@@ -57,23 +70,29 @@ const LogIn = ({ onLoginSuccess }) => {
 
   return (
     <div className="ul-page-container">
+      {/* Background Decorative Blobs */}
+      <div className="ul-bg-blob blob-1"></div>
+      <div className="ul-bg-blob blob-2"></div>
+
       <div className="ul-login-card">
-        {/* Brand Header */}
+        {/* Header Branding */}
         <div className="ul-brand-section">
-          <div className="ul-logo-icon">🏢</div>
-          <h1 className="ul-brand-title">Utkal Property</h1>
-          <p className="ul-brand-subtitle">Admin Panel Portal Gateway</p>
+          <div className="ul-logo-badge">
+            <FaBuilding className="ul-logo-icon" />
+          </div>
+          <h1 className="ul-brand-title">UTKAL PROPERTY</h1>
         </div>
 
-        {/* Login Form */}
+        {/* Login Form Body */}
         <form className="ul-form" onSubmit={handleSubmit}>
-          <h2 className="ul-form-heading">Welcome Back</h2>
-          <p className="ul-form-subheading">Please enter your credentials to access your account</p>
+          <div className="ul-form-header">
+            <h2>Welcome Back</h2>
+          </div>
 
-          {/* Error Alert Display block */}
+          {/* Error Banner */}
           {error && (
             <div className="ul-error-container">
-              <span className="ul-error-icon">⚠️</span>
+              <FaExclamationTriangle className="ul-error-icon" />
               <p className="ul-error-text">{error}</p>
             </div>
           )}
@@ -82,16 +101,17 @@ const LogIn = ({ onLoginSuccess }) => {
           <div className="ul-input-group">
             <label className="ul-label" htmlFor="userId">User ID / Email</label>
             <div className="ul-input-wrapper">
-              <span className="ul-input-icon">👤</span>
+              <FaUser className="ul-input-icon" />
               <input
                 type="text"
                 id="userId"
                 className="ul-input-field"
-                placeholder="Enter your User ID"
+                placeholder="e.g. utkal"
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
                 disabled={isLoading}
                 required
+                autoComplete="username"
               />
             </div>
           </div>
@@ -100,30 +120,31 @@ const LogIn = ({ onLoginSuccess }) => {
           <div className="ul-input-group">
             <label className="ul-label" htmlFor="password">Password</label>
             <div className="ul-input-wrapper">
-              <span className="ul-input-icon">🔒</span>
+              <FaLock className="ul-input-icon" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
-                className="ul-input-field"
-                placeholder="Enter your password"
+                className="ul-input-field password-field"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
                 required
+                autoComplete="current-password"
               />
               <button
                 type="button"
                 className="ul-toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={isLoading}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                tabIndex="-1"
               >
-                {showPassword ? '👁️' : '🙈'}
+                {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
               </button>
             </div>
           </div>
 
-          {/* Remember Me & Forgot Password Utilities */}
+          {/* Utility Checklist */}
           <div className="ul-form-utilities">
             <label className="ul-remember-me">
               <input
@@ -133,26 +154,34 @@ const LogIn = ({ onLoginSuccess }) => {
                 className="ul-checkbox"
                 disabled={isLoading}
               />
-              <span>Remember me</span>
+              <span>Remember session</span>
             </label>
             <a href="#forgot" className="ul-forgot-link" onClick={(e) => e.preventDefault()}>
               Forgot Password?
             </a>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Action Button */}
           <button 
             type="submit" 
-            className={`ul-submit-btn ${isLoading ? 'loading' : ''}`}
+            className="ul-submit-btn"
             disabled={isLoading}
           >
-            {isLoading ? 'Authenticating...' : 'Sign In'}
+            {isLoading ? (
+              <>
+                <FaSpinner className="ul-btn-spinner" />
+                <span>Authenticating...</span>
+              </>
+            ) : (
+              'Sign In to Dashboard'
+            )}
           </button>
         </form>
 
-        {/* Card Footer info */}
+        {/* Security Footer */}
         <div className="ul-card-footer">
-          <p>Protected by AWS Authentication Security</p>
+          <FaShieldAlt className="ul-footer-icon" />
+          <span>Secured with SSL Encrypted Portal Access</span>
         </div>
       </div>
     </div>

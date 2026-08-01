@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import API from '../../api/axios'; // Adjust relative path to your axios instance
 import './SellProperty.css';
 
 // Centralized field config to ensure single source of truth
@@ -166,10 +167,11 @@ const SellProperty = () => {
   });
 
   const [uploadedImages, setUploadedImages] = useState([]);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const summaryFileInputRef = useRef(null);
 
-  // Clean up object URLs on unmount to prevent memory leaks
+  // Clean up object URLs on unmount
   useEffect(() => {
     return () => {
       uploadedImages.forEach(img => URL.revokeObjectURL(img.previewUrl));
@@ -202,11 +204,76 @@ const SellProperty = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  // API Submit Handler
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting Form Data:', formData);
-    console.log('Uploaded Files:', uploadedImages.map(img => img.file));
-    alert('Property listed successfully!');
+
+    // Basic frontend validation for mandatory dropdowns
+    if (formData.propertyType === 'Select Type' || formData.furnishingStatus === 'Select Status') {
+      alert('Please select valid options for Property Type and Furnishing Status.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const data = new FormData();
+
+      // Append textual form fields
+      Object.keys(formData).forEach((key) => {
+        data.append(key, formData[key]);
+      });
+
+      // Append multiple images to 'images' key for Multer processing
+      uploadedImages.forEach((imgObj) => {
+        data.append('images', imgObj.file);
+      });
+
+      // Send POST request to backend properties API
+      const response = await API.post('/properties', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        alert('Property listed successfully!');
+        
+        // Reset state on successful submission
+        setFormData({
+          propertyTitle: '',
+          propertyType: 'Select Type',
+          propertyFor: 'Sell',
+          category: 'Residential',
+          expectedPrice: '',
+          negotiable: 'Yes',
+          builtUpArea: '',
+          carpetArea: '',
+          bhk: 'Select',
+          bathrooms: 'Select',
+          balconies: 'Select',
+          floor: '',
+          totalFloors: '',
+          furnishingStatus: 'Select Status',
+          propertyAge: 'Select Age',
+          parking: 'Select',
+          state: 'Odisha',
+          city: 'Bhubaneswar',
+          locality: '',
+          landmark: '',
+          pinCode: ''
+        });
+
+        // Clean up preview object URLs
+        uploadedImages.forEach(img => URL.revokeObjectURL(img.previewUrl));
+        setUploadedImages([]);
+      }
+    } catch (error) {
+      console.error('API Error Listing Property:', error);
+      alert(error.response?.data?.message || 'Failed to list property. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const summaryData = [
@@ -342,6 +409,7 @@ const SellProperty = () => {
             <label className="sell-property-label">Property Title <span>*</span></label>
             <input 
               type="text" 
+              required
               className="sell-property-input"
               placeholder={FIELD_CONFIG_MAP.propertyTitle.placeholder}
               value={formData.propertyTitle}
@@ -395,6 +463,7 @@ const SellProperty = () => {
               <label className="sell-property-label">Expected Price (₹) <span>*</span></label>
               <input 
                 type="text" 
+                required
                 className="sell-property-input"
                 placeholder={FIELD_CONFIG_MAP.expectedPrice.placeholder}
                 value={formData.expectedPrice}
@@ -431,6 +500,7 @@ const SellProperty = () => {
               <label className="sell-property-label">Built-up Area (sq ft) <span>*</span></label>
               <input 
                 type="text" 
+                required
                 className="sell-property-input"
                 placeholder={FIELD_CONFIG_MAP.builtUpArea.placeholder}
                 value={formData.builtUpArea}
@@ -592,6 +662,7 @@ const SellProperty = () => {
               <label className="sell-property-label">Locality <span>*</span></label>
               <input 
                 type="text" 
+                required
                 className="sell-property-input"
                 placeholder={FIELD_CONFIG_MAP.locality.placeholder}
                 value={formData.locality}
@@ -616,6 +687,7 @@ const SellProperty = () => {
               <label className="sell-property-label">PIN Code <span>*</span></label>
               <input 
                 type="text" 
+                required
                 className="sell-property-input"
                 placeholder={FIELD_CONFIG_MAP.pinCode.placeholder}
                 value={formData.pinCode}
@@ -728,8 +800,8 @@ const SellProperty = () => {
 
         {/* Submit Action Button */}
         <div className="sell-property-action-footer">
-          <button type="submit" className="sell-property-submit-btn">
-            <span>✈</span> Continue to Next Step &rarr;
+          <button type="submit" className="sell-property-submit-btn" disabled={loading}>
+            <span>✈</span> {loading ? 'Submitting Property...' : 'Continue to Next Step →'}
           </button>
         </div>
 

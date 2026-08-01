@@ -7,8 +7,8 @@
   --sp-primary-hover: #113c21;
   --sp-primary-light: #f0fdf4;
   --sp-indicator-blue: #2563eb;
-  --sp-border: #cbd5e1; /* Visible slate border for inputs/sections */
-  --sp-table-border: #cbd5e1; /* Visible border for summary table */
+  --sp-border: #cbd5e1;
+  --sp-table-border: #cbd5e1;
   --sp-text-main: #0f172a;
   --sp-text-muted: #64748b;
   --sp-radius: 12px;
@@ -37,9 +37,9 @@
   background-color: var(--utkal-bg-light);
   color: var(--utkal-text-main);
   min-height: 100vh;
-  padding: 30px 40px; /* Fluid outer padding */
+  padding: 30px 40px;
   width: 100%;
-  max-width: 100%; /* Removes max-width constraint for true full width */
+  max-width: 100%;
   margin: 0;
 }
 
@@ -271,6 +271,7 @@
   align-items: center;
   gap: 6px;
   transition: background-color 0.2s, border-color 0.2s;
+  width: 100%;
 }
 
 .sell-property-upload-zone:hover {
