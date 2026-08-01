@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   FaSwimmingPool, FaChild, FaParking, FaBasketballBall, 
   FaTableTennis, FaDog, FaShieldAlt, FaVideo, FaCar, 
@@ -16,14 +16,14 @@ import plan4 from '../../assets/map3.webp';
 
 import './PropertyDetailsAmenities.css';
 
-const PropertyDetailsAmenities = () => {
+const PropertyDetailsAmenities = ({ property }) => {
   // --- States for Rate & Review ---
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [reviewForm, setReviewForm] = useState({ name: '', email: '', phone: '', review: '' });
 
   // --- States for Amenities ---
-  const [activeAmenities, setActiveAmenities] = useState([]);
+  const [activeAmenities, setActiveAmenities] = useState(property?.amenities || []);
 
   // --- States for Contact Form & Captcha ---
   const [contactForm, setContactForm] = useState({ name: '', email: '', mobile: '', captchaInput: '' });
@@ -50,14 +50,14 @@ const PropertyDetailsAmenities = () => {
     };
   }, [isModalOpen]);
 
-  const generateCaptcha = () => {
+  function generateCaptcha() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%';
     let result = '';
     for (let i = 0; i < 6; i++) {
       result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     setCaptchaCode(result);
-  };
+  }
 
   const handleReviewChange = (e) => {
     const { name, value } = e.target;
@@ -154,7 +154,7 @@ const PropertyDetailsAmenities = () => {
             
             {/* 1. Amenities Section */}
             <div className="PropertyDetailsAmenities-section-header">
-              <h2 className="PropertyDetailsAmenities-title">Amenities Rudransh South Kingdom</h2>
+              <h2 className="PropertyDetailsAmenities-title">Amenities {property?.title || 'Rudransh South Kingdom'}</h2>
               <div className="PropertyDetailsAmenities-underline"></div>
             </div>
             <div className="PropertyDetailsAmenities-card">
@@ -174,12 +174,12 @@ const PropertyDetailsAmenities = () => {
 
             {/* 2. Key Features Section */}
             <div className="PropertyDetailsAmenities-section-header" style={{marginTop: '30px'}}>
-              <h2 className="PropertyDetailsAmenities-title">Key Features Rudransh South Kingdom</h2>
+              <h2 className="PropertyDetailsAmenities-title">Key Features {property?.title || 'Rudransh South Kingdom'}</h2>
               <div className="PropertyDetailsAmenities-underline"></div>
             </div>
             <div className="PropertyDetailsAmenities-card">
               <div className="PropertyDetailsAmenities-features-container">
-                {keyFeatures.map((feature, idx) => (
+                {(property?.highlights?.length ? property.highlights : keyFeatures).map((feature, idx) => (
                   <div key={idx} className="PropertyDetailsAmenities-feature-pill">
                     <FaRegStar className="PropertyDetailsAmenities-feature-icon" />
                     {feature}
@@ -239,7 +239,7 @@ const PropertyDetailsAmenities = () => {
 
             {/* 4. Explore Neighbourhood Section */}
             <div className="PropertyDetailsAmenities-section-header" style={{marginTop: '30px'}}>
-              <h2 className="PropertyDetailsAmenities-title">Explore Neighbourhood - Rudransh South Kingdom</h2>
+              <h2 className="PropertyDetailsAmenities-title">Explore Neighbourhood - {property?.title || 'Rudransh South Kingdom'}</h2>
               <div className="PropertyDetailsAmenities-underline"></div>
             </div>
             <div className="PropertyDetailsAmenities-card">

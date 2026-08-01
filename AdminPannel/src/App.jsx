@@ -30,11 +30,7 @@ import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
 
 // Protected Route Component
-const ProtectedRoute = ({
-  isAuthenticated,
-  onLoginSuccess,
-  children,
-}) => {
+const ProtectedRoute = ({ isAuthenticated, onLoginSuccess, children }) => {
   if (!isAuthenticated) {
     return <LogIn onLoginSuccess={onLoginSuccess} />;
   }
@@ -67,7 +63,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* Login */}
         <Route
           path="/login"
@@ -87,108 +82,58 @@ const App = () => {
               isAuthenticated={isAuthenticated}
               onLoginSuccess={handleLoginSuccess}
             >
-              <MainLayout
-                user={user}
-                onLogout={handleLogout}
-              />
+              <MainLayout user={user} onLogout={handleLogout} />
             </ProtectedRoute>
           }
         >
           {/* Dashboard */}
-          <Route
-            path="/"
-            element={<Navigate to="/dashboard" replace />}
-          />
-          <Route
-            path="/dashboard"
-            element={<DashboardMain />}
-          />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<DashboardMain />} />
 
           {/* Properties */}
-          <Route
-            path="/properties/all"
-            element={<PropertiesDashboard />}
-          />
-          <Route
-            path="/properties/add"
-            element={<AddNewProperty />}
-          />
-          <Route
-            path="/properties/categories"
-            element={<Categories />}
-          />
-          <Route
-            path="/properties/locations"
-            element={<Locations />}
-          />
+          <Route path="/properties/all" element={<PropertiesDashboard />} />
+          <Route path="/properties/add" element={<AddNewProperty />} />
+
+          <Route path="/properties/edit/:id" element={<AddNewProperty />} />
+
+
+          <Route path="/properties/categories" element={<Categories />} />
+          
+          <Route path="/properties/locations" element={<Locations />} />
 
           {/* Bookings */}
-          <Route
-            path="/bookings"
-            element={<Bookings />}
-          />
+          <Route path="/bookings" element={<Bookings />} />
 
           {/* Leads */}
-          <Route
-            path="/leads"
-            element={<LeadManagement />}
-          />
+          <Route path="/leads" element={<LeadManagement />} />
 
           {/* Enquiry */}
-          <Route
-            path="/enquiry"
-            element={<Enquire />}
-          />
+          <Route path="/enquiry" element={<Enquire />} />
 
           {/* Users */}
-          <Route
-            path="/users"
-            element={<User />}
-          />
+          <Route path="/users" element={<User />} />
 
           {/* Reports */}
-          <Route
-            path="/reports"
-            element={<Report />}
-          />
+          <Route path="/reports" element={<Report />} />
 
           {/* Settings */}
-          <Route
-            path="/settings"
-            element={<Setting />}
-          />
+          <Route path="/settings" element={<Setting />} />
 
           {/* Profile */}
-          <Route
-            path="/profile"
-            element={<ProfileSetting />}
-          />
+          <Route path="/profile" element={<ProfileSetting />} />
 
           {/* Testimonial */}
-          <Route
-            path="/testimonial"
-            element={<Testimonial />}
-          />
+          <Route path="/testimonial" element={<Testimonial />} />
 
           {/* Gallery */}
-          <Route
-            path="/gallery"
-            element={<Gallery />}
-          />
+          <Route path="/gallery" element={<Gallery />} />
 
           {/* Team */}
-          <Route
-            path="/team"
-            element={<OurTeam />}
-          />
+          <Route path="/team" element={<OurTeam />} />
 
           {/* 404 */}
-          <Route
-            path="*"
-            element={<Navigate to="/dashboard" replace />}
-          />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

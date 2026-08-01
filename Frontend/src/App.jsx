@@ -34,10 +34,10 @@ function App() {
       <Route path="/abot" element={<AboutUs/>} />
         <Route path="/" element={<Home/>}/>
         <Route path="/properties" element={<PropertyGrid/>}/>
+        <Route path="/property-details" element={<PropertyDetails/>} />
         <Route path="/about" element={<AboutUs/>} />
         <Route path="/Faq" element={<Faq/>} />
         <Route path="/contact" element={<Contacts/>} />
-        <Route path="/property-details" element={<PropertyDetails/>} />
 
         
 

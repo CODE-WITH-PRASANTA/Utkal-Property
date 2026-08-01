@@ -1,30 +1,41 @@
-import React, { useState, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   FiPlus, FiUpload, FiDownload, FiMapPin, FiChevronDown,
   FiSearch, FiRotateCcw, FiEye, FiEdit2, FiTrash2, FiGlobe,
   FiMap, FiHome, FiMaximize2, FiX, FiCheck, FiStar, FiFileText
 } from 'react-icons/fi';
 import './Locations.css';
+import API, { IMG_URL } from '../../api/axios';
+
+const COUNTRY_FLAGS = {
+  India: '🇮🇳',
+  USA: '🇺🇸',
+  UK: '🇬🇧',
+};
+
+const toLocationView = (location) => ({
+  id: location._id,
+  country: location.country,
+  flag: COUNTRY_FLAGS[location.country] || '📍',
+  state: location.state,
+  city: location.city,
+  area: location.area,
+  pincode: location.pincode,
+  latitude: location.latitude ?? '',
+  longitude: location.longitude ?? '',
+  properties: Number(location.properties) || 0,
+  featured: Boolean(location.featured),
+  status: location.status,
+  image: location.image ? (location.image.startsWith('http') ? location.image : `${IMG_URL}${location.image}`) : null,
+});
 
 // Initial Mock Data
-const INITIAL_LOCATIONS = [
-  { id: 1, country: 'India', flag: '🇮🇳', state: 'Odisha', city: 'Bhubaneswar', area: 'Patia', pincode: '751024', properties: 290, featured: true, status: 'Active' },
-  { id: 2, country: 'India', flag: '🇮🇳', state: 'Odisha', city: 'Bhubaneswar', area: 'Khandagiri', pincode: '751030', properties: 118, featured: true, status: 'Active' },
-  { id: 3, country: 'India', flag: '🇮🇳', state: 'Odisha', city: 'Cuttack', area: 'CDA', pincode: '753014', properties: 85, featured: false, status: 'Active' },
-  { id: 4, country: 'India', flag: '🇮🇳', state: 'Odisha', city: 'Puri', area: 'Swargadwar', pincode: '752001', properties: 62, featured: false, status: 'Active' },
-  { id: 5, country: 'India', flag: '🇮🇳', state: 'Odisha', city: 'Rourkela', area: 'Civil Township', pincode: '769004', properties: 46, featured: false, status: 'Inactive' },
-  { id: 6, country: 'India', flag: '🇮🇳', state: 'Maharashtra', city: 'Mumbai', area: 'Andheri West', pincode: '400053', properties: 412, featured: true, status: 'Active' },
-  { id: 7, country: 'India', flag: '🇮🇳', state: 'Karnataka', city: 'Bengaluru', area: 'Koramangala', pincode: '560034', properties: 350, featured: true, status: 'Active' },
-  { id: 8, country: 'India', flag: '🇮🇳', state: 'Delhi', city: 'New Delhi', area: 'Connaught Place', pincode: '110001', properties: 210, featured: false, status: 'Active' },
-  { id: 9, country: 'USA', flag: '🇺🇸', state: 'California', city: 'Los Angeles', area: 'Hollywood', pincode: '90028', properties: 180, featured: true, status: 'Active' },
-  { id: 10, country: 'USA', flag: '🇺🇸', state: 'New York', city: 'New York', area: 'Manhattan', pincode: '10001', properties: 520, featured: true, status: 'Active' },
-  { id: 11, country: 'UK', flag: '🇬🇧', state: 'England', city: 'London', area: 'Westminster', pincode: 'SW1A', properties: 310, featured: true, status: 'Active' },
-  { id: 12, country: 'India', flag: '🇮🇳', state: 'Odisha', city: 'Sambalpur', area: 'Burla', pincode: '768018', properties: 34, featured: false, status: 'Inactive' }
-];
-
 const Locations = () => {
   // Data & Selection State
-  const [locations, setLocations] = useState(INITIAL_LOCATIONS);
+  const [locations, setLocations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState('');
   const [selectedIds, setSelectedIds] = useState([]);
   
   // Filtering & Search
@@ -62,6 +73,7 @@ const Locations = () => {
     latitude: '',
     longitude: '',
     properties: '0',
+    featured: false,
     status: 'Active',
     image: null,
     imagePreview: null
@@ -69,6 +81,25 @@ const Locations = () => {
 
   const fileInputRef = useRef(null);
   const importFileRef = useRef(null);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    API.get('/locations')
+      .then(({ data }) => {
+        if (isCurrent) setLocations((data.data || []).map(toLocationView));
+      })
+      .catch((requestError) => {
+        if (isCurrent) setError(requestError.response?.data?.message || 'Unable to load locations.');
+      })
+      .finally(() => {
+        if (isCurrent) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
 
   // Filter Dropdown Unique Options
   const uniqueCountries = useMemo(() => ['All', ...new Set(locations.map(item => item.country))], [locations]);
@@ -148,12 +179,13 @@ const Locations = () => {
         city: item.city,
         area: item.area,
         pincode: item.pincode,
-        latitude: '',
-        longitude: '',
+        latitude: item.latitude?.toString() || '',
+        longitude: item.longitude?.toString() || '',
         properties: item.properties.toString(),
+        featured: item.featured,
         status: item.status,
         image: null,
-        imagePreview: null
+        imagePreview: item.image
       });
     } else {
       setEditingLocation(null);
@@ -166,6 +198,7 @@ const Locations = () => {
         latitude: '',
         longitude: '',
         properties: '0',
+        featured: false,
         status: 'Active',
         image: null,
         imagePreview: null
@@ -185,61 +218,136 @@ const Locations = () => {
     }
   };
 
-  const handleSaveLocation = (e) => {
+  const handleSaveLocation = async (e) => {
     e.preventDefault();
-    if (editingLocation) {
-      setLocations(prev => prev.map(item => item.id === editingLocation.id ? {
-        ...item,
-        country: formData.country,
-        state: formData.state,
-        city: formData.city,
-        area: formData.area,
-        pincode: formData.pincode,
-        properties: Number(formData.properties),
-        status: formData.status
-      } : item));
-    } else {
-      const newItem = {
-        id: Date.now(),
-        country: formData.country,
-        flag: formData.country === 'USA' ? '🇺🇸' : formData.country === 'UK' ? '🇬🇧' : '🇮🇳',
-        state: formData.state || 'Odisha',
-        city: formData.city || 'Bhubaneswar',
-        area: formData.area || 'New Area',
-        pincode: formData.pincode || '751001',
-        properties: Number(formData.properties) || 0,
-        featured: false,
-        status: formData.status
-      };
-      setLocations(prev => [newItem, ...prev]);
+    try {
+      setIsSaving(true);
+      setError('');
+      const payload = new FormData();
+      ['country', 'state', 'city', 'area', 'pincode', 'latitude', 'longitude', 'properties', 'status'].forEach((field) => {
+        payload.append(field, formData[field]);
+      });
+      payload.append('featured', String(formData.featured));
+      if (formData.image) payload.append('image', formData.image);
+
+      const response = editingLocation
+        ? await API.put(`/locations/${editingLocation.id}`, payload)
+        : await API.post('/locations', payload);
+      const savedLocation = toLocationView(response.data.data);
+
+      setLocations((previous) => editingLocation
+        ? previous.map((location) => location.id === savedLocation.id ? savedLocation : location)
+        : [savedLocation, ...previous]);
+      setIsAddEditOpen(false);
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || 'Unable to save location.');
+    } finally {
+      setIsSaving(false);
     }
-    setIsAddEditOpen(false);
   };
 
-  const handleDelete = () => {
-    setLocations(prev => prev.filter(item => item.id !== deleteId));
-    setSelectedIds(prev => prev.filter(i => i !== deleteId));
-    setDeleteId(null);
+  const handleDelete = async () => {
+    try {
+      setError('');
+      await API.delete(`/locations/${deleteId}`);
+      setLocations((previous) => previous.filter((location) => location.id !== deleteId));
+      setSelectedIds((previous) => previous.filter((id) => id !== deleteId));
+      setDeleteId(null);
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || 'Unable to delete location.');
+    }
   };
 
   const handleExportCSV = () => {
-    const headers = ['ID,Country,State,City,Area,Pincode,Properties,Status\n'];
+    if (!filteredLocations.length) {
+      setError('There are no locations to export.');
+      return;
+    }
+
+    const headers = ['ID,Country,State,City,Area,Pincode,Properties,Status'];
     const rows = filteredLocations.map(l => 
       `${l.id},"${l.country}","${l.state}","${l.city}","${l.area}","${l.pincode}",${l.properties},"${l.status}"`
     );
-    const blob = new Blob([...headers, ...rows.join('\n')], { type: 'text/csv' });
+    const blob = new Blob([[headers, ...rows].join('\n')], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'locations.csv';
     a.click();
+    window.URL.revokeObjectURL(url);
   };
 
-  const handleBulkDelete = () => {
-    setLocations(prev => prev.filter(item => !selectedIds.includes(item.id)));
-    setSelectedIds([]);
-    setIsBulkOpen(false);
+  const handleBulkDelete = async () => {
+    if (!selectedIds.length) return;
+    try {
+      setError('');
+      await Promise.all(selectedIds.map((id) => API.delete(`/locations/${id}`)));
+      setLocations((previous) => previous.filter((location) => !selectedIds.includes(location.id)));
+      setSelectedIds([]);
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || 'Unable to delete selected locations.');
+    } finally {
+      setIsBulkOpen(false);
+    }
   };
+
+  const handleImportLocations = async () => {
+    const file = importFileRef.current?.files[0];
+    if (!file) {
+      setError('Choose a CSV or JSON file to import locations.');
+      return;
+    }
+
+    try {
+      setError('');
+      const content = await file.text();
+      const parsed = file.name.toLowerCase().endsWith('.json')
+        ? JSON.parse(content)
+        : (() => {
+            const [headerLine, ...rows] = content.trim().split(/\r?\n/);
+            const headers = headerLine.split(',').map((header) => header.trim().toLowerCase());
+            return rows.filter(Boolean).map((row) => {
+              const values = row.split(',').map((value) => value.trim().replace(/^"|"$/g, ''));
+              return headers.reduce((location, header, index) => ({ ...location, [header]: values[index] }), {});
+            });
+          })();
+      const importedLocations = Array.isArray(parsed) ? parsed : parsed.locations || [];
+      const validLocations = importedLocations.filter((location) =>
+        location.country && location.state && location.city && location.area && location.pincode,
+      );
+
+      if (!validLocations.length) {
+        throw new Error('Each imported location needs country, state, city, area, and pincode values.');
+      }
+
+      const responses = await Promise.all(validLocations.map((location) => API.post('/locations', {
+        country: location.country,
+        state: location.state,
+        city: location.city,
+        area: location.area,
+        pincode: location.pincode,
+        latitude: location.latitude || '',
+        longitude: location.longitude || '',
+        properties: Number(location.properties) || 0,
+        featured: location.featured === true || String(location.featured).toLowerCase() === 'true',
+        status: location.status === 'Inactive' ? 'Inactive' : 'Active',
+      })));
+
+      setLocations((previous) => [
+        ...responses.map((response) => toLocationView(response.data.data)),
+        ...previous,
+      ]);
+      setIsImportOpen(false);
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || requestError.message || 'Unable to import locations.');
+    }
+  };
+
+  const mapLocation = viewData || filteredLocations[0];
+  const mapQuery = mapLocation
+    ? encodeURIComponent([mapLocation.area, mapLocation.city, mapLocation.state, mapLocation.country].filter(Boolean).join(', '))
+    : 'India';
+  const mapUrl = `https://maps.google.com/maps?q=${mapQuery}&t=&z=11&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <div className="locations-wrapper">
@@ -255,8 +363,15 @@ const Locations = () => {
           <button className="locations-btn locations-btn-primary" onClick={() => openAddEditModal()}>
             <FiPlus /> Add New Location
           </button>
-          
-          
+
+          <button className="locations-btn locations-btn-outline" onClick={() => setIsImportOpen(true)}>
+            <FiUpload /> Import
+          </button>
+
+          <button className="locations-btn locations-btn-outline" onClick={handleExportCSV}>
+            <FiDownload /> Export CSV
+          </button>
+
           <button className="locations-btn locations-btn-outline" onClick={() => setIsMapModalOpen(true)}>
             <FiMapPin /> Map View
           </button>
@@ -275,6 +390,8 @@ const Locations = () => {
           </div>
         </div>
       </header>
+
+      {error && <div role="alert" className="locations-error-message">{error}</div>}
 
       {/* 6 Top Stats Cards */}
       <section className="locations-stats-grid">
@@ -416,7 +533,11 @@ const Locations = () => {
             </tr>
           </thead>
           <tbody>
-            {currentTableData.length > 0 ? (
+            {isLoading ? (
+              <tr>
+                <td colSpan="10" className="locations-no-data-cell">Loading locations…</td>
+              </tr>
+            ) : currentTableData.length > 0 ? (
               currentTableData.map((row) => (
                 <tr key={row.id}>
                   <td>
@@ -514,7 +635,7 @@ const Locations = () => {
           <div className="locations-map-preview-wrapper">
             <iframe 
               title="Location Map"
-              src="https://maps.google.com/maps?q=Bhubaneswar&t=&z=11&ie=UTF8&iwloc=&output=embed"
+                src={mapUrl}
               width="100%" 
               height="280" 
               style={{ border: 0, borderRadius: '8px' }} 
@@ -685,7 +806,9 @@ const Locations = () => {
 
               <div className="locations-modal-footer">
                 <button type="button" className="locations-btn-cancel" onClick={() => setIsAddEditOpen(false)}>Cancel</button>
-                <button type="submit" className="locations-btn-save">Save Location</button>
+                <button type="submit" className="locations-btn-save" disabled={isSaving}>
+                  {isSaving ? 'Saving…' : 'Save Location'}
+                </button>
               </div>
             </form>
           </div>
@@ -701,17 +824,17 @@ const Locations = () => {
               <button className="locations-btn-close" onClick={() => setIsImportOpen(false)}><FiX /></button>
             </div>
             <div className="locations-modal-body">
-              <p className="locations-modal-desc">Upload a CSV or Excel file containing location data structured with Country, State, City, Area, Pincode.</p>
+              <p className="locations-modal-desc">Upload a CSV or JSON file with Country, State, City, Area, and Pincode columns.</p>
               <div className="locations-file-upload-box" onClick={() => importFileRef.current.click()}>
-                <input type="file" ref={importFileRef} hidden accept=".csv, .xlsx" />
+                <input type="file" ref={importFileRef} hidden accept=".csv,.json" />
                 <FiFileText className="locations-upload-icon" />
-                <span>Click to Upload CSV / Excel</span>
+                <span>Click to Upload CSV / JSON</span>
                 <small>Max file size 5MB</small>
               </div>
             </div>
             <div className="locations-modal-footer">
               <button className="locations-btn-cancel" onClick={() => setIsImportOpen(false)}>Cancel</button>
-              <button className="locations-btn-save" onClick={() => { alert('Import Processed!'); setIsImportOpen(false); }}>Upload & Import</button>
+              <button className="locations-btn-save" onClick={handleImportLocations}>Upload & Import</button>
             </div>
           </div>
         </div>
@@ -742,7 +865,7 @@ const Locations = () => {
             <div className="locations-modal-body locations-p-0">
               <iframe 
                 title="Full Map"
-                src="https://maps.google.com/maps?q=Bhubaneswar&t=&z=12&ie=UTF8&iwloc=&output=embed"
+                src={mapUrl}
                 width="100%" 
                 height="450" 
                 style={{ border: 0 }} 

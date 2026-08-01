@@ -1,4 +1,3 @@
-import React from 'react';
 import './PropertyDetailsProjectOverview.css';
 
 // Importing necessary icons from react-icons
@@ -27,20 +26,24 @@ import {
 
 import { BiArea, BiMoveHorizontal, BiBuildingHouse } from 'react-icons/bi';
 
-const PropertyDetailsProjectOverview = () => {
+const PropertyDetailsProjectOverview = ({ property }) => {
+  const propertyTitle = property?.title || 'Rudransh South Kingdom';
+  const description = property?.shortDescription || `${propertyTitle} offers a thoughtfully designed property with comfortable spaces, modern amenities, and convenient connectivity.`;
+  const location = property?.address || 'Info Valley corridor of Bhubaneswar';
+
   // Data for the grid based on the provided image
   const overviewData = [
-    { id: 1, label: 'Project Area', value: '2.5 Acre', icon: <BiArea /> },
-    { id: 2, label: 'No. of House/Villa', value: '45', icon: <MdHome /> },
-    { id: 3, label: 'Total Floors', value: 'G+2', icon: <MdDomain /> },
+    { id: 1, label: 'Project Area', value: property?.projectSize ? `${property.projectSize} Acre` : '2.5 Acre', icon: <BiArea /> },
+    { id: 2, label: 'No. of House/Villa', value: property?.totalUnits || '45', icon: <MdHome /> },
+    { id: 3, label: 'Total Floors', value: property?.totalFloors || 'G+2', icon: <MdDomain /> },
     { id: 4, label: 'Facing', value: 'North, South', icon: <MdMeetingRoom /> },
-    { id: 5, label: 'Plot Area', value: '1500 - 1500 sq.ft', icon: <BiMoveHorizontal /> },
-    { id: 6, label: 'Bedrooms', value: '4-5', icon: <MdBed /> },
-    { id: 7, label: 'Bathrooms', value: '4-5', icon: <MdBathtub /> },
+    { id: 5, label: 'Plot Area', value: property?.plotSize ? `${property.plotSize} sq.ft` : '1500 - 1500 sq.ft', icon: <BiMoveHorizontal /> },
+    { id: 6, label: 'Bedrooms', value: property?.bedrooms || '4-5', icon: <MdBed /> },
+    { id: 7, label: 'Bathrooms', value: property?.bathrooms || '4-5', icon: <MdBathtub /> },
     { id: 8, label: 'Balconies', value: '1-2', icon: <MdBalcony /> },
-    { id: 9, label: 'Parking', value: '2', icon: <MdDirectionsCar /> },
-    { id: 10, label: 'Transaction Type', value: 'New property', icon: <MdVpnKey /> },
-    { id: 11, label: 'Property Overlooking', value: 'Pool, Road, Club, Garden', icon: <MdVisibility /> },
+    { id: 9, label: 'Parking', value: property?.parking || '2', icon: <MdDirectionsCar /> },
+    { id: 10, label: 'Transaction Type', value: property?.statusType || 'New property', icon: <MdVpnKey /> },
+    { id: 11, label: 'Property Overlooking', value: property?.amenities?.join(', ') || 'Pool, Road, Club, Garden', icon: <MdVisibility /> },
     { id: 12, label: 'Maintainance Per Month', value: '₹ 0.00', icon: <MdHomeRepairService /> },
     { id: 13, label: 'Expected Rental Return', value: '₹ 40,000', icon: <BiBuildingHouse /> },
   ];
@@ -84,16 +87,16 @@ const PropertyDetailsProjectOverview = () => {
           <h3 className="PropertyDetailsProjectOverview-section-title">Description</h3>
           <div className="PropertyDetailsProjectOverview-content">
             <p>
-              Rudransh South Kingdom is a thoughtfully designed luxury villa community located in the rapidly developing Info Valley corridor of Bhubaneswar. Combining contemporary architecture, premium lifestyle amenities, and excellent connectivity, the project offers an ideal living environment for families seeking comfort, privacy, and convenience.
+              {description}
             </p>
             <p>
-              The development features elegant villas with spacious layouts, modern interiors, abundant natural light, and private outdoor spaces. Residents can enjoy a premium clubhouse, rooftop swimming pool, fitness center, yoga zone, indoor recreation facilities, landscaped gardens, children's play area, outdoor sports facilities, and beautifully designed community spaces.
+              {property?.highlights?.length ? property.highlights.join('. ') : `${propertyTitle} includes spacious layouts, practical features, and lifestyle amenities for comfortable everyday living.`}
             </p>
             <p>
-              Strategically positioned near Info Valley, Infosys, RBI Data Centre, GITA Autonomous College, NMIMS University, Grand Hyatt Hotel, and National Highway 16, Rudransh South Kingdom ensures seamless access to workplaces, educational institutions, healthcare facilities, shopping destinations, and entertainment hubs.
+              Located at {location}, this property is positioned for convenient access to nearby workplaces, educational institutions, healthcare facilities, shopping destinations, and entertainment hubs.
             </p>
             <p>
-              Designed to deliver a balanced lifestyle surrounded by greenery and modern infrastructure, Rudransh South Kingdom is a perfect destination for those looking for a premium residential address in Bhubaneswar.
+              {propertyTitle} is a suitable choice for buyers looking for a well-connected residential or investment property.
             </p>
           </div>
         </div>
@@ -103,7 +106,7 @@ const PropertyDetailsProjectOverview = () => {
           <h3 className="PropertyDetailsProjectOverview-section-title">Location</h3>
           <div className="PropertyDetailsProjectOverview-content">
             <p>
-              Located in the fast-growing Info Valley corridor of Bhubaneswar, Rudransh South Kingdom offers excellent connectivity to Infosys, RBI Data Centre, NMIMS University, GITA College, and NH-16. Surrounded by major infrastructure and institutional developments, this location is poised for strong future appreciation, making it ideal for both homebuyers and investors.
+              {propertyTitle} is located at {location}, offering convenient connectivity and access to the surrounding area.
             </p>
           </div>
         </div>

@@ -678,6 +678,11 @@ body {
   align-items: center;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
 }
 
 .categories-qa-item:hover {
@@ -1148,4 +1153,45 @@ body {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+.categories-error-message {
+  margin: 0 0 18px;
+  padding: 11px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.categories-success-message {
+  margin: 0 0 18px;
+  padding: 11px 14px;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #15803d;
+  font-size: 13px;
+}
+
+.categories-analytics-empty {
+  margin: 0;
+  color: var(--categories-text-muted);
+  font-size: 12px;
+}
+
+.categories-settings-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  color: var(--categories-text-main);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.categories-settings-checkbox input {
+  width: auto;
+  margin: 0;
 }

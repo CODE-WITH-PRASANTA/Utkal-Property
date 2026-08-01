@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaStar, FaRegStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './PropertyDetailsPeopleSay.css';
 
-const PropertyDetailsPeopleSay = () => {
+const PropertyDetailsPeopleSay = ({ property }) => {
   // Mock data for reviews. Added a few extra to demonstrate functional pagination.
   const allReviews = [
     {
@@ -98,7 +98,7 @@ const PropertyDetailsPeopleSay = () => {
         
         {/* Header Section */}
         <div className="PropertyDetailsPeopleSay-header">
-          <h2 className="PropertyDetailsPeopleSay-title">What People Say About Us</h2>
+          <h2 className="PropertyDetailsPeopleSay-title">What People Say About {property?.title || 'Us'}</h2>
           <div className="PropertyDetailsPeopleSay-google-logo">
             <span style={{ color: '#4285F4' }}>G</span>
             <span style={{ color: '#EA4335' }}>o</span>

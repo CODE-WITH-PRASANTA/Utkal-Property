@@ -9,6 +9,15 @@ const connectDB = require("./src/config/db");
 const testimonialRoutes = require("./src/routes/testimonialRoutes");
 const galleryRoutes = require("./src/routes/galleryRoutes");
 const teamRoutes = require("./src/routes/teamRoutes");
+const propertyRoutes = require("./src/routes/propertyRoutes");
+const categoryRoutes = require("./src/routes/categoryRoutes");
+const locationRoutes = require("./src/routes/locationRoutes");
+const userRoutes = require(
+  "./src/routes/userRoutes"
+);
+
+
+
 
 // Initialize MongoDB Connection
 connectDB();
@@ -26,6 +35,13 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/testimonials", testimonialRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use("/api/team", teamRoutes);
+app.use("/api/properties", propertyRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/locations", locationRoutes);
+app.use(
+  "/api/users",
+  userRoutes
+);
 
 app.get("/", (req, res) => {
   res.json({ message: "Server Running Successfully" });

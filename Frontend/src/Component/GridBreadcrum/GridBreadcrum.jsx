@@ -18,7 +18,7 @@ import { HiOutlineMapPin } from 'react-icons/hi2';
 // Local Asset Image Import
 import heroBg from '../../assets/bg1.jpg';
 
-const GridBreadcrum = () => {
+const GridBreadcrum = ({ onSearch }) => {
   // Toggle Rent / Buy Tabs
   const [activeTab, setActiveTab] = useState('Rent');
 
@@ -54,6 +54,37 @@ const GridBreadcrum = () => {
       ...prev,
       [name]: checked
     }));
+  };
+
+  const handleSearch = () => {
+    const amenityLabels = {
+      swimmingPool: 'Swimming pool',
+      garage: 'Garage',
+      alarmSystem: 'Alarm system',
+      balcony: 'Balcony',
+      outdoorArea: 'Outdoor area',
+      broadband: 'Broadband',
+      ensuite: 'Ensuite',
+      builtInRobes: 'Built in robes',
+      gym: 'Gym',
+      tennisCourt: 'Tennis court',
+      study: 'Study',
+      outdoorSpa: 'Outdoor spa',
+    };
+
+    const selectedAmenities = Object.entries(amenities)
+      .filter(([, selected]) => selected)
+      .map(([amenity]) => amenityLabels[amenity]);
+
+    onSearch?.({
+      search: keyword.trim(),
+      type: propertyType,
+      location,
+      bedrooms: beds,
+      bathrooms: baths,
+      statusType: activeTab === 'Buy' ? 'For Sale' : 'For Rent',
+      amenities: selectedAmenities,
+    });
   };
 
   // Fallback background image if local asset fails
@@ -174,7 +205,7 @@ const GridBreadcrum = () => {
             </button>
 
             {/* Search Button */}
-            <button className="GridBreadcrum-search-btn">
+            <button className="GridBreadcrum-search-btn" onClick={handleSearch}>
               <span>Search Now</span>
               <FiSearch className="GridBreadcrum-btn-search-icon" />
             </button>

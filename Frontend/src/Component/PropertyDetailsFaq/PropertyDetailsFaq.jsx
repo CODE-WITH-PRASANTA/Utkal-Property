@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 // Import local FAQ image
@@ -6,18 +6,20 @@ import faqimg from '../../assets/faqimg.webp';
 
 import './PropertyDetailsFaq.css';
 
-const PropertyDetailsFaq = () => {
+const PropertyDetailsFaq = ({ property }) => {
   // State to track the currently open accordion item (default to first item open)
   const [activeIndex, setActiveIndex] = useState(0);
 
   // FAQ Data provided in the prompt
+  const propertyTitle = property?.title || 'Rudransh South Kingdom';
+  const propertyLocation = property?.address || 'Madanpur, Bhubaneswar';
   const faqs = [
-    { id: 1, question: "Where is Rudransh South Kingdom Located?", answer: "This property is located in Madanpur, Bhubaneswar." },
-    { id: 2, question: "How Many Reserved Parking are In Rudransh South Kingdom?", answer: "2 reserved parking space(s) are available." },
-    { id: 3, question: "Is Rudransh South Kingdom RERA Registered?", answer: "Yes, it is RERA registered with ID PS/19/2026/01475." },
-    { id: 4, question: "What is the Status of Rudransh South Kingdom?", answer: "The current status of this property is Under Construction." },
-    { id: 5, question: "What is the Price Range of Rudransh South Kingdom?", answer: "The price range is 13000000.00." },
-    { id: 6, question: "Expected Rental Rerurn of Rudransh South Kingdom?", answer: "The expected rental return is 40000.00." },
+    { id: 1, question: `Where is ${propertyTitle} Located?`, answer: `This property is located at ${propertyLocation}.` },
+    { id: 2, question: `How Many Reserved Parking are In ${propertyTitle}?`, answer: `${property?.parking || '2'} parking space(s) are available.` },
+    { id: 3, question: `Is ${propertyTitle} RERA Registered?`, answer: property?.rera ? `Yes, it is RERA registered with ID ${property.rera}.` : 'RERA information is available on request.' },
+    { id: 4, question: `What is the Status of ${propertyTitle}?`, answer: `The current status of this property is ${property?.status || 'Under Construction'}.` },
+    { id: 5, question: `What is the Price Range of ${propertyTitle}?`, answer: `The price is ${property?.price || 'available on request'}.` },
+    { id: 6, question: `Expected Rental Return of ${propertyTitle}?`, answer: property?.pricePerSqft ? `The listed rate is ${property.pricePerSqft} per square foot.` : 'Rental return information is available on request.' },
     { id: 7, question: "How Far From Airport?", answer: "It is approximately 15 Km km from the airport." },
     { id: 8, question: "How Far From Railway Station?", answer: "It is approximately 18 Km km from the nearest railway station." },
     { id: 9, question: "What is the super built-up area for 4BHK?", answer: "The super built-up area for 4BHK is 3140.00 sq. ft." },

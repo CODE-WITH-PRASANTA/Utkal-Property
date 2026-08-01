@@ -268,15 +268,12 @@ const SellProperty = () => {
             <span>🏠</span> SALE
           </div>
           <div className="sell-property-banner-text">
-<<<<<<< HEAD
             <h1>
               We will find a <span className="highlight-green">perfect home</span> for you
             </h1>
             <p>List your property for sale and find the right buyer easily.</p>
-=======
             <h1>Sell a Property with Utkal Property</h1>
             <p>List your property for sale and connect with potential buyers across Odisha.</p>
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
           </div>
         </div>
         <div className="sell-property-banner-illustration">
@@ -530,16 +527,13 @@ const SellProperty = () => {
                 value={formData.state}
                 onChange={(e) => handleInputChange('state', e.target.value)}
               >
-<<<<<<< HEAD
                 {fieldConfigMap.state.options.map((opt, i) => (
                   <option key={i} value={opt}>{opt}</option>
                 ))}
-=======
                 <option value="Odisha">Odisha</option>
                 <option value="Karnataka">Karnataka</option>
                 <option value="Maharashtra">Maharashtra</option>
                 <option value="Delhi">Delhi</option>
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
               </select>
             </div>
 
@@ -550,16 +544,13 @@ const SellProperty = () => {
                 value={formData.city}
                 onChange={(e) => handleInputChange('city', e.target.value)}
               >
-<<<<<<< HEAD
                 {fieldConfigMap.city.options.map((opt, i) => (
                   <option key={i} value={opt}>{opt}</option>
                 ))}
-=======
                 <option value="Bhubaneswar">Bhubaneswar</option>
                 <option value="Cuttack">Cuttack</option>
                 <option value="Puri">Puri</option>
                 <option value="Sambalpur">Sambalpur</option>
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
               </select>
             </div>
 
@@ -600,11 +591,8 @@ const SellProperty = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
         {/* Section 4: Upload More Images */}
-=======
         {/* Upload Images Section */}
->>>>>>> 40076c9dd6e9f4f618ed8c6af950dbab8001c392
         <div className="sell-property-section">
           <h3 className="sell-property-section-title">
             <span className="title-indicator"></span> Upload More Images

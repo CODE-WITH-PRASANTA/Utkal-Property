@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './PropertyDetailsCard.css';
 
 // Exact imports as requested
@@ -34,8 +34,10 @@ const generateCaptcha = () => {
   return result;
 };
 
-const PropertyDetailsCard = () => {
-  const images = [house, house2, house3];
+const PropertyDetailsCard = ({ property }) => {
+  const images = property?.images?.length
+    ? property.images
+    : [house, house2, house3];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   
@@ -113,11 +115,13 @@ const PropertyDetailsCard = () => {
           {/* Right Section: Details */}
           <div className="pdc-details-section">
             <div className="pdc-header">
-              <h2>Rudransh South Kingdom</h2>
-              <p className="pdc-subtitle">Luxury Villas in a Premium Gated Community</p>
+              <h2>{property?.title || 'Rudransh South Kingdom'}</h2>
+              <p className="pdc-subtitle">
+                {property?.shortDescription || 'Luxury Villas in a Premium Gated Community'}
+              </p>
               <p className="pdc-location">
                 <span className="icon-loc"><MdLocationOn /></span> 
-                6PM9+7GX, Infosys Rd, Chandiheta, Odisha ...
+                {property?.address || '6PM9+7GX, Infosys Rd, Chandiheta, Odisha ...'}
               </p>
             </div>
 
@@ -132,14 +136,16 @@ const PropertyDetailsCard = () => {
             </div>
 
             <div className="pdc-pricing">
-              <h3 className="price-main">₹ 1.86 Cr - ₹ 1.99 Cr</h3>
-              <span className="price-sqft">₹6,350 / Sqft</span>
+              <h3 className="price-main">{property?.price || '₹ 1.86 Cr - ₹ 1.99 Cr'}</h3>
+              <span className="price-sqft">
+                {property?.pricePerSqft ? `₹${Number(property.pricePerSqft).toLocaleString()} / Sqft` : '₹6,350 / Sqft'}
+              </span>
             </div>
 
             <div className="pdc-grid">
               <div className="grid-item">
                 <span className="grid-label"><MdHome size={16} /> Type</span>
-                <span className="grid-value">Luxury Villa</span>
+                <span className="grid-value">{property?.type || 'Luxury Villa'}</span>
               </div>
               <div className="grid-item">
                 <span className="grid-label"><MdAttachMoney size={16} /> Booking Amount</span>
@@ -151,15 +157,17 @@ const PropertyDetailsCard = () => {
               </div>
               <div className="grid-item">
                 <span className="grid-label"><MdSquareFoot size={16} /> SBA</span>
-                <span className="grid-value">2932 - 3140 sq.ft</span>
+                <span className="grid-value">{property?.sqft ? `${property.sqft} sq.ft` : '2932 - 3140 sq.ft'}</span>
               </div>
               <div className="grid-item">
                 <span className="grid-label"><MdDateRange size={16} /> Available From</span>
-                <span className="grid-value">27 Jul 2028</span>
+                <span className="grid-value">
+                  {property?.launchDate ? new Date(property.launchDate).toLocaleDateString() : '27 Jul 2028'}
+                </span>
               </div>
               <div className="grid-item">
                 <span className="grid-label"><MdCheckCircle size={16} /> Status</span>
-                <span className="grid-value status-highlight">Under Construction</span>
+                <span className="grid-value status-highlight">{property?.status || 'Under Construction'}</span>
               </div>
             </div>
 
@@ -173,8 +181,8 @@ const PropertyDetailsCard = () => {
             </div>
 
             <div className="pdc-footer">
-              <span className="rera-no">RERA NO: PS/19/2026/01475</span>
-              <span className="views"><MdRemoveRedEye size={16} /> 1,204 Views</span>
+              <span className="rera-no">RERA NO: {property?.rera || 'PS/19/2026/01475'}</span>
+              <span className="views"><MdRemoveRedEye size={16} /> {property?.views || '1,204'} Views</span>
             </div>
           </div>
         </div>

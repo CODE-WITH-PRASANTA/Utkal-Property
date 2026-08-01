@@ -1,4 +1,4 @@
-import React from 'react'
+import { useLocation } from 'react-router-dom'
 import PropertyDetailsCard from '../../Component/PropertyDetailsCard/PropertyDetailsCard'
 import PropertyDetailsProjectOverview from '../../Component/PropertyDetailsProjectOverview/PropertyDetailsProjectOverview'
 import PropertyDetailsAmenities from '../../Component/PropertyDetailsAmenities/PropertyDetailsAmenities'
@@ -8,15 +8,18 @@ import PropertyDetailsPeopleSay from '../../Component/PropertyDetailsPeopleSay/P
 import PropertyDetailsFaq from '../../Component/PropertyDetailsFaq/PropertyDetailsFaq'
 
 const PropertyDetails = () => {
+  const { state } = useLocation();
+  const property = state?.property;
+
   return (
     <div>
-        <PropertyDetailsCard/>
-        <PropertyDetailsProjectOverview/>
-        <PropertyDetailsAmenities/>
-        <PropertyDetailsMap/>
-        <PropertyDetailsSimilarProjects/>
-        <PropertyDetailsFaq/>
-        <PropertyDetailsPeopleSay/>
+        <PropertyDetailsCard property={property}/>
+        <PropertyDetailsProjectOverview property={property}/>
+        <PropertyDetailsAmenities property={property}/>
+        <PropertyDetailsMap property={property}/>
+        <PropertyDetailsSimilarProjects property={property}/>
+        <PropertyDetailsFaq property={property}/>
+        <PropertyDetailsPeopleSay property={property}/>
 
 
 

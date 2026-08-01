@@ -1,4 +1,3 @@
-import React from 'react';
 import { 
   FaRupeeSign, 
   FaHome, 
@@ -13,7 +12,7 @@ import smp2 from '../../assets/smp2.webp';
 
 import './PropertyDetailsSimilarProjects.css';
 
-const PropertyDetailsSimilarProjects = () => {
+const PropertyDetailsSimilarProjects = ({ property }) => {
   // Data representing the projects
   const projects = [
     {
@@ -49,7 +48,7 @@ const PropertyDetailsSimilarProjects = () => {
     <div className="PropertyDetailsSimilarProjects-wrapper">
       {/* Section Header */}
       <div className="PropertyDetailsSimilarProjects-section-header">
-        <h2 className="PropertyDetailsSimilarProjects-title">Similar Project</h2>
+        <h2 className="PropertyDetailsSimilarProjects-title">Similar Projects for {property?.title || 'This Property'}</h2>
         <div className="PropertyDetailsSimilarProjects-underline"></div>
       </div>
 

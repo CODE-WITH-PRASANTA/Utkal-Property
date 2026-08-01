@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './HomeFeaturedproperties.css';
+import API, { BASE_URL } from '../../api/axios';
 
 // React Icons
 import {
@@ -202,7 +203,62 @@ CATEGORIES.slice(1).forEach((cat) => {
     title: `Utkal ${cat} Spot ${idx + 1}`,
     rawPrice: item.rawPrice + idx * 500000
   }));
+
 });
+
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80';
+
+const formatTimeAgo = (createdAt) => {
+  if (!createdAt) return 'Recently added';
+
+  const elapsedDays = Math.max(
+    0,
+    Math.floor((Date.now() - new Date(createdAt).getTime()) / 86400000),
+  );
+
+  if (elapsedDays === 0) return 'Today';
+  if (elapsedDays < 30) return `${elapsedDays} days ago`;
+
+  return `${Math.floor(elapsedDays / 30)} months ago`;
+};
+
+const normalizeProperty = (property) => {
+  const image = property.image ? `${BASE_URL}${property.image}` : FALLBACK_IMAGE;
+
+  return {
+    ...property,
+    id: property._id,
+    title: property.name,
+    address: [property.location, property.city, property.state]
+      .filter(Boolean)
+      .join(', '),
+    rawPrice: Number(property.price) || 0,
+    isRent: property.statusType?.toLowerCase().includes('rent'),
+    beds: property.bedrooms || 0,
+    baths: property.bathrooms || 0,
+    sqft: property.totalArea || property.plotSize || 0,
+    featured: property.featured,
+    forSale: property.statusType?.toLowerCase().includes('sale'),
+    verified: property.publishStatus !== false && property.status === 'Active',
+    timeAgo: formatTimeAgo(property.createdAt),
+    avatar: image,
+    images: [image],
+  };
+};
+
+const categoryMatches = (property, category) => {
+  const value = `${property.type || ''} ${property.category || ''}`.toLowerCase();
+  const categoryAliases = {
+    Houses: ['house', 'houses', 'independent'],
+    'Smart home': ['smart home', 'smart'],
+    Apartments: ['apartment', 'apartments'],
+    Office: ['office', 'commercial'],
+    Villa: ['villa'],
+    Bungalow: ['bungalow'],
+  };
+
+  return categoryAliases[category].some((alias) => value.includes(alias));
+};
 
 // Single Property Card Component
 const PropertyCard = ({ property }) => {
@@ -333,9 +389,29 @@ const PropertyCard = ({ property }) => {
 const HomeFeaturedproperties = () => {
   const [activeTab, setActiveTab] = useState('Houses');
   const [currentPage, setCurrentPage] = useState(1);
+  const [properties, setProperties] = useState([]);
   const itemsPerPage = 4;
 
-  const activeProperties = PROPERTIES_DATA[activeTab] || [];
+  useEffect(() => {
+    const fetchFeaturedProperties = async () => {
+      try {
+        const response = await API.get('/properties', {
+          params: { page: 1, limit: 1000, featured: true },
+        });
+        const propertyData = response.data?.properties || [];
+        setProperties(propertyData.map(normalizeProperty));
+      } catch (error) {
+        console.error('FETCH FEATURED PROPERTIES ERROR:', error);
+        setProperties([]);
+      }
+    };
+
+    fetchFeaturedProperties();
+  }, []);
+
+  const activeProperties = properties.length
+    ? properties.filter((property) => categoryMatches(property, activeTab))
+    : PROPERTIES_DATA[activeTab] || [];
   const totalPages = Math.ceil(activeProperties.length / itemsPerPage);
 
   const indexOfLastItem = currentPage * itemsPerPage;
