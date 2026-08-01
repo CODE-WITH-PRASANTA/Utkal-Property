@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { signIn } from 'aws-amplify/auth';
+
+// Standard & Reliable React Icons (FontAwesome & Feather)
 import { 
-  LuUser, 
-  LuLock, 
-  LuEye, 
-  LuEyeOff, 
-  LuBuilding2, 
-  LuAlertCircle, 
-  LuShieldCheck,
-  LuLoader2 
-} from 'react-icons/lu';
+  FaUser, 
+  FaLock, 
+  FaEye, 
+  FaEyeSlash, 
+  FaBuilding, 
+  FaShieldAlt, 
+  FaExclamationTriangle,
+  FaSpinner 
+} from 'react-icons/fa';
+
 import './LogIn.css';
 
 const LogIn = ({ onLoginSuccess }) => {
@@ -75,23 +78,21 @@ const LogIn = ({ onLoginSuccess }) => {
         {/* Header Branding */}
         <div className="ul-brand-section">
           <div className="ul-logo-badge">
-            <LuBuilding2 className="ul-logo-icon" />
+            <FaBuilding className="ul-logo-icon" />
           </div>
           <h1 className="ul-brand-title">UTKAL PROPERTY</h1>
-          <p className="ul-brand-subtitle">Enterprise Admin Portal Gateway</p>
         </div>
 
         {/* Login Form Body */}
         <form className="ul-form" onSubmit={handleSubmit}>
           <div className="ul-form-header">
             <h2>Welcome Back</h2>
-            <p>Sign in to access your dashboard & property manager</p>
           </div>
 
           {/* Error Banner */}
           {error && (
             <div className="ul-error-container">
-              <LuAlertCircle className="ul-error-icon" />
+              <FaExclamationTriangle className="ul-error-icon" />
               <p className="ul-error-text">{error}</p>
             </div>
           )}
@@ -100,7 +101,7 @@ const LogIn = ({ onLoginSuccess }) => {
           <div className="ul-input-group">
             <label className="ul-label" htmlFor="userId">User ID / Email</label>
             <div className="ul-input-wrapper">
-              <LuUser className="ul-input-icon" />
+              <FaUser className="ul-input-icon" />
               <input
                 type="text"
                 id="userId"
@@ -119,7 +120,7 @@ const LogIn = ({ onLoginSuccess }) => {
           <div className="ul-input-group">
             <label className="ul-label" htmlFor="password">Password</label>
             <div className="ul-input-wrapper">
-              <LuLock className="ul-input-icon" />
+              <FaLock className="ul-input-icon" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
@@ -138,7 +139,7 @@ const LogIn = ({ onLoginSuccess }) => {
                 disabled={isLoading}
                 tabIndex="-1"
               >
-                {showPassword ? <LuEyeOff size={18} /> : <LuEye size={18} />}
+                {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
               </button>
             </div>
           </div>
@@ -168,7 +169,7 @@ const LogIn = ({ onLoginSuccess }) => {
           >
             {isLoading ? (
               <>
-                <LuLoader2 className="ul-btn-spinner" />
+                <FaSpinner className="ul-btn-spinner" />
                 <span>Authenticating...</span>
               </>
             ) : (
@@ -179,7 +180,7 @@ const LogIn = ({ onLoginSuccess }) => {
 
         {/* Security Footer */}
         <div className="ul-card-footer">
-          <LuShieldCheck className="ul-footer-icon" />
+          <FaShieldAlt className="ul-footer-icon" />
           <span>Secured with SSL Encrypted Portal Access</span>
         </div>
       </div>

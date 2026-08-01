@@ -6,20 +6,22 @@ import { signOut, getCurrentUser } from "aws-amplify/auth";
 import MainLayout from "./Layout/MainLayout/MainLayout";
 import LogIn from "./Pages/login/LogIn";
 
-// Dashboard Pages
+// Dashboard Components
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
 import DashboardReview from "./Components/DashboardReview/DashboardReview";
 
-// Properties Pages
+// Properties Components
 import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
 import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 
-// Sidebar & Page Components
+// Management & Other Components
 import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
+import BlogManagement from "./Components/BlogManagement/BlogManagement";
+import BlogPosting from "./Components/BlogPosting/BlogPosting";
 
 // Pages
 import Report from "./Pages/Dashboard/Report/Report";
@@ -29,8 +31,6 @@ import Setting from "./Pages/Setting/Setting";
 import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
-import BlogManagement from "./Components/BlogManagement/BlogManagement";
-import BlogPosting from "./Components/BlogPosting/BlogPosting";
 
 // Protected Route Guard with Loading Screen
 const ProtectedRoute = ({ isAuthenticated, isCheckingAuth, children }) => {
@@ -130,7 +130,7 @@ const App = () => {
           }
         />
 
-        {/* Protected Admin Routes */}
+        {/* Protected Admin Routes Wrapped inside MainLayout */}
         <Route
           element={
             <ProtectedRoute
@@ -154,16 +154,16 @@ const App = () => {
           <Route path="/properties/categories" element={<Categories />} />
           <Route path="/properties/locations" element={<Locations />} />
 
-          {/* Management */}
+          {/* Management & Operations */}
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/leads" element={<LeadManagement />} />
-          <Route path="/LeadManagement" element={<LeadManagement />} /> {/* Alias route */}
+          <Route path="/LeadManagement" element={<LeadManagement />} /> {/* Alias */}
 
           {/* General Pages */}
           <Route path="/enquiry" element={<Enquire />} />
           <Route path="/users" element={<User />} />
           <Route path="/reports" element={<Report />} />
-          <Route path="/Report" element={<Report />} /> {/* Alias route */}
+          <Route path="/Report" element={<Report />} /> {/* Alias */}
           <Route path="/settings" element={<Setting />} />
 
           {/* Profile Pages & Aliases */}
@@ -171,7 +171,7 @@ const App = () => {
           <Route path="/ProfileSetting" element={<ProfileSetting />} />
           <Route path="/DashboardProfile" element={<ProfileSetting />} />
 
-          {/* Content & Blogs */}
+          {/* Content, Gallery & Blogs */}
           <Route path="/testimonial" element={<Testimonial />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/team" element={<OurTeam />} />

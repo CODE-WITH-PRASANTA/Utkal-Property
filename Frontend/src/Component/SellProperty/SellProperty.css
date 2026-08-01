@@ -83,25 +83,11 @@
 }
 
 .sell-property-banner-text h1 {
-<<<<<<< HEAD
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--utkal-navy);
-  margin-bottom: 4px;
-  letter-spacing: -0.3px;
-}
-
-.sell-property-banner-text h1 .highlight-green {
-  color: #18522e;
-  font-weight: 800;
-  font-size: 26px;
-=======
   font-size: 26px;
   font-weight: 800;
   color: var(--utkal-navy);
   margin-bottom: 4px;
   letter-spacing: -0.3px;
->>>>>>> c26d32534173e8129e7aa3965e1dbc41c9bd012a
 }
 
 .sell-property-banner-text p {
@@ -137,8 +123,6 @@
 }
 
 .sell-property-section-title {
-<<<<<<< HEAD
-=======
   font-size: 20px;
   font-weight: 800;
   color: #0f172a;
@@ -147,7 +131,6 @@
   gap: 10px;
   margin-bottom: 8px;
   letter-spacing: -0.01em;
->>>>>>> c26d32534173e8129e7aa3965e1dbc41c9bd012a
   font-size: 17px;
   font-weight: 700;
   color: var(--utkal-navy);
@@ -168,10 +151,6 @@
   height: 18px;
   background-color: var(--utkal-green);
   border-radius: 2px;
-<<<<<<< HEAD
-  display: inline-block;
-=======
->>>>>>> c26d32534173e8129e7aa3965e1dbc41c9bd012a
 }
 
 /* Form Controls & Full-Width Grid Layouts */
@@ -196,14 +175,11 @@
 .sell-property-select {
   width: 100%;
   background-color: #ffffff;
-<<<<<<< HEAD
-=======
   border: 1.5px solid var(--sp-border);
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 13px;
   color: var(--sp-text-main);
->>>>>>> c26d32534173e8129e7aa3965e1dbc41c9bd012a
   border: 1px solid var(--utkal-border);
   border-radius: 10px;
   padding: 12px 16px;
@@ -213,14 +189,6 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-<<<<<<< HEAD
-.sell-property-input:hover,
-.sell-property-select:hover {
-  border-color: #94a3b8;
-}
-
-=======
->>>>>>> c26d32534173e8129e7aa3965e1dbc41c9bd012a
 .sell-property-input::placeholder {
   color: #94a3b8;
 }
@@ -242,10 +210,7 @@
 }
 
 /* Grid Variations */
-<<<<<<< HEAD
-=======
 /* Full Width Grid Variations */
->>>>>>> c26d32534173e8129e7aa3965e1dbc41c9bd012a
 .sell-property-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -294,10 +259,7 @@
 
 /* Image Upload Zone */
 .sell-property-upload-zone {
-<<<<<<< HEAD
-=======
   width: 100%;
->>>>>>> c26d32534173e8129e7aa3965e1dbc41c9bd012a
   border: 2px dashed rgba(18, 98, 41, 0.3);
   background-color: rgba(18, 98, 41, 0.04);
   border-radius: 12px;
@@ -584,12 +546,9 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-<<<<<<< HEAD
-=======
   gap: 8px;
   box-shadow: 0 4px 12px rgba(21, 128, 61, 0.3);
   transition: opacity 0.2s, transform 0.1s;
->>>>>>> c26d32534173e8129e7aa3965e1dbc41c9bd012a
   gap: 10px;
   box-shadow: 0 4px 14px rgba(18, 98, 41, 0.35);
   transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
