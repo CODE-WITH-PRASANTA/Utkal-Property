@@ -12,7 +12,7 @@ import DashboardReview from "./Components/DashboardReview/DashboardReview";
 
 // Properties Components
 import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
-import AddNewProperty from "./Components/AddNewProperty/AddNewProperty";
+
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 
@@ -31,6 +31,8 @@ import Setting from "./Pages/Setting/Setting";
 import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
+import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
+import NearbyPlaces from "./Components/NearbyPlaces/NearbyPlaces";
 
 // Protected Route Component
 const ProtectedRoute = ({ isAuthenticated, onLoginSuccess, children }) => {
@@ -142,10 +144,12 @@ const App = () => {
 
           <Route path="/properties/edit/:id" element={<AddNewProperty />} />
 
-
           <Route path="/properties/categories" element={<Categories />} />
           
           <Route path="/properties/locations" element={<Locations />} />
+
+          <Route path="/properties/Nearby" element={<NearbyPlaces />} />
+
 
           {/* Bookings */}
           <Route path="/bookings" element={<Bookings />} />
