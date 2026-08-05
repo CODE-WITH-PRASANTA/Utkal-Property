@@ -16,10 +16,6 @@ import PropertyDetails from './Pages/PropertyDetails/PropertyDetails';
 import SellProperty from './Component/SellProperty/SellProperty';
 import RentProperty from './Component/RentProperty/RentProperty';
 
-
-
-
-
 function App() {
   return (
     <BrowserRouter>
@@ -33,11 +29,6 @@ function App() {
         <Route path="/about" element={<AboutUs/>} />
         <Route path="/Faq" element={<Faq/>} />
         <Route path="/contact" element={<Contacts/>} />
-
-        
-
-
-        <Route path="/property-details" element={<PropertyDetails/>} />
         <Route path="/blog" element={<Blog/>} />
         <Route path="/details/:id" element={<BlogDetails/>} />
         <Route path="/real" element={<RealNear/>} />
