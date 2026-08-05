@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import './LocationDetails.css'; // Import the CSS file
+import './LocationDetails.css';
 
 const LocationDetails = () => {
-  // State to manage the working input boxes
+  // State to manage input values
   const [location, setLocation] = useState('No locations found');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -10,11 +10,10 @@ const LocationDetails = () => {
 
   return (
     <div className="ld-main-container">
-      {/* Header Section - Takes 60% width on desktop, stacked on mobile */}
+      {/* Header Section */}
       <div className="ld-header-wrapper">
         <h2 className="ld-main-header">
           <span className="ld-header-icon">
-            {/* SVG for the location pin icon */}
             <svg 
               width="24" 
               height="24" 
@@ -34,7 +33,7 @@ const LocationDetails = () => {
       </div>
 
       {/* Form Fields Section */}
-      <form className="ld-form">
+      <form className="ld-form" onSubmit={(e) => e.preventDefault()}>
         {/* Full width Location field */}
         <div className="ld-form-group ld-w-full">
           <label htmlFor="location" className="ld-label ld-bold-label">
@@ -47,11 +46,11 @@ const LocationDetails = () => {
             onChange={(e) => setLocation(e.target.value)}
           >
             <option value="No locations found">No locations found</option>
-            {/* Add other locations here if needed */}
+            {/* Add more <option> tags dynamically here if needed */}
           </select>
         </div>
 
-        {/* City, State, Country fields - Responsive grid */}
+        {/* City, State, Country fields - Responsive grid row */}
         <div className="ld-form-row">
           <div className="ld-form-group">
             <label htmlFor="city" className="ld-label ld-bold-label">City</label>
@@ -59,7 +58,7 @@ const LocationDetails = () => {
               type="text"
               id="city"
               className="ld-text-input ld-input-field"
-              placeholder="City"
+              placeholder="Enter city"
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
@@ -71,7 +70,7 @@ const LocationDetails = () => {
               type="text"
               id="state"
               className="ld-text-input ld-input-field"
-              placeholder="State"
+              placeholder="Enter state"
               value={state}
               onChange={(e) => setState(e.target.value)}
             />
@@ -83,7 +82,7 @@ const LocationDetails = () => {
               type="text"
               id="country"
               className="ld-text-input ld-input-field"
-              placeholder="Country"
+              placeholder="Enter country"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
             />

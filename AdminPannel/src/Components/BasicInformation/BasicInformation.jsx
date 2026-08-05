@@ -29,24 +29,24 @@ const BasicInformation = () => {
   };
 
   return (
-    <div className="basic-info-container">
-      <div className="basic-info-card">
+    <div className="basic-information-container">
+      <div className="basic-information-card">
         
         {/* Section Header */}
-        <div className="basic-info-header">
-          <svg className="header-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+        <div className="basic-information-header">
+          <svg className="basic-information-header-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
           </svg>
-          <h2 className="header-title">Basic Information</h2>
+          <h2 className="basic-information-header-title">Basic Information</h2>
         </div>
 
         {/* Form Grid */}
-        <form className="basic-info-form">
+        <form className="basic-information-form">
           
           {/* Property Name */}
-          <div className="form-group full-width">
-            <label htmlFor="propertyName" className="form-label">
-              Property Name <span className="required-star">*</span>
+          <div className="basic-information-form-group basic-information-full-width">
+            <label htmlFor="propertyName" className="basic-information-label">
+              Property Name <span className="basic-information-required">*</span>
             </label>
             <input
               type="text"
@@ -54,23 +54,23 @@ const BasicInformation = () => {
               name="propertyName"
               value={formData.propertyName}
               onChange={handleInputChange}
-              className="form-input"
+              className="basic-information-input"
               placeholder="Enter property name"
             />
           </div>
 
           {/* Category */}
-          <div className="form-group">
-            <label htmlFor="category" className="form-label">
-              Category <span className="required-star">*</span>
+          <div className="basic-information-form-group">
+            <label htmlFor="category" className="basic-information-label">
+              Category <span className="basic-information-required">*</span>
             </label>
-            <div className="select-wrapper">
+            <div className="basic-information-select-wrapper">
               <select
                 id="category"
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
-                className="form-input form-select"
+                className="basic-information-input basic-information-select"
               >
                 <option value="" disabled>Select category</option>
                 <option value="Apartment">Apartment</option>
@@ -81,17 +81,17 @@ const BasicInformation = () => {
           </div>
 
           {/* Property Type */}
-          <div className="form-group">
-            <label htmlFor="propertyType" className="form-label">
-              Property Type <span className="required-star">*</span>
+          <div className="basic-information-form-group">
+            <label htmlFor="propertyType" className="basic-information-label">
+              Property Type <span className="basic-information-required">*</span>
             </label>
-            <div className="select-wrapper">
+            <div className="basic-information-select-wrapper">
               <select
                 id="propertyType"
                 name="propertyType"
                 value={formData.propertyType}
                 onChange={handleInputChange}
-                className="form-input form-select"
+                className="basic-information-input basic-information-select"
               >
                 <option value="" disabled>Select property type</option>
                 <option value="Luxury Villas">Luxury Villas</option>
@@ -101,17 +101,17 @@ const BasicInformation = () => {
           </div>
 
           {/* Status */}
-          <div className="form-group">
-            <label htmlFor="status" className="form-label">
-              Status <span className="required-star">*</span>
+          <div className="basic-information-form-group">
+            <label htmlFor="status" className="basic-information-label">
+              Status <span className="basic-information-required">*</span>
             </label>
-            <div className="select-wrapper">
+            <div className="basic-information-select-wrapper">
               <select
                 id="status"
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="form-input form-select"
+                className="basic-information-input basic-information-select"
               >
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
@@ -120,8 +120,8 @@ const BasicInformation = () => {
           </div>
 
           {/* Project Size (sq ft) */}
-          <div className="form-group">
-            <label htmlFor="projectSize" className="form-label">
+          <div className="basic-information-form-group">
+            <label htmlFor="projectSize" className="basic-information-label">
               Project Size (sq ft)
             </label>
             <input
@@ -130,23 +130,23 @@ const BasicInformation = () => {
               name="projectSize"
               value={formData.projectSize}
               onChange={handleInputChange}
-              className="form-input"
+              className="basic-information-input"
               placeholder="e.g. 15000"
             />
           </div>
 
           {/* Completion Status */}
-          <div className="form-group full-width">
-            <label htmlFor="completionStatus" className="form-label">
+          <div className="basic-information-form-group basic-information-full-width">
+            <label htmlFor="completionStatus" className="basic-information-label">
               Completion Status
             </label>
-            <div className="select-wrapper">
+            <div className="basic-information-select-wrapper">
               <select
                 id="completionStatus"
                 name="completionStatus"
                 value={formData.completionStatus}
                 onChange={handleInputChange}
-                className="form-input form-select"
+                className="basic-information-input basic-information-select"
               >
                 <option value="Under Construction">Under Construction</option>
                 <option value="Completed">Completed</option>
@@ -156,30 +156,30 @@ const BasicInformation = () => {
           </div>
 
           {/* Short Description */}
-          <div className="form-group full-width">
-            <label htmlFor="shortDescription" className="form-label">
+          <div className="basic-information-form-group basic-information-full-width">
+            <label htmlFor="shortDescription" className="basic-information-label">
               Short Description
             </label>
-            <div className="textarea-container">
+            <div className="basic-information-textarea-wrapper">
               <textarea
                 id="shortDescription"
                 name="shortDescription"
                 value={formData.shortDescription}
                 onChange={handleInputChange}
                 rows="4"
-                className="form-input form-textarea"
+                className="basic-information-input basic-information-textarea"
                 placeholder="Enter short description"
               />
-              <span className="char-counter">
+              <span className="basic-information-char-counter">
                 {formData.shortDescription.length}/120
               </span>
             </div>
           </div>
 
           {/* Property Price */}
-          <div className="form-group">
-            <label htmlFor="propertyPrice" className="form-label">
-              Property Price <span className="required-star">*</span>
+          <div className="basic-information-form-group">
+            <label htmlFor="propertyPrice" className="basic-information-label">
+              Property Price <span className="basic-information-required">*</span>
             </label>
             <input
               type="text"
@@ -187,14 +187,14 @@ const BasicInformation = () => {
               name="propertyPrice"
               value={formData.propertyPrice}
               onChange={handleInputChange}
-              className="form-input"
+              className="basic-information-input"
               placeholder="e.g. 12500000"
             />
           </div>
 
           {/* Price Per Sq Ft */}
-          <div className="form-group">
-            <label htmlFor="pricePerSqFt" className="form-label">
+          <div className="basic-information-form-group">
+            <label htmlFor="pricePerSqFt" className="basic-information-label">
               Price Per Sq Ft
             </label>
             <input
@@ -203,14 +203,14 @@ const BasicInformation = () => {
               name="pricePerSqFt"
               value={formData.pricePerSqFt}
               onChange={handleInputChange}
-              className="form-input"
+              className="basic-information-input"
               placeholder="e.g. 8500"
             />
           </div>
 
           {/* RERA Number */}
-          <div className="form-group full-width">
-            <label htmlFor="reraNumber" className="form-label">
+          <div className="basic-information-form-group basic-information-full-width">
+            <label htmlFor="reraNumber" className="basic-information-label">
               RERA Number
             </label>
             <input
@@ -219,14 +219,14 @@ const BasicInformation = () => {
               name="reraNumber"
               value={formData.reraNumber}
               onChange={handleInputChange}
-              className="form-input"
+              className="basic-information-input"
               placeholder="Enter RERA registration number"
             />
           </div>
 
           {/* Highlights (Key Features) */}
-          <div className="form-group full-width">
-            <label htmlFor="highlights" className="form-label">
+          <div className="basic-information-form-group basic-information-full-width">
+            <label htmlFor="highlights" className="basic-information-label">
               Highlights (Key Features)
             </label>
             <input
@@ -235,19 +235,19 @@ const BasicInformation = () => {
               name="highlights"
               value={formData.highlights}
               onChange={handleInputChange}
-              className="form-input"
+              className="basic-information-input"
               placeholder="Add key feature"
             />
           </div>
 
           {/* Add Highlight Button */}
-          <div className="form-group full-width">
+          <div className="basic-information-form-group basic-information-full-width">
             <button
               type="button"
               onClick={addHighlight}
-              className="add-highlight-btn"
+              className="basic-information-add-highlight-btn"
             >
-              <span className="plus-icon">+</span> Add Highlight
+              <span className="basic-information-plus-icon">+</span> Add Highlight
             </button>
           </div>
 
