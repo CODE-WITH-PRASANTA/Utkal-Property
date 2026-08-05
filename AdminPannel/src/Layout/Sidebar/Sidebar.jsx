@@ -38,7 +38,7 @@ const menuItems = [
       { title: 'Add Property', path: '/properties/add', icon: FiPlus },
       { title: 'Categories', path: '/properties/categories', icon: FiGrid },
       { title: 'Locations', path: '/properties/locations', icon: FiMapPin },
-      { title: 'Nearby Places', path: '/properties/Nearby', icon: FiMapPin },
+      { title: 'Amenities', path: '/properties/Amenities', icon: FiMapPin },
     ],
   },
   {

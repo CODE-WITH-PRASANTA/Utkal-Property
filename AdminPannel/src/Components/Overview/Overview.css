@@ -1,0 +1,113 @@
+.overview-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px 0 20px 4%;
+  background-color: #f8f9fa;
+  box-sizing: border-box;
+}
+
+.overview-grid-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .overview-grid-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.overview-card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.overview-form-group {
+  margin-bottom: 16px;
+}
+
+.overview-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.overview-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1e293b;
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.overview-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Actions Footer Styles */
+.overview-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.overview-actions-right {
+  display: flex;
+  gap: 12px;
+}
+
+.overview-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.overview-btn-reset {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.overview-btn-reset:hover {
+  background-color: #f1f5f9;
+}
+
+.overview-btn-cancel {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.overview-btn-cancel:hover {
+  background-color: #f1f5f9;
+}
+
+.overview-btn-save {
+  background-color: #0f172a;
+  color: #ffffff;
+}
+
+.overview-btn-save:hover {
+  background-color: #1e293b;
+}

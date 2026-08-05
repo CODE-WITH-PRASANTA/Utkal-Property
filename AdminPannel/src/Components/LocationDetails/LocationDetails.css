@@ -1,60 +1,40 @@
-/* --- Core Styles & Variables --- */
-:root {
-  --bg-color: #ffffff;
-  --text-main: #1a1d24;
-  --text-muted: #8a8f9e;
-  --border-color: #e0e2e7;
-  --accent-color: #673ab7;
-  --error-color: #d32f2f;
-  --input-bg: #f8f9fa;
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* --- Main Container (Left-aligned & Controlled Width) --- */
+/* Main Container Styling */
 .ld-main-container {
-  background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 22px;
   width: 100%;
-  max-width: 700px;
-  margin: 20px 0 20px 5%; 
-  font-family: var(--font-family);
-  color: var(--text-main);
-  text-align: left;
+  max-width: 900px;
+  margin: 20px 0 20px 4%;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
-
-/* --- Form Content Wrapper with Left Padding --- */
-.ld-form-wrapper {
-  padding-left: 24px; /* Adjust this value to increase/decrease left padding */
-}
-
-/* --- Header Section (Strict 60% Width) --- */
+ 
+/* Header Section */
 .ld-header-wrapper {
-  width: 60%;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 16px;
 }
 
 .ld-main-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
   margin: 0;
-  color: var(--text-main);
 }
 
 .ld-header-icon {
   display: flex;
-  color: var(--accent-color);
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  color: #4f46e5; /* Modern accent color */
 }
 
-/* --- Form Layout --- */
+/* Form Layout */
 .ld-form {
   display: flex;
   flex-direction: column;
@@ -65,84 +45,74 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
 }
 
-.ld-label {
-  font-size: 14px;
-  color: var(--text-main);
-  text-align: left;
-}
-
-.ld-bold-label {
-  font-weight: 700;
-}
-
-.ld-asterisk {
-  color: var(--error-color);
-}
-
-/* --- Input Field Styles --- */
-.ld-input-field {
-  height: 48px;
-  padding: 0 16px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 15px;
-  color: var(--text-main);
-  background-color: var(--input-bg);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  font-family: inherit;
+.ld-w-full {
   width: 100%;
 }
 
-.ld-input-field:focus {
+/* Labels */
+.ld-label {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.ld-bold-label {
+  font-weight: 600;
+}
+
+.ld-asterisk {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+/* Input Fields & Select Dropdowns */
+.ld-input-field {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  color: #1f2937;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.1);
 }
 
-.ld-input-field::placeholder {
-  color: var(--text-muted);
+.ld-input-field:focus {
+  border-color: #4f46e5;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
-/* Select Dropdown Styling */
 .ld-select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231a1d24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236B7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
-  background-position: right 16px center;
-  background-size: 16px;
-  padding-right: 40px;
+  background-position: right 14px center;
+  background-size: 10px;
+  padding-right: 36px;
+  cursor: pointer;
 }
 
-/* --- Responsive Layout Grid --- */
-@media (min-width: 601px) {
-  .ld-form-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
+/* Responsive Grid Row for City, State, Country */
+.ld-form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
-/* --- Mobile Breakpoint --- */
-@media (max-width: 600px) {
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 768px) {
   .ld-main-container {
     padding: 16px;
-    border: none;
-  }
-
-  /* Reset form padding on small screens for better alignment */
-  .ld-form-wrapper {
-    padding-left: 0; 
-  }
-
-  .ld-header-wrapper {
-    width: 100% !important;
+    border-radius: 8px;
   }
 
   .ld-form-row {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    grid-template-columns: 1fr; /* Stack fields vertically on tablets and mobile */
+    gap: 16px;
   }
 }

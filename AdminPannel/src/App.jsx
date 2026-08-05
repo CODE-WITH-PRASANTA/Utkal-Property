@@ -32,7 +32,7 @@ import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
 import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
-import NearbyPlaces from "./Components/NearbyPlaces/NearbyPlaces";
+import Amenities from "./Components/Amenities/Amenities";
 
 // Protected Route Component
 const ProtectedRoute = ({ isAuthenticated, onLoginSuccess, children }) => {
@@ -137,7 +137,7 @@ const App = () => {
           {/* Dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardMain />} />
-
+  
           {/* Properties */}
           <Route path="/properties/all" element={<PropertiesDashboard />} />
           <Route path="/properties/add" element={<AddNewProperty />} />
@@ -148,7 +148,7 @@ const App = () => {
           
           <Route path="/properties/locations" element={<Locations />} />
 
-          <Route path="/properties/Nearby" element={<NearbyPlaces />} />
+          <Route path="/properties/Amenities" element={<Amenities />} />
 
 
           {/* Bookings */}

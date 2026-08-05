@@ -18,7 +18,7 @@ import {
   FaLayerGroup
 } from 'react-icons/fa';
 import './NearbyPlaces.css';
-
+ 
 const iconMap = {
   Airport: <FaPlane />,
   'Railway Station': <FaTrain />,
