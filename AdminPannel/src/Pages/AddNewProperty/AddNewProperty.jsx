@@ -7,7 +7,7 @@ import Overview from "../../Components/Overview/Overview";
 import Document from "../../Components/Document/Document";
 import NearbyPlaces from "../../Components/NearbyPlaces/NearbyPlaces";
 import AllProperty from "../../Components/AllProperty/AllProperty";
- 
+  
 const AddNewProperty = () => {
   return (
     <div className="add-property-page">

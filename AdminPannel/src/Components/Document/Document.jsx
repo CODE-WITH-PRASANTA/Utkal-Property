@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
-import { IoDocumentTextOutline, IoCloudUploadOutline, IoClose, IoPencil, IoSquareOutline, IoText, IoArrowUndo, IoTrashOutline, IoEyeOutline } from 'react-icons/io5';
-import './Document.css'; // Import the CSS file
+import React, { useState, useRef } from 'react';
+import { 
+    IoDocumentTextOutline, 
+    IoCloudUploadOutline, 
+    IoClose, 
+    IoPencil, 
+    IoSquareOutline, 
+    IoText, 
+    IoArrowUndo, 
+    IoTrashOutline, 
+    IoEyeOutline,
+    IoAdd 
+} from 'react-icons/io5';
+import './Document.css';
 
 const Document = () => {
-    // State to control the visibility of the "Add New Floor Plan" modal
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const fileInputRef = useRef(null);
 
-    // State to hold the form data with initial dummy data
     const [formData, setFormData] = useState({
         planTitle: 'Fourth Floor Plan',
-        planType: 'Apartment', // Value for select dropdown
+        planType: 'Apartment',
         beds: 3,
         baths: 2,
         balconies: 1,
@@ -18,11 +28,12 @@ const Document = () => {
         storeRoom: 0,
         sbaSqft: 3140,
         plotSqft: 1500,
-        // Sketch data would be handled by a drawing library, represented as null here
         floorPlanSketch: null, 
     });
 
-    // Handle input changes for text and number fields
+    const [uploadedImage, setUploadedImage] = useState(null);
+    const [imageFileName, setImageFileName] = useState('');
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -31,37 +42,97 @@ const Document = () => {
         }));
     };
 
-    // Handle form submission
+    const handleUploadClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            processFile(file);
+        }
+    };
+
+    const processFile = (file) => {
+        if (!file.type.match('image.*')) {
+            alert('Please select a valid image file (JPG, PNG, WebP)');
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File size exceeds 5MB limit.');
+            return;
+        }
+
+        setImageFileName(file.name);
+        const previewUrl = URL.createObjectURL(file);
+        setUploadedImage(previewUrl);
+
+        setFormData((prevData) => ({
+            ...prevData,
+            floorPlanSketch: file,
+        }));
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            processFile(file);
+        }
+    };
+
+    const handleRemoveImage = (e) => {
+        if (e) e.stopPropagation();
+        setUploadedImage(null);
+        setImageFileName('');
+        setFormData((prevData) => ({
+            ...prevData,
+            floorPlanSketch: null,
+        }));
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Form Data Submitted:', formData);
         alert('Floor plan saved successfully! Check console for data.');
-        // Here you would typically call an API to save the data
         closeModal(); 
     };
 
-    // Function to open the modal
     const openModal = () => {
         setIsModalOpen(true);
-        document.body.style.overflow = 'hidden'; // Prevent scrolling the background when modal is open
+        document.body.style.overflow = 'hidden'; 
     };
 
-    // Function to close the modal
     const closeModal = () => {
         setIsModalOpen(false);
-        document.body.style.overflow = 'unset'; // Restore scrolling
+        document.body.style.overflow = 'unset'; 
     };
 
     return (
         <div className="document-page-container">
-            {/* --- 1st and 2nd Part: Document Upload Card --- */}
-            {/* This card acts as the trigger for the modal */}
-            <div className="document-card" onClick={openModal}>
-                <div className="document-header">
+            <div className="document-top-action-bar">
+                <div className="document-header-left">
                     <IoDocumentTextOutline className="document-icon-purple" />
                     <h2 className="document-title">Documents</h2>
                 </div>
+                <button type="button" className="btn-add-document" onClick={openModal}>
+                    <IoAdd className="add-icon" /> Add Document
+                </button>
+            </div>
 
+            <div className="document-card" onClick={openModal}>
                 <div className="upload-zone">
                     <IoCloudUploadOutline className="upload-icon-purple" />
                     <p className="upload-text">
@@ -71,23 +142,20 @@ const Document = () => {
                 </div>
             </div>
 
-            {/* --- 3rd Part: Add New Floor Plan Modal (Popup) --- */}
-            {/* This renders only when isModalOpen is true, with a fade-in animation */}
             {isModalOpen && (
-                <div className={`modal-overlay ${isModalOpen ? 'fade-in' : ''}`}>
+                <div className="modal-overlay fade-in">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h2 className="modal-title">Add New Floor Plan</h2>
-                            <button className="close-button" onClick={closeModal}>
+                            <button className="close-button" onClick={closeModal} type="button">
                                 <IoClose />
                             </button>
                         </div>
 
                         <form className="modal-form" onSubmit={handleSubmit}>
                             <div className="form-grid">
-                                {/* Left Column - Text Inputs */}
+                                {/* Left Column - Text Inputs & Room Configuration */}
                                 <div className="form-column left-column">
-                                    {/* Plan Title */}
                                     <div className="form-group">
                                         <label htmlFor="planTitle">Plan Title <span className="required">*</span></label>
                                         <input
@@ -101,7 +169,6 @@ const Document = () => {
                                         />
                                     </div>
 
-                                    {/* Select Plan Type */}
                                     <div className="form-group">
                                         <label htmlFor="planType">Select Plan Type <span className="required">*</span></label>
                                         <select
@@ -118,7 +185,6 @@ const Document = () => {
                                         </select>
                                     </div>
 
-                                    {/* Grid for Beds, Baths, etc. */}
                                     <div className="room-details-grid">
                                         {['beds', 'baths', 'balconies', 'pujaRoom', 'servantRoom', 'storeRoom'].map((field) => (
                                             <div className="form-group" key={field}>
@@ -135,7 +201,6 @@ const Document = () => {
                                         ))}
                                     </div>
 
-                                    {/* SBA and Plot Sqft */}
                                     <div className="size-inputs-row">
                                         <div className="form-group">
                                             <label htmlFor="sbaSqft">SBA (sqft)</label>
@@ -162,25 +227,59 @@ const Document = () => {
                                     </div>
                                 </div>
 
-                                {/* Right Column - Upload and Sketch */}
+                                {/* Right Column - Upload and Sketch Canvas */}
                                 <div className="form-column right-column">
-                                    {/* Upload Floor Plan Image */}
                                     <div className="form-group upload-container">
                                         <label>Upload Floor Plan Image <span className="required">*</span></label>
-                                        <div className="upload-zone modal-upload-zone">
-                                            <IoCloudUploadOutline className="upload-icon-purple" />
-                                            <p className="upload-text">
-                                                <strong>Click to upload</strong> or drag & drop
-                                            </p>
-                                            <p className="upload-subtext">JPG, PNG, WebP (Max. 5MB)</p>
+                                        
+                                        <input 
+                                            type="file" 
+                                            ref={fileInputRef} 
+                                            onChange={handleFileChange} 
+                                            accept="image/png, image/jpeg, image/webp" 
+                                            style={{ display: 'none' }} 
+                                        />
+
+                                        <div 
+                                            className="upload-zone modal-upload-zone"
+                                            onClick={handleUploadClick}
+                                            onDragOver={handleDragOver}
+                                            onDrop={handleDrop}
+                                        >
+                                            {uploadedImage ? (
+                                                <div className="uploaded-preview-container">
+                                                    <img 
+                                                        src={uploadedImage} 
+                                                        alt="Floor Plan Preview" 
+                                                        className="mini-preview-img"
+                                                    />
+                                                    <p className="upload-text">
+                                                        <strong>{imageFileName}</strong>
+                                                    </p>
+                                                    <button 
+                                                        type="button" 
+                                                        className="btn-remove-image" 
+                                                        onClick={handleRemoveImage}
+                                                    >
+                                                        Remove Image
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <IoCloudUploadOutline className="upload-icon-purple" />
+                                                    <p className="upload-text">
+                                                        <strong>Click to upload</strong> or drag & drop
+                                                    </p>
+                                                    <p className="upload-subtext">JPG, PNG, WebP (Max. 5MB)</p>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
 
                                     <div className="divider-or">OR</div>
 
-                                    {/* Scratch Floor Plan (Quick Sketch) */}
                                     <div className="form-group sketch-container">
-                                        <label>Scratch Floor Plan (Quick Sketch)</label>
+                                        <label>Upload Preview Image</label>
                                         <div className="sketch-box">
                                             <div className="sketch-toolbar">
                                                 <button type="button" className="tool-btn active"><IoPencil /></button>
@@ -190,24 +289,40 @@ const Document = () => {
                                                 <button type="button" className="tool-btn"><IoArrowUndo /></button>
                                                 <button type="button" className="tool-btn text-danger"><IoTrashOutline /></button>
                                             </div>
+                                            
                                             <div className="sketch-canvas">
-                                                {/* Placeholder for the floor plan sketch image from image_2.png */}
-                                                <img 
-                                                    src="https://i.imgur.com/5Yj3r4C.png" 
-                                                    alt="Floor Plan Sketch"
-                                                    className="sketch-image-placeholder"
-                                                />
+                                                {uploadedImage ? (
+                                                    <div className="canvas-image-wrapper">
+                                                        <img 
+                                                            src={uploadedImage} 
+                                                            alt="Canvas Preview" 
+                                                            className="canvas-synced-image" 
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="sketch-placeholder-text">
+                                                        Canvas Drawing Area Ready
+                                                    </div>
+                                                )}
                                             </div>
+
                                             <div className="sketch-footer">
-                                                <button type="button" className="footer-btn btn-outline-danger"><IoTrashOutline /> Clear</button>
-                                                <button type="button" className="footer-btn btn-outline-primary"><IoEyeOutline /> Preview</button>
+                                                <button 
+                                                    type="button" 
+                                                    className="footer-btn btn-outline-danger"
+                                                    onClick={handleRemoveImage}
+                                                >
+                                                    <IoTrashOutline /> Clear
+                                                </button>
+                                                <button type="button" className="footer-btn btn-outline-primary">
+                                                    <IoEyeOutline /> Preview
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Form Action Buttons */}
                             <div className="modal-actions">
                                 <button type="button" className="btn-cancel" onClick={closeModal}>Cancel</button>
                                 <button type="submit" className="btn-save">Save Plan</button>
@@ -218,6 +333,6 @@ const Document = () => {
             )}
         </div>
     );
-};
+}; 
 
 export default Document;
