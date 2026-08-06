@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 import "./AddNewProperty.css";
 
@@ -15,146 +22,149 @@ import API from "../../api/Axios";
 const AddNewProperty = () => {
   const navigate = useNavigate();
 
-  // =====================================================
-  // ALL PROPERTY DATA
-  // =====================================================
+  const { id } = useParams();
 
-  const [propertyData, setPropertyData] = useState({
-    // =================================================
-    // BASIC INFORMATION
-    // =================================================
+  // ==========================================
+  // EDIT MODE
+  // ==========================================
 
-    propertyName: "Sunrise Luxury Estate",
+  const isEditMode = Boolean(id);
 
-    category: "Apartment",
+  // ==========================================
+  // PROPERTY DATA
+  // ==========================================
 
-    propertyType: "Luxury Villas",
+  const [propertyData, setPropertyData] =
+    useState({
+      // BASIC
+      propertyName: "",
+      category: "",
+      propertyType: "",
+      status: "Active",
+      projectSize: "",
+      completionStatus:
+        "Under Construction",
 
-    status: "Active",
+      shortDescription: "",
 
-    projectSize: "15000",
+      propertyPrice: "",
+      pricePerSqFt: "",
+      reraNumber: "",
 
-    completionStatus: "Under Construction",
+      highlights: [],
 
-    shortDescription:
-      "A premier residential project located in the heart of the city, offering world-class amenities and breathtaking views.",
+      // LOCATION
+      location: "",
+      city: "",
+      state: "",
+      country: "",
 
-    propertyPrice: "12500000",
+      // OVERVIEW
+      projectArea: "",
+      noOfHouseVilla: "",
+      totalFloors: "",
+      facing: "",
+      plotArea: "",
+      bedrooms: "",
+      bathrooms: "",
+      balconies: "",
+      parking: "",
 
-    pricePerSqFt: "8500",
+      transactionType: "For Sale",
 
-    reraNumber: "",
+      propertyOverlooking: "",
 
-    highlights: [],
+      maintenancePerMonth: "",
 
-    // =================================================
-    // LOCATION
-    // =================================================
+      expectedRentalReturn: "",
 
-    location: "",
+      // AMENITIES
+      amenities: [],
 
-    city: "",
+      // NEARBY
+      nearbyPlaces: [],
 
-    state: "",
+      // SEO
+      metaTitle: "",
+      metaDescription: "",
+      urlSlug: "",
 
-    country: "",
+      // PUBLISH
+      publishStatus: true,
 
-    // =================================================
-    // OVERVIEW
-    // =================================================
+      featuredProperty: false,
 
-    projectArea: "2.5 Acre",
+      publishDate: "",
 
-    noOfHouseVilla: "140",
+      promoteProperty: false,
+    });
 
-    totalFloors: "10",
+  // ==========================================
+  // NEW PROPERTY IMAGES
+  // File[]
+  // ==========================================
 
-    facing: "North",
+  const [
+    propertyImages,
+    setPropertyImages,
+  ] = useState([]);
 
-    plotArea: "1500 sq.ft",
+  // ==========================================
+  // EXISTING PROPERTY IMAGES
+  // String[]
+  // ==========================================
 
-    bedrooms: "1",
+  const [
+    existingPropertyImages,
+    setExistingPropertyImages,
+  ] = useState([]);
 
-    bathrooms: "1",
+  // ==========================================
+  // NEW DOCUMENTS
+  // File[]
+  // ==========================================
 
-    balconies: "1-2",
+  const [
+    documents,
+    setDocuments,
+  ] = useState([]);
 
-    parking: "1",
+  // ==========================================
+  // EXISTING DOCUMENTS
+  // Object[]
+  // ==========================================
 
-    transactionType: "For Sale",
+  const [
+    existingDocuments,
+    setExistingDocuments,
+  ] = useState([]);
 
-    propertyOverlooking: "",
-
-    maintenancePerMonth: "0.00",
-
-    expectedRentalReturn: "40000",
-
-    // =================================================
-    // AMENITIES
-    // =================================================
-
-    amenities: [],
-
-    // =================================================
-    // NEARBY PLACES
-    // =================================================
-
-    nearbyPlaces: [],
-
-    // =================================================
-    // SEO
-    // =================================================
-
-    metaTitle: "",
-
-    metaDescription: "",
-
-    urlSlug: "",
-
-    // =================================================
-    // PUBLISH
-    // =================================================
-
-    publishStatus: true,
-
-    featuredProperty: false,
-
-    publishDate: "",
-
-    promoteProperty: false,
-  });
-
-  // =====================================================
-  // PROPERTY IMAGES
-  // =====================================================
-
-  const [propertyImages, setPropertyImages] =
-    useState([]);
-
-  // =====================================================
-  // DOCUMENTS
-  // =====================================================
-
-  const [documents, setDocuments] =
-    useState([]);
-
-  // =====================================================
+  // ==========================================
   // FLOOR PLANS
-  // =====================================================
+  // ==========================================
 
-  const [floorPlans, setFloorPlans] =
-    useState([]);
+  const [
+    floorPlans,
+    setFloorPlans,
+  ] = useState([]);
 
-  // =====================================================
-  // PUBLISHING
-  // =====================================================
+  // ==========================================
+  // LOADING
+  // ==========================================
 
-  const [publishing, setPublishing] =
-    useState(false);
+  const [
+    loadingProperty,
+    setLoadingProperty,
+  ] = useState(false);
 
-  // =====================================================
-  // COMMON CHANGE
-  // =====================================================
+  const [
+    publishing,
+    setPublishing,
+  ] = useState(false);
+
+  // ==========================================
+  // COMMON UPDATE
+  // ==========================================
 
   const updatePropertyData = (
     name,
@@ -167,642 +177,1047 @@ const AddNewProperty = () => {
     }));
   };
 
-  // =====================================================
-  // PUBLISH PROPERTY
-  // =====================================================
-
-  const handlePublish = async () => {
-    try {
-      // =================================================
-      // VALIDATION
-      // =================================================
-
-      if (
-        !propertyData.propertyName?.trim()
-      ) {
-        alert("Property name is required");
-
-        return;
-      }
-
-      if (!propertyData.category) {
-        alert("Category is required");
-
-        return;
-      }
-
-      if (!propertyData.propertyType) {
-        alert("Property type is required");
-
-        return;
-      }
-
-      if (
-        !propertyData.location?.trim()
-      ) {
-        alert("Location is required");
-
-        return;
-      }
-
-      if (!propertyData.propertyPrice) {
-        alert("Property price is required");
-
-        return;
-      }
-
-      // Optional image validation
-      // Uncomment if image is mandatory
-
-      /*
-      if (propertyImages.length === 0) {
-        alert(
-          "Please upload at least one property image"
-        );
-
-        return;
-      }
-      */
-
-      setPublishing(true);
-
-      // =================================================
-      // CREATE FORMDATA
-      // =================================================
-
-      const form = new FormData();
-
-      // =================================================
-      // BASIC INFORMATION
-      // =================================================
-
-      // Frontend:
-      // propertyName
-      //
-      // Backend:
-      // name
-
-      form.append(
-        "name",
-        propertyData.propertyName.trim()
-      );
-
-      form.append(
-        "category",
-        propertyData.category
-      );
-
-      // Frontend:
-      // propertyType
-      //
-      // Backend:
-      // type
-
-      form.append(
-        "type",
-        propertyData.propertyType
-      );
-
-      form.append(
-        "subType",
-        propertyData.propertyType || ""
-      );
-
-      form.append(
-        "status",
-        propertyData.status || "Active"
-      );
-
-      // Transaction type can be used
-      // as backend statusType
-
-      form.append(
-        "statusType",
-        propertyData.transactionType ||
-          "For Sale"
-      );
-
-      form.append(
-        "projectSize",
-        propertyData.projectSize || "0"
-      );
-
-      form.append(
-        "completionStatus",
-        propertyData.completionStatus ||
-          "Under Construction"
-      );
-
-      form.append(
-        "shortDescription",
-        propertyData.shortDescription ||
-          ""
-      );
-
-      // =================================================
-      // FEATURED
-      // =================================================
-
-      form.append(
-        "featured",
-        String(
-          propertyData.featuredProperty
-        )
-      );
-
-      // =================================================
-      // HIGHLIGHTS
-      // =================================================
-
-      form.append(
-        "highlights",
-        JSON.stringify(
-          propertyData.highlights || []
-        )
-      );
-
-      // =================================================
-      // PRICE
-      // =================================================
-
-      // Frontend:
-      // propertyPrice
-      //
-      // Backend:
-      // price
-
-      form.append(
-        "price",
-        propertyData.propertyPrice
-      );
-
-      // Frontend:
-      // pricePerSqFt
-      //
-      // Backend:
-      // pricePerSqft
-
-      form.append(
-        "pricePerSqft",
-        propertyData.pricePerSqFt || "0"
-      );
-
-      // Frontend:
-      // reraNumber
-      //
-      // Backend:
-      // rera
-
-      form.append(
-        "rera",
-        propertyData.reraNumber || ""
-      );
-
-      // =================================================
-      // LOCATION
-      // =================================================
-
-      form.append(
-        "location",
-        propertyData.location.trim()
-      );
-
-      form.append(
-        "city",
-        propertyData.city || ""
-      );
-
-      form.append(
-        "state",
-        propertyData.state || ""
-      );
-
-      form.append(
-        "country",
-        propertyData.country || ""
-      );
-
-      // =================================================
-      // OVERVIEW
-      // =================================================
-
-      form.append(
-        "projectArea",
-        propertyData.projectArea || ""
-      );
-
-      form.append(
-        "noOfHouseVilla",
-        propertyData.noOfHouseVilla || "0"
-      );
-
-      form.append(
-        "totalFloors",
-        propertyData.totalFloors || "0"
-      );
-
-      form.append(
-        "facing",
-        propertyData.facing || ""
-      );
-
-      form.append(
-        "plotArea",
-        propertyData.plotArea || ""
-      );
-
-      form.append(
-        "bedrooms",
-        propertyData.bedrooms || "0"
-      );
-
-      form.append(
-        "bathrooms",
-        propertyData.bathrooms || "0"
-      );
-
-      form.append(
-        "balconies",
-        propertyData.balconies || ""
-      );
-
-      form.append(
-        "parking",
-        propertyData.parking || ""
-      );
-
-      form.append(
-        "transactionType",
-        propertyData.transactionType ||
-          "For Sale"
-      );
-
-      form.append(
-        "propertyOverlooking",
-        propertyData.propertyOverlooking ||
-          ""
-      );
-
-      form.append(
-        "maintenancePerMonth",
-        propertyData.maintenancePerMonth ||
-          "0"
-      );
-
-      form.append(
-        "expectedRentalReturn",
-        propertyData.expectedRentalReturn ||
-          "0"
-      );
-
-      // =================================================
-      // OLD SCHEMA COMPATIBILITY
-      // =================================================
-      //
-      // If your schema still contains totalUnits,
-      // totalArea and plotSize these values will
-      // also be available.
-
-      form.append(
-        "totalUnits",
-        propertyData.noOfHouseVilla || "0"
-      );
-
-      form.append(
-        "totalArea",
-        propertyData.projectArea || ""
-      );
-
-      form.append(
-        "plotSize",
-        propertyData.plotArea || ""
-      );
-
-      // =================================================
-      // AMENITIES
-      // =================================================
-
-      form.append(
-        "amenities",
-        JSON.stringify(
-          propertyData.amenities || []
-        )
-      );
-
-      // =================================================
-      // NEARBY PLACES
-      // =================================================
-
-      form.append(
-        "nearbyPlaces",
-        JSON.stringify(
-          propertyData.nearbyPlaces || []
-        )
-      );
-
-      // =================================================
-      // FLOOR PLAN DATA
-      // =================================================
-
-      const floorPlanData =
-        floorPlans.map((plan) => ({
-          planTitle:
-            plan.planTitle || "",
-
-          planType:
-            plan.planType || "",
-
-          beds:
-            Number(plan.beds) || 0,
-
-          baths:
-            Number(plan.baths) || 0,
-
-          balconies:
-            Number(plan.balconies) || 0,
-
-          pujaRoom:
-            Number(plan.pujaRoom) || 0,
-
-          servantRoom:
-            Number(plan.servantRoom) || 0,
-
-          storeRoom:
-            Number(plan.storeRoom) || 0,
-
-          sbaSqft:
-            Number(plan.sbaSqft) || 0,
-
-          plotSqft:
-            Number(plan.plotSqft) || 0,
-        }));
-
-      form.append(
-        "floorPlans",
-        JSON.stringify(floorPlanData)
-      );
-
-      // =================================================
-      // SEO
-      // =================================================
-
-      form.append(
-        "metaTitle",
-        propertyData.metaTitle || ""
-      );
-
-      form.append(
-        "metaDescription",
-        propertyData.metaDescription ||
-          ""
-      );
-
-      form.append(
-        "urlSlug",
-        propertyData.urlSlug || ""
-      );
-
-      // =================================================
-      // PUBLISH SETTINGS
-      // =================================================
-
-      form.append(
-        "publishStatus",
-        String(
-          propertyData.publishStatus
-        )
-      );
-
-      form.append(
-        "publishDate",
-        propertyData.publishDate || ""
-      );
-
-      form.append(
-        "promoteProperty",
-        String(
-          propertyData.promoteProperty
-        )
-      );
-
-      // =================================================
-      // PROPERTY IMAGES
-      // =================================================
-      //
-      // IMPORTANT:
-      //
-      // Your backend Multer must use:
-      //
-      // { name: "propertyImages", maxCount: 10 }
-      //
-
-      propertyImages.forEach((image) => {
-        if (image instanceof File) {
-          form.append(
-            "propertyImages",
-            image
-          );
-        }
-      });
-
-      // =================================================
-      // DOCUMENTS
-      // =================================================
-      //
-      // Backend:
-      //
-      // { name: "documents", maxCount: 10 }
-      //
-
-      documents.forEach((document) => {
-        if (document instanceof File) {
-          form.append(
-            "documents",
-            document
-          );
-        }
-      });
-
-      // =================================================
-      // FLOOR PLAN IMAGES
-      // =================================================
-      //
-      // Backend:
-      //
-      // {
-      //   name: "floorPlanImages",
-      //   maxCount: 10
-      // }
-      //
-
-      floorPlans.forEach((plan) => {
-        if (
-          plan.floorPlanSketch instanceof
-          File
-        ) {
-          form.append(
-            "floorPlanImages",
-            plan.floorPlanSketch
-          );
-        }
-      });
-
-      // =================================================
-      // DEBUG
-      // =================================================
-
-      console.log(
-        "======================================"
-      );
-
-      console.log(
-        "PROPERTY DATA BEFORE API"
-      );
-
-      console.log(
-        "======================================"
-      );
-
-      console.log(propertyData);
-
-      console.log(
-        "PROPERTY IMAGES:",
-        propertyImages
-      );
-
-      console.log(
-        "DOCUMENTS:",
-        documents
-      );
-
-      console.log(
-        "FLOOR PLANS:",
-        floorPlans
-      );
-
-      console.log(
-        "NEARBY PLACES:",
-        propertyData.nearbyPlaces
-      );
-
-      console.log(
-        "======================================"
-      );
-
-      console.log(
-        "FORM DATA SENT TO BACKEND"
-      );
-
-      console.log(
-        "======================================"
-      );
-
-      for (
-        const [key, value]
-        of form.entries()
-      ) {
-        console.log(
-          `${key}:`,
-          value
-        );
-      }
-
-      // =================================================
-      // BACKEND REQUEST
-      // =================================================
-
-      const response = await API.post(
-        "/properties",
-        form
-      );
-
-      // =================================================
-      // SUCCESS
-      // =================================================
-
-      console.log(
-        "======================================"
-      );
-
-      console.log(
-        "PROPERTY CREATED"
-      );
-
-      console.log(
-        response.data
-      );
-
-      console.log(
-        "======================================"
-      );
-
-      alert(
-        response.data.message ||
-          "Property published successfully"
-      );
-
-      // =================================================
-      // REMOVE DRAFT
-      // =================================================
-
-      localStorage.removeItem(
-        "property_draft"
-      );
-
-      // =================================================
-      // REDIRECT
-      // =================================================
-
-      navigate("/properties/all");
-
-    } catch (error) {
-      // =================================================
-      // ERROR
-      // =================================================
-
-      console.error(
-        "======================================"
-      );
-
-      console.error(
-        "PUBLISH PROPERTY ERROR"
-      );
-
-      console.error(
-        error.response?.data || error
-      );
-
-      console.error(
-        "======================================"
-      );
-
-      alert(
-        error.response?.data?.message ||
-          error.message ||
-          "Failed to publish property"
-      );
-    } finally {
-      setPublishing(false);
+  // ==========================================
+  // DATE FORMAT
+  // ==========================================
+
+  const formatDateForInput = (
+    date
+  ) => {
+    if (!date) {
+      return "";
     }
+
+    const parsedDate =
+      new Date(date);
+
+    if (
+      Number.isNaN(
+        parsedDate.getTime()
+      )
+    ) {
+      return "";
+    }
+
+    return parsedDate
+      .toISOString()
+      .split("T")[0];
   };
 
-  // =====================================================
+  // ==========================================
+  // FETCH PROPERTY FOR EDIT
+  // ==========================================
+
+  useEffect(() => {
+    if (!isEditMode) {
+      return;
+    }
+
+    const fetchProperty = async () => {
+      try {
+        setLoadingProperty(true);
+
+        console.log(
+          "FETCHING PROPERTY:",
+          id
+        );
+
+        const response =
+          await API.get(
+            `/properties/${id}`
+          );
+
+        console.log(
+          "PROPERTY RESPONSE:",
+          response.data
+        );
+
+        const property =
+          response.data?.property ||
+          response.data?.data ||
+          response.data;
+
+        if (!property) {
+          alert(
+            "Property not found"
+          );
+
+          return;
+        }
+
+        // ======================================
+        // SET NORMAL PROPERTY DATA
+        // ======================================
+
+        setPropertyData({
+          propertyName:
+            property.name ||
+            property.propertyName ||
+            "",
+
+          category:
+            property.category || "",
+
+          propertyType:
+            property.type ||
+            property.propertyType ||
+            "",
+
+          status:
+            property.status ||
+            "Active",
+
+          projectSize:
+            property.projectSize ??
+            "",
+
+          completionStatus:
+            property.completionStatus ||
+            "Under Construction",
+
+          shortDescription:
+            property.shortDescription ||
+            "",
+
+          propertyPrice:
+            property.price ??
+            property.propertyPrice ??
+            "",
+
+          pricePerSqFt:
+            property.pricePerSqft ??
+            property.pricePerSqFt ??
+            "",
+
+          reraNumber:
+            property.rera ||
+            property.reraNumber ||
+            "",
+
+          highlights:
+            Array.isArray(
+              property.highlights
+            )
+              ? property.highlights
+              : [],
+
+          // LOCATION
+
+          location:
+            property.location || "",
+
+          city:
+            property.city || "",
+
+          state:
+            property.state || "",
+
+          country:
+            property.country || "",
+
+          // OVERVIEW
+
+          projectArea:
+            property.projectArea ||
+            property.totalArea ||
+            "",
+
+          noOfHouseVilla:
+            property.noOfHouseVilla ??
+            property.totalUnits ??
+            "",
+
+          totalFloors:
+            property.totalFloors ??
+            "",
+
+          facing:
+            property.facing || "",
+
+          plotArea:
+            property.plotArea ||
+            property.plotSize ||
+            "",
+
+          bedrooms:
+            property.bedrooms ??
+            "",
+
+          bathrooms:
+            property.bathrooms ??
+            "",
+
+          balconies:
+            property.balconies ??
+            "",
+
+          parking:
+            property.parking || "",
+
+          transactionType:
+            property.transactionType ||
+            property.statusType ||
+            "For Sale",
+
+          propertyOverlooking:
+            property.propertyOverlooking ||
+            "",
+
+          maintenancePerMonth:
+            property.maintenancePerMonth ??
+            "",
+
+          expectedRentalReturn:
+            property.expectedRentalReturn ??
+            "",
+
+          // AMENITIES
+
+          amenities:
+            Array.isArray(
+              property.amenities
+            )
+              ? property.amenities
+              : [],
+
+          // NEARBY
+
+          nearbyPlaces:
+            Array.isArray(
+              property.nearbyPlaces
+            )
+              ? property.nearbyPlaces
+              : [],
+
+          // SEO
+
+          metaTitle:
+            property.metaTitle ||
+            "",
+
+          metaDescription:
+            property.metaDescription ||
+            "",
+
+          urlSlug:
+            property.urlSlug ||
+            "",
+
+          // PUBLISH
+
+          publishStatus:
+            property.publishStatus ??
+            true,
+
+          featuredProperty:
+            property.featured ??
+            property.featuredProperty ??
+            false,
+
+          publishDate:
+            formatDateForInput(
+              property.publishDate
+            ),
+
+          promoteProperty:
+            property.promoteProperty ??
+            false,
+        });
+
+        // ======================================
+        // EXISTING PROPERTY IMAGES
+        // ======================================
+
+        let oldImages = [];
+
+        if (
+          Array.isArray(
+            property.propertyImages
+          )
+        ) {
+          oldImages =
+            property.propertyImages;
+        }
+
+        // Support old image field
+
+        if (
+          oldImages.length === 0 &&
+          property.image
+        ) {
+          oldImages = [
+            property.image,
+          ];
+        }
+
+        setExistingPropertyImages(
+          oldImages
+        );
+
+        // IMPORTANT:
+        // propertyImages contains ONLY
+        // newly selected File objects
+
+        setPropertyImages([]);
+
+        // ======================================
+        // EXISTING DOCUMENTS
+        // ======================================
+
+        setExistingDocuments(
+          Array.isArray(
+            property.documents
+          )
+            ? property.documents
+            : []
+        );
+
+        // documents contains only new files
+
+        setDocuments([]);
+
+        // ======================================
+        // FLOOR PLANS
+        // ======================================
+
+        setFloorPlans(
+          Array.isArray(
+            property.floorPlans
+          )
+            ? property.floorPlans.map(
+                (plan) => ({
+                  ...plan,
+
+                  // Keep existing image
+                  existingFloorPlanSketch:
+                    plan.floorPlanSketch ||
+                    "",
+
+                  // New uploaded File
+                  floorPlanSketch: null,
+                })
+              )
+            : []
+        );
+
+        console.log(
+          "OLD IMAGES:",
+          oldImages
+        );
+
+        console.log(
+          "OLD DOCUMENTS:",
+          property.documents
+        );
+
+      } catch (error) {
+        console.error(
+          "GET PROPERTY ERROR:",
+          error.response?.data ||
+            error
+        );
+
+        alert(
+          error.response?.data
+            ?.message ||
+            "Failed to load property"
+        );
+      } finally {
+        setLoadingProperty(false);
+      }
+    };
+
+    fetchProperty();
+  }, [id, isEditMode]);
+
+  // ==========================================
+  // PUBLISH / UPDATE
+  // ==========================================
+
+  const handlePublish =
+    async () => {
+      try {
+        // ======================================
+        // VALIDATION
+        // ======================================
+
+        if (
+          !propertyData.propertyName
+            ?.trim()
+        ) {
+          alert(
+            "Property name is required"
+          );
+
+          return;
+        }
+
+        if (
+          !propertyData.category
+        ) {
+          alert(
+            "Category is required"
+          );
+
+          return;
+        }
+
+        if (
+          !propertyData.propertyType
+        ) {
+          alert(
+            "Property type is required"
+          );
+
+          return;
+        }
+
+        if (
+          !propertyData.location
+            ?.trim()
+        ) {
+          alert(
+            "Location is required"
+          );
+
+          return;
+        }
+
+        if (
+          !propertyData.propertyPrice
+        ) {
+          alert(
+            "Property price is required"
+          );
+
+          return;
+        }
+
+        setPublishing(true);
+
+        // ======================================
+        // CREATE FORMDATA
+        // ======================================
+
+        const form =
+          new FormData();
+
+        // ======================================
+        // BASIC
+        // ======================================
+
+        form.append(
+          "name",
+          propertyData.propertyName.trim()
+        );
+
+        form.append(
+          "category",
+          propertyData.category
+        );
+
+        form.append(
+          "type",
+          propertyData.propertyType
+        );
+
+        form.append(
+          "subType",
+          propertyData.propertyType ||
+            ""
+        );
+
+        form.append(
+          "status",
+          propertyData.status ||
+            "Active"
+        );
+
+        form.append(
+          "statusType",
+          propertyData.transactionType ||
+            "For Sale"
+        );
+
+        form.append(
+          "projectSize",
+          propertyData.projectSize ||
+            "0"
+        );
+
+        form.append(
+          "completionStatus",
+          propertyData.completionStatus ||
+            "Under Construction"
+        );
+
+        form.append(
+          "shortDescription",
+          propertyData.shortDescription ||
+            ""
+        );
+
+        form.append(
+          "featured",
+          String(
+            propertyData.featuredProperty
+          )
+        );
+
+        // ======================================
+        // HIGHLIGHTS
+        // ======================================
+
+        form.append(
+          "highlights",
+          JSON.stringify(
+            propertyData.highlights ||
+              []
+          )
+        );
+
+        // ======================================
+        // PRICE
+        // ======================================
+
+        form.append(
+          "price",
+          propertyData.propertyPrice
+        );
+
+        form.append(
+          "pricePerSqft",
+          propertyData.pricePerSqFt ||
+            "0"
+        );
+
+        form.append(
+          "rera",
+          propertyData.reraNumber ||
+            ""
+        );
+
+        // ======================================
+        // LOCATION
+        // ======================================
+
+        form.append(
+          "location",
+          propertyData.location.trim()
+        );
+
+        form.append(
+          "city",
+          propertyData.city || ""
+        );
+
+        form.append(
+          "state",
+          propertyData.state || ""
+        );
+
+        form.append(
+          "country",
+          propertyData.country ||
+            ""
+        );
+
+        // ======================================
+        // OVERVIEW
+        // ======================================
+
+        form.append(
+          "projectArea",
+          propertyData.projectArea ||
+            ""
+        );
+
+        form.append(
+          "noOfHouseVilla",
+          propertyData.noOfHouseVilla ||
+            "0"
+        );
+
+        form.append(
+          "totalFloors",
+          propertyData.totalFloors ||
+            "0"
+        );
+
+        form.append(
+          "facing",
+          propertyData.facing ||
+            ""
+        );
+
+        form.append(
+          "plotArea",
+          propertyData.plotArea ||
+            ""
+        );
+
+        form.append(
+          "bedrooms",
+          propertyData.bedrooms ||
+            "0"
+        );
+
+        form.append(
+          "bathrooms",
+          propertyData.bathrooms ||
+            "0"
+        );
+
+        form.append(
+          "balconies",
+          propertyData.balconies ||
+            ""
+        );
+
+        form.append(
+          "parking",
+          propertyData.parking ||
+            ""
+        );
+
+        form.append(
+          "transactionType",
+          propertyData.transactionType ||
+            "For Sale"
+        );
+
+        form.append(
+          "propertyOverlooking",
+          propertyData.propertyOverlooking ||
+            ""
+        );
+
+        form.append(
+          "maintenancePerMonth",
+          propertyData.maintenancePerMonth ||
+            "0"
+        );
+
+        form.append(
+          "expectedRentalReturn",
+          propertyData.expectedRentalReturn ||
+            "0"
+        );
+
+        // ======================================
+        // OLD SCHEMA COMPATIBILITY
+        // ======================================
+
+        form.append(
+          "totalUnits",
+          propertyData.noOfHouseVilla ||
+            "0"
+        );
+
+        form.append(
+          "totalArea",
+          propertyData.projectArea ||
+            ""
+        );
+
+        form.append(
+          "plotSize",
+          propertyData.plotArea ||
+            ""
+        );
+
+        // ======================================
+        // AMENITIES
+        // ======================================
+
+        form.append(
+          "amenities",
+          JSON.stringify(
+            propertyData.amenities ||
+              []
+          )
+        );
+
+        // ======================================
+        // NEARBY
+        // ======================================
+
+        form.append(
+          "nearbyPlaces",
+          JSON.stringify(
+            propertyData.nearbyPlaces ||
+              []
+          )
+        );
+
+        // ======================================
+        // FLOOR PLAN DATA
+        // ======================================
+
+        const floorPlanData =
+          floorPlans.map(
+            (plan) => ({
+              _id:
+                plan._id || undefined,
+
+              planTitle:
+                plan.planTitle || "",
+
+              planType:
+                plan.planType || "",
+
+              beds:
+                Number(
+                  plan.beds
+                ) || 0,
+
+              baths:
+                Number(
+                  plan.baths
+                ) || 0,
+
+              balconies:
+                Number(
+                  plan.balconies
+                ) || 0,
+
+              pujaRoom:
+                Number(
+                  plan.pujaRoom
+                ) || 0,
+
+              servantRoom:
+                Number(
+                  plan.servantRoom
+                ) || 0,
+
+              storeRoom:
+                Number(
+                  plan.storeRoom
+                ) || 0,
+
+              sbaSqft:
+                Number(
+                  plan.sbaSqft
+                ) || 0,
+
+              plotSqft:
+                Number(
+                  plan.plotSqft
+                ) || 0,
+
+              // KEEP EXISTING IMAGE
+
+              floorPlanSketch:
+                plan.existingFloorPlanSketch ||
+                (
+                  typeof plan.floorPlanSketch ===
+                  "string"
+                    ? plan.floorPlanSketch
+                    : ""
+                ),
+            })
+          );
+
+        form.append(
+          "floorPlans",
+          JSON.stringify(
+            floorPlanData
+          )
+        );
+
+        // ======================================
+        // SEO
+        // ======================================
+
+        form.append(
+          "metaTitle",
+          propertyData.metaTitle ||
+            ""
+        );
+
+        form.append(
+          "metaDescription",
+          propertyData.metaDescription ||
+            ""
+        );
+
+        form.append(
+          "urlSlug",
+          propertyData.urlSlug ||
+            ""
+        );
+
+        // ======================================
+        // PUBLISH
+        // ======================================
+
+        form.append(
+          "publishStatus",
+          String(
+            propertyData.publishStatus
+          )
+        );
+
+        form.append(
+          "publishDate",
+          propertyData.publishDate ||
+            ""
+        );
+
+        form.append(
+          "promoteProperty",
+          String(
+            propertyData.promoteProperty
+          )
+        );
+
+        // ======================================
+        // IMPORTANT:
+        // KEEP OLD PROPERTY IMAGES
+        // ======================================
+
+        form.append(
+          "existingPropertyImages",
+          JSON.stringify(
+            existingPropertyImages
+          )
+        );
+
+        // ======================================
+        // NEW PROPERTY IMAGES
+        // ======================================
+
+        propertyImages.forEach(
+          (image) => {
+            if (
+              image instanceof File
+            ) {
+              form.append(
+                "propertyImages",
+                image
+              );
+            }
+          }
+        );
+
+        // ======================================
+        // IMPORTANT:
+        // KEEP OLD DOCUMENTS
+        // ======================================
+
+        form.append(
+          "existingDocuments",
+          JSON.stringify(
+            existingDocuments
+          )
+        );
+
+        // ======================================
+        // NEW DOCUMENTS
+        // ======================================
+
+        documents.forEach(
+          (document) => {
+            if (
+              document instanceof
+              File
+            ) {
+              form.append(
+                "documents",
+                document
+              );
+            }
+          }
+        );
+
+        // ======================================
+        // NEW FLOOR PLAN IMAGES
+        // ======================================
+
+        floorPlans.forEach(
+          (plan) => {
+            if (
+              plan.floorPlanSketch instanceof
+              File
+            ) {
+              form.append(
+                "floorPlanImages",
+                plan.floorPlanSketch
+              );
+            }
+          }
+        );
+
+        // ======================================
+        // DEBUG
+        // ======================================
+
+        console.log(
+          "================================"
+        );
+
+        console.log(
+          isEditMode
+            ? "UPDATE PROPERTY"
+            : "CREATE PROPERTY"
+        );
+
+        console.log(
+          "PROPERTY:",
+          propertyData
+        );
+
+        console.log(
+          "EXISTING IMAGES:",
+          existingPropertyImages
+        );
+
+        console.log(
+          "NEW IMAGES:",
+          propertyImages
+        );
+
+        console.log(
+          "EXISTING DOCUMENTS:",
+          existingDocuments
+        );
+
+        console.log(
+          "NEW DOCUMENTS:",
+          documents
+        );
+
+        console.log(
+          "FLOOR PLANS:",
+          floorPlans
+        );
+
+        console.log(
+          "FORM DATA:"
+        );
+
+        for (
+          const [key, value]
+          of form.entries()
+        ) {
+          console.log(
+            key,
+            value
+          );
+        }
+
+        console.log(
+          "================================"
+        );
+
+        // ======================================
+        // CREATE OR UPDATE API
+        // ======================================
+
+        let response;
+
+        if (isEditMode) {
+          response =
+            await API.put(
+              `/properties/${id}`,
+              form
+            );
+        } else {
+          response =
+            await API.post(
+              "/properties",
+              form
+            );
+        }
+
+        console.log(
+          "PROPERTY RESPONSE:",
+          response.data
+        );
+
+        alert(
+          response.data?.message ||
+            (
+              isEditMode
+                ? "Property updated successfully"
+                : "Property published successfully"
+            )
+        );
+
+        localStorage.removeItem(
+          "property_draft"
+        );
+
+        navigate(
+          "/properties/all"
+        );
+
+      } catch (error) {
+        console.error(
+          "================================"
+        );
+
+        console.error(
+          isEditMode
+            ? "UPDATE PROPERTY ERROR"
+            : "PUBLISH PROPERTY ERROR"
+        );
+
+        console.error(
+          error.response?.data ||
+            error
+        );
+
+        console.error(
+          "================================"
+        );
+
+        alert(
+          error.response?.data
+            ?.message ||
+            error.message ||
+            (
+              isEditMode
+                ? "Failed to update property"
+                : "Failed to publish property"
+            )
+        );
+      } finally {
+        setPublishing(false);
+      }
+    };
+
+  // ==========================================
+  // LOADING
+  // ==========================================
+
+  if (
+    isEditMode &&
+    loadingProperty
+  ) {
+    return (
+      <div className="add-property-page">
+        Loading property...
+      </div>
+    );
+  }
+
+  // ==========================================
   // COMPONENT
-  // =====================================================
+  // ==========================================
 
   return (
     <div className="add-property-page">
 
-      {/* =================================================
-          LEFT SIDE
-      ================================================= */}
+      {/* LEFT SIDE */}
 
       <div className="left-section">
 
-        {/* BASIC INFORMATION */}
-
         <BasicInformation
-          propertyData={propertyData}
+          propertyData={
+            propertyData
+          }
           setPropertyData={
             setPropertyData
           }
@@ -810,11 +1225,11 @@ const AddNewProperty = () => {
             updatePropertyData
           }
         />
-
-        {/* LOCATION */}
 
         <LocationDetails
-          propertyData={propertyData}
+          propertyData={
+            propertyData
+          }
           setPropertyData={
             setPropertyData
           }
@@ -822,11 +1237,11 @@ const AddNewProperty = () => {
             updatePropertyData
           }
         />
-
-        {/* OVERVIEW */}
 
         <Overview
-          propertyData={propertyData}
+          propertyData={
+            propertyData
+          }
           setPropertyData={
             setPropertyData
           }
@@ -835,23 +1250,33 @@ const AddNewProperty = () => {
           }
         />
 
-        {/* DOCUMENTS + FLOOR PLANS */}
-
         <Document
-          documents={documents}
+          documents={
+            documents
+          }
           setDocuments={
             setDocuments
           }
-          floorPlans={floorPlans}
+
+          existingDocuments={
+            existingDocuments
+          }
+          setExistingDocuments={
+            setExistingDocuments
+          }
+
+          floorPlans={
+            floorPlans
+          }
           setFloorPlans={
             setFloorPlans
           }
         />
 
-        {/* NEARBY PLACES */}
-
         <NearbyPlaces
-          propertyData={propertyData}
+          propertyData={
+            propertyData
+          }
           setPropertyData={
             setPropertyData
           }
@@ -859,28 +1284,42 @@ const AddNewProperty = () => {
 
       </div>
 
-      {/* =================================================
-          RIGHT SIDE
-      ================================================= */}
+      {/* RIGHT SIDE */}
 
       <div className="right-section">
 
         <AllProperty
-          propertyData={propertyData}
+          propertyData={
+            propertyData
+          }
           setPropertyData={
             setPropertyData
           }
+
           propertyImages={
             propertyImages
           }
           setPropertyImages={
             setPropertyImages
           }
+
+          existingPropertyImages={
+            existingPropertyImages
+          }
+          setExistingPropertyImages={
+            setExistingPropertyImages
+          }
+
           handlePublish={
             handlePublish
           }
+
           publishing={
             publishing
+          }
+
+          isEditMode={
+            isEditMode
           }
         />
 

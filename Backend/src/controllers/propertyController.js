@@ -297,7 +297,26 @@ exports.createProperty = async (req, res) => {
       : [];
 
     const parsedFloorPlans = prepareFloorPlans(floorPlans, floorPlanImages);
+    const parsedPrice = Number(price);
+    const parsedPricePerSqft = Number(pricePerSqft);
 
+    if (!Number.isFinite(parsedPrice) || parsedPrice < 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid property price.",
+      });
+    }
+
+    if (
+      !Number.isFinite(parsedPricePerSqft) ||
+      parsedPricePerSqft < 0 ||
+      parsedPricePerSqft > 10000000
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid price per sq.ft.",
+      });
+    }
     // =================================================
     // CREATE
     // =================================================
