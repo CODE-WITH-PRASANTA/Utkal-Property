@@ -1,0 +1,111 @@
+.amenities-container {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 24px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.amenities-header {
+  margin-bottom: 20px;
+}
+
+.amenities-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.amenities-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 14px;
+
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.amenities-item:hover {
+  border-color: #999;
+}
+
+.amenities-item.selected {
+  background: #f8f8f8;
+  border-color: #222;
+}
+
+.amenities-checkbox {
+  display: none;
+}
+
+.amenities-check-box {
+  width: 20px;
+  height: 20px;
+
+  border: 1px solid #bbb;
+  border-radius: 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.amenities-item.selected
+.amenities-check-box {
+  background: #222;
+  color: white;
+  border-color: #222;
+}
+
+.amenities-name {
+  font-size: 14px;
+  color: #333;
+}
+
+.amenities-icon {
+  font-size: 20px;
+}
+
+.amenities-image {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.amenities-loading,
+.amenities-empty {
+  padding: 15px 0;
+  color: #777;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .amenities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .amenities-grid {
+    grid-template-columns: 1fr;
+  }
+}

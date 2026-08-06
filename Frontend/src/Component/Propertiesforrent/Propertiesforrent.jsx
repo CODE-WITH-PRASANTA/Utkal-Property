@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import './Propertiesforrent.css';
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import "./Propertiesforrent.css";
+
+import API from "../../api/axios";
 
 // React Icons
 import {
@@ -12,273 +18,953 @@ import {
   FaArrowRight,
   FaMapMarkerAlt,
   FaChevronUp,
-  FaTimes
-} from 'react-icons/fa';
+  FaTimes,
+} from "react-icons/fa";
 
-// Mock Data updated to Indian currency (₹/month) and local Odisha rental locations
-const PROPERTIES_DATA = [
-  {
-    id: 1,
-    title: 'Modern 3BHK Fully Furnished Flat',
-    address: 'Near KIIT Square, Patia, Bhubaneswar',
-    price: '₹ 28,000 / mo',
-    beds: 3,
-    baths: 2,
-    sqft: 1450,
-    featured: true,
-    forRent: true,
-    timeAgo: '1 day ago',
-    avatar: 'https://i.pravatar.cc/150?img=12',
-    images: [
-      'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80'
-    ]
-  },
-  {
-    id: 2,
-    title: 'Luxury Residency Apartment',
-    address: 'Saheed Nagar, Bhubaneswar, Odisha',
-    price: '₹ 35,000 / mo',
-    beds: 3,
-    baths: 3,
-    sqft: 1650,
-    featured: true,
-    forRent: true,
-    timeAgo: '3 days ago',
-    avatar: 'https://i.pravatar.cc/150?img=15',
-    images: [
-      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'
-    ]
-  },
-  {
-    id: 3,
-    title: 'Spacious 2BHK Rental Unit',
-    address: 'Chandrasekharpur, Bhubaneswar, Odisha',
-    price: '₹ 18,500 / mo',
-    beds: 2,
-    baths: 2,
-    sqft: 1100,
-    featured: true,
-    forRent: true,
-    timeAgo: '5 days ago',
-    avatar: 'https://i.pravatar.cc/150?img=32',
-    images: [
-      'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80'
-    ]
-  },
-  {
-    id: 4,
-    title: 'Commercial Office Space',
-    address: 'Cuttack Road, Bhubaneswar, Odisha',
-    price: '₹ 45,000 / mo',
-    beds: 4,
-    baths: 2,
-    sqft: 2100,
-    featured: true,
-    forRent: true,
-    timeAgo: '1 week ago',
-    avatar: 'https://i.pravatar.cc/150?img=51',
-    images: [
-      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80'
-    ]
+// =====================================================
+// BACKEND URL
+// =====================================================
+
+const BACKEND_URL =
+  "http://localhost:5000";
+
+// =====================================================
+// IMAGE URL HELPER
+// =====================================================
+
+const getImageUrl = (image) => {
+  if (!image) {
+    return "";
   }
-];
 
-// Single Card Component with Image Carousel & Zoom Trigger
-const PropertyCard = ({ property, onOpenModal }) => {
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  // Already complete URL
+  if (
+    image.startsWith("http://") ||
+    image.startsWith("https://") ||
+    image.startsWith("blob:")
+  ) {
+    return image;
+  }
+
+  // Example:
+  // /uploads/property/image.webp
+  if (image.startsWith("/")) {
+    return `${BACKEND_URL}${image}`;
+  }
+
+  return `${BACKEND_URL}/${image}`;
+};
+
+// =====================================================
+// GET ALL PROPERTY IMAGES
+// =====================================================
+
+const getPropertyImages = (
+  property
+) => {
+  let images = [];
+
+  // ============================================
+  // propertyImages[]
+  // ============================================
+
+  if (
+    Array.isArray(
+      property.propertyImages
+    )
+  ) {
+    images =
+      property.propertyImages
+        .map((image) => {
+          // Image stored as string
+          if (
+            typeof image ===
+            "string"
+          ) {
+            return getImageUrl(
+              image
+            );
+          }
+
+          // Image stored as object
+          if (
+            image &&
+            typeof image ===
+              "object"
+          ) {
+            const path =
+              image.url ||
+              image.path ||
+              image.file ||
+              image.image ||
+              "";
+
+            return getImageUrl(
+              path
+            );
+          }
+
+          return "";
+        })
+        .filter(Boolean);
+  }
+
+  // ============================================
+  // PRIMARY IMAGE FALLBACK
+  // ============================================
+
+  if (
+    images.length === 0 &&
+    property.primaryImage
+  ) {
+    images.push(
+      getImageUrl(
+        property.primaryImage
+      )
+    );
+  }
+
+  // ============================================
+  // OLD IMAGE FIELD FALLBACK
+  // ============================================
+
+  if (
+    images.length === 0 &&
+    property.image
+  ) {
+    images.push(
+      getImageUrl(
+        property.image
+      )
+    );
+  }
+
+  // ============================================
+  // REMOVE DUPLICATE IMAGES
+  // ============================================
+
+  return [...new Set(images)];
+};
+
+// =====================================================
+// FORMAT PRICE
+// =====================================================
+
+const formatPrice = (price) => {
+  const amount = Number(price);
+
+  if (!Number.isFinite(amount)) {
+    return "₹ 0 / mo";
+  }
+
+  return `₹ ${amount.toLocaleString(
+    "en-IN"
+  )} / mo`;
+};
+
+// =====================================================
+// CREATE ADDRESS
+// =====================================================
+
+const getPropertyAddress = (
+  property
+) => {
+  const parts = [
+    property.location,
+    property.city,
+    property.state,
+    property.country,
+  ].filter(Boolean);
+
+  return parts.join(", ");
+};
+
+// =====================================================
+// GET PROPERTY AREA
+// =====================================================
+
+const getPropertyArea = (
+  property
+) => {
+  return (
+    property.plotArea ||
+    property.plotSize ||
+    property.totalArea ||
+    property.projectArea ||
+    "0"
+  );
+};
+
+// =====================================================
+// TIME AGO
+// =====================================================
+
+const getTimeAgo = (
+  createdAt
+) => {
+  if (!createdAt) {
+    return "";
+  }
+
+  const created =
+    new Date(createdAt);
+
+  const now = new Date();
+
+  const difference =
+    now.getTime() -
+    created.getTime();
+
+  const seconds = Math.floor(
+    difference / 1000
+  );
+
+  const minutes = Math.floor(
+    seconds / 60
+  );
+
+  const hours = Math.floor(
+    minutes / 60
+  );
+
+  const days = Math.floor(
+    hours / 24
+  );
+
+  const weeks = Math.floor(
+    days / 7
+  );
+
+  const months = Math.floor(
+    days / 30
+  );
+
+  if (seconds < 60) {
+    return "Just now";
+  }
+
+  if (minutes < 60) {
+    return `${minutes} ${
+      minutes === 1
+        ? "minute"
+        : "minutes"
+    } ago`;
+  }
+
+  if (hours < 24) {
+    return `${hours} ${
+      hours === 1
+        ? "hour"
+        : "hours"
+    } ago`;
+  }
+
+  if (days < 7) {
+    return `${days} ${
+      days === 1
+        ? "day"
+        : "days"
+    } ago`;
+  }
+
+  if (weeks < 5) {
+    return `${weeks} ${
+      weeks === 1
+        ? "week"
+        : "weeks"
+    } ago`;
+  }
+
+  return `${months} ${
+    months === 1
+      ? "month"
+      : "months"
+  } ago`;
+};
+
+// =====================================================
+// SINGLE PROPERTY CARD
+// =====================================================
+
+const PropertyCard = ({
+  property,
+  onOpenModal,
+}) => {
+  const [
+    currentImgIndex,
+    setCurrentImgIndex,
+  ] = useState(0);
+
+  // ============================================
+  // GET PROPERTY IMAGES
+  // ============================================
+
+  const images =
+    getPropertyImages(property);
+
+  // ============================================
+  // PREVIOUS IMAGE
+  // ============================================
 
   const handlePrevImage = (e) => {
     e.stopPropagation();
-    setCurrentImgIndex((prev) =>
-      prev === 0 ? property.images.length - 1 : prev - 1
+
+    if (images.length <= 1) {
+      return;
+    }
+
+    setCurrentImgIndex(
+      (previous) =>
+        previous === 0
+          ? images.length - 1
+          : previous - 1
     );
   };
+
+  // ============================================
+  // NEXT IMAGE
+  // ============================================
 
   const handleNextImage = (e) => {
     e.stopPropagation();
-    setCurrentImgIndex((prev) =>
-      prev === property.images.length - 1 ? 0 : prev + 1
+
+    if (images.length <= 1) {
+      return;
+    }
+
+    setCurrentImgIndex(
+      (previous) =>
+        previous ===
+        images.length - 1
+          ? 0
+          : previous + 1
     );
   };
 
+  // ============================================
+  // CURRENT IMAGE
+  // ============================================
+
+  const currentImage =
+    images[currentImgIndex] || "";
+
+  // ============================================
+  // UI
+  // ============================================
+
   return (
     <div className="Propertiesforrent-card">
-      {/* Image Container with Hover Overlay */}
-      <div className="Propertiesforrent-card-img-wrapper">
-        <img
-          src={property.images[currentImgIndex]}
-          alt={property.title}
-          className="Propertiesforrent-card-img"
-        />
 
-        {/* Top-Left Badges */}
+      {/* ====================================== */}
+      {/* IMAGE CONTAINER */}
+      {/* ====================================== */}
+
+      <div className="Propertiesforrent-card-img-wrapper">
+
+        {currentImage ? (
+          <img
+            src={currentImage}
+            alt={
+              property.name ||
+              "Property"
+            }
+            className="Propertiesforrent-card-img"
+          />
+        ) : (
+          <div className="Propertiesforrent-card-img">
+            No Image
+          </div>
+        )}
+
+        {/* ==================================== */}
+        {/* BADGES */}
+        {/* ==================================== */}
+
         <div className="Propertiesforrent-badges">
+
           {property.featured && (
-            <span className="Propertiesforrent-badge-featured">Featured</span>
+            <span className="Propertiesforrent-badge-featured">
+              Featured
+            </span>
           )}
-          {property.forRent && (
-            <span className="Propertiesforrent-badge-forrent">For Rent</span>
-          )}
+
+          <span className="Propertiesforrent-badge-forrent">
+            For Rent
+          </span>
+
         </div>
 
-        {/* Top-Right Bookmark Icon */}
+        {/* ==================================== */}
+        {/* BOOKMARK */}
+        {/* ==================================== */}
+
         <div className="Propertiesforrent-bookmark-tag">
           <FaBookmark />
         </div>
 
-        {/* Hover Overlay with (+) & Navigation Arrows */}
+        {/* ==================================== */}
+        {/* HOVER OVERLAY */}
+        {/* ==================================== */}
+
         <div className="Propertiesforrent-hover-overlay">
+
           <div
             className="Propertiesforrent-crosshair-icon"
-            onClick={() => onOpenModal(property.images[currentImgIndex])}
+            onClick={() => {
+              if (currentImage) {
+                onOpenModal(
+                  currentImage
+                );
+              }
+            }}
             title="View image full size"
           >
             +
           </div>
 
-          <div className="Propertiesforrent-nav-arrows">
-            <button
-              className="Propertiesforrent-arrow-btn"
-              onClick={handlePrevImage}
-              aria-label="Previous Image"
-            >
-              <FaArrowLeft />
-            </button>
-            <button
-              className="Propertiesforrent-arrow-btn"
-              onClick={handleNextImage}
-              aria-label="Next Image"
-            >
-              <FaArrowRight />
-            </button>
-          </div>
+          {/* ================================== */}
+          {/* IMAGE NAVIGATION */}
+          {/* ================================== */}
+
+          {images.length > 1 && (
+            <div className="Propertiesforrent-nav-arrows">
+
+              <button
+                className="Propertiesforrent-arrow-btn"
+                onClick={
+                  handlePrevImage
+                }
+                aria-label="Previous Image"
+              >
+                <FaArrowLeft />
+              </button>
+
+              <button
+                className="Propertiesforrent-arrow-btn"
+                onClick={
+                  handleNextImage
+                }
+                aria-label="Next Image"
+              >
+                <FaArrowRight />
+              </button>
+
+            </div>
+          )}
+
         </div>
+
       </div>
 
-      {/* Card Content */}
+      {/* ====================================== */}
+      {/* CARD CONTENT */}
+      {/* ====================================== */}
+
       <div className="Propertiesforrent-card-content">
-        <h3 className="Propertiesforrent-card-title">{property.title}</h3>
+
+        {/* ==================================== */}
+        {/* PROPERTY NAME */}
+        {/* ==================================== */}
+
+        <h3 className="Propertiesforrent-card-title">
+          {property.name ||
+            "Property"}
+        </h3>
+
+        {/* ==================================== */}
+        {/* ADDRESS */}
+        {/* ==================================== */}
 
         <p className="Propertiesforrent-address">
+
           <FaMapMarkerAlt className="Propertiesforrent-address-icon" />
-          <span>{property.address}</span>
+
+          <span>
+            {getPropertyAddress(
+              property
+            ) ||
+              "Location not available"}
+          </span>
+
         </p>
 
-        <div className="Propertiesforrent-price">{property.price}</div>
+        {/* ==================================== */}
+        {/* PRICE */}
+        {/* ==================================== */}
 
-        <div className="Propertiesforrent-specs">
-          <span className="Propertiesforrent-spec-item">
-            <FaBed /> Beds: <strong>{property.beds}</strong>
-          </span>
-          <span className="Propertiesforrent-spec-item">
-            <FaBath /> Baths: <strong>{property.baths}</strong>
-          </span>
-          <span className="Propertiesforrent-spec-item">
-            <FaRulerCombined /> Sqft: <strong>{property.sqft}</strong>
-          </span>
+        <div className="Propertiesforrent-price">
+          {formatPrice(
+            property.price
+          )}
         </div>
 
-        {/* Card Footer */}
+        {/* ==================================== */}
+        {/* SPECS */}
+        {/* ==================================== */}
+
+        <div className="Propertiesforrent-specs">
+
+          {/* BEDROOMS */}
+
+          <span className="Propertiesforrent-spec-item">
+
+            <FaBed />
+
+            Beds:{" "}
+
+            <strong>
+              {property.bedrooms ??
+                0}
+            </strong>
+
+          </span>
+
+          {/* BATHROOMS */}
+
+          <span className="Propertiesforrent-spec-item">
+
+            <FaBath />
+
+            Baths:{" "}
+
+            <strong>
+              {property.bathrooms ??
+                0}
+            </strong>
+
+          </span>
+
+          {/* AREA */}
+
+          <span className="Propertiesforrent-spec-item">
+
+            <FaRulerCombined />
+
+            Sqft:{" "}
+
+            <strong>
+              {getPropertyArea(
+                property
+              )}
+            </strong>
+
+          </span>
+
+        </div>
+
+        {/* ==================================== */}
+        {/* CARD FOOTER */}
+        {/* ==================================== */}
+
         <div className="Propertiesforrent-card-footer">
+
           <button className="Propertiesforrent-compare-btn">
-            <FaPlus className="Propertiesforrent-plus-icon" /> Compare
+
+            <FaPlus className="Propertiesforrent-plus-icon" />
+
+            Compare
+
           </button>
 
           <div className="Propertiesforrent-user-info">
-            <img
-              src={property.avatar}
-              alt="Agent Avatar"
-              className="Propertiesforrent-avatar"
-            />
-            <span className="Propertiesforrent-time">{property.timeAgo}</span>
+
+            <span className="Propertiesforrent-time">
+              {getTimeAgo(
+                property.createdAt
+              )}
+            </span>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
   );
 };
 
+// =====================================================
+// MAIN COMPONENT
+// =====================================================
+
 const Propertiesforrent = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  // ============================================
+  // PROPERTIES
+  // ============================================
 
-  const handleOpenModal = (imgUrl) => {
-    setSelectedImage(imgUrl);
+  const [
+    properties,
+    setProperties,
+  ] = useState([]);
+
+  // ============================================
+  // LOADING
+  // ============================================
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
+
+  // ============================================
+  // ERROR
+  // ============================================
+
+  const [
+    error,
+    setError,
+  ] = useState("");
+
+  // ============================================
+  // MODAL IMAGE
+  // ============================================
+
+  const [
+    selectedImage,
+    setSelectedImage,
+  ] = useState(null);
+
+  // =================================================
+  // FETCH ALL RENT PROPERTIES
+  // =================================================
+
+  useEffect(() => {
+    const fetchRentProperties =
+      async () => {
+        try {
+          setLoading(true);
+
+          setError("");
+
+          console.log(
+            "================================"
+          );
+
+          console.log(
+            "FETCHING RENT PROPERTIES"
+          );
+
+          console.log(
+            "================================"
+          );
+
+          // =========================================
+          // IMPORTANT
+          //
+          // parent=Rent
+          //
+          // This means:
+          //
+          // Rent
+          //   Apartment
+          //   House
+          //   Villa
+          //
+          // All will be returned.
+          // =========================================
+
+          const response =
+            await API.get(
+              "/properties",
+              {
+                params: {
+                  parent: "Rent",
+
+                  // Large limit because you said
+                  // show ALL rent properties.
+                  limit: 1000,
+
+                  page: 1,
+                },
+              }
+            );
+
+          console.log(
+            "RENT PROPERTY RESPONSE:",
+            response.data
+          );
+
+          // =========================================
+          // GET ARRAY
+          // =========================================
+
+          const propertyData =
+            response.data
+              ?.properties ||
+            response.data?.data ||
+            response.data ||
+            [];
+
+          console.log(
+            "RENT PROPERTY ARRAY:",
+            propertyData
+          );
+
+          if (
+            !Array.isArray(
+              propertyData
+            )
+          ) {
+            setProperties([]);
+
+            return;
+          }
+
+          // =========================================
+          // EXTRA FRONTEND SAFETY FILTER
+          //
+          // Backend should already filter parent=Rent.
+          //
+          // This protects against an older backend
+          // controller that ignores parent.
+          // =========================================
+
+          const rentProperties =
+            propertyData.filter(
+              (property) => {
+                const parent =
+                  property.categoryParent ||
+                  "";
+
+                return (
+                  parent
+                    .trim()
+                    .toLowerCase() ===
+                  "rent"
+                );
+              }
+            );
+
+          console.log(
+            "FINAL RENT PROPERTIES:",
+            rentProperties
+          );
+
+          // =========================================
+          // SHOW ALL
+          // =========================================
+
+          setProperties(
+            rentProperties
+          );
+        } catch (error) {
+          console.error(
+            "================================"
+          );
+
+          console.error(
+            "FETCH RENT PROPERTY ERROR"
+          );
+
+          console.error(
+            error.response?.data ||
+              error
+          );
+
+          console.error(
+            "================================"
+          );
+
+          setProperties([]);
+
+          setError(
+            error.response?.data
+              ?.message ||
+              "Failed to load rental properties."
+          );
+        } finally {
+          setLoading(false);
+        }
+      };
+
+    fetchRentProperties();
+  }, []);
+
+  // =================================================
+  // OPEN IMAGE
+  // =================================================
+
+  const handleOpenModal = (
+    imgUrl
+  ) => {
+    setSelectedImage(
+      imgUrl
+    );
   };
 
-  const handleCloseModal = () => {
-    setSelectedImage(null);
-  };
+  // =================================================
+  // CLOSE IMAGE
+  // =================================================
+
+  const handleCloseModal =
+    () => {
+      setSelectedImage(
+        null
+      );
+    };
+
+  // =================================================
+  // SCROLL TOP
+  // =================================================
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
+
+  // =================================================
+  // UI
+  // =================================================
 
   return (
     <section className="Propertiesforrent">
+
       <div className="Propertiesforrent-container">
-        {/* Header */}
+
+        {/* ==================================== */}
+        {/* HEADER */}
+        {/* ==================================== */}
+
         <div className="Propertiesforrent-header">
-          <span className="Propertiesforrent-tag">Rental Spaces</span>
-          <h1 className="Propertiesforrent-main-heading">Properties For Rent</h1>
+
+          <span className="Propertiesforrent-tag">
+            Rental Spaces
+          </span>
+
+          <h1 className="Propertiesforrent-main-heading">
+            Properties For Rent
+          </h1>
+
           <p className="Propertiesforrent-subheading">
-            Find premium residential and commercial rental options curated by Utkal Property
+            Find premium residential
+            and commercial rental
+            options curated by Utkal
+            Property
           </p>
+
         </div>
 
-        {/* 4 Card Grid */}
+        {/* ==================================== */}
+        {/* PROPERTY GRID */}
+        {/* ==================================== */}
+
         <div className="Propertiesforrent-grid">
-          {PROPERTIES_DATA.map((property) => (
-            <PropertyCard
-              key={property.id}
-              property={property}
-              onOpenModal={handleOpenModal}
-            />
-          ))}
+
+          {/* LOADING */}
+
+          {loading && (
+            <p>
+              Loading rental
+              properties...
+            </p>
+          )}
+
+          {/* ERROR */}
+
+          {!loading &&
+            error && (
+              <p>
+                {error}
+              </p>
+            )}
+
+          {/* NO PROPERTY */}
+
+          {!loading &&
+            !error &&
+            properties.length ===
+              0 && (
+              <p>
+                No rental properties
+                found.
+              </p>
+            )}
+
+          {/* ================================== */}
+          {/* SHOW ALL RENT PROPERTIES */}
+          {/* ================================== */}
+
+          {!loading &&
+            !error &&
+            properties.map(
+              (property) => (
+                <PropertyCard
+                  key={
+                    property._id
+                  }
+                  property={
+                    property
+                  }
+                  onOpenModal={
+                    handleOpenModal
+                  }
+                />
+              )
+            )}
+
         </div>
 
-        {/* Scroll-to-Top Button */}
+        {/* ==================================== */}
+        {/* SCROLL TO TOP */}
+        {/* ==================================== */}
+
         <button
           className="Propertiesforrent-scroll-top-btn"
-          onClick={scrollToTop}
+          onClick={
+            scrollToTop
+          }
           aria-label="Scroll to top"
         >
           <FaChevronUp />
         </button>
 
-        {/* Modal Lightbox */}
+        {/* ==================================== */}
+        {/* IMAGE MODAL */}
+        {/* ==================================== */}
+
         {selectedImage && (
           <div
             className="Propertiesforrent-modal-overlay"
-            onClick={handleCloseModal}
+            onClick={
+              handleCloseModal
+            }
           >
+
             <div
               className="Propertiesforrent-modal-content"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) =>
+                e.stopPropagation()
+              }
             >
+
               <button
                 className="Propertiesforrent-modal-close"
-                onClick={handleCloseModal}
+                onClick={
+                  handleCloseModal
+                }
                 aria-label="Close modal"
               >
                 <FaTimes />
               </button>
+
               <img
-                src={selectedImage}
+                src={
+                  selectedImage
+                }
                 alt="Enlarged property"
                 className="Propertiesforrent-modal-img"
               />
+
             </div>
+
           </div>
         )}
+
       </div>
+
     </section>
   );
 };

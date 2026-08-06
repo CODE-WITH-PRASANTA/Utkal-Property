@@ -10,118 +10,120 @@ const {
   processPropertyFiles,
 } = require("../middleware/multer");
 
-// ============================================
+// =====================================================
+// MULTER PROPERTY FIELDS
+// =====================================================
+
+const propertyUploadFields = propertyUpload.fields([
+  {
+    name: "propertyImages",
+    maxCount: 10,
+  },
+  {
+    name: "documents",
+    maxCount: 10,
+  },
+  {
+    name: "floorPlanImages",
+    maxCount: 10,
+  },
+]);
+
+// =====================================================
 // CREATE PROPERTY
-// ============================================
+// POST /api/properties
+// =====================================================
 
 router.post(
   "/",
-
-  propertyUpload.fields([
-    {
-      name: "propertyImages",
-      maxCount: 10,
-    },
-    {
-      name: "documents",
-      maxCount: 10,
-    },
-    {
-      name: "floorPlanImages",
-      maxCount: 10,
-    },
-  ]),
-
+  propertyUploadFields,
   processPropertyFiles,
-
   propertyController.createProperty
 );
 
-// ============================================
-// GET PROPERTIES
-// ============================================
+// =====================================================
+// GET ALL PROPERTIES
+// GET /api/properties
+// =====================================================
 
 router.get(
   "/",
   propertyController.getProperties
 );
 
-// ============================================
-// DASHBOARD
-// ============================================
+// =====================================================
+// DASHBOARD STATS
+// IMPORTANT: STATIC ROUTES BEFORE /:id
+// =====================================================
 
+// GET /api/properties/dashboard/stats
 router.get(
   "/dashboard/stats",
   propertyController.dashboardStats
 );
 
+// GET /api/properties/top-locations
 router.get(
   "/top-locations",
   propertyController.topLocations
 );
 
+// GET /api/properties/property-types
 router.get(
   "/property-types",
   propertyController.propertyTypes
 );
 
+// GET /api/properties/price-range
 router.get(
   "/price-range",
   propertyController.priceRangeAnalytics
 );
 
-// ============================================
-// GET SINGLE PROPERTY
-// ============================================
-
-router.get(
-  "/:id",
-  propertyController.getProperty
-);
-
-// ============================================
-// UPDATE PROPERTY
-// ============================================
-
-router.put(
-  "/:id",
-
-  propertyUpload.fields([
-    {
-      name: "propertyImages",
-      maxCount: 10,
-    },
-    {
-      name: "documents",
-      maxCount: 10,
-    },
-    {
-      name: "floorPlanImages",
-      maxCount: 10,
-    },
-  ]),
-
-  processPropertyFiles,
-
-  propertyController.updateProperty
-);
-
-// ============================================
-// UPDATE STATUS
-// ============================================
+// =====================================================
+// UPDATE PROPERTY STATUS
+// PUT /api/properties/:id/status
+// =====================================================
 
 router.put(
   "/:id/status",
   propertyController.updateStatus
 );
 
-// ============================================
-// DELETE
-// ============================================
+// =====================================================
+// GET SINGLE PROPERTY BY ID
+// GET /api/properties/:id
+// =====================================================
+
+router.get(
+  "/:id",
+  propertyController.getProperty
+);
+
+// =====================================================
+// UPDATE PROPERTY BY ID
+// PUT /api/properties/:id
+// =====================================================
+
+router.put(
+  "/:id",
+  propertyUploadFields,
+  processPropertyFiles,
+  propertyController.updateProperty
+);
+
+// =====================================================
+// DELETE PROPERTY BY ID
+// DELETE /api/properties/:id
+// =====================================================
 
 router.delete(
   "/:id",
   propertyController.deleteProperty
 );
+
+// =====================================================
+// EXPORT ROUTER
+// =====================================================
 
 module.exports = router;
