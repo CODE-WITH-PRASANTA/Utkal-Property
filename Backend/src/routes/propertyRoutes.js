@@ -1,53 +1,54 @@
 const express = require("express");
+
 const router = express.Router();
 
-const propertyController = require(
-  "../controllers/propertyController"
-);
+const propertyController =
+  require("../controllers/propertyController");
 
 const {
   propertyUpload,
   processPropertyFiles,
 } = require("../middleware/multer");
 
-// ========================================
-// PROPERTY FILES
-// ========================================
-
-const propertyFiles = propertyUpload.fields([
-  {
-    name: "image",
-    maxCount: 1,
-  },
-  {
-    name: "documents",
-    maxCount: 10,
-  },
-]);
-
-// ========================================
-// CREATE
-// ========================================
+// ============================================
+// CREATE PROPERTY
+// ============================================
 
 router.post(
   "/",
-  propertyFiles,
+
+  propertyUpload.fields([
+    {
+      name: "propertyImages",
+      maxCount: 10,
+    },
+    {
+      name: "documents",
+      maxCount: 10,
+    },
+    {
+      name: "floorPlanImages",
+      maxCount: 10,
+    },
+  ]),
+
   processPropertyFiles,
+
   propertyController.createProperty
 );
 
-// ========================================
-// GET ALL
-// ========================================
+// ============================================
+// GET PROPERTIES
+// ============================================
 
 router.get(
   "/",
   propertyController.getProperties
 );
 
-// ========================================
+// ============================================
 // DASHBOARD
-// ========================================
+// ============================================
 
 router.get(
   "/dashboard/stats",
@@ -69,43 +70,58 @@ router.get(
   propertyController.priceRangeAnalytics
 );
 
-// ========================================
-// GET ONE
-// ========================================
+// ============================================
+// GET SINGLE PROPERTY
+// ============================================
 
 router.get(
   "/:id",
   propertyController.getProperty
 );
 
-// ========================================
-// UPDATE
-// ========================================
+// ============================================
+// UPDATE PROPERTY
+// ============================================
 
 router.put(
   "/:id",
-  propertyFiles,
+
+  propertyUpload.fields([
+    {
+      name: "propertyImages",
+      maxCount: 10,
+    },
+    {
+      name: "documents",
+      maxCount: 10,
+    },
+    {
+      name: "floorPlanImages",
+      maxCount: 10,
+    },
+  ]),
+
   processPropertyFiles,
+
   propertyController.updateProperty
 );
 
-// ========================================
-// STATUS
-// ========================================
+// ============================================
+// UPDATE STATUS
+// ============================================
 
 router.put(
   "/:id/status",
   propertyController.updateStatus
 );
 
-// ========================================
+// ============================================
 // DELETE
-// ========================================
+// ============================================
 
 router.delete(
   "/:id",
   propertyController.deleteProperty
 );
-
 
 module.exports = router;
