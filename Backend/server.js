@@ -12,11 +12,9 @@ const teamRoutes = require("./src/routes/teamRoutes");
 const propertyRoutes = require("./src/routes/propertyRoutes");
 const categoryRoutes = require("./src/routes/categoryRoutes");
 const locationRoutes = require("./src/routes/locationRoutes");
-const userRoutes = require(
-  "./src/routes/userRoutes"
-);
+const userRoutes = require("./src/routes/userRoutes");
 
-
+const amenityRoutes = require("./src/routes/amenityRoutes");
 
 const blogRoutes = require("./src/routes/blogRoutes");
 
@@ -30,19 +28,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static uploaded webp assets
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // API Routes
 app.use("/api/testimonials", testimonialRoutes);
-app.use('/api/gallery', galleryRoutes);
+app.use("/api/gallery", galleryRoutes);
 app.use("/api/team", teamRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/locations", locationRoutes);
-app.use(
-  "/api/users",
-  userRoutes
-);
+
+app.use("/api/amenities", amenityRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
 
 app.get("/", (req, res) => {

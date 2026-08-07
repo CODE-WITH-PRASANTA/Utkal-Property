@@ -498,7 +498,6 @@
 
 .amenities-modal-form {
   padding: 20px 24px;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
