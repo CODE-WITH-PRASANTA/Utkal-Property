@@ -38,8 +38,8 @@ function App() {
 
 
         <Route path="/property-details" element={<PropertyDetails/>} />
-        <Route path="/blog" element={<Blog/>} />
-        <Route path="/details/:id" element={<BlogDetails/>} />
+        <Route path="/blogposting" element={<Blog/>} />
+        <Route path="/blogmanagement/:id" element={<BlogDetails/>} />
         <Route path="/real" element={<RealNear/>} />
         <Route path="/our-team" element={<OurTeam/>} />
         <Route path="/sell-property" element={<SellProperty/>} />
