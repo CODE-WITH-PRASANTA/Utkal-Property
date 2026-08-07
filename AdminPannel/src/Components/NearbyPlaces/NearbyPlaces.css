@@ -1,21 +1,27 @@
+/* Main Container configured for 60% fixed width and responsive scaling */
 .nearby-places__container {
-  padding: 24px;
-  background-color: #f4f6f8;
-  min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  max-width: 900px;
+  margin: 20px 0 20px 4%;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* Base Card Styling */
 .nearby-places__card {
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Header Row Elements */
 .nearby-places__header-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 24px;
@@ -23,99 +29,101 @@
 
 .nearby-places__title-group {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: flex-start;
 }
 
 .nearby-places__map-icon-green {
-  font-size: 28px;
+  font-size: 24px;
   color: #006738;
+  margin-top: 4px;
 }
 
 .nearby-places__title-group h1 {
   font-size: 20px;
   font-weight: 700;
-  color: #333333;
-  margin: 0;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
 }
 
 .nearby-places__title-group p {
   font-size: 13px;
-  color: #666666;
-  margin: 2px 0 0 0;
+  color: #666;
+  margin: 0;
 }
 
+/* Stats Group */
 .nearby-places__stats-group {
   display: flex;
   gap: 12px;
 }
 
 .nearby-places__stat-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  padding: 10px 16px;
-  border-radius: 8px;
+  gap: 10px;
 }
 
 .nearby-places__stat-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .nearby-places__stat-icon--total {
-  color: #3b82f6;
+  color: #006738;
 }
 
 .nearby-places__stat-icon--active {
-  color: #10b981;
+  color: #2b8a3e;
 }
 
 .nearby-places__stat-card h3 {
   font-size: 16px;
-  font-weight: 700;
-  color: #111827;
   margin: 0;
+  color: #111;
 }
 
 .nearby-places__stat-card p {
   font-size: 11px;
-  color: #6b7280;
   margin: 0;
+  color: #6c757d;
 }
 
+/* Toolbar & Filters */
 .nearby-places__toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  flex-wrap: wrap;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .nearby-places__category-filter {
-  padding: 8px 14px;
-  border: 1px solid #d1d5db;
+  padding: 8px 12px;
   border-radius: 6px;
-  font-size: 14px;
+  border: 1px solid #ced4da;
   background-color: #fff;
-  color: #374151;
+  font-size: 14px;
   outline: none;
+  cursor: pointer;
 }
 
 .nearby-places__add-btn {
   background-color: #006738;
-  color: #ffffff;
+  color: #fff;
   border: none;
   padding: 9px 16px;
   border-radius: 6px;
   font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+  font-weight: 500;
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
   transition: background-color 0.2s;
 }
 
@@ -123,31 +131,34 @@
   background-color: #00522c;
 }
 
+/* Data Table Wrapper */
 .nearby-places__table-wrapper {
+  width: 100%;
   overflow-x: auto;
+  margin-bottom: 20px;
 }
 
 .nearby-places__table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  font-size: 14px;
 }
 
 .nearby-places__table th {
-  background-color: #f9fafb;
-  color: #4b5563;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
-  letter-spacing: 0.5px;
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 12px;
+  border-bottom: 2px solid #e9ecef;
 }
 
 .nearby-places__table td {
-  padding: 14px 16px;
-  font-size: 14px;
-  color: #1f2937;
-  border-bottom: 1px solid #f3f4f6;
+  padding: 12px;
+  border-bottom: 1px solid #e9ecef;
+  color: #212529;
+  white-space: nowrap;
 }
 
 .nearby-places__cat-cell {
@@ -159,7 +170,7 @@
 .nearby-places__icon-box {
   width: 32px;
   height: 32px;
-  background-color: #f0fdf4;
+  background: #e6f4ea;
   color: #006738;
   border-radius: 6px;
   display: flex;
@@ -168,31 +179,31 @@
   font-size: 14px;
 }
 
+/* Status Tags */
 .nearby-places__status-tag {
   padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  display: inline-block;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .nearby-places__status-tag--active {
-  background-color: #def7ec;
-  color: #03543f;
+  background-color: #e6f4ea;
+  color: #137333;
 }
 
 .nearby-places__status-tag--inactive {
-  background-color: #fde8e8;
-  color: #9b1c1c;
+  background-color: #fce8e6;
+  color: #c5221f;
 }
 
+/* Pagination */
 .nearby-places__pagination-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
   font-size: 13px;
-  color: #6b7280;
+  color: #6c757d;
   flex-wrap: wrap;
   gap: 12px;
 }
@@ -204,8 +215,8 @@
 
 .nearby-places__page-btn {
   background: #fff;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  border: 1px solid #dee2e6;
+  color: #495057;
   padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
@@ -218,13 +229,13 @@
   border-color: #006738;
 }
 
-/* Modal Popup Styles */
+/* Modal Popup Overlay */
 .nearby-places__popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
@@ -233,6 +244,8 @@
   visibility: hidden;
   transition: all 0.3s ease;
   z-index: 1000;
+  box-sizing: border-box;
+  padding: 16px;
 }
 
 .nearby-places__popup-overlay--open {
@@ -241,14 +254,15 @@
 }
 
 .nearby-places__add-card {
-  background: #ffffff;
+  background: #fff;
   width: 100%;
   max-width: 480px;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   max-height: 90vh;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .nearby-places__add-header {
@@ -260,29 +274,24 @@
 
 .nearby-places__add-header h2 {
   font-size: 18px;
-  font-weight: 700;
-  color: #111827;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 0;
+  color: #1a1a1a;
 }
 
 .nearby-places__close-btn {
   background: none;
   border: none;
   font-size: 16px;
-  color: #6b7280;
+  color: #6c757d;
   cursor: pointer;
 }
 
-.nearby-places__form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
+/* Form Styles */
 .nearby-places__form-group {
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -290,19 +299,19 @@
 
 .nearby-places__form-group label {
   font-size: 13px;
-  font-weight: 600;
-  color: #374151;
+  font-weight: 500;
+  color: #495057;
 }
 
-.nearby-places__form-group input, 
+.nearby-places__form-group input,
 .nearby-places__form-group select {
-  padding: 9px 12px;
-  border: 1px solid #d1d5db;
+  padding: 10px;
+  border: 1px solid #ced4da;
   border-radius: 6px;
   font-size: 14px;
   outline: none;
-  background-color: #fff;
-  color: #1f2937;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .nearby-places__form-row {
@@ -338,7 +347,7 @@
   cursor: pointer;
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: .3s;
   border-radius: 22px;
 }
 
@@ -350,7 +359,7 @@
   left: 3px;
   bottom: 3px;
   background-color: white;
-  transition: .4s;
+  transition: .3s;
   border-radius: 50%;
 }
 
@@ -364,67 +373,95 @@
 
 .nearby-places__status-label {
   font-size: 13px;
-  font-weight: 600;
-  color: #374151;
+  font-weight: 500;
+  color: #333;
 }
 
 .nearby-places__preview-box {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #f9fafb;
-  border: 1px dashed #d1d5db;
+  background: #f8f9fa;
+  border: 1px dashed #ced4da;
   padding: 12px;
   border-radius: 8px;
-}
-
-.nearby-places__preview-details h4 {
-  font-size: 14px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-}
-
-.nearby-places__preview-details p {
-  font-size: 12px;
-  color: #6b7280;
-  margin: 2px 0 0 0;
+  margin-bottom: 20px;
 }
 
 .nearby-places__preview-subtext {
   font-size: 11px;
-  color: #777;
+  color: #6c757d;
+  margin: 0;
+}
+
+.nearby-places__preview-details h4 {
+  font-size: 14px;
+  margin: 2px 0;
+  color: #212529;
+}
+
+.nearby-places__preview-details p {
+  font-size: 12px;
+  margin: 0;
+  color: #495057;
 }
 
 .nearby-places__form-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
 }
 
 .nearby-places__action-btn {
-  padding: 9px 16px;
+  flex: 1;
+  padding: 10px;
   border-radius: 6px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   border: none;
-}
-
-.nearby-places__action-btn--cancel {
-  background-color: #e5e7eb;
-  color: #374151;
-}
-
-.nearby-places__action-btn--save {
-  background-color: #006738;
-  color: #ffffff;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
 }
 
-.nearby-places__action-btn--save:hover {
-  background-color: #00522c;
+.nearby-places__action-btn--cancel {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.nearby-places__action-btn--save {
+  background: #006738;
+  color: #fff;
+}
+
+/* Responsive Media Queries for Mobile/Tablet optimization */
+@media screen and (max-width: 1024px) {
+  .nearby-places__container {
+    width: 85%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .nearby-places__container {
+    width: 95%;
+    margin: 10px auto;
+  }
+  
+  .nearby-places__card {
+    padding: 16px;
+  }
+
+  .nearby-places__header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nearby-places__stats-group {
+    width: 100%;
+  }
+
+  .nearby-places__stat-card {
+    flex: 1;
+  }
 }

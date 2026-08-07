@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import './Propertiesforsale.css';
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import "./Propertiesforsale.css";
+
+import API from "../../api/axios";
 
 // React Icons
 import {
@@ -12,254 +18,879 @@ import {
   FaArrowRight,
   FaMapMarkerAlt,
   FaChevronUp,
-  FaTimes
-} from 'react-icons/fa';
+  FaTimes,
+} from "react-icons/fa";
 
-// Mock Data updated to Indian currency (₹ in Lakhs) and local addresses
-const PROPERTIES_DATA = [
-  {
-    id: 1,
-    title: 'Luxury 3BHK Apartment Building',
-    address: 'Plot 104, Patia, Bhubaneswar, Odisha 751024',
-    price: '₹ 75,00,000',
-    beds: 3,
-    baths: 2,
-    sqft: 1450,
-    featured: true,
-    forSale: true,
-    timeAgo: '2 days ago',
-    avatar: 'https://i.pravatar.cc/150?img=11',
-    images: [
-      'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80'
-    ]
-  },
-  {
-    id: 2,
-    title: 'Modern Premium Duplex Villa',
-    address: 'Lane 4, Jayadev Vihar, Bhubaneswar, Odisha 751013',
-    price: '₹ 1,25,00,000',
-    beds: 4,
-    baths: 3,
-    sqft: 2200,
-    featured: true,
-    forSale: true,
-    timeAgo: '1 week ago',
-    avatar: 'https://i.pravatar.cc/150?img=20',
-    images: [
-      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'
-    ]
-  },
-  {
-    id: 3,
-    title: 'Royal Enclave Gated Residency',
-    address: 'Khandagiri Square, Bhubaneswar, Odisha 751030',
-    price: '₹ 95,00,000',
-    beds: 3,
-    baths: 3,
-    sqft: 1750,
-    featured: true,
-    forSale: true,
-    timeAgo: '3 weeks ago',
-    avatar: 'https://i.pravatar.cc/150?img=33',
-    images: [
-      'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80'
-    ]
+// =====================================================
+// IMAGE BASE URL
+// =====================================================
+
+// Change only if your backend runs on another port
+const BACKEND_URL = "http://localhost:5000";
+
+// =====================================================
+// GET FULL IMAGE URL
+// =====================================================
+
+const getImageUrl = (image) => {
+  if (!image) {
+    return "";
   }
-];
 
-// Single Card Component with Carousel & Modal Zoom
-const PropertyCard = ({ property, onOpenModal }) => {
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  // Already full URL
+  if (
+    image.startsWith("http://") ||
+    image.startsWith("https://") ||
+    image.startsWith("blob:")
+  ) {
+    return image;
+  }
 
-  const handlePrevImage = (e) => {
+  // Backend uploaded image
+  if (image.startsWith("/")) {
+    return `${BACKEND_URL}${image}`;
+  }
+
+  return `${BACKEND_URL}/${image}`;
+};
+
+// =====================================================
+// FORMAT PRICE
+// =====================================================
+
+const formatPrice = (price) => {
+  const numericPrice = Number(price);
+
+  if (
+    !Number.isFinite(numericPrice)
+  ) {
+    return "₹ 0";
+  }
+
+  return `₹ ${numericPrice.toLocaleString(
+    "en-IN"
+  )}`;
+};
+
+// =====================================================
+// CREATE ADDRESS
+// =====================================================
+
+const getPropertyAddress = (
+  property
+) => {
+  const addressParts = [
+    property.location,
+    property.city,
+    property.state,
+    property.country,
+  ].filter(Boolean);
+
+  return addressParts.join(", ");
+};
+
+// =====================================================
+// PROPERTY AREA
+// =====================================================
+
+const getPropertyArea = (
+  property
+) => {
+  return (
+    property.plotArea ||
+    property.plotSize ||
+    property.totalArea ||
+    property.projectArea ||
+    "0"
+  );
+};
+
+// =====================================================
+// TIME AGO
+// =====================================================
+
+const getTimeAgo = (
+  createdAt
+) => {
+  if (!createdAt) {
+    return "";
+  }
+
+  const createdDate =
+    new Date(createdAt);
+
+  const currentDate =
+    new Date();
+
+  const difference =
+    currentDate.getTime() -
+    createdDate.getTime();
+
+  const seconds =
+    Math.floor(
+      difference / 1000
+    );
+
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
+
+  const hours =
+    Math.floor(
+      minutes / 60
+    );
+
+  const days =
+    Math.floor(
+      hours / 24
+    );
+
+  const weeks =
+    Math.floor(
+      days / 7
+    );
+
+  const months =
+    Math.floor(
+      days / 30
+    );
+
+  if (seconds < 60) {
+    return "Just now";
+  }
+
+  if (minutes < 60) {
+    return `${minutes} ${
+      minutes === 1
+        ? "minute"
+        : "minutes"
+    } ago`;
+  }
+
+  if (hours < 24) {
+    return `${hours} ${
+      hours === 1
+        ? "hour"
+        : "hours"
+    } ago`;
+  }
+
+  if (days < 7) {
+    return `${days} ${
+      days === 1
+        ? "day"
+        : "days"
+    } ago`;
+  }
+
+  if (weeks < 5) {
+    return `${weeks} ${
+      weeks === 1
+        ? "week"
+        : "weeks"
+    } ago`;
+  }
+
+  return `${months} ${
+    months === 1
+      ? "month"
+      : "months"
+  } ago`;
+};
+
+// =====================================================
+// GET PROPERTY IMAGES
+// =====================================================
+
+const getPropertyImages = (
+  property
+) => {
+  let images = [];
+
+  // ============================================
+  // PROPERTY IMAGES ARRAY
+  // ============================================
+
+  if (
+    Array.isArray(
+      property.propertyImages
+    )
+  ) {
+    images =
+      property.propertyImages
+        .map((image) => {
+          // String
+          if (
+            typeof image ===
+            "string"
+          ) {
+            return getImageUrl(
+              image
+            );
+          }
+
+          // Object compatibility
+          if (
+            image &&
+            typeof image ===
+              "object"
+          ) {
+            const imagePath =
+              image.url ||
+              image.path ||
+              image.file ||
+              image.image ||
+              "";
+
+            return getImageUrl(
+              imagePath
+            );
+          }
+
+          return "";
+        })
+        .filter(Boolean);
+  }
+
+  // ============================================
+  // PRIMARY IMAGE FALLBACK
+  // ============================================
+
+  if (
+    images.length === 0 &&
+    property.primaryImage
+  ) {
+    images.push(
+      getImageUrl(
+        property.primaryImage
+      )
+    );
+  }
+
+  // ============================================
+  // OLD IMAGE FIELD FALLBACK
+  // ============================================
+
+  if (
+    images.length === 0 &&
+    property.image
+  ) {
+    images.push(
+      getImageUrl(
+        property.image
+      )
+    );
+  }
+
+  // ============================================
+  // REMOVE DUPLICATES
+  // ============================================
+
+  return [
+    ...new Set(images),
+  ];
+};
+
+// =====================================================
+// PROPERTY CARD
+// =====================================================
+
+const PropertyCard = ({
+  property,
+  onOpenModal,
+}) => {
+  const [
+    currentImgIndex,
+    setCurrentImgIndex,
+  ] = useState(0);
+
+  // ============================================
+  // PROPERTY IMAGES
+  // ============================================
+
+  const images =
+    getPropertyImages(
+      property
+    );
+
+  // ============================================
+  // PREVIOUS IMAGE
+  // ============================================
+
+  const handlePrevImage = (
+    e
+  ) => {
     e.stopPropagation();
-    setCurrentImgIndex((prev) =>
-      prev === 0 ? property.images.length - 1 : prev - 1
+
+    if (
+      images.length <= 1
+    ) {
+      return;
+    }
+
+    setCurrentImgIndex(
+      (previous) =>
+        previous === 0
+          ? images.length - 1
+          : previous - 1
     );
   };
 
-  const handleNextImage = (e) => {
+  // ============================================
+  // NEXT IMAGE
+  // ============================================
+
+  const handleNextImage = (
+    e
+  ) => {
     e.stopPropagation();
-    setCurrentImgIndex((prev) =>
-      prev === property.images.length - 1 ? 0 : prev + 1
+
+    if (
+      images.length <= 1
+    ) {
+      return;
+    }
+
+    setCurrentImgIndex(
+      (previous) =>
+        previous ===
+        images.length - 1
+          ? 0
+          : previous + 1
     );
   };
+
+  // ============================================
+  // CURRENT IMAGE
+  // ============================================
+
+  const currentImage =
+    images[
+      currentImgIndex
+    ] || "";
+
+  // ============================================
+  // FOR SALE
+  // ============================================
+
+  const isForSale =
+    property.statusType ===
+      "For Sale" ||
+    property.transactionType ===
+      "For Sale";
+
+  // ============================================
+  // UI
+  // ============================================
 
   return (
     <div className="Propertiesforsale-card">
-      {/* Image Container with Hover Controls */}
-      <div className="Propertiesforsale-card-img-wrapper">
-        <img
-          src={property.images[currentImgIndex]}
-          alt={property.title}
-          className="Propertiesforsale-card-img"
-        />
 
-        {/* Badges */}
+      {/* ====================================== */}
+      {/* IMAGE */}
+      {/* ====================================== */}
+
+      <div className="Propertiesforsale-card-img-wrapper">
+
+        {currentImage ? (
+          <img
+            src={
+              currentImage
+            }
+            alt={
+              property.name ||
+              "Property"
+            }
+            className="Propertiesforsale-card-img"
+          />
+        ) : (
+          <div className="Propertiesforsale-card-img">
+            No Image
+          </div>
+        )}
+
+        {/* ==================================== */}
+        {/* BADGES */}
+        {/* ==================================== */}
+
         <div className="Propertiesforsale-badges">
+
           {property.featured && (
-            <span className="Propertiesforsale-badge-featured">Featured</span>
+            <span className="Propertiesforsale-badge-featured">
+              Featured
+            </span>
           )}
-          {property.forSale && (
-            <span className="Propertiesforsale-badge-forsale">For Sale</span>
+
+          {isForSale && (
+            <span className="Propertiesforsale-badge-forsale">
+              For Sale
+            </span>
           )}
+
         </div>
 
-        {/* Top-Right Bookmark Icon */}
+        {/* ==================================== */}
+        {/* BOOKMARK */}
+        {/* ==================================== */}
+
         <div className="Propertiesforsale-bookmark-tag">
           <FaBookmark />
         </div>
 
-        {/* Hover Overlay with Crosshair (+) and Nav Arrows */}
+        {/* ==================================== */}
+        {/* IMAGE HOVER */}
+        {/* ==================================== */}
+
         <div className="Propertiesforsale-hover-overlay">
+
           <div
             className="Propertiesforsale-crosshair-icon"
-            onClick={() => onOpenModal(property.images[currentImgIndex])}
+            onClick={() => {
+              if (
+                currentImage
+              ) {
+                onOpenModal(
+                  currentImage
+                );
+              }
+            }}
             title="Click to expand view"
           >
             +
           </div>
-          <div className="Propertiesforsale-nav-arrows">
-            <button
-              className="Propertiesforsale-arrow-btn"
-              onClick={handlePrevImage}
-              aria-label="Previous Image"
-            >
-              <FaArrowLeft />
-            </button>
-            <button
-              className="Propertiesforsale-arrow-btn"
-              onClick={handleNextImage}
-              aria-label="Next Image"
-            >
-              <FaArrowRight />
-            </button>
-          </div>
+
+          {/* ================================== */}
+          {/* IMAGE NAVIGATION */}
+          {/* ================================== */}
+
+          {images.length > 1 && (
+            <div className="Propertiesforsale-nav-arrows">
+
+              <button
+                className="Propertiesforsale-arrow-btn"
+                onClick={
+                  handlePrevImage
+                }
+                aria-label="Previous Image"
+              >
+                <FaArrowLeft />
+              </button>
+
+              <button
+                className="Propertiesforsale-arrow-btn"
+                onClick={
+                  handleNextImage
+                }
+                aria-label="Next Image"
+              >
+                <FaArrowRight />
+              </button>
+
+            </div>
+          )}
+
         </div>
+
       </div>
 
-      {/* Card Content Section */}
+      {/* ====================================== */}
+      {/* CONTENT */}
+      {/* ====================================== */}
+
       <div className="Propertiesforsale-card-content">
-        <h3 className="Propertiesforsale-card-title">{property.title}</h3>
+
+        {/* PROPERTY NAME */}
+
+        <h3 className="Propertiesforsale-card-title">
+          {property.name ||
+            "Property"}
+        </h3>
+
+        {/* ADDRESS */}
 
         <p className="Propertiesforsale-address">
+
           <FaMapMarkerAlt className="Propertiesforsale-address-icon" />
-          <span>{property.address}</span>
+
+          <span>
+            {getPropertyAddress(
+              property
+            ) ||
+              "Location not available"}
+          </span>
+
         </p>
 
-        <div className="Propertiesforsale-price">{property.price}</div>
+        {/* PRICE */}
 
-        <div className="Propertiesforsale-specs">
-          <span className="Propertiesforsale-spec-item">
-            <FaBed /> Beds: <strong>{property.beds}</strong>
-          </span>
-          <span className="Propertiesforsale-spec-item">
-            <FaBath /> Baths: <strong>{property.baths}</strong>
-          </span>
-          <span className="Propertiesforsale-spec-item">
-            <FaRulerCombined /> Sqft: <strong>{property.sqft}</strong>
-          </span>
+        <div className="Propertiesforsale-price">
+          {formatPrice(
+            property.price
+          )}
         </div>
 
-        {/* Card Footer */}
+        {/* ==================================== */}
+        {/* SPECS */}
+        {/* ==================================== */}
+
+        <div className="Propertiesforsale-specs">
+
+          <span className="Propertiesforsale-spec-item">
+
+            <FaBed />
+
+            Beds:{" "}
+
+            <strong>
+              {property.bedrooms ??
+                0}
+            </strong>
+
+          </span>
+
+          <span className="Propertiesforsale-spec-item">
+
+            <FaBath />
+
+            Baths:{" "}
+
+            <strong>
+              {property.bathrooms ??
+                0}
+            </strong>
+
+          </span>
+
+          <span className="Propertiesforsale-spec-item">
+
+            <FaRulerCombined />
+
+            Sqft:{" "}
+
+            <strong>
+              {getPropertyArea(
+                property
+              )}
+            </strong>
+
+          </span>
+
+        </div>
+
+        {/* ==================================== */}
+        {/* FOOTER */}
+        {/* ==================================== */}
+
         <div className="Propertiesforsale-card-footer">
+
           <button className="Propertiesforsale-compare-btn">
-            <FaPlus className="Propertiesforsale-plus-icon" /> Compare
+
+            <FaPlus className="Propertiesforsale-plus-icon" />
+
+            Compare
+
           </button>
 
           <div className="Propertiesforsale-user-info">
-            <img
-              src={property.avatar}
-              alt="Agent Avatar"
-              className="Propertiesforsale-avatar"
-            />
-            <span className="Propertiesforsale-time">{property.timeAgo}</span>
+
+            {/* Keep same existing UI */}
+
+            <span className="Propertiesforsale-time">
+              {getTimeAgo(
+                property.createdAt
+              )}
+            </span>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
   );
 };
 
+// =====================================================
+// MAIN COMPONENT
+// =====================================================
+
 const Propertiesforsale = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  // ============================================
+  // STATES
+  // ============================================
 
-  const handleOpenModal = (imgUrl) => {
-    setSelectedImage(imgUrl);
+  const [
+    properties,
+    setProperties,
+  ] = useState([]);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
+
+  const [
+    selectedImage,
+    setSelectedImage,
+  ] = useState(null);
+
+  // ============================================
+  // FETCH PROPERTIES FOR SALE
+  // ============================================
+
+  useEffect(() => {
+    const fetchProperties =
+      async () => {
+        try {
+          setLoading(true);
+
+          const response =
+            await API.get(
+              "/properties",
+              {
+                params: {
+                  page: 1,
+
+                  // We only need 3 cards
+                  limit: 3,
+
+                  // Parent/category filtering
+                  // according to your backend
+                  parent:
+                    "Residential",
+                },
+              }
+            );
+
+          console.log(
+            "PROPERTIES FOR SALE RESPONSE:",
+            response.data
+          );
+
+          const propertyData =
+            response.data
+              ?.properties ||
+            response.data?.data ||
+            response.data ||
+            [];
+
+          if (
+            !Array.isArray(
+              propertyData
+            )
+          ) {
+            setProperties([]);
+
+            return;
+          }
+
+          // ====================================
+          // FOR SALE FILTER
+          // ====================================
+
+          const forSaleProperties =
+            propertyData.filter(
+              (property) => {
+                const transaction =
+                  property.statusType ||
+                  property.transactionType ||
+                  "";
+
+                return (
+                  transaction.toLowerCase() ===
+                  "for sale"
+                );
+              }
+            );
+
+          console.log(
+            "FOR SALE PROPERTIES:",
+            forSaleProperties
+          );
+
+          setProperties(
+            forSaleProperties.slice(
+              0,
+              3
+            )
+          );
+        } catch (error) {
+          console.error(
+            "FETCH PROPERTIES FOR SALE ERROR:",
+            error.response?.data ||
+              error
+          );
+
+          setProperties([]);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+    fetchProperties();
+  }, []);
+
+  // ============================================
+  // OPEN MODAL
+  // ============================================
+
+  const handleOpenModal = (
+    imgUrl
+  ) => {
+    setSelectedImage(
+      imgUrl
+    );
   };
 
-  const handleCloseModal = () => {
-    setSelectedImage(null);
-  };
+  // ============================================
+  // CLOSE MODAL
+  // ============================================
+
+  const handleCloseModal =
+    () => {
+      setSelectedImage(
+        null
+      );
+    };
+
+  // ============================================
+  // SCROLL TOP
+  // ============================================
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
+
+  // ============================================
+  // UI
+  // ============================================
 
   return (
     <section className="Propertiesforsale">
+
       <div className="Propertiesforsale-container">
-        {/* Main Header */}
+
+        {/* ==================================== */}
+        {/* HEADER */}
+        {/* ==================================== */}
+
         <div className="Propertiesforsale-header">
-          <span className="Propertiesforsale-tag">Featured Listings</span>
-          <h1 className="Propertiesforsale-main-heading">Properties For Sale</h1>
+
+          <span className="Propertiesforsale-tag">
+            Featured Listings
+          </span>
+
+          <h1 className="Propertiesforsale-main-heading">
+            Properties For Sale
+          </h1>
+
           <p className="Propertiesforsale-subheading">
-            Explore premium verified listings across prime locations by Utkal Property
+            Explore premium verified
+            listings across prime
+            locations by Utkal Property
           </p>
+
         </div>
 
-        {/* 3-Card Grid */}
+        {/* ==================================== */}
+        {/* PROPERTY GRID */}
+        {/* ==================================== */}
+
         <div className="Propertiesforsale-grid">
-          {PROPERTIES_DATA.map((property) => (
-            <PropertyCard
-              key={property.id}
-              property={property}
-              onOpenModal={handleOpenModal}
-            />
-          ))}
+
+          {loading ? (
+            <p>
+              Loading properties...
+            </p>
+          ) : properties.length ===
+            0 ? (
+            <p>
+              No properties for sale
+              found.
+            </p>
+          ) : (
+            properties.map(
+              (property) => (
+                <PropertyCard
+                  key={
+                    property._id
+                  }
+                  property={
+                    property
+                  }
+                  onOpenModal={
+                    handleOpenModal
+                  }
+                />
+              )
+            )
+          )}
+
         </div>
 
-        {/* Scroll-to-top Floating Button */}
+        {/* ==================================== */}
+        {/* SCROLL TOP */}
+        {/* ==================================== */}
+
         <button
           className="Propertiesforsale-scroll-top-btn"
-          onClick={scrollToTop}
+          onClick={
+            scrollToTop
+          }
           aria-label="Scroll to top"
         >
           <FaChevronUp />
         </button>
 
-        {/* Image Lightbox Modal */}
+        {/* ==================================== */}
+        {/* IMAGE MODAL */}
+        {/* ==================================== */}
+
         {selectedImage && (
           <div
             className="Propertiesforsale-modal-overlay"
-            onClick={handleCloseModal}
+            onClick={
+              handleCloseModal
+            }
           >
+
             <div
               className="Propertiesforsale-modal-content"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) =>
+                e.stopPropagation()
+              }
             >
+
               <button
                 className="Propertiesforsale-modal-close"
-                onClick={handleCloseModal}
+                onClick={
+                  handleCloseModal
+                }
                 aria-label="Close image modal"
               >
                 <FaTimes />
               </button>
+
               <img
-                src={selectedImage}
+                src={
+                  selectedImage
+                }
                 alt="Enlarged property"
                 className="Propertiesforsale-modal-img"
               />
+
             </div>
+
           </div>
         )}
+
       </div>
+
     </section>
   );
 };

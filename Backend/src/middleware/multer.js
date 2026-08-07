@@ -25,6 +25,12 @@ const propertyDocumentDir = path.join(
   "../../uploads/property/documents"
 );
 
+// Property floor plan images
+const floorPlanUploadDir = path.join(
+  __dirname,
+  "../../uploads/property/floor-plans"
+);
+
 // Category images
 const categoryUploadDir = path.join(
   __dirname,
@@ -43,6 +49,12 @@ const userUploadDir = path.join(
   "../../uploads/users"
 );
 
+// Amenity images
+const amenityUploadDir = path.join(
+  __dirname,
+  "../../uploads/amenities"
+);
+
 // =====================================================
 // CREATE DIRECTORIES
 // =====================================================
@@ -51,9 +63,11 @@ const userUploadDir = path.join(
   teamUploadDir,
   propertyUploadDir,
   propertyDocumentDir,
+  floorPlanUploadDir,
   categoryUploadDir,
   locationUploadDir,
   userUploadDir,
+  amenityUploadDir,
 ].forEach((dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, {
@@ -72,13 +86,21 @@ const storage = multer.memoryStorage();
 // COMMON IMAGE FILTER
 // =====================================================
 
-const imageFileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image/")) {
+const imageFileFilter = (
+  req,
+  file,
+  cb
+) => {
+  if (
+    file.mimetype.startsWith("image/")
+  ) {
     return cb(null, true);
   }
 
   return cb(
-    new Error("Only image files are allowed!"),
+    new Error(
+      "Only image files are allowed!"
+    ),
     false
   );
 };
@@ -111,9 +133,10 @@ const convertToWebp = async (
   }
 
   try {
-    const filename = `team-${Date.now()}-${Math.round(
-      Math.random() * 1e9
-    )}.webp`;
+    const filename =
+      `team-${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}.webp`;
 
     const outputPath = path.join(
       teamUploadDir,
@@ -132,9 +155,13 @@ const convertToWebp = async (
 
     req.file.filename = filename;
 
-    // Optional DB-ready path
     req.processedTeamImage =
       `/uploads/team/${filename}`;
+
+    console.log(
+      "TEAM IMAGE:",
+      req.processedTeamImage
+    );
 
     return next();
   } catch (error) {
@@ -145,7 +172,8 @@ const convertToWebp = async (
 
     return res.status(500).json({
       success: false,
-      message: "Failed to process team image.",
+      message:
+        "Failed to process team image.",
       error: error.message,
     });
   }
@@ -160,12 +188,29 @@ const propertyFileFilter = (
   file,
   cb
 ) => {
-  // -----------------------------------------
-  // PROPERTY IMAGE
-  // -----------------------------------------
+  console.log(
+    "PROPERTY UPLOAD FIELD:",
+    file.fieldname
+  );
 
-  if (file.fieldname === "image") {
-    if (file.mimetype.startsWith("image/")) {
+  console.log(
+    "PROPERTY UPLOAD TYPE:",
+    file.mimetype
+  );
+
+  // ===================================================
+  // PROPERTY IMAGES
+  // ===================================================
+
+  if (
+    file.fieldname ===
+    "propertyImages"
+  ) {
+    if (
+      file.mimetype.startsWith(
+        "image/"
+      )
+    ) {
       return cb(null, true);
     }
 
@@ -177,11 +222,37 @@ const propertyFileFilter = (
     );
   }
 
-  // -----------------------------------------
-  // PROPERTY DOCUMENTS
-  // -----------------------------------------
+  // ===================================================
+  // FLOOR PLAN IMAGES
+  // ===================================================
 
-  if (file.fieldname === "documents") {
+  if (
+    file.fieldname ===
+    "floorPlanImages"
+  ) {
+    if (
+      file.mimetype.startsWith(
+        "image/"
+      )
+    ) {
+      return cb(null, true);
+    }
+
+    return cb(
+      new Error(
+        "Floor plan must be an image file."
+      ),
+      false
+    );
+  }
+
+  // ===================================================
+  // PROPERTY DOCUMENTS
+  // ===================================================
+
+  if (
+    file.fieldname === "documents"
+  ) {
     const allowedTypes = [
       "application/pdf",
 
@@ -193,7 +264,9 @@ const propertyFileFilter = (
     ];
 
     if (
-      allowedTypes.includes(file.mimetype)
+      allowedTypes.includes(
+        file.mimetype
+      )
     ) {
       return cb(null, true);
     }
@@ -205,6 +278,10 @@ const propertyFileFilter = (
       false
     );
   }
+
+  // ===================================================
+  // UNKNOWN FIELD
+  // ===================================================
 
   return cb(
     new Error(
@@ -224,16 +301,16 @@ const propertyUpload = multer({
   fileFilter: propertyFileFilter,
 
   limits: {
-    // Each file maximum 10MB
+    // 10 MB per file
     fileSize: 10 * 1024 * 1024,
 
-    // 1 image + 10 documents
-    files: 11,
+    // Maximum total files
+    files: 30,
   },
 });
 
 // =====================================================
-// PROCESS PROPERTY IMAGE + DOCUMENTS
+// PROCESS PROPERTY FILES
 // =====================================================
 
 const processPropertyFiles = async (
@@ -242,47 +319,82 @@ const processPropertyFiles = async (
   next
 ) => {
   try {
-    // =========================================
-    // PROPERTY IMAGE
-    // =========================================
+    console.log(
+      "======================================"
+    );
+
+    console.log(
+      "PROCESSING PROPERTY FILES"
+    );
+
+    console.log(
+      "RECEIVED FILE FIELDS:",
+      Object.keys(req.files || {})
+    );
+
+    console.log(
+      "======================================"
+    );
+
+    // =================================================
+    // PROPERTY IMAGES
+    // =================================================
+
+    req.processedPropertyImages = [];
 
     if (
-      req.files?.image &&
-      req.files.image.length > 0
+      req.files?.propertyImages &&
+      req.files.propertyImages.length > 0
     ) {
-      const image =
-        req.files.image[0];
+      for (
+        const image of
+        req.files.propertyImages
+      ) {
+        const filename =
+          `property-${Date.now()}-${Math.round(
+            Math.random() * 1e9
+          )}.webp`;
 
-      const filename =
-        `property-${Date.now()}-${Math.round(
-          Math.random() * 1e9
-        )}.webp`;
+        const outputPath =
+          path.join(
+            propertyUploadDir,
+            filename
+          );
 
-      const outputPath = path.join(
-        propertyUploadDir,
-        filename
-      );
+        await sharp(image.buffer)
+          .resize({
+            width: 1400,
+            withoutEnlargement: true,
+          })
+          .webp({
+            quality: 80,
+          })
+          .toFile(outputPath);
 
-      await sharp(image.buffer)
-        .resize({
-          width: 1400,
-          withoutEnlargement: true,
-        })
-        .webp({
-          quality: 80,
-        })
-        .toFile(outputPath);
+        const imagePath =
+          `/uploads/property/${filename}`;
 
-      req.processedImage = filename;
-
-      // DB-ready image path
-      req.processedPropertyImage =
-        `/uploads/property/${filename}`;
+        req.processedPropertyImages.push(
+          imagePath
+        );
+      }
     }
 
-    // =========================================
+    // =================================================
+    // MAIN / COVER PROPERTY IMAGE
+    // =================================================
+
+    req.processedPropertyImage =
+      req.processedPropertyImages[0] ||
+      "";
+
+    // Keep compatibility with old controller
+    req.processedImage =
+      req.processedPropertyImage;
+
+    // =================================================
     // PROPERTY DOCUMENTS
-    // =========================================
+    // =================================================
 
     req.processedDocuments = [];
 
@@ -291,22 +403,26 @@ const processPropertyFiles = async (
       req.files.documents.length > 0
     ) {
       for (
-        const document
-        of req.files.documents
+        const document of
+        req.files.documents
       ) {
-        const extension = path
-          .extname(document.originalname)
-          .toLowerCase();
+        const extension =
+          path
+            .extname(
+              document.originalname
+            )
+            .toLowerCase();
 
         const filename =
           `property-document-${Date.now()}-${Math.round(
             Math.random() * 1e9
           )}${extension}`;
 
-        const outputPath = path.join(
-          propertyDocumentDir,
-          filename
-        );
+        const outputPath =
+          path.join(
+            propertyDocumentDir,
+            filename
+          );
 
         await fs.promises.writeFile(
           outputPath,
@@ -323,14 +439,74 @@ const processPropertyFiles = async (
       }
     }
 
+    // =================================================
+    // FLOOR PLAN IMAGES
+    // =================================================
+
+    req.processedFloorPlanImages = [];
+
+    if (
+      req.files?.floorPlanImages &&
+      req.files.floorPlanImages.length >
+        0
+    ) {
+      for (
+        const image of
+        req.files.floorPlanImages
+      ) {
+        const filename =
+          `floor-plan-${Date.now()}-${Math.round(
+            Math.random() * 1e9
+          )}.webp`;
+
+        const outputPath =
+          path.join(
+            floorPlanUploadDir,
+            filename
+          );
+
+        await sharp(image.buffer)
+          .resize({
+            width: 1600,
+            withoutEnlargement: true,
+          })
+          .webp({
+            quality: 85,
+          })
+          .toFile(outputPath);
+
+        req.processedFloorPlanImages.push(
+          `/uploads/property/floor-plans/${filename}`
+        );
+      }
+    }
+
+    // =================================================
+    // DEBUG
+    // =================================================
+
     console.log(
-      "PROPERTY IMAGE:",
-      req.processedImage
+      "PROPERTY IMAGES:",
+      req.processedPropertyImages
+    );
+
+    console.log(
+      "MAIN PROPERTY IMAGE:",
+      req.processedPropertyImage
     );
 
     console.log(
       "PROPERTY DOCUMENTS:",
       req.processedDocuments
+    );
+
+    console.log(
+      "FLOOR PLAN IMAGES:",
+      req.processedFloorPlanImages
+    );
+
+    console.log(
+      "======================================"
     );
 
     return next();
@@ -342,8 +518,10 @@ const processPropertyFiles = async (
 
     return res.status(500).json({
       success: false,
+
       message:
         "Failed to process property files.",
+
       error: error.message,
     });
   }
@@ -397,7 +575,8 @@ const processCategoryImage = async (
       })
       .toFile(outputPath);
 
-    req.file.filename = filename;
+    req.file.filename =
+      filename;
 
     req.processedCategoryImage =
       `/uploads/categories/${filename}`;
@@ -416,8 +595,10 @@ const processCategoryImage = async (
 
     return res.status(500).json({
       success: false,
+
       message:
         "Failed to process category image.",
+
       error: error.message,
     });
   }
@@ -471,7 +652,8 @@ const processLocationImage = async (
       })
       .toFile(outputPath);
 
-    req.file.filename = filename;
+    req.file.filename =
+      filename;
 
     req.processedLocationImage =
       `/uploads/locations/${filename}`;
@@ -490,8 +672,10 @@ const processLocationImage = async (
 
     return res.status(500).json({
       success: false,
+
       message:
         "Failed to process location image.",
+
       error: error.message,
     });
   }
@@ -549,10 +733,9 @@ const convertUserImageToWebp = async (
       })
       .toFile(outputPath);
 
-    // Keep filename available
-    req.file.filename = filename;
+    req.file.filename =
+      filename;
 
-    // Full path for MongoDB
     req.processedUserImage =
       `/uploads/users/${filename}`;
 
@@ -570,8 +753,165 @@ const convertUserImageToWebp = async (
 
     return res.status(500).json({
       success: false,
+
       message:
         "Failed to process user image.",
+
+      error: error.message,
+    });
+  }
+};
+
+// =====================================================
+// AMENITY IMAGE FILTER
+// =====================================================
+
+const amenityFileFilter = (
+  req,
+  file,
+  cb
+) => {
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+    "image/svg+xml",
+  ];
+
+  if (
+    allowedTypes.includes(
+      file.mimetype
+    )
+  ) {
+    return cb(null, true);
+  }
+
+  return cb(
+    new Error(
+      "Only PNG, JPG, JPEG, WEBP and SVG images are allowed!"
+    ),
+    false
+  );
+};
+
+// =====================================================
+// AMENITY IMAGE UPLOAD
+// =====================================================
+
+const amenityUpload = multer({
+  storage,
+
+  fileFilter: amenityFileFilter,
+
+  limits: {
+    // Maximum 2 MB
+    fileSize: 2 * 1024 * 1024,
+  },
+});
+
+// =====================================================
+// AMENITY IMAGE PROCESSOR
+// =====================================================
+
+const processAmenityImage = async (
+  req,
+  res,
+  next
+) => {
+  // Image is optional
+  if (!req.file) {
+    return next();
+  }
+
+  try {
+    // =========================================
+    // SVG FILE
+    // =========================================
+
+    if (
+      req.file.mimetype ===
+      "image/svg+xml"
+    ) {
+      const filename =
+        `amenity-${Date.now()}-${Math.round(
+          Math.random() * 1e9
+        )}.svg`;
+
+      const outputPath = path.join(
+        amenityUploadDir,
+        filename
+      );
+
+      await fs.promises.writeFile(
+        outputPath,
+        req.file.buffer
+      );
+
+      req.file.filename =
+        filename;
+
+      req.processedAmenityImage =
+        `/uploads/amenities/${filename}`;
+
+      console.log(
+        "AMENITY SVG:",
+        req.processedAmenityImage
+      );
+
+      return next();
+    }
+
+    // =========================================
+    // PNG/JPG/JPEG/WEBP -> WEBP
+    // =========================================
+
+    const filename =
+      `amenity-${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}.webp`;
+
+    const outputPath = path.join(
+      amenityUploadDir,
+      filename
+    );
+
+    await sharp(req.file.buffer)
+      .resize({
+        width: 500,
+        height: 500,
+        fit: "inside",
+        withoutEnlargement: true,
+      })
+      .webp({
+        quality: 80,
+      })
+      .toFile(outputPath);
+
+    req.file.filename =
+      filename;
+
+    req.processedAmenityImage =
+      `/uploads/amenities/${filename}`;
+
+    console.log(
+      "AMENITY IMAGE:",
+      req.processedAmenityImage
+    );
+
+    return next();
+  } catch (error) {
+    console.error(
+      "AMENITY IMAGE PROCESSING ERROR:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+
+      message:
+        "Failed to process amenity image.",
+
       error: error.message,
     });
   }
@@ -601,4 +941,8 @@ module.exports = {
   // Users
   userUpload,
   convertUserImageToWebp,
+
+  // Amenities
+  amenityUpload,
+  processAmenityImage,
 };

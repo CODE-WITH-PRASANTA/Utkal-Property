@@ -35,6 +35,8 @@ import Setting from "./Pages/Setting/Setting";
 import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
+import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
+import Amenities from "./Components/Amenities/Amenities";
 
 function ProtectedRoute({
   isAuthenticated,
@@ -172,6 +174,9 @@ function App() {
             element={<DashboardMain />}
           />
 
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<DashboardMain />} />
+  
           {/* Properties */}
 
           <Route
@@ -188,6 +193,7 @@ function App() {
             path="/properties/edit/:id"
             element={<AddNewProperty />}
           />
+          <Route path="/properties/Amenities" element={<Amenities />} />
 
           <Route
             path="/properties/categories"
