@@ -169,6 +169,51 @@ const propertySchema = new mongoose.Schema(
       default: false,
     },
 
+    // =================================================
+    // CATEGORY PARENT
+    // =================================================
+    //
+    // Examples:
+    //
+    // Residential
+    // Commercial
+    // Rent
+    //
+    // This is important because:
+    //
+    // Residential -> Apartment
+    // Rent        -> Apartment
+    //
+    // Both can have the same child category name.
+    // =================================================
+
+    categoryParent: {
+      type: String,
+      required: true,
+      trim: true,
+
+      enum: [
+        "Residential",
+        "Commercial",
+        "Rent",
+      ],
+    },
+
+    // =================================================
+    // CHILD CATEGORY
+    // =================================================
+    //
+    // Examples:
+    //
+    // Apartment
+    // Plot
+    // Villa
+    // Office
+    // Shop
+    // House
+    //
+    // =================================================
+
     category: {
       type: String,
       required: true,
@@ -388,13 +433,7 @@ const propertySchema = new mongoose.Schema(
       min: 0,
     },
 
-    /*
-      Your frontend currently sends:
-      totalArea: "2 Acre"
-
-      So String is better than Number here.
-    */
-
+    // Frontend sends: "2 Acre"
     totalArea: {
       type: String,
       default: "",
@@ -406,13 +445,7 @@ const propertySchema = new mongoose.Schema(
       default: null,
     },
 
-    /*
-      Frontend currently sends:
-      plotSize: "1500 sq.ft"
-
-      Therefore keep this as String.
-    */
-
+    // Frontend sends: "1500 sq.ft"
     plotSize: {
       type: String,
       default: "",
@@ -434,9 +467,7 @@ const propertySchema = new mongoose.Schema(
     // NEARBY PLACES
     // =================================================
 
-    nearbyPlaces: [
-      nearbyPlaceSchema
-    ],
+    nearbyPlaces: [nearbyPlaceSchema],
 
     // =================================================
     // PROPERTY IMAGES
@@ -456,16 +487,7 @@ const propertySchema = new mongoose.Schema(
       trim: true,
     },
 
-    /*
-      Keep old "image" field for compatibility.
-
-      Your existing PropertyCard uses:
-
-      property.image
-
-      So this prevents the frontend listing from breaking.
-    */
-
+    // Keep for old frontend PropertyCard compatibility
     image: {
       type: String,
       default: "",
@@ -476,17 +498,13 @@ const propertySchema = new mongoose.Schema(
     // DOCUMENTS
     // =================================================
 
-    documents: [
-      documentSchema
-    ],
+    documents: [documentSchema],
 
     // =================================================
     // FLOOR PLANS
     // =================================================
 
-    floorPlans: [
-      floorPlanSchema
-    ],
+    floorPlans: [floorPlanSchema],
 
     // =================================================
     // SEO
@@ -563,6 +581,17 @@ propertySchema.index({
   city: "text",
   category: "text",
   type: "text",
+});
+
+// Parent filtering
+propertySchema.index({
+  categoryParent: 1,
+});
+
+// Parent + category filtering
+propertySchema.index({
+  categoryParent: 1,
+  category: 1,
 });
 
 propertySchema.index({

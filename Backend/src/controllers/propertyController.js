@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Property = require("../models/Property");
+const Category = require("../models/Category");
 const fs = require("fs");
 const path = require("path");
 
@@ -44,6 +45,18 @@ const numberValue = (value) => {
   return Number.isNaN(number) ? 0 : number;
 };
 
+
+
+// =====================================================
+// ESCAPE REGEX
+// =====================================================
+
+const escapeRegex = (value = "") => {
+  return String(value).replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
+};
 // =====================================================
 // DELETE FILE HELPER
 // =====================================================
@@ -138,22 +151,53 @@ const prepareFloorPlans = (floorPlansValue, uploadedImages = []) => {
 exports.createProperty = async (req, res) => {
   try {
     console.log("================================");
+    console.log("CREATE PROPERTY REQUEST");
 
     console.log("PROPERTY BODY:", req.body);
 
-    console.log("PROPERTY FILES:", req.files);
+    console.log(
+      "CATEGORY PARENT:",
+      req.body.categoryParent
+    );
 
-    console.log("PROCESSED PROPERTY IMAGES:", req.processedPropertyImages);
+    console.log(
+      "CATEGORY:",
+      req.body.category
+    );
 
-    console.log("PROCESSED DOCUMENTS:", req.processedDocuments);
+    console.log(
+      "PROPERTY FILES:",
+      req.files
+    );
 
-    console.log("PROCESSED FLOOR PLAN IMAGES:", req.processedFloorPlanImages);
+    console.log(
+      "PROCESSED PROPERTY IMAGES:",
+      req.processedPropertyImages
+    );
+
+    console.log(
+      "PROCESSED DOCUMENTS:",
+      req.processedDocuments
+    );
+
+    console.log(
+      "PROCESSED FLOOR PLAN IMAGES:",
+      req.processedFloorPlanImages
+    );
 
     console.log("================================");
+
+    // =================================================
+    // REQUEST BODY
+    // =================================================
 
     const {
       // BASIC
       name,
+
+      // NEW
+      categoryParent,
+
       category,
       type,
       subType,
@@ -221,35 +265,91 @@ exports.createProperty = async (req, res) => {
     if (!name?.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Property name is required.",
+        message:
+          "Property name is required.",
       });
     }
+
+    // =================================================
+    // CATEGORY PARENT VALIDATION
+    // =================================================
+
+    if (!categoryParent?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Parent category is required.",
+      });
+    }
+
+    // Optional but recommended validation
+    const allowedParents = [
+      "Residential",
+      "Commercial",
+      "Rent",
+    ];
+
+    if (
+      !allowedParents.includes(
+        categoryParent.trim()
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid parent category.",
+      });
+    }
+
+    // =================================================
+    // CATEGORY VALIDATION
+    // =================================================
 
     if (!category?.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Category is required.",
+        message:
+          "Category is required.",
       });
     }
+
+    // =================================================
+    // TYPE VALIDATION
+    // =================================================
 
     if (!type?.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Property type is required.",
+        message:
+          "Property type is required.",
       });
     }
+
+    // =================================================
+    // LOCATION VALIDATION
+    // =================================================
 
     if (!location?.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Location is required.",
+        message:
+          "Location is required.",
       });
     }
 
-    if (price === undefined || price === null || price === "") {
+    // =================================================
+    // PRICE VALIDATION
+    // =================================================
+
+    if (
+      price === undefined ||
+      price === null ||
+      price === ""
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Property price is required.",
+        message:
+          "Property price is required.",
       });
     }
 
@@ -257,11 +357,14 @@ exports.createProperty = async (req, res) => {
     // PARSE ARRAYS
     // =================================================
 
-    const parsedHighlights = parseArray(highlights);
+    const parsedHighlights =
+      parseArray(highlights);
 
-    const parsedAmenities = parseArray(amenities);
+    const parsedAmenities =
+      parseArray(amenities);
 
-    const parsedNearbyPlaces = parseArray(nearbyPlaces);
+    const parsedNearbyPlaces =
+      parseArray(nearbyPlaces);
 
     // =================================================
     // PROPERTY IMAGES
@@ -269,214 +372,470 @@ exports.createProperty = async (req, res) => {
 
     let propertyImages = [];
 
-    if (Array.isArray(req.processedPropertyImages)) {
-      propertyImages = req.processedPropertyImages
-        .map(normalizePropertyImage)
-        .filter(Boolean);
+    if (
+      Array.isArray(
+        req.processedPropertyImages
+      )
+    ) {
+      propertyImages =
+        req.processedPropertyImages
+          .map(
+            normalizePropertyImage
+          )
+          .filter(Boolean);
     }
 
-    // Backward compatibility
-    if (propertyImages.length === 0 && req.processedImage) {
-      propertyImages.push(normalizePropertyImage(req.processedImage));
+    // =================================================
+    // BACKWARD COMPATIBILITY
+    // =================================================
+
+    if (
+      propertyImages.length === 0 &&
+      req.processedImage
+    ) {
+      const oldImage =
+        normalizePropertyImage(
+          req.processedImage
+        );
+
+      if (oldImage) {
+        propertyImages.push(
+          oldImage
+        );
+      }
     }
 
     // =================================================
     // DOCUMENTS
     // =================================================
 
-    const documents = Array.isArray(req.processedDocuments)
-      ? req.processedDocuments
-      : [];
+    const documents =
+      Array.isArray(
+        req.processedDocuments
+      )
+        ? req.processedDocuments
+        : [];
 
     // =================================================
-    // FLOOR PLANS
+    // FLOOR PLAN IMAGES
     // =================================================
 
-    const floorPlanImages = Array.isArray(req.processedFloorPlanImages)
-      ? req.processedFloorPlanImages
-      : [];
-
-    const parsedFloorPlans = prepareFloorPlans(floorPlans, floorPlanImages);
+    const floorPlanImages =
+      Array.isArray(
+        req.processedFloorPlanImages
+      )
+        ? req.processedFloorPlanImages
+        : [];
 
     // =================================================
-    // CREATE
+    // FLOOR PLAN DATA
     // =================================================
 
-    const primaryImage = propertyImages[0] || "";
+    const parsedFloorPlans =
+      prepareFloorPlans(
+        floorPlans,
+        floorPlanImages
+      );
 
-    const property = await Property.create({
-      // =================================
-      // BASIC
-      // =================================
+    // =================================================
+    // PARSE PRICE
+    // =================================================
 
-      name: name.trim(),
+    const parsedPrice =
+      Number(price);
 
-      category: category.trim(),
+    const parsedPricePerSqft =
+      Number(pricePerSqft || 0);
 
-      type: type.trim(),
+    // =================================================
+    // PROPERTY PRICE VALIDATION
+    // =================================================
 
-      subType: subType?.trim() || type.trim(),
+    if (
+      !Number.isFinite(
+        parsedPrice
+      ) ||
+      parsedPrice < 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid property price.",
+      });
+    }
 
-      status: status || "Active",
+    // =================================================
+    // PRICE PER SQFT VALIDATION
+    // =================================================
 
-      statusType: statusType || transactionType || "For Sale",
+    if (
+      !Number.isFinite(
+        parsedPricePerSqft
+      ) ||
+      parsedPricePerSqft < 0 ||
+      parsedPricePerSqft >
+        10000000
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid price per sq.ft.",
+      });
+    }
 
-      projectSize: numberValue(projectSize),
+    // =================================================
+    // PRIMARY IMAGE
+    // =================================================
 
-      completionStatus: completionStatus || "Under Construction",
+    const primaryImage =
+      propertyImages[0] || "";
 
-      shortDescription: shortDescription?.trim() || "",
+    // =================================================
+    // CREATE PROPERTY
+    // =================================================
 
-      featured: parseBoolean(featured, false),
+    const property =
+      await Property.create({
+        // =============================================
+        // BASIC
+        // =============================================
 
-      highlights: parsedHighlights,
+        name: name.trim(),
 
-      // =================================
-      // PRICE
-      // =================================
+        // =============================================
+        // PARENT CATEGORY
+        // =============================================
 
-      price: numberValue(price),
+        categoryParent:
+          categoryParent.trim(),
 
-      pricePerSqft: numberValue(pricePerSqft),
+        // =============================================
+        // CHILD CATEGORY
+        // =============================================
 
-      rera: rera?.trim() || "",
+        category:
+          category.trim(),
 
-      // =================================
-      // LOCATION
-      // =================================
+        type:
+          type.trim(),
 
-      location: location.trim(),
+        subType:
+          subType?.trim() ||
+          type.trim(),
 
-      city: city?.trim() || "",
+        status:
+          status ||
+          "Active",
 
-      state: state?.trim() || "",
+        statusType:
+          statusType ||
+          transactionType ||
+          "For Sale",
 
-      country: country?.trim() || "",
+        projectSize:
+          numberValue(
+            projectSize
+          ),
 
-      // =================================
-      // OVERVIEW
-      // =================================
+        completionStatus:
+          completionStatus ||
+          "Under Construction",
 
-      projectArea: projectArea?.trim() || "",
+        shortDescription:
+          shortDescription?.trim() ||
+          "",
 
-      noOfHouseVilla: numberValue(noOfHouseVilla),
+        featured:
+          parseBoolean(
+            featured,
+            false
+          ),
 
-      totalFloors: numberValue(totalFloors),
+        highlights:
+          parsedHighlights,
 
-      facing: facing?.trim() || "",
+        // =============================================
+        // PRICE
+        // =============================================
 
-      plotArea: plotArea?.trim() || "",
+        price:
+          parsedPrice,
 
-      bedrooms: numberValue(bedrooms),
+        pricePerSqft:
+          parsedPricePerSqft,
 
-      bathrooms: numberValue(bathrooms),
+        rera:
+          rera?.trim() ||
+          "",
 
-      balconies: balconies || "",
+        // =============================================
+        // LOCATION
+        // =============================================
 
-      parking: parking || "",
+        location:
+          location.trim(),
 
-      transactionType: transactionType || statusType || "For Sale",
+        city:
+          city?.trim() ||
+          "",
 
-      propertyOverlooking: propertyOverlooking || "",
+        state:
+          state?.trim() ||
+          "",
 
-      maintenancePerMonth: numberValue(maintenancePerMonth),
+        country:
+          country?.trim() ||
+          "",
 
-      expectedRentalReturn: numberValue(expectedRentalReturn),
+        // =============================================
+        // OVERVIEW
+        // =============================================
 
-      // =================================
-      // QUICK STATS
-      // =================================
+        projectArea:
+          projectArea?.trim() ||
+          "",
 
-      totalUnits: numberValue(totalUnits),
+        noOfHouseVilla:
+          numberValue(
+            noOfHouseVilla
+          ),
 
-      availableUnits: numberValue(availableUnits),
+        totalFloors:
+          numberValue(
+            totalFloors
+          ),
 
-      totalArea: totalArea || projectArea || "",
+        facing:
+          facing?.trim() ||
+          "",
 
-      launchDate: launchDate || null,
+        plotArea:
+          plotArea?.trim() ||
+          "",
 
-      plotSize: plotSize || plotArea || "",
+        bedrooms:
+          numberValue(
+            bedrooms
+          ),
 
-      // =================================
-      // AMENITIES
-      // =================================
+        bathrooms:
+          numberValue(
+            bathrooms
+          ),
 
-      amenities: parsedAmenities,
+        balconies:
+          balconies ||
+          "",
 
-      // =================================
-      // NEARBY PLACES
-      // =================================
+        parking:
+          parking ||
+          "",
 
-      nearbyPlaces: parsedNearbyPlaces,
+        transactionType:
+          transactionType ||
+          statusType ||
+          "For Sale",
 
-      // =================================
-      // IMAGES
-      // =================================
+        propertyOverlooking:
+          propertyOverlooking ||
+          "",
 
-      propertyImages,
+        maintenancePerMonth:
+          numberValue(
+            maintenancePerMonth
+          ),
 
-      primaryImage,
+        expectedRentalReturn:
+          numberValue(
+            expectedRentalReturn
+          ),
 
-      // Keep existing frontend compatible
-      image: primaryImage,
+        // =============================================
+        // QUICK STATS
+        // =============================================
 
-      // =================================
-      // DOCUMENTS
-      // =================================
+        totalUnits:
+          numberValue(
+            totalUnits
+          ),
 
-      documents,
+        availableUnits:
+          numberValue(
+            availableUnits
+          ),
 
-      // =================================
-      // FLOOR PLANS
-      // =================================
+        totalArea:
+          totalArea ||
+          projectArea ||
+          "",
 
-      floorPlans: parsedFloorPlans,
+        launchDate:
+          launchDate ||
+          null,
 
-      // =================================
-      // SEO
-      // =================================
+        plotSize:
+          plotSize ||
+          plotArea ||
+          "",
 
-      metaTitle: metaTitle?.trim() || "",
+        // =============================================
+        // AMENITIES
+        // =============================================
 
-      metaDescription: metaDescription?.trim() || "",
+        amenities:
+          parsedAmenities,
 
-      urlSlug: urlSlug?.trim() || "",
+        // =============================================
+        // NEARBY PLACES
+        // =============================================
 
-      // =================================
-      // PUBLISH
-      // =================================
+        nearbyPlaces:
+          parsedNearbyPlaces,
 
-      publishStatus: parseBoolean(publishStatus, true),
+        // =============================================
+        // IMAGES
+        // =============================================
 
-      publishDate: publishDate || null,
+        propertyImages,
 
-      promoteProperty: parseBoolean(promoteProperty, false),
-    });
+        primaryImage,
+
+        // Keep compatibility with PropertyCard
+        image:
+          primaryImage,
+
+        // =============================================
+        // DOCUMENTS
+        // =============================================
+
+        documents,
+
+        // =============================================
+        // FLOOR PLANS
+        // =============================================
+
+        floorPlans:
+          parsedFloorPlans,
+
+        // =============================================
+        // SEO
+        // =============================================
+
+        metaTitle:
+          metaTitle?.trim() ||
+          "",
+
+        metaDescription:
+          metaDescription?.trim() ||
+          "",
+
+        urlSlug:
+          urlSlug?.trim() ||
+          "",
+
+        // =============================================
+        // PUBLISH
+        // =============================================
+
+        publishStatus:
+          parseBoolean(
+            publishStatus,
+            true
+          ),
+
+        publishDate:
+          publishDate ||
+          null,
+
+        promoteProperty:
+          parseBoolean(
+            promoteProperty,
+            false
+          ),
+      });
+
+    // =================================================
+    // SUCCESS DEBUG
+    // =================================================
+
+    console.log(
+      "================================"
+    );
+
+    console.log(
+      "PROPERTY CREATED SUCCESSFULLY"
+    );
+
+    console.log(
+      "PROPERTY ID:",
+      property._id
+    );
+
+    console.log(
+      "CATEGORY PARENT:",
+      property.categoryParent
+    );
+
+    console.log(
+      "CATEGORY:",
+      property.category
+    );
+
+    console.log(
+      "================================"
+    );
+
+    // =================================================
+    // RESPONSE
+    // =================================================
 
     return res.status(201).json({
       success: true,
 
-      message: "Property created successfully.",
+      message:
+        "Property created successfully.",
 
       property,
     });
   } catch (error) {
-    console.error("CREATE PROPERTY ERROR:", error);
+    console.error(
+      "CREATE PROPERTY ERROR:",
+      error
+    );
 
-    if (error.name === "ValidationError") {
+    // =================================================
+    // MONGOOSE VALIDATION
+    // =================================================
+
+    if (
+      error.name ===
+      "ValidationError"
+    ) {
       return res.status(400).json({
         success: false,
-        message: error.message,
+        message:
+          error.message,
       });
     }
+
+    // =================================================
+    // SERVER ERROR
+    // =================================================
 
     return res.status(500).json({
       success: false,
 
-      message: error.message || "Failed to create property.",
+      message:
+        error.message ||
+        "Failed to create property.",
     });
   }
 };
+
+// =====================================================
+// GET ALL PROPERTIES
+// GET /api/properties
+// =====================================================
 
 // =====================================================
 // GET ALL PROPERTIES
@@ -490,7 +849,12 @@ exports.getProperties = async (req, res) => {
       limit = 10,
       search = "",
       status,
+
+      // CATEGORY
       category,
+      parent, // ⭐ parent category
+
+      // PROPERTY FILTERS
       type,
       propertyType,
       location,
@@ -498,152 +862,278 @@ exports.getProperties = async (req, res) => {
       bedrooms,
       bathrooms,
       amenities,
+
+      // OTHER FILTERS
       featured,
       featuredProperty,
       promoteProperty,
     } = req.query;
 
-    page = Math.max(Number(page) || 1, 1);
+    // =====================================================
+    // PAGINATION
+    // =====================================================
 
+    page = Math.max(Number(page) || 1, 1);
     limit = Math.max(Number(limit) || 10, 1);
 
     const filter = {};
 
-    // =================================================
-    // SEARCH
-    // =================================================
+    console.log("======================================");
+    console.log("PROPERTY QUERY:", req.query);
+    console.log("SELECTED PARENT:", parent);
+    console.log("======================================");
 
-    if (search.trim()) {
+    // =====================================================
+    // SEARCH
+    // =====================================================
+
+    if (search && search.trim()) {
+      const searchText = search.trim();
+
       filter.$or = [
         {
           name: {
-            $regex: search.trim(),
-
+            $regex: searchText,
             $options: "i",
           },
         },
-
         {
           location: {
-            $regex: search.trim(),
-
+            $regex: searchText,
             $options: "i",
           },
         },
-
         {
           city: {
-            $regex: search.trim(),
-
+            $regex: searchText,
             $options: "i",
           },
         },
-
         {
           state: {
-            $regex: search.trim(),
-
+            $regex: searchText,
             $options: "i",
           },
         },
-
         {
           rera: {
-            $regex: search.trim(),
-
+            $regex: searchText,
             $options: "i",
           },
         },
       ];
     }
 
-    // =================================================
+    // =====================================================
     // STATUS
-    // =================================================
+    // =====================================================
 
     if (status && status !== "All") {
       filter.status = status;
     }
 
-    // =================================================
-    // CATEGORY
-    // =================================================
+    // =====================================================
+    // ⭐ PARENT CATEGORY FILTER
+    // =====================================================
+    //
+    // Example:
+    //
+    // Residential
+    //    ├── Apartment
+    //    ├── Villa
+    //    └── Plot
+    //
+    // Property:
+    // category = "Apartment"
+    //
+    // So:
+    // parent Residential
+    //       ↓
+    // find child categories
+    //       ↓
+    // Apartment, Villa, Plot
+    //       ↓
+    // find properties having those categories
+    // =====================================================
 
-    if (category && category !== "All") {
+    if (parent && parent !== "All") {
+      const cleanParent = parent.trim();
+
+      console.log("SEARCHING CATEGORY PARENT:", cleanParent);
+
+      const childCategories = await Category.find({
+        parent: {
+          $regex: `^${escapeRegex(cleanParent)}$`,
+          $options: "i",
+        },
+
+        // If your Category schema uses Active/Inactive
+        status: "Active",
+      }).select("name parent status");
+
+      console.log(
+        "CHILD CATEGORY DOCUMENTS:",
+        childCategories
+      );
+
+      const childCategoryNames = childCategories
+        .map((item) => item.name?.trim())
+        .filter(Boolean);
+
+      console.log(
+        "CHILD CATEGORY NAMES:",
+        childCategoryNames
+      );
+
+      if (childCategoryNames.length > 0) {
+        filter.category = {
+          $in: childCategoryNames.map(
+            (name) =>
+              new RegExp(
+                `^${escapeRegex(name)}$`,
+                "i"
+              )
+          ),
+        };
+      } else {
+        // Parent exists in request but no children found.
+        // Return no properties instead of accidentally
+        // returning every property.
+        filter.category = {
+          $in: [],
+        };
+      }
+    }
+
+    // =====================================================
+    // DIRECT CATEGORY FILTER
+    // =====================================================
+    //
+    // Only use direct category when parent is NOT selected.
+    // Otherwise this would overwrite filter.category created
+    // above.
+    // =====================================================
+
+    if (
+      !parent &&
+      category &&
+      category !== "All"
+    ) {
       filter.category = {
-        $regex: category.replace(/-/g, " "),
+        $regex: category
+          .replace(/-/g, " ")
+          .trim(),
 
         $options: "i",
       };
     }
 
-    // =================================================
+    // =====================================================
     // PROPERTY TYPE
-    // =================================================
+    // =====================================================
 
     const selectedType = type || propertyType;
 
-    if (selectedType && selectedType !== "All") {
+    if (
+      selectedType &&
+      selectedType !== "All"
+    ) {
       filter.type = {
-        $regex: selectedType.replace(/-/g, " "),
+        $regex: selectedType
+          .replace(/-/g, " ")
+          .trim(),
 
         $options: "i",
       };
     }
 
-    // =================================================
+    // =====================================================
     // LOCATION
-    // =================================================
+    // =====================================================
 
-    if (location && location !== "All") {
+    if (
+      location &&
+      location !== "All"
+    ) {
       filter.location = {
-        $regex: location.replace(/-/g, " "),
+        $regex: location
+          .replace(/-/g, " ")
+          .trim(),
 
         $options: "i",
       };
     }
 
-    // =================================================
+    // =====================================================
     // TRANSACTION TYPE
-    // =================================================
+    // =====================================================
 
-    if (transactionType && transactionType !== "All") {
+    if (
+      transactionType &&
+      transactionType !== "All"
+    ) {
       filter.transactionType = {
-        $regex: transactionType,
-
+        $regex: transactionType.trim(),
         $options: "i",
       };
     }
 
-    // =================================================
+    // =====================================================
     // BEDROOMS
-    // =================================================
+    // =====================================================
 
-    if (bedrooms) {
-      filter.bedrooms = {
-        $gte: Number(bedrooms),
-      };
+    if (
+      bedrooms !== undefined &&
+      bedrooms !== null &&
+      bedrooms !== ""
+    ) {
+      const bedroomNumber = Number(bedrooms);
+
+      if (!Number.isNaN(bedroomNumber)) {
+        filter.bedrooms = {
+          $gte: bedroomNumber,
+        };
+      }
     }
 
-    // =================================================
+    // =====================================================
     // BATHROOMS
-    // =================================================
+    // =====================================================
 
-    if (bathrooms) {
-      filter.bathrooms = {
-        $gte: Number(bathrooms),
-      };
+    if (
+      bathrooms !== undefined &&
+      bathrooms !== null &&
+      bathrooms !== ""
+    ) {
+      const bathroomNumber = Number(bathrooms);
+
+      if (!Number.isNaN(bathroomNumber)) {
+        filter.bathrooms = {
+          $gte: bathroomNumber,
+        };
+      }
     }
 
-    // =================================================
+    // =====================================================
     // AMENITIES
-    // =================================================
+    // =====================================================
 
     if (amenities) {
-      const requestedAmenities = amenities
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
+      let requestedAmenities = [];
+
+      // Query example:
+      // ?amenities=Gym,Garage,Balcony
+
+      if (Array.isArray(amenities)) {
+        requestedAmenities = amenities
+          .map((item) => String(item).trim())
+          .filter(Boolean);
+      } else {
+        requestedAmenities = String(amenities)
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
 
       if (requestedAmenities.length > 0) {
         filter.amenities = {
@@ -652,30 +1142,48 @@ exports.getProperties = async (req, res) => {
       }
     }
 
-    // =================================================
+    // =====================================================
     // FEATURED
-    // =================================================
+    // =====================================================
 
-    const featuredValue = featured !== undefined ? featured : featuredProperty;
+    const featuredValue =
+      featured !== undefined
+        ? featured
+        : featuredProperty;
 
     if (featuredValue !== undefined) {
-      filter.featured = featuredValue === true || featuredValue === "true";
+      filter.featured =
+        featuredValue === true ||
+        featuredValue === "true";
     }
 
-    // =================================================
-    // PROMOTED
-    // =================================================
+    // =====================================================
+    // PROMOTED PROPERTY
+    // =====================================================
 
     if (promoteProperty !== undefined) {
       filter.promoteProperty =
-        promoteProperty === true || promoteProperty === "true";
+        promoteProperty === true ||
+        promoteProperty === "true";
     }
 
-    // =================================================
-    // QUERY
-    // =================================================
+    // =====================================================
+    // DEBUG FINAL FILTER
+    // =====================================================
 
-    const total = await Property.countDocuments(filter);
+    console.log("======================================");
+    console.log(
+      "FINAL PROPERTY FILTER:",
+      JSON.stringify(filter, null, 2)
+    );
+    console.log("======================================");
+
+    // =====================================================
+    // QUERY DATABASE
+    // =====================================================
+
+    const total =
+      await Property.countDocuments(filter);
 
     const properties = await Property.find(filter)
       .sort({
@@ -684,6 +1192,10 @@ exports.getProperties = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(limit);
 
+    // =====================================================
+    // RESPONSE
+    // =====================================================
+
     return res.status(200).json({
       success: true,
 
@@ -691,17 +1203,23 @@ exports.getProperties = async (req, res) => {
 
       currentPage: page,
 
-      totalPages: Math.ceil(total / limit),
+      totalPages:
+        Math.ceil(total / limit),
 
       properties,
     });
   } catch (error) {
-    console.error("GET PROPERTIES ERROR:", error);
+    console.error(
+      "GET PROPERTIES ERROR:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
 
-      message: error.message || "Failed to fetch properties.",
+      message:
+        error.message ||
+        "Failed to fetch properties.",
     });
   }
 };

@@ -15,20 +15,26 @@ const BasicInformation = ({
   // STATES
   // ============================================
 
-  const [
-    highlightInput,
-    setHighlightInput,
-  ] = useState("");
+  const [highlightInput, setHighlightInput] =
+    useState("");
 
-  const [
-    categories,
-    setCategories,
-  ] = useState([]);
+  const [categories, setCategories] =
+    useState([]);
 
   const [
     loadingCategories,
     setLoadingCategories,
   ] = useState(false);
+
+  // ============================================
+  // PARENT CATEGORY OPTIONS
+  // ============================================
+
+  const parentOptions = [
+    "Residential",
+    "Commercial",
+    "Rent",
+  ];
 
   // ============================================
   // FETCH CATEGORIES
@@ -39,8 +45,9 @@ const BasicInformation = ({
       try {
         setLoadingCategories(true);
 
-        const response =
-          await API.get("/categories");
+        const response = await API.get(
+          "/categories"
+        );
 
         console.log(
           "CATEGORY API RESPONSE:",
@@ -77,9 +84,7 @@ const BasicInformation = ({
         // ----------------------------------------
 
         else if (
-          Array.isArray(
-            result?.categories
-          )
+          Array.isArray(result?.categories)
         ) {
           categoryData =
             result.categories;
@@ -127,6 +132,52 @@ const BasicInformation = ({
   }, []);
 
   // ============================================
+  // FILTER CATEGORY ACCORDING TO PARENT
+  // ============================================
+
+  const filteredCategories =
+    categories.filter((category) => {
+      // Parent must match
+      const parentMatch =
+        String(
+          category.parent || ""
+        )
+          .trim()
+          .toLowerCase() ===
+        String(
+          propertyData.categoryParent ||
+            ""
+        )
+          .trim()
+          .toLowerCase();
+
+      // If status does not exist,
+      // still allow the category.
+      const statusMatch =
+        !category.status ||
+        category.status === "Active";
+
+      return (
+        parentMatch &&
+        statusMatch
+      );
+    });
+
+  // ============================================
+  // DEBUG
+  // ============================================
+
+  console.log(
+    "SELECTED CATEGORY PARENT:",
+    propertyData.categoryParent
+  );
+
+  console.log(
+    "FILTERED CATEGORIES:",
+    filteredCategories
+  );
+
+  // ============================================
   // INPUT CHANGE
   // ============================================
 
@@ -136,7 +187,9 @@ const BasicInformation = ({
       value,
     } = e.target;
 
-    // Short description maximum 120 characters
+    // ------------------------------------------
+    // SHORT DESCRIPTION
+    // ------------------------------------------
 
     if (
       name === "shortDescription" &&
@@ -144,6 +197,42 @@ const BasicInformation = ({
     ) {
       return;
     }
+
+    // ------------------------------------------
+    // PARENT CATEGORY CHANGE
+    // ------------------------------------------
+    //
+    // When parent changes:
+    //
+    // Residential -> Commercial
+    //
+    // old child category must be cleared.
+    //
+    // Example:
+    //
+    // Residential -> Apartment
+    //
+    // then select Commercial
+    //
+    // Apartment should be removed.
+    // ------------------------------------------
+
+    if (name === "categoryParent") {
+      setPropertyData((previous) => ({
+        ...previous,
+
+        categoryParent: value,
+
+        // Reset child category
+        category: "",
+      }));
+
+      return;
+    }
+
+    // ------------------------------------------
+    // NORMAL INPUT
+    // ------------------------------------------
 
     setPropertyData((previous) => ({
       ...previous,
@@ -184,7 +273,6 @@ const BasicInformation = ({
 
   return (
     <div className="basic-information-container">
-
       <div className="basic-information-card">
 
         {/* ======================================
@@ -192,7 +280,6 @@ const BasicInformation = ({
         ====================================== */}
 
         <div className="basic-information-header">
-
           <svg
             className="basic-information-header-icon"
             xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +298,6 @@ const BasicInformation = ({
           <h2 className="basic-information-header-title">
             Basic Information
           </h2>
-
         </div>
 
         {/* ======================================
@@ -230,7 +316,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group basic-information-full-width">
-
             <label
               htmlFor="propertyName"
               className="basic-information-label"
@@ -256,7 +341,54 @@ const BasicInformation = ({
               className="basic-information-input"
               placeholder="Enter property name"
             />
+          </div>
 
+          {/* ====================================
+              PARENT CATEGORY
+          ==================================== */}
+
+          <div className="basic-information-form-group">
+            <label
+              htmlFor="categoryParent"
+              className="basic-information-label"
+            >
+              Parent Category{" "}
+
+              <span className="basic-information-required">
+                *
+              </span>
+            </label>
+
+            <div className="basic-information-select-wrapper">
+              <select
+                id="categoryParent"
+                name="categoryParent"
+                value={
+                  propertyData.categoryParent ||
+                  ""
+                }
+                onChange={
+                  handleInputChange
+                }
+                className="basic-information-input basic-information-select"
+                required
+              >
+                <option value="">
+                  Select Parent Category
+                </option>
+
+                {parentOptions.map(
+                  (parent) => (
+                    <option
+                      key={parent}
+                      value={parent}
+                    >
+                      {parent}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
           </div>
 
           {/* ====================================
@@ -264,7 +396,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group">
-
             <label
               htmlFor="category"
               className="basic-information-label"
@@ -277,7 +408,6 @@ const BasicInformation = ({
             </label>
 
             <div className="basic-information-select-wrapper">
-
               <select
                 id="category"
                 name="category"
@@ -290,25 +420,27 @@ const BasicInformation = ({
                 }
                 className="basic-information-input basic-information-select"
                 required
+                disabled={
+                  !propertyData.categoryParent ||
+                  loadingCategories
+                }
               >
-
                 <option value="">
-
                   {loadingCategories
                     ? "Loading categories..."
-                    : categories.length ===
-                        0
-                      ? "No categories found"
-                      : "Select category"}
-
+                    : !propertyData.categoryParent
+                      ? "Select parent category first"
+                      : filteredCategories.length ===
+                          0
+                        ? "No categories found"
+                        : "Select category"}
                 </option>
 
-                {categories.map(
+                {filteredCategories.map(
                   (
                     category,
                     index
                   ) => (
-
                     <option
                       key={
                         category._id ||
@@ -322,14 +454,10 @@ const BasicInformation = ({
                       {category.name ||
                         "Unnamed Category"}
                     </option>
-
                   )
                 )}
-
               </select>
-
             </div>
-
           </div>
 
           {/* ====================================
@@ -337,7 +465,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group">
-
             <label
               htmlFor="propertyType"
               className="basic-information-label"
@@ -350,7 +477,6 @@ const BasicInformation = ({
             </label>
 
             <div className="basic-information-select-wrapper">
-
               <select
                 id="propertyType"
                 name="propertyType"
@@ -363,7 +489,6 @@ const BasicInformation = ({
                 }
                 className="basic-information-input basic-information-select"
               >
-
                 <option
                   value=""
                   disabled
@@ -378,11 +503,8 @@ const BasicInformation = ({
                 <option value="Standard House">
                   Standard House
                 </option>
-
               </select>
-
             </div>
-
           </div>
 
           {/* ====================================
@@ -390,7 +512,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group">
-
             <label
               htmlFor="status"
               className="basic-information-label"
@@ -403,7 +524,6 @@ const BasicInformation = ({
             </label>
 
             <div className="basic-information-select-wrapper">
-
               <select
                 id="status"
                 name="status"
@@ -416,7 +536,6 @@ const BasicInformation = ({
                 }
                 className="basic-information-input basic-information-select"
               >
-
                 <option value="Active">
                   Active
                 </option>
@@ -436,11 +555,8 @@ const BasicInformation = ({
                 <option value="Sold">
                   Sold
                 </option>
-
               </select>
-
             </div>
-
           </div>
 
           {/* ====================================
@@ -448,7 +564,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group">
-
             <label
               htmlFor="projectSize"
               className="basic-information-label"
@@ -470,7 +585,6 @@ const BasicInformation = ({
               className="basic-information-input"
               placeholder="e.g. 15000"
             />
-
           </div>
 
           {/* ====================================
@@ -478,7 +592,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group basic-information-full-width">
-
             <label
               htmlFor="completionStatus"
               className="basic-information-label"
@@ -487,13 +600,11 @@ const BasicInformation = ({
             </label>
 
             <div className="basic-information-select-wrapper">
-
               <select
                 id="completionStatus"
                 name="completionStatus"
                 value={
-                  propertyData
-                    .completionStatus ||
+                  propertyData.completionStatus ||
                   "Under Construction"
                 }
                 onChange={
@@ -501,9 +612,12 @@ const BasicInformation = ({
                 }
                 className="basic-information-input basic-information-select"
               >
-
                 <option value="Under Construction">
                   Under Construction
+                </option>
+
+                <option value="Completed">
+                  Completed
                 </option>
 
                 <option value="Ready to Move">
@@ -513,11 +627,8 @@ const BasicInformation = ({
                 <option value="Upcoming">
                   Upcoming
                 </option>
-
               </select>
-
             </div>
-
           </div>
 
           {/* ====================================
@@ -525,7 +636,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group basic-information-full-width">
-
             <label
               htmlFor="shortDescription"
               className="basic-information-label"
@@ -534,13 +644,11 @@ const BasicInformation = ({
             </label>
 
             <div className="basic-information-textarea-wrapper">
-
               <textarea
                 id="shortDescription"
                 name="shortDescription"
                 value={
-                  propertyData
-                    .shortDescription ||
+                  propertyData.shortDescription ||
                   ""
                 }
                 onChange={
@@ -553,19 +661,15 @@ const BasicInformation = ({
               />
 
               <span className="basic-information-char-counter">
-
-                {(
-                  propertyData
-                    .shortDescription ||
-                  ""
-                ).length}
-
+                {
+                  (
+                    propertyData.shortDescription ||
+                    ""
+                  ).length
+                }
                 /120
-
               </span>
-
             </div>
-
           </div>
 
           {/* ====================================
@@ -573,7 +677,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group">
-
             <label
               htmlFor="propertyPrice"
               className="basic-information-label"
@@ -590,8 +693,7 @@ const BasicInformation = ({
               id="propertyPrice"
               name="propertyPrice"
               value={
-                propertyData
-                  .propertyPrice ||
+                propertyData.propertyPrice ||
                 ""
               }
               onChange={
@@ -600,7 +702,6 @@ const BasicInformation = ({
               className="basic-information-input"
               placeholder="e.g. 12500000"
             />
-
           </div>
 
           {/* ====================================
@@ -608,7 +709,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group">
-
             <label
               htmlFor="pricePerSqFt"
               className="basic-information-label"
@@ -620,6 +720,8 @@ const BasicInformation = ({
               type="text"
               id="pricePerSqFt"
               name="pricePerSqFt"
+              min="0"
+              max="10000000"
               value={
                 propertyData.pricePerSqFt ||
                 ""
@@ -630,7 +732,6 @@ const BasicInformation = ({
               className="basic-information-input"
               placeholder="e.g. 8500"
             />
-
           </div>
 
           {/* ====================================
@@ -638,7 +739,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group basic-information-full-width">
-
             <label
               htmlFor="reraNumber"
               className="basic-information-label"
@@ -660,7 +760,6 @@ const BasicInformation = ({
               className="basic-information-input"
               placeholder="Enter RERA registration number"
             />
-
           </div>
 
           {/* ====================================
@@ -668,7 +767,6 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group basic-information-full-width">
-
             <label
               htmlFor="highlights"
               className="basic-information-label"
@@ -680,9 +778,7 @@ const BasicInformation = ({
               type="text"
               id="highlights"
               name="highlights"
-              value={
-                highlightInput
-              }
+              value={highlightInput}
               onChange={(e) =>
                 setHighlightInput(
                   e.target.value
@@ -691,7 +787,6 @@ const BasicInformation = ({
               className="basic-information-input"
               placeholder="Add key feature"
             />
-
           </div>
 
           {/* ====================================
@@ -699,29 +794,20 @@ const BasicInformation = ({
           ==================================== */}
 
           <div className="basic-information-form-group basic-information-full-width">
-
             <button
               type="button"
-              onClick={
-                addHighlight
-              }
+              onClick={addHighlight}
               className="basic-information-add-highlight-btn"
             >
-
               <span className="basic-information-plus-icon">
                 +
               </span>{" "}
-
               Add Highlight
-
             </button>
-
           </div>
 
         </form>
-
       </div>
-
     </div>
   );
 };

@@ -1,7 +1,16 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useState,
+} from "react";
 
-import API, { BASE_URL } from "../../api/axios";
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import API, {
+  BASE_URL,
+} from "../../api/axios";
+
 import "./GridPropertyListing.css";
 
 // React Icons
@@ -15,298 +24,480 @@ import {
   BsBookmarkFill,
   BsPlus,
 } from "react-icons/bs";
-import { BiBed, BiBath, BiArea } from "react-icons/bi";
-import { HiOutlineMapPin } from "react-icons/hi2";
 
-// 24 Unique Property Listings with Distinct Image Sets
-// const PROPERTY_DATABASE = [
-//   {
-//     id: 1,
-//     title: "Modern White Villa",
-//     address: "58 Hullbrook Road, Billesley, B13 0LA",
-//     price: "$7,500",
-//     beds: 4,
-//     baths: 2,
-//     sqft: 1150,
-//     timeAgo: "3 years ago",
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar:
-//       "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150",
-//     images: [
-//       "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   },
-//   {
-//     id: 2,
-//     title: "Suburban Stone House",
-//     address: "24 Green Avenue, Oxford, OX1 2JD",
-//     price: "$8,200",
-//     beds: 5,
-//     baths: 3,
-//     sqft: 1420,
-//     timeAgo: "2 years ago",
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar:
-//       "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150",
-//     images: [
-//       "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/2062426/pexels-photo-2062426.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   },
-//   {
-//     id: 3,
-//     title: "Minimalist Cubical Home",
-//     address: "102 Sunset Boulevard, Bristol, BS1 5TY",
-//     price: "$6,800",
-//     beds: 3,
-//     baths: 2,
-//     sqft: 980,
-//     timeAgo: "1 year ago",
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar:
-//       "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150",
-//     images: [
-//       "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   },
-//   {
-//     id: 4,
-//     title: "Tropical Coastal Estate",
-//     address: "15 Ocean View Road, Brighton, BN1 3PA",
-//     price: "$9,400",
-//     beds: 4,
-//     baths: 3,
-//     sqft: 1600,
-//     timeAgo: "5 months ago",
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar:
-//       "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150",
-//     images: [
-//       "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/221540/pexels-photo-221540.jpeg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   },
-//   {
-//     id: 5,
-//     title: "Luxury Villa with Pool",
-//     address: "88 Palm Street, Miami, FL 33101",
-//     price: "$12,500",
-//     beds: 6,
-//     baths: 4,
-//     sqft: 2200,
-//     timeAgo: "3 weeks ago",
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar:
-//       "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=150",
-//     images: [
-//       "https://images.pexels.com/photos/53610/large-home-residential-house-architecture-53610.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/2459/stairs-design-interior-renovation.jpg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   },
-//   {
-//     id: 6,
-//     title: "Contemporary Glass House",
-//     address: "42 Pine Drive, Seattle, WA 98101",
-//     price: "$8,900",
-//     beds: 4,
-//     baths: 3,
-//     sqft: 1350,
-//     timeAgo: "2 months ago",
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar:
-//       "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=150",
-//     images: [
-//       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   },
-//   {
-//     id: 7,
-//     title: "Elegance Resort Residence",
-//     address: "77 Lakeview Way, Austin, TX 78701",
-//     price: "$11,000",
-//     beds: 5,
-//     baths: 4,
-//     sqft: 1850,
-//     timeAgo: "4 months ago",
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar:
-//       "https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=150",
-//     images: [
-//       "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   },
-//   {
-//     id: 8,
-//     title: "Urban Penthouse Living",
-//     address: "304 High Street, London, EC1A 1BB",
-//     price: "$9,800",
-//     beds: 3,
-//     baths: 2,
-//     sqft: 1200,
-//     timeAgo: "1 week ago",
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar:
-//       "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=150",
-//     images: [
-//       "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   },
-//   ...Array.from({ length: 16 }).map((_, index) => ({
-//     id: index + 9,
-//     title: `Exclusive Residence #${index + 9}`,
-//     address: `${10 + index} Grand Avenue, City Center, UK`,
-//     price: `$${6500 + index * 300}`,
-//     beds: (index % 3) + 2,
-//     baths: (index % 2) + 1,
-//     sqft: 900 + index * 50,
-//     timeAgo: `${index + 1} months ago`,
-//     isFeatured: true,
-//     isForSale: true,
-//     agentAvatar: `https://i.pravatar.cc/150?img=${(index % 12) + 1}`,
-//     images: [
-//       `https://images.pexels.com/photos/${106399 + (index % 5)}/pexels-photo-${106399 + (index % 5)}.jpeg?auto=compress&cs=tinysrgb&w=800`,
-//       "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
-//       "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
-//     ],
-//   })),
-// ];
+import {
+  BiBed,
+  BiBath,
+  BiArea,
+} from "react-icons/bi";
+
+import {
+  HiOutlineMapPin,
+} from "react-icons/hi2";
+
+// =====================================================
+// ITEMS PER PAGE
+// =====================================================
 
 const ITEMS_PER_PAGE = 8;
 
-const formatTimeAgo = (createdAt) => {
+// =====================================================
+// FORMAT TIME AGO
+// =====================================================
+
+const formatTimeAgo = (
+  createdAt
+) => {
   if (!createdAt) {
     return "Recently added";
   }
 
-  const elapsedTime = Date.now() - new Date(createdAt).getTime();
-  const elapsedDays = Math.max(0, Math.floor(elapsedTime / 86400000));
+  const elapsedTime =
+    Date.now() -
+    new Date(
+      createdAt
+    ).getTime();
+
+  const elapsedDays =
+    Math.max(
+      0,
+      Math.floor(
+        elapsedTime / 86400000
+      )
+    );
 
   if (elapsedDays < 1) {
     return "Today";
   }
 
   if (elapsedDays < 30) {
-    return `${elapsedDays} ${elapsedDays === 1 ? "day" : "days"} ago`;
+    return `${elapsedDays} ${
+      elapsedDays === 1
+        ? "day"
+        : "days"
+    } ago`;
   }
 
-  const elapsedMonths = Math.floor(elapsedDays / 30);
-  return `${elapsedMonths} ${elapsedMonths === 1 ? "month" : "months"} ago`;
+  const elapsedMonths =
+    Math.floor(
+      elapsedDays / 30
+    );
+
+  return `${elapsedMonths} ${
+    elapsedMonths === 1
+      ? "month"
+      : "months"
+  } ago`;
 };
 
-const normalizeProperty = (property) => {
-  const image = property.image
-    ? `${BASE_URL}${property.image}`
-    : "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800";
+// =====================================================
+// NORMALIZE PROPERTY
+// =====================================================
+
+const normalizeProperty = (
+  property
+) => {
+  // ============================================
+  // PROPERTY IMAGES
+  // ============================================
+
+  let images = [];
+
+  if (
+    Array.isArray(
+      property.propertyImages
+    ) &&
+    property.propertyImages.length >
+      0
+  ) {
+    images =
+      property.propertyImages.map(
+        (img) => {
+          if (!img) {
+            return "";
+          }
+
+          // ====================================
+          // STRING IMAGE
+          // ====================================
+
+          if (
+            typeof img ===
+            "string"
+          ) {
+            if (
+              img.startsWith(
+                "http://"
+              ) ||
+              img.startsWith(
+                "https://"
+              )
+            ) {
+              return img;
+            }
+
+            return `${BASE_URL}${img}`;
+          }
+
+          // ====================================
+          // OBJECT IMAGE
+          // ====================================
+
+          if (
+            typeof img ===
+            "object"
+          ) {
+            const imagePath =
+              img.url ||
+              img.path ||
+              img.file ||
+              img.image ||
+              "";
+
+            if (!imagePath) {
+              return "";
+            }
+
+            if (
+              imagePath.startsWith(
+                "http://"
+              ) ||
+              imagePath.startsWith(
+                "https://"
+              )
+            ) {
+              return imagePath;
+            }
+
+            return `${BASE_URL}${imagePath}`;
+          }
+
+          return "";
+        }
+      );
+
+    images =
+      images.filter(Boolean);
+  }
+
+  // ============================================
+  // FALLBACK PRIMARY IMAGE
+  // ============================================
+
+  if (
+    images.length === 0 &&
+    property.primaryImage
+  ) {
+    images = [
+      property.primaryImage.startsWith(
+        "http"
+      )
+        ? property.primaryImage
+        : `${BASE_URL}${property.primaryImage}`,
+    ];
+  }
+
+  // ============================================
+  // FALLBACK IMAGE
+  // ============================================
+
+  if (
+    images.length === 0 &&
+    property.image
+  ) {
+    images = [
+      property.image.startsWith(
+        "http"
+      )
+        ? property.image
+        : `${BASE_URL}${property.image}`,
+    ];
+  }
+
+  // ============================================
+  // FINAL FALLBACK
+  // ============================================
+
+  if (images.length === 0) {
+    images = [
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ];
+  }
+
+  // ============================================
+  // PRICE
+  // ============================================
+
+  const priceValue =
+    property.price ??
+    property.propertyPrice ??
+    0;
+
+  // ============================================
+  // RETURN NORMALIZED PROPERTY
+  // ============================================
 
   return {
     ...property,
-    id: property._id,
-    title: property.name,
-    address: [property.location, property.city, property.state]
+
+    // IMPORTANT:
+    // MongoDB _id converted to id
+    id:
+      property._id ||
+      property.id,
+
+    title:
+      property.name ||
+      property.propertyName ||
+      "Unnamed Property",
+
+    address: [
+      property.location,
+      property.city,
+      property.state,
+    ]
       .filter(Boolean)
       .join(", "),
-    price: property.price
-      ? `$${Number(property.price).toLocaleString()}`
+
+    price: priceValue
+      ? `₹${Number(
+          priceValue
+        ).toLocaleString(
+          "en-IN"
+        )}`
       : "Price on request",
-    beds: property.bedrooms || 0,
-    baths: property.bathrooms || 0,
-    sqft: property.totalArea || property.plotSize || 0,
-    timeAgo: formatTimeAgo(property.createdAt),
-    isFeatured: property.featured,
-    isForSale: property.statusType === "For Sale",
-    agentAvatar: image,
-    images: [image],
+
+    rawPrice:
+      Number(priceValue) || 0,
+
+    beds:
+      property.bedrooms || 0,
+
+    baths:
+      property.bathrooms || 0,
+
+    sqft:
+      property.totalArea ||
+      property.plotArea ||
+      property.plotSize ||
+      property.projectSize ||
+      0,
+
+    timeAgo:
+      formatTimeAgo(
+        property.createdAt
+      ),
+
+    isFeatured:
+      property.featured ??
+      property.featuredProperty ??
+      false,
+
+    isForSale:
+      property.statusType ===
+        "For Sale" ||
+      property.transactionType ===
+        "For Sale",
+
+    agentAvatar: images[0],
+
+    images,
   };
 };
 
-const PropertyCard = ({ property }) => {
-  const navigate = useNavigate();
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+// =====================================================
+// PROPERTY CARD
+// =====================================================
 
-  const handlePrevImage = (e) => {
-    e.stopPropagation();
-    setCurrentImgIndex((prev) =>
-      prev === 0 ? property.images.length - 1 : prev - 1,
+const PropertyCard = ({
+  property,
+}) => {
+  const navigate =
+    useNavigate();
+
+  const [
+    currentImgIndex,
+    setCurrentImgIndex,
+  ] = useState(0);
+
+  const [
+    isBookmarked,
+    setIsBookmarked,
+  ] = useState(false);
+
+  // ===================================================
+  // PREVIOUS IMAGE
+  // ===================================================
+
+  const handlePrevImage = (
+    event
+  ) => {
+    event.stopPropagation();
+
+    setCurrentImgIndex(
+      (previous) =>
+        previous === 0
+          ? property.images
+              .length - 1
+          : previous - 1
     );
   };
 
-  const handleNextImage = (e) => {
-    e.stopPropagation();
-    setCurrentImgIndex((prev) =>
-      prev === property.images.length - 1 ? 0 : prev + 1,
+  // ===================================================
+  // NEXT IMAGE
+  // ===================================================
+
+  const handleNextImage = (
+    event
+  ) => {
+    event.stopPropagation();
+
+    setCurrentImgIndex(
+      (previous) =>
+        previous ===
+        property.images.length -
+          1
+          ? 0
+          : previous + 1
     );
   };
+
+  // ===================================================
+  // OPEN PROPERTY DETAILS BY ID
+  // ===================================================
+
+  const handleOpenProperty =
+    () => {
+      const propertyId =
+        property._id ||
+        property.id;
+
+      if (!propertyId) {
+        console.error(
+          "PROPERTY ID NOT FOUND:",
+          property
+        );
+
+        return;
+      }
+
+      console.log(
+        "================================"
+      );
+
+      console.log(
+        "OPEN PROPERTY DETAILS"
+      );
+
+      console.log(
+        "PROPERTY ID:",
+        propertyId
+      );
+
+      console.log(
+        "PROPERTY:",
+        property
+      );
+
+      console.log(
+        "================================"
+      );
+
+      navigate(
+        `/property-details/${propertyId}`
+      );
+    };
+
+  // ===================================================
+  // UI
+  // ===================================================
 
   return (
     <div
       className="GridPropertyListing-card"
-      onClick={() => navigate("/property-details", { state: { property } })}
+      onClick={
+        handleOpenProperty
+      }
       role="button"
       tabIndex={0}
       onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          navigate("/property-details", { state: { property } });
+        if (
+          event.key ===
+            "Enter" ||
+          event.key === " "
+        ) {
+          handleOpenProperty();
         }
       }}
     >
-      {/* Image Container */}
+      {/* ==================================== */}
+      {/* IMAGE CONTAINER */}
+      {/* ==================================== */}
+
       <div className="GridPropertyListing-image-container">
         <img
-          src={property.images[currentImgIndex]}
+          src={
+            property.images[
+              currentImgIndex
+            ]
+          }
           alt={property.title}
           className="GridPropertyListing-card-img"
         />
 
-        {/* Badges */}
+        {/* ================================== */}
+        {/* BADGES */}
+        {/* ================================== */}
+
         <div className="GridPropertyListing-badges">
           {property.isFeatured && (
-            <span className="GridPropertyListing-badge-featured">Featured</span>
+            <span className="GridPropertyListing-badge-featured">
+              Featured
+            </span>
           )}
+
           {property.isForSale && (
-            <span className="GridPropertyListing-badge-sale">For Sale</span>
+            <span className="GridPropertyListing-badge-sale">
+              For Sale
+            </span>
           )}
         </div>
 
-        {/* Bookmark Button */}
+        {/* ================================== */}
+        {/* BOOKMARK BUTTON */}
+        {/* ================================== */}
+
         <button
           className={`GridPropertyListing-bookmark-btn ${
-            isBookmarked ? "active" : ""
+            isBookmarked
+              ? "active"
+              : ""
           }`}
-          onClick={(event) => {
+          onClick={(
+            event
+          ) => {
             event.stopPropagation();
-            setIsBookmarked(!isBookmarked);
+
+            setIsBookmarked(
+              !isBookmarked
+            );
           }}
         >
           <BsBookmarkFill />
         </button>
 
-        {/* Hover Controls */}
+        {/* ================================== */}
+        {/* HOVER CONTROLS */}
+        {/* ================================== */}
+
         <div className="GridPropertyListing-overlay">
           <button
             className="GridPropertyListing-plus-icon-btn"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(
+              event
+            ) => {
+              event.stopPropagation();
+            }}
           >
             <BsPlusLg />
           </button>
@@ -314,13 +505,18 @@ const PropertyCard = ({ property }) => {
           <div className="GridPropertyListing-slider-arrows">
             <button
               className="GridPropertyListing-arrow-btn"
-              onClick={handlePrevImage}
+              onClick={
+                handlePrevImage
+              }
             >
               <BsChevronLeft />
             </button>
+
             <button
               className="GridPropertyListing-arrow-btn"
-              onClick={handleNextImage}
+              onClick={
+                handleNextImage
+              }
             >
               <BsChevronRight />
             </button>
@@ -328,49 +524,99 @@ const PropertyCard = ({ property }) => {
         </div>
       </div>
 
-      {/* Property Details */}
+      {/* ==================================== */}
+      {/* PROPERTY DETAILS */}
+      {/* ==================================== */}
+
       <div className="GridPropertyListing-card-content">
-        <h3 className="GridPropertyListing-card-title">{property.title}</h3>
+        <h3 className="GridPropertyListing-card-title">
+          {property.title}
+        </h3>
+
+        {/* ================================== */}
+        {/* ADDRESS */}
+        {/* ================================== */}
 
         <div className="GridPropertyListing-card-address">
           <HiOutlineMapPin className="GridPropertyListing-location-icon" />
-          <span>{property.address}</span>
+
+          <span>
+            {property.address}
+          </span>
         </div>
 
-        <div className="GridPropertyListing-card-price">{property.price}</div>
+        {/* ================================== */}
+        {/* PRICE */}
+        {/* ================================== */}
+
+        <div className="GridPropertyListing-card-price">
+          {property.price}
+        </div>
+
+        {/* ================================== */}
+        {/* SPECS */}
+        {/* ================================== */}
 
         <div className="GridPropertyListing-card-specs">
           <span className="GridPropertyListing-spec-item">
             <BiBed className="GridPropertyListing-spec-icon" />
-            Beds: <strong>{property.beds}</strong>
+
+            Beds:{" "}
+            <strong>
+              {property.beds}
+            </strong>
           </span>
+
           <span className="GridPropertyListing-spec-item">
             <BiBath className="GridPropertyListing-spec-icon" />
-            Baths: <strong>{property.baths}</strong>
+
+            Baths:{" "}
+            <strong>
+              {property.baths}
+            </strong>
           </span>
+
           <span className="GridPropertyListing-spec-item">
             <BiArea className="GridPropertyListing-spec-icon" />
-            Sqft: <strong>{property.sqft}</strong>
+
+            Sqft:{" "}
+            <strong>
+              {property.sqft}
+            </strong>
           </span>
         </div>
+
+        {/* ================================== */}
+        {/* FOOTER */}
+        {/* ================================== */}
 
         <div className="GridPropertyListing-card-footer">
           <button
             className="GridPropertyListing-compare-btn"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(
+              event
+            ) => {
+              event.stopPropagation();
+            }}
           >
             <BsPlus className="GridPropertyListing-compare-icon" />
+
             Compare
           </button>
 
           <div className="GridPropertyListing-agent-info">
             <img
-              src={property.agentAvatar}
+              src={
+                property.agentAvatar
+              }
               alt="Agent Avatar"
               className="GridPropertyListing-agent-avatar"
             />
+
             <span className="GridPropertyListing-time-posted">
-              {property.timeAgo}
+              {
+                property.timeAgo
+              }
             </span>
           </div>
         </div>
@@ -379,183 +625,544 @@ const PropertyCard = ({ property }) => {
   );
 };
 
-const GridPropertyListing = ({ filters = {} }) => {
-  const [properties, setProperties] = useState([]);
+// =====================================================
+// GRID PROPERTY LISTING
+// =====================================================
 
-  const [loading, setLoading] = useState(false);
+const GridPropertyListing = ({
+  filters = {},
+}) => {
+  // ===================================================
+  // STATE
+  // ===================================================
 
-  const [error, setError] = useState("");
+  const [
+    properties,
+    setProperties,
+  ] = useState([]);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
 
-  const [viewMode, setViewMode] = useState("grid");
+  const [
+    error,
+    setError,
+  ] = useState("");
 
-  const [sortOrder, setSortOrder] = useState("Default order");
+  const [
+    currentPage,
+    setCurrentPage,
+  ] = useState(1);
 
-  const fetchProperties = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  const [
+    viewMode,
+    setViewMode,
+  ] = useState("grid");
 
-      const response = await API.get("/properties", {
-        params: {
+  const [
+    sortOrder,
+    setSortOrder,
+  ] = useState(
+    "Default order"
+  );
+
+  // ===================================================
+  // FETCH PROPERTIES
+  // ===================================================
+
+  const fetchProperties =
+    async () => {
+      try {
+        setLoading(true);
+
+        setError("");
+
+        // =============================================
+        // REQUEST PARAMS
+        // =============================================
+
+        const params = {
           page: 1,
           limit: 1000,
           ...filters,
-          amenities: filters.amenities?.join(","),
-        },
-      });
+        };
 
-      console.log("PROPERTY RESPONSE:", response.data);
+        // =============================================
+        // AMENITIES
+        // =============================================
 
-      const propertyData =
-        response.data?.properties || response.data?.data || response.data || [];
+        if (
+          Array.isArray(
+            filters.amenities
+          ) &&
+          filters.amenities
+            .length > 0
+        ) {
+          params.amenities =
+            filters.amenities.join(
+              ","
+            );
+        } else {
+          delete params.amenities;
+        }
 
-      console.log("PROPERTY ARRAY:", propertyData);
+        console.log(
+          "================================"
+        );
 
-      setProperties(
-        Array.isArray(propertyData)
-          ? propertyData.map(normalizeProperty)
-          : [],
-      );
-    } catch (error) {
-      console.error("FETCH PROPERTIES ERROR:", error.response?.data || error);
+        console.log(
+          "PROPERTY FILTERS:",
+          filters
+        );
 
-      setProperties([]);
+        console.log(
+          "PROPERTY API PARAMS:",
+          params
+        );
 
-      setError(error.response?.data?.message || "Failed to load properties");
-    } finally {
-      setLoading(false);
-    }
-  };
+        console.log(
+          "================================"
+        );
+
+        // =============================================
+        // API
+        // =============================================
+
+        const response =
+          await API.get(
+            "/properties",
+            {
+              params,
+            }
+          );
+
+        console.log(
+          "PROPERTY RESPONSE:",
+          response.data
+        );
+
+        // =============================================
+        // GET PROPERTY ARRAY
+        // =============================================
+
+        const propertyData =
+          response.data
+            ?.properties ||
+          response.data?.data ||
+          response.data ||
+          [];
+
+        console.log(
+          "PROPERTY ARRAY:",
+          propertyData
+        );
+
+        // =============================================
+        // NORMALIZE
+        // =============================================
+
+        const normalizedProperties =
+          Array.isArray(
+            propertyData
+          )
+            ? propertyData.map(
+                normalizeProperty
+              )
+            : [];
+
+        console.log(
+          "NORMALIZED PROPERTIES:",
+          normalizedProperties
+        );
+
+        setProperties(
+          normalizedProperties
+        );
+      } catch (error) {
+        console.error(
+          "FETCH PROPERTIES ERROR:",
+          error.response?.data ||
+            error
+        );
+
+        setProperties([]);
+
+        setError(
+          error.response?.data
+            ?.message ||
+            "Failed to load properties"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  // ===================================================
+  // FETCH WHEN FILTER CHANGES
+  // ===================================================
 
   useEffect(() => {
     fetchProperties();
+
     setCurrentPage(1);
   }, [filters]);
 
-  const totalPages = Math.ceil(properties.length / ITEMS_PER_PAGE);
+  // ===================================================
+  // TOTAL PAGES
+  // ===================================================
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const totalPages =
+    Math.ceil(
+      properties.length /
+        ITEMS_PER_PAGE
+    );
 
-  const sortedProperties = [...properties].sort((firstProperty, secondProperty) => {
-    if (sortOrder === "Price: Low to High") {
-      return Number(firstProperty.price.replace(/[$,]/g, "")) -
-        Number(secondProperty.price.replace(/[$,]/g, ""));
+  // ===================================================
+  // START INDEX
+  // ===================================================
+
+  const startIndex =
+    (currentPage - 1) *
+    ITEMS_PER_PAGE;
+
+  // ===================================================
+  // SORT PROPERTIES
+  // ===================================================
+
+  const sortedProperties = [
+    ...properties,
+  ].sort(
+    (
+      firstProperty,
+      secondProperty
+    ) => {
+      // =============================================
+      // LOW TO HIGH
+      // =============================================
+
+      if (
+        sortOrder ===
+        "Price: Low to High"
+      ) {
+        return (
+          firstProperty.rawPrice -
+          secondProperty.rawPrice
+        );
+      }
+
+      // =============================================
+      // HIGH TO LOW
+      // =============================================
+
+      if (
+        sortOrder ===
+        "Price: High to Low"
+      ) {
+        return (
+          secondProperty.rawPrice -
+          firstProperty.rawPrice
+        );
+      }
+
+      // =============================================
+      // NEWEST
+      // =============================================
+
+      if (
+        sortOrder ===
+        "Newest First"
+      ) {
+        return (
+          new Date(
+            secondProperty.createdAt
+          ) -
+          new Date(
+            firstProperty.createdAt
+          )
+        );
+      }
+
+      return 0;
     }
-
-    if (sortOrder === "Price: High to Low") {
-      return Number(secondProperty.price.replace(/[$,]/g, "")) -
-        Number(firstProperty.price.replace(/[$,]/g, ""));
-    }
-
-    if (sortOrder === "Newest First") {
-      return new Date(secondProperty.createdAt) - new Date(firstProperty.createdAt);
-    }
-
-    return 0;
-  });
-
-  const currentProperties = sortedProperties.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE,
   );
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
+  // ===================================================
+  // CURRENT PAGE PROPERTIES
+  // ===================================================
+
+  const currentProperties =
+    sortedProperties.slice(
+      startIndex,
+      startIndex +
+        ITEMS_PER_PAGE
+    );
+
+  // ===================================================
+  // PAGE CHANGE
+  // ===================================================
+
+  const handlePageChange = (
+    page
+  ) => {
+    if (
+      page >= 1 &&
+      page <= totalPages
+    ) {
       setCurrentPage(page);
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
   };
+
+  // ===================================================
+  // UI
+  // ===================================================
 
   return (
     <section className="GridPropertyListing">
       <div className="GridPropertyListing-container">
-        {/* Top Header Controls */}
+
+        {/* ==================================== */}
+        {/* TOP HEADER CONTROLS */}
+        {/* ==================================== */}
+
         <div className="GridPropertyListing-header">
+
           <div className="GridPropertyListing-header-left">
-            {/* Title styled matching reference image: "Property" (Green) + "Listing" (Dark Navy/Black) */}
+
             <h2 className="GridPropertyListing-main-title">
-              <span className="GridPropertyListing-title-green">Property</span>{" "}
-              <span className="GridPropertyListing-title-dark">Listing</span>
+
+              <span className="GridPropertyListing-title-green">
+                Property
+              </span>{" "}
+
+              <span className="GridPropertyListing-title-dark">
+                Listing
+              </span>
+
             </h2>
+
             <span className="GridPropertyListing-count-text">
-              There are currently {properties.length} properties.
+
+              There are currently{" "}
+              {properties.length}{" "}
+              properties.
+
             </span>
+
           </div>
 
+          {/* ================================== */}
+          {/* RIGHT HEADER */}
+          {/* ================================== */}
+
           <div className="GridPropertyListing-header-right">
+
+            {/* ================================ */}
+            {/* VIEW TOGGLE */}
+            {/* ================================ */}
+
             <div className="GridPropertyListing-view-toggle">
+
               <button
                 className={`GridPropertyListing-toggle-btn ${
-                  viewMode === "grid" ? "active" : ""
+                  viewMode ===
+                  "grid"
+                    ? "active"
+                    : ""
                 }`}
-                onClick={() => setViewMode("grid")}
+                onClick={() =>
+                  setViewMode(
+                    "grid"
+                  )
+                }
               >
                 <BsGrid3X3GapFill />
               </button>
+
               <button
                 className={`GridPropertyListing-toggle-btn ${
-                  viewMode === "list" ? "active" : ""
+                  viewMode ===
+                  "list"
+                    ? "active"
+                    : ""
                 }`}
-                onClick={() => setViewMode("list")}
+                onClick={() =>
+                  setViewMode(
+                    "list"
+                  )
+                }
               >
                 <BsListUl />
               </button>
+
             </div>
+
+            {/* ================================ */}
+            {/* SORT */}
+            {/* ================================ */}
 
             <div className="GridPropertyListing-sort-box">
+
               <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value)}
+                value={
+                  sortOrder
+                }
+                onChange={(e) =>
+                  setSortOrder(
+                    e.target.value
+                  )
+                }
                 className="GridPropertyListing-sort-select"
               >
-                <option value="Default order">Default order</option>
-                <option value="Price: Low to High">Price: Low to High</option>
-                <option value="Price: High to Low">Price: High to Low</option>
-                <option value="Newest First">Newest First</option>
+                <option value="Default order">
+                  Default order
+                </option>
+
+                <option value="Price: Low to High">
+                  Price: Low to High
+                </option>
+
+                <option value="Price: High to Low">
+                  Price: High to Low
+                </option>
+
+                <option value="Newest First">
+                  Newest First
+                </option>
+
               </select>
+
               <BsChevronDown className="GridPropertyListing-sort-icon" />
+
             </div>
+
           </div>
+
         </div>
 
-        {/* Grid Layout */}
-        <div className={`GridPropertyListing-grid ${viewMode}`}>
-          {currentProperties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
-        </div>
+        {/* ==================================== */}
+        {/* LOADING */}
+        {/* ==================================== */}
 
-        {/* Pagination Bar */}
-        <div className="GridPropertyListing-pagination">
-          <button
-            className="GridPropertyListing-page-nav"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <BsChevronLeft />
-          </button>
+        {loading && (
+          <div>
+            Loading properties...
+          </div>
+        )}
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              className={`GridPropertyListing-page-btn ${
-                currentPage === page ? "active" : ""
-              }`}
-              onClick={() => handlePageChange(page)}
+        {/* ==================================== */}
+        {/* ERROR */}
+        {/* ==================================== */}
+
+        {!loading &&
+          error && (
+            <div>
+              {error}
+            </div>
+          )}
+
+        {/* ==================================== */}
+        {/* GRID */}
+        {/* ==================================== */}
+
+        {!loading &&
+          !error && (
+            <div
+              className={`GridPropertyListing-grid ${viewMode}`}
             >
-              {page}
-            </button>
-          ))}
+              {currentProperties.map(
+                (property) => (
+                  <PropertyCard
+                    key={
+                      property.id
+                    }
+                    property={
+                      property
+                    }
+                  />
+                )
+              )}
+            </div>
+          )}
 
-          <button
-            className="GridPropertyListing-page-nav"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            <BsChevronRight />
-          </button>
-        </div>
+        {/* ==================================== */}
+        {/* PAGINATION */}
+        {/* ==================================== */}
+
+        {!loading &&
+          !error &&
+          totalPages > 0 && (
+            <div className="GridPropertyListing-pagination">
+
+              <button
+                className="GridPropertyListing-page-nav"
+                onClick={() =>
+                  handlePageChange(
+                    currentPage -
+                      1
+                  )
+                }
+                disabled={
+                  currentPage ===
+                  1
+                }
+              >
+                <BsChevronLeft />
+              </button>
+
+              {Array.from(
+                {
+                  length:
+                    totalPages,
+                },
+                (_, index) =>
+                  index + 1
+              ).map(
+                (page) => (
+                  <button
+                    key={page}
+                    className={`GridPropertyListing-page-btn ${
+                      currentPage ===
+                      page
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handlePageChange(
+                        page
+                      )
+                    }
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+
+              <button
+                className="GridPropertyListing-page-nav"
+                onClick={() =>
+                  handlePageChange(
+                    currentPage +
+                      1
+                  )
+                }
+                disabled={
+                  currentPage ===
+                  totalPages
+                }
+              >
+                <BsChevronRight />
+              </button>
+
+            </div>
+          )}
+
       </div>
     </section>
   );
