@@ -25,6 +25,16 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/properties" element={<PropertyGrid />} />
 
+        
+
+
+        <Route path="/property-details" element={<PropertyDetails/>} />
+        <Route path="/blogposting" element={<Blog/>} />
+        <Route path="/blogmanagement/:id" element={<BlogDetails/>} />
+        <Route path="/real" element={<RealNear/>} />
+        <Route path="/our-team" element={<OurTeam/>} />
+        <Route path="/sell-property" element={<SellProperty/>} />
+        <Route path="/rent-property" element={<RentProperty/>} />
         <Route path="/property-details/:id" element={<PropertyDetails />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/Faq" element={<Faq />} />
