@@ -150,43 +150,7 @@ const prepareFloorPlans = (floorPlansValue, uploadedImages = []) => {
 
 exports.createProperty = async (req, res) => {
   try {
-    console.log("================================");
-    console.log("CREATE PROPERTY REQUEST");
-
-    console.log("PROPERTY BODY:", req.body);
-
-    console.log(
-      "CATEGORY PARENT:",
-      req.body.categoryParent
-    );
-
-    console.log(
-      "CATEGORY:",
-      req.body.category
-    );
-
-    console.log(
-      "PROPERTY FILES:",
-      req.files
-    );
-
-    console.log(
-      "PROCESSED PROPERTY IMAGES:",
-      req.processedPropertyImages
-    );
-
-    console.log(
-      "PROCESSED DOCUMENTS:",
-      req.processedDocuments
-    );
-
-    console.log(
-      "PROCESSED FLOOR PLAN IMAGES:",
-      req.processedFloorPlanImages
-    );
-
-    console.log("================================");
-
+    
     // =================================================
     // REQUEST BODY
     // =================================================
@@ -758,32 +722,7 @@ exports.createProperty = async (req, res) => {
     // SUCCESS DEBUG
     // =================================================
 
-    console.log(
-      "================================"
-    );
-
-    console.log(
-      "PROPERTY CREATED SUCCESSFULLY"
-    );
-
-    console.log(
-      "PROPERTY ID:",
-      property._id
-    );
-
-    console.log(
-      "CATEGORY PARENT:",
-      property.categoryParent
-    );
-
-    console.log(
-      "CATEGORY:",
-      property.category
-    );
-
-    console.log(
-      "================================"
-    );
+   
 
     // =================================================
     // RESPONSE
@@ -878,11 +817,6 @@ exports.getProperties = async (req, res) => {
 
     const filter = {};
 
-    console.log("======================================");
-    console.log("PROPERTY QUERY:", req.query);
-    console.log("SELECTED PARENT:", parent);
-    console.log("======================================");
-
     // =====================================================
     // SEARCH
     // =====================================================
@@ -959,8 +893,6 @@ exports.getProperties = async (req, res) => {
     if (parent && parent !== "All") {
       const cleanParent = parent.trim();
 
-      console.log("SEARCHING CATEGORY PARENT:", cleanParent);
-
       const childCategories = await Category.find({
         parent: {
           $regex: `^${escapeRegex(cleanParent)}$`,
@@ -971,19 +903,12 @@ exports.getProperties = async (req, res) => {
         status: "Active",
       }).select("name parent status");
 
-      console.log(
-        "CHILD CATEGORY DOCUMENTS:",
-        childCategories
-      );
+     
 
       const childCategoryNames = childCategories
         .map((item) => item.name?.trim())
         .filter(Boolean);
 
-      console.log(
-        "CHILD CATEGORY NAMES:",
-        childCategoryNames
-      );
 
       if (childCategoryNames.length > 0) {
         filter.category = {
@@ -1170,13 +1095,6 @@ exports.getProperties = async (req, res) => {
     // =====================================================
     // DEBUG FINAL FILTER
     // =====================================================
-
-    console.log("======================================");
-    console.log(
-      "FINAL PROPERTY FILTER:",
-      JSON.stringify(filter, null, 2)
-    );
-    console.log("======================================");
 
     // =====================================================
     // QUERY DATABASE

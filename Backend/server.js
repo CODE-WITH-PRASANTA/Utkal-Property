@@ -17,6 +17,7 @@ const userRoutes = require("./src/routes/userRoutes");
 const amenityRoutes = require("./src/routes/amenityRoutes");
 
 const blogRoutes = require("./src/routes/blogRoutes");
+const propertyReviewRoutes = require("./src/routes/propertyReview.routes");
 
 // Initialize MongoDB Connection
 connectDB();
@@ -37,6 +38,8 @@ app.use("/api/team", teamRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/locations", locationRoutes);
+
+app.use("/api/property-reviews", propertyReviewRoutes);
 
 app.use("/api/amenities", amenityRoutes);
 app.use("/api/users", userRoutes);

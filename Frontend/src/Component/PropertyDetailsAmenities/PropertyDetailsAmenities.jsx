@@ -1,7 +1,4 @@
-import {
-  useState,
-  useEffect,
-} from "react";
+import { useState, useEffect } from "react";
 
 import {
   FaSwimmingPool,
@@ -27,9 +24,9 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
-import {
-  MdOutlineCurtains,
-} from "react-icons/md";
+import { MdOutlineCurtains } from "react-icons/md";
+
+import API from "../../api/Axios";
 
 import "./PropertyDetailsAmenities.css";
 
@@ -37,183 +34,101 @@ import "./PropertyDetailsAmenities.css";
 // BACKEND URL
 // =====================================================
 
-const BACKEND_URL =
-  "http://localhost:5000";
+const BACKEND_URL = "http://localhost:5000";
 
 // =====================================================
 // AMENITY ICON MAP
 // =====================================================
-//
-// Property stores:
-// amenities: ["Swimming Pool", "Gym", "Security"]
-//
-// We use the amenity name to choose its icon.
-// =====================================================
 
 const AMENITY_ICON_MAP = {
-  "Swimming Pool": (
-    <FaSwimmingPool />
-  ),
+  "Swimming Pool": <FaSwimmingPool />,
 
-  "Children Play Area": (
-    <FaChild />
-  ),
+  "Children Play Area": <FaChild />,
 
-  "Children's Play Area": (
-    <FaChild />
-  ),
+  "Children's Play Area": <FaChild />,
 
-  "Kids Play Area": (
-    <FaTableTennis />
-  ),
+  "Kids Play Area": <FaTableTennis />,
 
-  "Kids' Play Area": (
-    <FaTableTennis />
-  ),
+  "Kids' Play Area": <FaTableTennis />,
 
-  "Conference Rooms": (
-    <FaDoorClosed />
-  ),
+  "Conference Rooms": <FaDoorClosed />,
 
-  "Conference Room": (
-    <FaDoorClosed />
-  ),
+  "Conference Room": <FaDoorClosed />,
 
-  "Reserved Parking": (
-    <FaParking />
-  ),
+  "Reserved Parking": <FaParking />,
 
-  Parking: (
-    <FaParking />
-  ),
+  Parking: <FaParking />,
 
-  "Basketball Court": (
-    <FaBasketballBall />
-  ),
+  "Basketball Court": <FaBasketballBall />,
 
-  "Table Tennis": (
-    <FaTableTennis />
-  ),
+  "Table Tennis": <FaTableTennis />,
 
-  "Pet Friendly": (
-    <FaDog />
-  ),
+  "Pet Friendly": <FaDog />,
 
-  Security: (
-    <FaShieldAlt />
-  ),
+  Security: <FaShieldAlt />,
 
-  "24x7 Security": (
-    <FaShieldAlt />
-  ),
+  "24x7 Security": <FaShieldAlt />,
 
-  CCTV: (
-    <FaVideo />
-  ),
+  CCTV: <FaVideo />,
 
-  "CCTV Camera": (
-    <FaVideo />
-  ),
+  "CCTV Camera": <FaVideo />,
 
-  "Guest Parking": (
-    <FaCar />
-  ),
+  "Guest Parking": <FaCar />,
 
-  "Multipurpose Hall": (
-    <MdOutlineCurtains />
-  ),
+  "Multipurpose Hall": <MdOutlineCurtains />,
 
-  "Club House": (
-    <FaCheckCircle />
-  ),
+  "Club House": <FaCheckCircle />,
 
-  Clubhouse: (
-    <FaCheckCircle />
-  ),
+  Clubhouse: <FaCheckCircle />,
 
-  "Power Backup": (
-    <FaCarBattery />
-  ),
+  "Power Backup": <FaCarBattery />,
 
-  Landscape: (
-    <FaTree />
-  ),
+  Landscape: <FaTree />,
 
-  Garden: (
-    <FaTree />
-  ),
+  Garden: <FaTree />,
 
-  "Grand Entrance": (
-    <FaToriiGate />
-  ),
+  "Grand Entrance": <FaToriiGate />,
 
-  "Society Office": (
-    <FaCheckCircle />
-  ),
+  "Society Office": <FaCheckCircle />,
 
-  Library: (
-    <FaBookOpen />
-  ),
+  Library: <FaBookOpen />,
 
-  Gym: (
-    <FaDumbbell />
-  ),
+  Gym: <FaDumbbell />,
 
-  Gymnasium: (
-    <FaDumbbell />
-  ),
+  Gymnasium: <FaDumbbell />,
 
-  "Indoor Game": (
-    <FaTableTennis />
-  ),
+  "Indoor Game": <FaTableTennis />,
 
-  "Indoor Games": (
-    <FaTableTennis />
-  ),
+  "Indoor Games": <FaTableTennis />,
 
-  "Banquet Hall": (
-    <FaArchway />
-  ),
+  "Banquet Hall": <FaArchway />,
 };
 
 // =====================================================
 // GET AMENITY ICON
 // =====================================================
 
-const getAmenityIcon = (
-  amenityName
-) => {
+const getAmenityIcon = (amenityName) => {
   if (!amenityName) {
     return <FaCheckCircle />;
   }
 
   // Direct match
-  if (
-    AMENITY_ICON_MAP[
-      amenityName
-    ]
-  ) {
-    return AMENITY_ICON_MAP[
-      amenityName
-    ];
+  if (AMENITY_ICON_MAP[amenityName]) {
+    return AMENITY_ICON_MAP[amenityName];
   }
 
   // Case-insensitive match
-  const matchedKey =
-    Object.keys(
-      AMENITY_ICON_MAP
-    ).find(
-      (key) =>
-        key.toLowerCase() ===
-        String(
-          amenityName
-        ).toLowerCase()
-    );
+  const matchedKey = Object.keys(
+    AMENITY_ICON_MAP
+  ).find(
+    (key) =>
+      key.toLowerCase() ===
+      String(amenityName).toLowerCase()
+  );
 
   if (matchedKey) {
-    return AMENITY_ICON_MAP[
-      matchedKey
-    ];
+    return AMENITY_ICON_MAP[matchedKey];
   }
 
   // Default icon
@@ -224,30 +139,20 @@ const getAmenityIcon = (
 // FILE URL
 // =====================================================
 
-const getFileUrl = (
-  filePath
-) => {
+const getFileUrl = (filePath) => {
   if (!filePath) {
     return "";
   }
 
   if (
-    filePath.startsWith(
-      "http://"
-    ) ||
-    filePath.startsWith(
-      "https://"
-    ) ||
-    filePath.startsWith(
-      "blob:"
-    )
+    filePath.startsWith("http://") ||
+    filePath.startsWith("https://") ||
+    filePath.startsWith("blob:")
   ) {
     return filePath;
   }
 
-  if (
-    filePath.startsWith("/")
-  ) {
+  if (filePath.startsWith("/")) {
     return `${BACKEND_URL}${filePath}`;
   }
 
@@ -258,65 +163,47 @@ const getFileUrl = (
 // PROPERTY DETAILS AMENITIES
 // =====================================================
 
-const PropertyDetailsAmenities = ({
-  property,
-}) => {
+const PropertyDetailsAmenities = ({ property }) => {
   // =================================================
   // REVIEW
   // =================================================
 
-  const [
-    rating,
-    setRating,
-  ] = useState(0);
+  const [rating, setRating] = useState(0);
 
-  const [
-    hover,
-    setHover,
-  ] = useState(0);
+  const [hover, setHover] = useState(0);
 
-  const [
-    reviewForm,
-    setReviewForm,
-  ] = useState({
+  const [reviewForm, setReviewForm] = useState({
     name: "",
     email: "",
     phone: "",
     review: "",
   });
 
+  const [reviewSubmitting, setReviewSubmitting] =
+    useState(false);
+
   // =================================================
   // CONTACT
   // =================================================
 
-  const [
-    contactForm,
-    setContactForm,
-  ] = useState({
+  const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
     mobile: "",
     captchaInput: "",
   });
 
-  const [
-    captchaCode,
-    setCaptchaCode,
-  ] = useState("");
+  const [captchaCode, setCaptchaCode] =
+    useState("");
 
   // =================================================
   // FLOOR PLAN
   // =================================================
 
-  const [
-    activeTab,
-    setActiveTab,
-  ] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
 
-  const [
-    isModalOpen,
-    setIsModalOpen,
-  ] = useState(false);
+  const [isModalOpen, setIsModalOpen] =
+    useState(false);
 
   // =================================================
   // GENERATE CAPTCHA
@@ -340,16 +227,13 @@ const PropertyDetailsAmenities = ({
 
   useEffect(() => {
     if (isModalOpen) {
-      document.body.style.overflow =
-        "hidden";
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow =
-        "unset";
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow =
-        "unset";
+      document.body.style.overflow = "unset";
     };
   }, [isModalOpen]);
 
@@ -363,18 +247,13 @@ const PropertyDetailsAmenities = ({
 
     let result = "";
 
-    for (
-      let i = 0;
-      i < 6;
-      i++
-    ) {
-      result +=
-        characters.charAt(
-          Math.floor(
-            Math.random() *
-              characters.length
-          )
-        );
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(
+        Math.floor(
+          Math.random() *
+            characters.length
+        )
+      );
     }
 
     setCaptchaCode(result);
@@ -384,70 +263,199 @@ const PropertyDetailsAmenities = ({
   // REVIEW CHANGE
   // =================================================
 
-  const handleReviewChange = (
-    e
-  ) => {
-    const {
-      name,
-      value,
-    } = e.target;
+  const handleReviewChange = (e) => {
+    const { name, value } = e.target;
 
-    setReviewForm(
-      (previous) => ({
-        ...previous,
-        [name]: value,
-      })
-    );
+    setReviewForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
   };
 
   // =================================================
   // CONTACT CHANGE
   // =================================================
 
-  const handleContactChange = (
-    e
-  ) => {
-    const {
-      name,
-      value,
-    } = e.target;
+  const handleContactChange = (e) => {
+    const { name, value } = e.target;
 
-    setContactForm(
-      (previous) => ({
-        ...previous,
-        [name]: value,
-      })
-    );
+    setContactForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
   };
 
   // =================================================
   // SUBMIT REVIEW
   // =================================================
 
-  const submitReview = (e) => {
+  const submitReview = async (e) => {
     e.preventDefault();
 
-    alert(
-      `Review Submitted!\nRating: ${rating} Stars\nName: ${reviewForm.name}`
+    // ==============================================
+    // CHECK RATING
+    // ==============================================
+
+    if (!rating) {
+      alert("Please select a rating.");
+      return;
+    }
+
+    // ==============================================
+    // GET PROPERTY ID
+    // ==============================================
+
+    const propertyId =
+      property?._id ||
+      property?.id;
+
+    console.log(
+      "PROPERTY DATA:",
+      property
     );
 
-    setReviewForm({
-      name: "",
-      email: "",
-      phone: "",
-      review: "",
-    });
+    console.log(
+      "PROPERTY ID:",
+      propertyId
+    );
 
-    setRating(0);
+    // ==============================================
+    // CHECK PROPERTY ID
+    // ==============================================
+
+    if (!propertyId) {
+      console.error(
+        "PROPERTY ID NOT FOUND:",
+        property
+      );
+
+      alert(
+        "Property information is missing."
+      );
+
+      return;
+    }
+
+    // ==============================================
+    // VALIDATE NAME
+    // ==============================================
+
+    if (!reviewForm.name.trim()) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    // ==============================================
+    // VALIDATE EMAIL
+    // ==============================================
+
+    if (!reviewForm.email.trim()) {
+      alert("Please enter your email.");
+      return;
+    }
+
+    // ==============================================
+    // VALIDATE PHONE
+    // ==============================================
+
+    if (!reviewForm.phone.trim()) {
+      alert(
+        "Please enter your phone number."
+      );
+
+      return;
+    }
+
+    // ==============================================
+    // VALIDATE REVIEW
+    // ==============================================
+
+    if (!reviewForm.review.trim()) {
+      alert("Please write your review.");
+      return;
+    }
+
+    // ==============================================
+    // SUBMIT
+    // ==============================================
+
+    try {
+      setReviewSubmitting(true);
+
+      const reviewPayload = {
+        propertyId,
+
+        name: reviewForm.name.trim(),
+
+        email:
+          reviewForm.email
+            .trim()
+            .toLowerCase(),
+
+        phone: reviewForm.phone.trim(),
+
+        rating: Number(rating),
+
+        review: reviewForm.review.trim(),
+      };
+
+      console.log(
+        "REVIEW PAYLOAD:",
+        reviewPayload
+      );
+
+      const response =
+        await API.post(
+          "/property-reviews",
+          reviewPayload
+        );
+
+      console.log(
+        "REVIEW RESPONSE:",
+        response.data
+      );
+
+      alert(
+        response.data?.message ||
+          "Review submitted successfully."
+      );
+
+      // ==========================================
+      // RESET REVIEW FORM
+      // ==========================================
+
+      setReviewForm({
+        name: "",
+        email: "",
+        phone: "",
+        review: "",
+      });
+
+      setRating(0);
+
+      setHover(0);
+
+    } catch (error) {
+      console.error(
+        "SUBMIT REVIEW ERROR:",
+        error.response?.data ||
+          error
+      );
+
+      alert(
+        error.response?.data?.message ||
+          "Failed to submit review."
+      );
+    } finally {
+      setReviewSubmitting(false);
+    }
   };
 
   // =================================================
   // SUBMIT CONTACT
   // =================================================
 
-  const submitContact = (
-    e
-  ) => {
+  const submitContact = (e) => {
     e.preventDefault();
 
     if (
@@ -460,12 +468,10 @@ const PropertyDetailsAmenities = ({
 
       generateCaptcha();
 
-      setContactForm(
-        (previous) => ({
-          ...previous,
-          captchaInput: "",
-        })
-      );
+      setContactForm((previous) => ({
+        ...previous,
+        captchaInput: "",
+      }));
 
       return;
     }
@@ -496,33 +502,10 @@ const PropertyDetailsAmenities = ({
   // =================================================
   // PROPERTY AMENITIES
   // =================================================
-  //
-  // IMPORTANT:
-  //
-  // We do NOT show every amenity anymore.
-  //
-  // We show only:
-  //
-  // property.amenities
-  //
-  // Example:
-  //
-  // amenities: [
-  //   "Swimming Pool",
-  //   "Gym",
-  //   "Security"
-  // ]
-  //
-  // Only these 3 appear.
-  // =================================================
 
   const propertyAmenities =
-    Array.isArray(
-      property?.amenities
-    )
-      ? property.amenities.filter(
-          Boolean
-        )
+    Array.isArray(property?.amenities)
+      ? property.amenities.filter(Boolean)
       : [];
 
   // =================================================
@@ -530,12 +513,8 @@ const PropertyDetailsAmenities = ({
   // =================================================
 
   const propertyHighlights =
-    Array.isArray(
-      property?.highlights
-    )
-      ? property.highlights.filter(
-          Boolean
-        )
+    Array.isArray(property?.highlights)
+      ? property.highlights.filter(Boolean)
       : [];
 
   // =================================================
@@ -543,9 +522,7 @@ const PropertyDetailsAmenities = ({
   // =================================================
 
   const floorPlans =
-    Array.isArray(
-      property?.floorPlans
-    )
+    Array.isArray(property?.floorPlans)
       ? property.floorPlans
       : [];
 
@@ -554,17 +531,14 @@ const PropertyDetailsAmenities = ({
   // =================================================
 
   const currentFloorPlan =
-    floorPlans[activeTab] ||
-    null;
+    floorPlans[activeTab] || null;
 
   // =================================================
   // NEARBY PLACES
   // =================================================
 
   const nearbyPlaces =
-    Array.isArray(
-      property?.nearbyPlaces
-    )
+    Array.isArray(property?.nearbyPlaces)
       ? property.nearbyPlaces
       : [];
 
@@ -573,40 +547,9 @@ const PropertyDetailsAmenities = ({
   // =================================================
 
   const documents =
-    Array.isArray(
-      property?.documents
-    )
+    Array.isArray(property?.documents)
       ? property.documents
       : [];
-
-  // =================================================
-  // DEBUG
-  // =================================================
-
-  console.log(
-    "PROPERTY DETAILS:",
-    property
-  );
-
-  console.log(
-    "PROPERTY AMENITIES:",
-    propertyAmenities
-  );
-
-  console.log(
-    "PROPERTY HIGHLIGHTS:",
-    propertyHighlights
-  );
-
-  console.log(
-    "PROPERTY FLOOR PLANS:",
-    floorPlans
-  );
-
-  console.log(
-    "PROPERTY NEARBY PLACES:",
-    nearbyPlaces
-  );
 
   // =================================================
   // UI
@@ -618,21 +561,20 @@ const PropertyDetailsAmenities = ({
 
         <div className="PropertyDetailsAmenities-main-layout">
 
-          {/* ================================= */}
-          {/* LEFT COLUMN */}
-          {/* ================================= */}
+          {/* =================================
+              LEFT COLUMN
+          ================================= */}
 
           <div className="PropertyDetailsAmenities-left-col">
 
-            {/* =============================== */}
-            {/* 1. AMENITIES */}
-            {/* =============================== */}
+            {/* ===============================
+                1. AMENITIES
+            =============================== */}
 
             <div className="PropertyDetailsAmenities-section-header">
 
               <h2 className="PropertyDetailsAmenities-title">
-                Amenities{" "}
-                {propertyName}
+                Amenities {propertyName}
               </h2>
 
               <div className="PropertyDetailsAmenities-underline"></div>
@@ -643,34 +585,19 @@ const PropertyDetailsAmenities = ({
 
               <div className="PropertyDetailsAmenities-grid">
 
-                {/* =========================== */}
-                {/* PROPERTY-WISE AMENITIES */}
-                {/* =========================== */}
+                {propertyAmenities.length > 0 ? (
 
-                {propertyAmenities.length >
-                0 ? (
                   propertyAmenities.map(
-                    (
-                      amenity,
-                      index
-                    ) => {
-                      // Support string:
-                      // "Swimming Pool"
-                      //
-                      // and object:
-                      // { name: "Swimming Pool" }
+                    (amenity, index) => {
 
                       const amenityName =
-                        typeof amenity ===
-                        "string"
+                        typeof amenity === "string"
                           ? amenity
                           : amenity?.name ||
                             amenity?.title ||
                             "";
 
-                      if (
-                        !amenityName
-                      ) {
+                      if (!amenityName) {
                         return null;
                       }
 
@@ -682,53 +609,47 @@ const PropertyDetailsAmenities = ({
                           }
                           className="PropertyDetailsAmenities-grid-item active"
                         >
-                          <div className="PropertyDetailsAmenities-icon">
 
+                          <div className="PropertyDetailsAmenities-icon">
                             {getAmenityIcon(
                               amenityName
                             )}
-
                           </div>
 
                           <span className="PropertyDetailsAmenities-name">
-
-                            {
-                              amenityName
-                            }
-
+                            {amenityName}
                           </span>
 
                         </div>
                       );
                     }
                   )
+
                 ) : (
+
                   <p>
-                    No amenities
-                    available for this
-                    property.
+                    No amenities available for this property.
                   </p>
+
                 )}
 
               </div>
 
             </div>
 
-            {/* =============================== */}
-            {/* 2. KEY FEATURES */}
-            {/* =============================== */}
+            {/* ===============================
+                2. KEY FEATURES
+            =============================== */}
 
             <div
               className="PropertyDetailsAmenities-section-header"
               style={{
-                marginTop:
-                  "30px",
+                marginTop: "30px",
               }}
             >
 
               <h2 className="PropertyDetailsAmenities-title">
-                Key Features{" "}
-                {propertyName}
+                Key Features {propertyName}
               </h2>
 
               <div className="PropertyDetailsAmenities-underline"></div>
@@ -739,17 +660,13 @@ const PropertyDetailsAmenities = ({
 
               <div className="PropertyDetailsAmenities-features-container">
 
-                {propertyHighlights.length >
-                0 ? (
+                {propertyHighlights.length > 0 ? (
+
                   propertyHighlights.map(
-                    (
-                      feature,
-                      index
-                    ) => (
+                    (feature, index) => (
+
                       <div
-                        key={
-                          index
-                        }
+                        key={index}
                         className="PropertyDetailsAmenities-feature-pill"
                       >
 
@@ -758,34 +675,35 @@ const PropertyDetailsAmenities = ({
                         {feature}
 
                       </div>
+
                     )
                   )
+
                 ) : (
+
                   <p>
-                    No key features
-                    available.
+                    No key features available.
                   </p>
+
                 )}
 
               </div>
 
             </div>
 
-            {/* =============================== */}
-            {/* 3. FLOOR PLANS & DOCUMENTS */}
-            {/* =============================== */}
+            {/* ===============================
+                3. FLOOR PLANS & DOCUMENTS
+            =============================== */}
 
             <div
               className="PropertyDetailsAmenities-section-header"
               style={{
-                marginTop:
-                  "30px",
+                marginTop: "30px",
               }}
             >
 
               <h2 className="PropertyDetailsAmenities-title">
-                Floor Plans &
-                Documents
+                Floor Plans & Documents
               </h2>
 
               <div className="PropertyDetailsAmenities-underline"></div>
@@ -794,27 +712,24 @@ const PropertyDetailsAmenities = ({
 
             <div className="PropertyDetailsAmenities-card PropertyDetailsAmenities-floor-plan-card">
 
-              {/* ============================= */}
-              {/* FLOOR PLAN TABS */}
-              {/* ============================= */}
+              {/* =============================
+                  FLOOR PLAN TABS
+              ============================= */}
 
-              {floorPlans.length >
-                0 && (
+              {floorPlans.length > 0 && (
+
                 <div className="PropertyDetailsAmenities-tabs">
 
                   {floorPlans.map(
-                    (
-                      plan,
-                      index
-                    ) => (
+                    (plan, index) => (
+
                       <div
                         key={
                           plan._id ||
                           index
                         }
                         className={`PropertyDetailsAmenities-tab ${
-                          activeTab ===
-                          index
+                          activeTab === index
                             ? "active"
                             : ""
                         }`}
@@ -827,23 +742,23 @@ const PropertyDetailsAmenities = ({
 
                         {plan.planTitle ||
                           plan.planType ||
-                          `Plan ${
-                            index +
-                            1
-                          }`}
+                          `Plan ${index + 1}`}
 
                       </div>
+
                     )
                   )}
 
                 </div>
+
               )}
 
-              {/* ============================= */}
-              {/* CURRENT FLOOR PLAN */}
-              {/* ============================= */}
+              {/* =============================
+                  CURRENT FLOOR PLAN
+              ============================= */}
 
               {currentFloorPlan ? (
+
                 <div className="PropertyDetailsAmenities-tab-content">
 
                   <h3 className="PropertyDetailsAmenities-content-title">
@@ -857,66 +772,50 @@ const PropertyDetailsAmenities = ({
                   <div className="PropertyDetailsAmenities-stats-row">
 
                     <span>
-                      <strong>
-                        Bed:
-                      </strong>{" "}
+                      <strong>Bed:</strong>{" "}
                       {currentFloorPlan.beds ??
                         0}
                     </span>
 
                     <span>
-                      <strong>
-                        Bath:
-                      </strong>{" "}
+                      <strong>Bath:</strong>{" "}
                       {currentFloorPlan.baths ??
                         0}
                     </span>
 
                     <span>
-                      <strong>
-                        Balconies:
-                      </strong>{" "}
+                      <strong>Balconies:</strong>{" "}
                       {currentFloorPlan.balconies ??
                         0}
                     </span>
 
                     <span>
-                      <strong>
-                        Puja:
-                      </strong>{" "}
+                      <strong>Puja:</strong>{" "}
                       {currentFloorPlan.pujaRoom ??
                         0}
                     </span>
 
                     <span>
-                      <strong>
-                        Servant:
-                      </strong>{" "}
+                      <strong>Servant:</strong>{" "}
                       {currentFloorPlan.servantRoom ??
                         0}
                     </span>
 
                     <span>
-                      <strong>
-                        Store:
-                      </strong>{" "}
+                      <strong>Store:</strong>{" "}
                       {currentFloorPlan.storeRoom ??
                         0}
                     </span>
 
                     <span>
-                      <strong>
-                        SBA:
-                      </strong>{" "}
+                      <strong>SBA:</strong>{" "}
                       {currentFloorPlan.sbaSqft ??
                         0}{" "}
                       sqft
                     </span>
 
                     <span>
-                      <strong>
-                        Plot:
-                      </strong>{" "}
+                      <strong>Plot:</strong>{" "}
                       {currentFloorPlan.plotSqft ??
                         0}{" "}
                       sqft
@@ -924,11 +823,12 @@ const PropertyDetailsAmenities = ({
 
                   </div>
 
-                  {/* ========================= */}
-                  {/* FLOOR PLAN IMAGE */}
-                  {/* ========================= */}
+                  {/* =========================
+                      FLOOR PLAN IMAGE
+                  ========================= */}
 
                   {currentFloorPlan.floorPlanSketch && (
+
                     <div className="PropertyDetailsAmenities-floor-image-container">
 
                       <img
@@ -946,8 +846,7 @@ const PropertyDetailsAmenities = ({
                           )
                         }
                         style={{
-                          cursor:
-                            "pointer",
+                          cursor: "pointer",
                         }}
                       />
 
@@ -962,46 +861,44 @@ const PropertyDetailsAmenities = ({
 
                         <FaExpand />
 
-                        View Full
-                        Screen
+                        View Full Screen
 
                       </button>
 
                     </div>
+
                   )}
 
                 </div>
+
               ) : (
+
                 <div className="PropertyDetailsAmenities-tab-content">
 
                   <p>
-                    No floor plans
-                    available for this
-                    property.
+                    No floor plans available for this property.
                   </p>
 
                 </div>
+
               )}
 
-              {/* ============================= */}
-              {/* DOCUMENTS */}
-              {/* ============================= */}
+              {/* =============================
+                  DOCUMENTS
+              ============================= */}
 
-              {documents.length >
-                0 && (
+              {documents.length > 0 && (
+
                 <div
                   className="PropertyDetailsAmenities-features-container"
                   style={{
-                    marginTop:
-                      "20px",
+                    marginTop: "20px",
                   }}
                 >
 
                   {documents.map(
-                    (
-                      document,
-                      index
-                    ) => (
+                    (document, index) => (
+
                       <a
                         key={
                           document._id ||
@@ -1018,35 +915,32 @@ const PropertyDetailsAmenities = ({
                         <FaBookOpen className="PropertyDetailsAmenities-feature-icon" />
 
                         {document.originalName ||
-                          `Document ${
-                            index +
-                            1
-                          }`}
+                          `Document ${index + 1}`}
 
                       </a>
+
                     )
                   )}
 
                 </div>
+
               )}
 
             </div>
 
-            {/* =============================== */}
-            {/* 4. NEARBY PLACES */}
-            {/* =============================== */}
+            {/* ===============================
+                4. NEARBY PLACES
+            =============================== */}
 
             <div
               className="PropertyDetailsAmenities-section-header"
               style={{
-                marginTop:
-                  "30px",
+                marginTop: "30px",
               }}
             >
 
               <h2 className="PropertyDetailsAmenities-title">
-                Explore
-                Neighbourhood -{" "}
+                Explore Neighbourhood -{" "}
                 {propertyName}
               </h2>
 
@@ -1058,13 +952,11 @@ const PropertyDetailsAmenities = ({
 
               <div className="PropertyDetailsAmenities-neighbourhood-grid">
 
-                {nearbyPlaces.length >
-                0 ? (
+                {nearbyPlaces.length > 0 ? (
+
                   nearbyPlaces.map(
-                    (
-                      item,
-                      index
-                    ) => (
+                    (item, index) => (
+
                       <div
                         key={
                           item._id ||
@@ -1092,10 +984,7 @@ const PropertyDetailsAmenities = ({
                               : ""}
 
                             {item.distance ||
-                              `${
-                                item.distanceValue ||
-                                0
-                              } ${
+                              `${item.distanceValue || 0} ${
                                 item.unit ||
                                 "Km"
                               }`}
@@ -1105,13 +994,16 @@ const PropertyDetailsAmenities = ({
                         </div>
 
                       </div>
+
                     )
                   )
+
                 ) : (
+
                   <p>
-                    No nearby places
-                    available.
+                    No nearby places available.
                   </p>
+
                 )}
 
               </div>
@@ -1120,15 +1012,15 @@ const PropertyDetailsAmenities = ({
 
           </div>
 
-          {/* ================================= */}
-          {/* RIGHT COLUMN */}
-          {/* ================================= */}
+          {/* =================================
+              RIGHT COLUMN
+          ================================= */}
 
           <div className="PropertyDetailsAmenities-right-col">
 
-            {/* =============================== */}
-            {/* RATE & REVIEW */}
-            {/* =============================== */}
+            {/* ===============================
+                RATE & REVIEW
+            =============================== */}
 
             <div className="PropertyDetailsAmenities-sidebar-card">
 
@@ -1136,18 +1028,21 @@ const PropertyDetailsAmenities = ({
                 Rate & Review
               </h3>
 
+              {/* =================================
+                  STAR RATING
+              ================================= */}
+
               <div className="PropertyDetailsAmenities-stars-container">
 
                 {[...Array(5)].map(
                   (_, index) => {
+
                     const ratingValue =
                       index + 1;
 
                     return (
                       <label
-                        key={
-                          index
-                        }
+                        key={index}
                         className="PropertyDetailsAmenities-star-label"
                       >
 
@@ -1157,7 +1052,11 @@ const PropertyDetailsAmenities = ({
                           value={
                             ratingValue
                           }
-                          onClick={() =>
+                          checked={
+                            rating ===
+                            ratingValue
+                          }
+                          onChange={() =>
                             setRating(
                               ratingValue
                             )
@@ -1181,9 +1080,7 @@ const PropertyDetailsAmenities = ({
                             )
                           }
                           onMouseLeave={() =>
-                            setHover(
-                              0
-                            )
+                            setHover(0)
                           }
                         />
 
@@ -1194,12 +1091,34 @@ const PropertyDetailsAmenities = ({
 
               </div>
 
+              {/* =================================
+                  SELECTED RATING
+              ================================= */}
+
+              {rating > 0 && (
+
+                <div className="PropertyDetailsAmenities-rating-text">
+
+                  You selected{" "}
+                  {rating}{" "}
+                  {rating === 1
+                    ? "star"
+                    : "stars"}
+
+                </div>
+
+              )}
+
+              {/* =================================
+                  REVIEW FORM
+              ================================= */}
+
               <form
-                onSubmit={
-                  submitReview
-                }
+                onSubmit={submitReview}
                 className="PropertyDetailsAmenities-form"
               >
+
+                {/* NAME */}
 
                 <input
                   type="text"
@@ -1215,6 +1134,8 @@ const PropertyDetailsAmenities = ({
                   required
                 />
 
+                {/* EMAIL */}
+
                 <input
                   type="email"
                   name="email"
@@ -1228,6 +1149,8 @@ const PropertyDetailsAmenities = ({
                   className="PropertyDetailsAmenities-input"
                   required
                 />
+
+                {/* PHONE */}
 
                 <input
                   type="tel"
@@ -1243,6 +1166,8 @@ const PropertyDetailsAmenities = ({
                   required
                 />
 
+                {/* REVIEW */}
+
                 <textarea
                   name="review"
                   placeholder="Write your review..."
@@ -1253,31 +1178,57 @@ const PropertyDetailsAmenities = ({
                     handleReviewChange
                   }
                   className="PropertyDetailsAmenities-textarea"
-                  rows="3"
+                  rows="4"
+                  maxLength={1000}
                   required
                 ></textarea>
+
+                {/* CHARACTER COUNT */}
+
+                <div className="PropertyDetailsAmenities-review-count">
+
+                  {
+                    reviewForm.review
+                      .length
+                  }
+                  /1000
+
+                </div>
+
+                {/* SUBMIT */}
 
                 <button
                   type="submit"
                   className="PropertyDetailsAmenities-submit-btn"
+                  disabled={
+                    reviewSubmitting
+                  }
                 >
-                  Submit
+
+                  {reviewSubmitting ? (
+                    <>
+                      <span className="PropertyDetailsAmenities-button-spinner" />
+
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit Review"
+                  )}
+
                 </button>
 
               </form>
 
             </div>
 
-            {/* =============================== */}
-            {/* CONTACT FORM */}
-            {/* =============================== */}
+            {/* ===============================
+                CONTACT FORM
+            =============================== */}
 
             <div className="PropertyDetailsAmenities-sidebar-card">
 
               <p className="PropertyDetailsAmenities-contact-heading">
-                Kindly fill in your
-                details to view the
-                contact number.
+                Kindly fill in your details to view the contact number.
               </p>
 
               <form
@@ -1362,9 +1313,7 @@ const PropertyDetailsAmenities = ({
                   <div className="PropertyDetailsAmenities-captcha-row">
 
                     <div className="PropertyDetailsAmenities-captcha-box">
-                      {
-                        captchaCode
-                      }
+                      {captchaCode}
                     </div>
 
                     <button
@@ -1407,8 +1356,7 @@ const PropertyDetailsAmenities = ({
                   type="submit"
                   className="PropertyDetailsAmenities-submit-btn"
                   style={{
-                    marginTop:
-                      "10px",
+                    marginTop: "10px",
                   }}
                 >
                   Submit
@@ -1424,19 +1372,18 @@ const PropertyDetailsAmenities = ({
 
       </div>
 
-      {/* ===================================== */}
-      {/* FULL SCREEN FLOOR PLAN MODAL */}
-      {/* ===================================== */}
+      {/* =====================================
+          FULL SCREEN FLOOR PLAN MODAL
+      ===================================== */}
 
       {isModalOpen &&
         currentFloorPlan &&
         currentFloorPlan.floorPlanSketch && (
+
           <div
             className="PropertyDetailsAmenities-modal-overlay"
             onClick={() =>
-              setIsModalOpen(
-                false
-              )
+              setIsModalOpen(false)
             }
           >
 
@@ -1450,9 +1397,7 @@ const PropertyDetailsAmenities = ({
               <button
                 className="PropertyDetailsAmenities-modal-close"
                 onClick={() =>
-                  setIsModalOpen(
-                    false
-                  )
+                  setIsModalOpen(false)
                 }
               >
                 <FaTimes />
@@ -1480,6 +1425,7 @@ const PropertyDetailsAmenities = ({
             </div>
 
           </div>
+
         )}
 
     </>

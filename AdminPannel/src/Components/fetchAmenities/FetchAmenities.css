@@ -1,111 +1,1348 @@
-.amenities-container {
+/* =====================================================
+   FETCH AMENITIES
+   PREMIUM COMPONENT UI
+   PREFIX: fap-
+===================================================== */
+
+
+/* =====================================================
+   MAIN CONTAINER
+===================================================== */
+
+.fap-container {
   width: 100%;
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 24px;
+
+  height: auto;
+  min-height: 0;
+  max-height: none;
+
+  align-self: flex-start;
+  justify-self: start;
+
   box-sizing: border-box;
-  margin-bottom: 20px;
+
+  margin-bottom: 22px;
+  padding: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fcfcff 55%,
+      #f9faff 100%
+    );
+
+  border: 1px solid #e6e9f0;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 35px rgba(15, 23, 42, 0.055),
+    0 2px 8px rgba(15, 23, 42, 0.025);
+
+  overflow: visible;
+
+  transition:
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
-.amenities-header {
-  margin-bottom: 20px;
+.fap-container:hover {
+  border-color: #dfe3eb;
+
+  box-shadow:
+    0 14px 40px rgba(15, 23, 42, 0.07),
+    0 3px 10px rgba(15, 23, 42, 0.03);
 }
 
-.amenities-title {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: #222;
-}
 
-.amenities-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-}
+/* =====================================================
+   HEADER
+===================================================== */
 
-.amenities-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 12px 14px;
-
-  border: 1px solid #e2e2e2;
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.amenities-item:hover {
-  border-color: #999;
-}
-
-.amenities-item.selected {
-  background: #f8f8f8;
-  border-color: #222;
-}
-
-.amenities-checkbox {
-  display: none;
-}
-
-.amenities-check-box {
-  width: 20px;
-  height: 20px;
-
-  border: 1px solid #bbb;
-  border-radius: 4px;
+.fap-header {
+  width: 100%;
 
   display: flex;
+
   align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADING
+===================================================== */
+
+.fap-heading {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  min-width: 0;
+
+  flex: 1;
+}
+
+
+/* =====================================================
+   HEADING ICON
+===================================================== */
+
+.fap-heading-icon {
+  position: relative;
+
+  width: 44px;
+  height: 44px;
+
+  flex: 0 0 44px;
+
+  display: flex;
+
+  align-items: center;
+
   justify-content: center;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef2ff 0%,
+      #e8e7ff 50%,
+      #f5f3ff 100%
+    );
+
+  border: 1px solid #dfe1ff;
+
+  color: #5b55e8;
+
+  font-size: 20px;
+
+  box-shadow:
+    0 5px 14px rgba(79, 70, 229, 0.08);
+
+  overflow: hidden;
+}
+
+.fap-heading-icon::before {
+  content: "";
+
+  position: absolute;
+
+  width: 24px;
+  height: 24px;
+
+  top: -10px;
+  right: -7px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.fap-heading-icon span {
+  position: relative;
+
+  z-index: 1;
+}
+
+
+/* =====================================================
+   HEADING CONTENT
+===================================================== */
+
+.fap-heading-content {
+  min-width: 0;
+
+  flex: 1;
+}
+
+
+/* =====================================================
+   TITLE ROW
+===================================================== */
+
+.fap-title-row {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.fap-title {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 19px;
+
+  line-height: 1.3;
+
+  font-weight: 750;
+
+  letter-spacing: -0.3px;
+}
+
+
+/* =====================================================
+   AVAILABLE BADGE
+===================================================== */
+
+.fap-available-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  height: 21px;
+
+  padding: 0 8px;
+
+  border-radius: 999px;
+
+  background: #f1f5ff;
+
+  border: 1px solid #e0e6ff;
+
+  color: #5b55e8;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.2px;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
+
+.fap-description {
+  margin: 4px 0 0;
+
+  color: #8a94a6;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+/* =====================================================
+   COUNTER
+===================================================== */
+
+.fap-counter {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
 
   flex-shrink: 0;
 
-  font-size: 13px;
-  font-weight: bold;
+  padding: 6px 9px 6px 6px;
+
+  background: #f8f9fc;
+
+  border: 1px solid #e5e8ef;
+
+  border-radius: 999px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.amenities-item.selected
-.amenities-check-box {
-  background: #222;
-  color: white;
-  border-color: #222;
+.fap-counter-active {
+  background: #f5f5ff;
+
+  border-color: #dedcff;
+
+  box-shadow:
+    0 4px 12px rgba(79, 70, 229, 0.07);
 }
 
-.amenities-name {
-  font-size: 14px;
-  color: #333;
+
+/* =====================================================
+   COUNTER NUMBER
+===================================================== */
+
+.fap-counter-number {
+  min-width: 24px;
+
+  height: 24px;
+
+  padding: 0 6px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #4f46e5
+    );
+
+  color: #ffffff;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  box-shadow:
+    0 3px 8px rgba(79, 70, 229, 0.2);
 }
 
-.amenities-icon {
-  font-size: 20px;
+
+/* =====================================================
+   COUNTER LABEL
+===================================================== */
+
+.fap-counter-label {
+  color: #697386;
+
+  font-size: 10px;
+
+  font-weight: 650;
+
+  white-space: nowrap;
 }
 
-.amenities-image {
-  width: 28px;
-  height: 28px;
+
+/* =====================================================
+   DIVIDER
+===================================================== */
+
+.fap-divider {
+  width: 100%;
+
+  height: 1px;
+
+  margin: 18px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      #e7eaf0 0%,
+      #f0f2f6 55%,
+      transparent 100%
+    );
+}
+
+
+/* =====================================================
+   GRID
+
+   IMPORTANT:
+   No fixed height.
+   No max-height.
+
+   More amenities = more rows =
+   taller container automatically.
+===================================================== */
+
+.fap-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 12px;
+
+  height: auto;
+
+  min-height: 0;
+
+  max-height: none;
+
+  align-items: start;
+
+  align-content: start;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   ITEM
+===================================================== */
+
+.fap-item {
+  position: relative;
+
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: 62px;
+
+  height: auto;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 11px;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fbfcfe
+    );
+
+  border: 1px solid #e5e8ee;
+
+  border-radius: 13px;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+
+/* =====================================================
+   TOP SHINE
+===================================================== */
+
+.fap-item::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.95),
+      transparent
+    );
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.fap-item:hover {
+  transform: translateY(-2px);
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f9faff
+    );
+
+  border-color: #d4d9e5;
+
+  box-shadow:
+    0 8px 22px rgba(15, 23, 42, 0.075);
+}
+
+
+/* =====================================================
+   ACTIVE / SELECTED ITEM
+===================================================== */
+
+.fap-item-active {
+  background:
+    linear-gradient(
+      145deg,
+      #fafaff 0%,
+      #f5f5ff 100%
+    );
+
+  border-color: #8f88ef;
+
+  box-shadow:
+    0 7px 20px rgba(79, 70, 229, 0.095);
+}
+
+.fap-item-active:hover {
+  transform: translateY(-2px);
+
+  border-color: #7169e8;
+
+  box-shadow:
+    0 10px 25px rgba(79, 70, 229, 0.14);
+}
+
+
+/* =====================================================
+   HIDDEN INPUT
+===================================================== */
+
+.fap-input {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   CHECKBOX
+===================================================== */
+
+.fap-check {
+  width: 20px;
+  height: 20px;
+
+  flex: 0 0 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1.5px solid #d1d7e2;
+
+  border-radius: 6px;
+
+  color: transparent;
+
+  box-shadow:
+    inset 0 1px 2px rgba(15, 23, 42, 0.025);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* =====================================================
+   ACTIVE CHECKBOX
+===================================================== */
+
+.fap-item-active .fap-check {
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #4f46e5
+    );
+
+  border-color: #4f46e5;
+
+  color: #ffffff;
+
+  transform: scale(1.04);
+
+  box-shadow:
+    0 3px 8px rgba(79, 70, 229, 0.23);
+}
+
+
+/* =====================================================
+   CHECK MARK
+===================================================== */
+
+.fap-check-mark {
+  display: block;
+
+  font-size: 11px;
+
+  line-height: 1;
+
+  font-weight: 850;
+}
+
+
+/* =====================================================
+   VISUAL
+===================================================== */
+
+.fap-visual {
+  position: relative;
+
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f7f8fb,
+      #eef0f5
+    );
+
+  border: 1px solid #e5e8ed;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s ease;
+}
+
+
+/* =====================================================
+   ACTIVE VISUAL
+===================================================== */
+
+.fap-item-active .fap-visual {
+  background:
+    linear-gradient(
+      145deg,
+      #efefff,
+      #e5e4ff
+    );
+
+  border-color: #d7d4ff;
+
+  transform: scale(1.02);
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.fap-icon {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 19px;
+
+  line-height: 1;
+}
+
+
+/* =====================================================
+   DEFAULT ICON
+===================================================== */
+
+.fap-default-icon {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #8b93a7;
+
+  font-size: 16px;
+
+  line-height: 1;
+}
+
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.fap-image {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
   object-fit: contain;
+
+  padding: 5px;
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.22s ease;
 }
 
-.amenities-loading,
-.amenities-empty {
-  padding: 15px 0;
-  color: #777;
-  font-size: 14px;
+.fap-item:hover .fap-image {
+  transform: scale(1.06);
 }
 
-@media (max-width: 900px) {
-  .amenities-grid {
-    grid-template-columns: repeat(2, 1fr);
+
+/* =====================================================
+   NAME
+===================================================== */
+
+.fap-name {
+  flex: 1;
+
+  min-width: 0;
+
+  display: block;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   ACTIVE NAME
+===================================================== */
+
+.fap-item-active .fap-name {
+  color: #3730a3;
+
+  font-weight: 650;
+}
+
+
+/* =====================================================
+   SELECTED INDICATOR
+===================================================== */
+
+.fap-selected {
+  width: 20px;
+  height: 20px;
+
+  flex: 0 0 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: transparent;
+
+  font-size: 10px;
+
+  font-weight: 850;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.fap-selected-visible {
+  background:
+    linear-gradient(
+      135deg,
+      #ede9fe,
+      #e5e1ff
+    );
+
+  color: #5b52d9;
+
+  transform: scale(1);
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.fap-loading {
+  min-height: 76px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 11px;
+
+  padding: 12px;
+
+  color: #8a94a6;
+
+  font-size: 12px;
+}
+
+.fap-loading-animation {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f3f4ff;
+}
+
+.fap-spinner {
+  width: 16px;
+  height: 16px;
+
+  display: block;
+
+  border: 2px solid #e2e4f2;
+
+  border-top-color: #5b55e8;
+
+  border-right-color: #7c75ed;
+
+  border-radius: 50%;
+
+  animation:
+    fap-spin 0.7s linear infinite;
+}
+
+.fap-loading-content {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.fap-loading-title {
+  color: #64748b;
+
+  font-size: 11px;
+
+  font-weight: 650;
+}
+
+.fap-loading-text {
+  color: #a1a9b7;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+   SPINNER ANIMATION
+===================================================== */
+
+@keyframes fap-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.fap-empty {
+  min-height: 82px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  padding: 16px;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fbfcfd,
+      #f8f9fb
+    );
+
+  border: 1px dashed #dce1e9;
+
+  border-radius: 13px;
+}
+
+
+/* =====================================================
+   EMPTY ICON
+===================================================== */
+
+.fap-empty-icon {
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f1f2f6,
+      #e9ebf0
+    );
+
+  border: 1px solid #e1e4ea;
+
+  color: #9aa2b1;
+
+  font-size: 17px;
+}
+
+.fap-empty-content {
+  min-width: 0;
+}
+
+.fap-empty-content h3 {
+  margin: 0 0 3px;
+
+  color: #4b5563;
+
+  font-size: 12px;
+
+  line-height: 1.4;
+
+  font-weight: 700;
+}
+
+.fap-empty-content p {
+  margin: 0;
+
+  color: #9aa2b1;
+
+  font-size: 10.5px;
+
+  line-height: 1.4;
+}
+
+
+/* =====================================================
+   LARGE TABLET
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .fap-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 800px) {
+
+  .fap-container {
+    padding: 18px;
+
+    margin-bottom: 18px;
+
+    border-radius: 16px;
+  }
+
+
+  .fap-header {
+    gap: 14px;
+  }
+
+
+  .fap-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+
+  .fap-title {
+    font-size: 18px;
+  }
+
+
+  .fap-description {
+    font-size: 11.5px;
+  }
+
+
+  .fap-item {
+    min-height: 59px;
+
+    padding: 9px 10px;
+  }
+
+
+  .fap-visual {
+    width: 36px;
+    height: 36px;
+
+    flex-basis: 36px;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media (max-width: 600px) {
-  .amenities-grid {
-    grid-template-columns: 1fr;
+
+  .fap-container {
+    width: 100%;
+
+    padding: 15px;
+
+    margin-bottom: 15px;
+
+    border-radius: 14px;
   }
+
+
+  .fap-header {
+    align-items: flex-start;
+
+    gap: 12px;
+  }
+
+
+  .fap-heading {
+    align-items: flex-start;
+
+    gap: 10px;
+  }
+
+
+  .fap-heading-icon {
+    width: 38px;
+    height: 38px;
+
+    flex-basis: 38px;
+
+    border-radius: 11px;
+
+    font-size: 18px;
+  }
+
+
+  .fap-title {
+    font-size: 16px;
+
+    letter-spacing: -0.15px;
+  }
+
+
+  .fap-description {
+    max-width: 240px;
+
+    font-size: 10.5px;
+
+    line-height: 1.45;
+  }
+
+
+  .fap-available-badge {
+    display: none;
+  }
+
+
+  .fap-counter {
+    padding: 5px 7px 5px 5px;
+  }
+
+
+  .fap-counter-number {
+    min-width: 22px;
+
+    height: 22px;
+  }
+
+
+  .fap-counter-label {
+    display: none;
+  }
+
+
+  .fap-divider {
+    margin: 14px 0;
+  }
+
+
+  .fap-grid {
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+  }
+
+
+  .fap-item {
+    min-height: 57px;
+
+    padding: 9px 10px;
+
+    gap: 9px;
+
+    border-radius: 11px;
+  }
+
+
+  .fap-check {
+    width: 19px;
+    height: 19px;
+
+    flex-basis: 19px;
+  }
+
+
+  .fap-visual {
+    width: 35px;
+    height: 35px;
+
+    flex-basis: 35px;
+
+    border-radius: 9px;
+  }
+
+
+  .fap-icon {
+    font-size: 18px;
+  }
+
+
+  .fap-name {
+    font-size: 13px;
+  }
+
+
+  .fap-selected {
+    width: 18px;
+    height: 18px;
+
+    flex-basis: 18px;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+  .fap-container {
+    padding: 12px;
+
+    border-radius: 13px;
+  }
+
+
+  .fap-heading-icon {
+    width: 34px;
+    height: 34px;
+
+    flex-basis: 34px;
+
+    border-radius: 9px;
+
+    font-size: 16px;
+  }
+
+
+  .fap-title {
+    font-size: 15px;
+  }
+
+
+  .fap-description {
+    display: none;
+  }
+
+
+  .fap-item {
+    min-height: 53px;
+
+    gap: 8px;
+
+    padding: 8px;
+  }
+
+
+  .fap-check {
+    width: 18px;
+    height: 18px;
+
+    flex-basis: 18px;
+  }
+
+
+  .fap-visual {
+    width: 33px;
+    height: 33px;
+
+    flex-basis: 33px;
+  }
+
+
+  .fap-name {
+    font-size: 12.5px;
+  }
+
+
+  .fap-selected {
+    width: 17px;
+    height: 17px;
+
+    flex-basis: 17px;
+  }
+
+
+  .fap-empty {
+    min-height: 70px;
+
+    padding: 12px;
+  }
+
+
+  .fap-empty-icon {
+    width: 32px;
+    height: 32px;
+
+    flex-basis: 32px;
+  }
+
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 340px) {
+
+  .fap-container {
+    padding: 10px;
+  }
+
+
+  .fap-heading {
+    gap: 8px;
+  }
+
+
+  .fap-heading-icon {
+    width: 32px;
+    height: 32px;
+
+    flex-basis: 32px;
+  }
+
+
+  .fap-title {
+    font-size: 14px;
+  }
+
+
+  .fap-item {
+    min-height: 50px;
+
+    padding: 7px;
+  }
+
+
+  .fap-visual {
+    width: 31px;
+    height: 31px;
+
+    flex-basis: 31px;
+  }
+
+
+  .fap-name {
+    font-size: 12px;
+  }
+
 }
