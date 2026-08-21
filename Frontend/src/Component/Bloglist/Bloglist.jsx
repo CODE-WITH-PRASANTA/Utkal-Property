@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Bloglist.css';
 import API, { IMG_URL } from "../../api/axios";
 
 const Bloglist = () => {
+  const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedTag, setSelectedTag] = useState(null);
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
 
-  // Image URL Resolver (Handles backend upload paths & external URLs)
+  // Universal Image URL Resolver
   const getImageUrl = (imgPath) => {
     if (!imgPath) {
       return 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80';
@@ -54,7 +56,7 @@ const Bloglist = () => {
     fetchPublishedBlogs();
   }, []);
 
-  // Filter Blogs based on Search Term, Selected Category & Selected Tag
+  // Filter Blogs based on Search Term, Category, and Tag
   const filteredBlogs = blogs.filter((blog) => {
     const matchesSearch =
       (blog.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -72,7 +74,7 @@ const Bloglist = () => {
     return matchesSearch && matchesCategory && matchesTag;
   });
 
-  // --- Category counts, fetched live from actual published blog data ---
+  // Category counts calculated from live database items
   const categoryCounts = useMemo(() => {
     const counts = {};
     blogs.forEach((b) => {
@@ -90,7 +92,7 @@ const Bloglist = () => {
     return ['All', ...ordered, ...extras];
   }, [categoryCounts]);
 
-  // --- Popular tags, fetched live from actual published blog data ---
+  // Dynamic tags cloud from blog keywords
   const popularTags = useMemo(() => {
     const freq = {};
     blogs.forEach((b) => {
@@ -106,7 +108,7 @@ const Bloglist = () => {
       .map(([tag]) => tag);
   }, [blogs]);
 
-  // --- Recent posts, sorted by publish date ---
+  // Recent posts for sidebar
   const recentPosts = useMemo(() => {
     return [...blogs]
       .sort((a, b) => new Date(b.publishDate || 0) - new Date(a.publishDate || 0))
@@ -131,7 +133,7 @@ const Bloglist = () => {
           {/* Section Header */}
           <div className="blog-section-header">
             <h1 className="blog-page-title">
-              Blog <span className="blog-highlight-text">List</span>
+              Real Estate <span className="blog-highlight-text">Insights & News</span>
             </h1>
 
             {/* Grid / List View Toggle Controls */}
@@ -198,7 +200,7 @@ const Bloglist = () => {
           {/* Results Count */}
           {!loading && (
             <p className="blog-results-count">
-              {filteredBlogs.length} {filteredBlogs.length === 1 ? 'post' : 'posts'} found
+              Showing {filteredBlogs.length} {filteredBlogs.length === 1 ? 'article' : 'articles'}
             </p>
           )}
 
@@ -213,10 +215,12 @@ const Bloglist = () => {
               filteredBlogs.map((blog) => {
                 const blogId = blog._id || blog.id;
                 const coverImage = getImageUrl(blog.blogImage);
+                const detailUrl = `/blog-details/${blogId}`;
 
                 return (
                   <article className="blog-post-card" key={blogId}>
-                    <div className="blog-image-wrapper">
+                    {/* Clickable Image Banner */}
+                    <Link to={detailUrl} className="blog-image-wrapper" tabIndex={-1} aria-hidden="true">
                       <img
                         src={coverImage}
                         alt={blog.title || "Real Estate Blog"}
@@ -225,7 +229,7 @@ const Bloglist = () => {
                       />
                       <div className="blog-category-badge">
                         <span className="blog-badge-date">
-                          {blog.publishDate ? new Date(blog.publishDate).toLocaleString('default', { month: 'short' }) : 'April'}
+                          {blog.publishDate ? new Date(blog.publishDate).toLocaleString('default', { month: 'short' }) : 'Recent'}
                         </span>
                         <span className="blog-badge-category">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -234,20 +238,29 @@ const Bloglist = () => {
                           {blog.category || 'Housing'}
                         </span>
                       </div>
-                    </div>
+                    </Link>
 
+                    {/* Content Section */}
                     <div className="blog-content-wrapper">
                       <h2 className="blog-post-title">
-                        {blog.title}
+                        <Link to={detailUrl} className="blog-post-link">
+                          {blog.title}
+                        </Link>
                       </h2>
+
                       <p className="blog-post-snippet">
-                        {blog.shortDesc || blog.content?.substring(0, 160) + '...'}
+                        {blog.shortDesc || (blog.content ? blog.content.substring(0, 150) + '...' : '')}
                       </p>
 
-                      {/* Meta Footer */}
-                      <div className="blog-post-meta">
-                        <span className="blog-meta-author">By {blog.author || 'Admin'}</span>
-                        <span className="blog-meta-date">• {blog.publishDate}</span>
+                      {/* Meta & Read More Button */}
+                      <div className="blog-post-footer">
+                        <div className="blog-post-meta">
+                          <span className="blog-meta-author">By {blog.author || 'Utkal Property'}</span>
+                          {blog.publishDate && <span className="blog-meta-date">• {blog.publishDate}</span>}
+                        </div>
+                        <Link to={detailUrl} className="blog-read-more-btn">
+                          Read More →
+                        </Link>
                       </div>
                     </div>
                   </article>
@@ -256,9 +269,9 @@ const Bloglist = () => {
             ) : (
               <div className="blog-empty-state">
                 <h3>No Blog Posts Found</h3>
-                <p>Try resetting your search or selecting a different category widget on the right.</p>
+                <p>Try clearing your search filters or browse another category from the sidebar.</p>
                 {hasActiveFilters && (
-                  <button className="blog-empty-reset-btn" onClick={clearAllFilters}>Reset Filters</button>
+                  <button className="blog-empty-reset-btn" onClick={clearAllFilters}>Reset All Filters</button>
                 )}
               </div>
             )}
@@ -269,9 +282,9 @@ const Bloglist = () => {
         {/* Right Sidebar Area */}
         <aside className="blog-sidebar" aria-label="Sidebar Widgets">
 
-          {/* Live Search Widget */}
+          {/* Search Widget */}
           <div className="blog-widget search-widget">
-            <h3 className="blog-widget-title">Search</h3>
+            <h3 className="blog-widget-title">Search Articles</h3>
             <div className="blog-search-box">
               <svg className="blog-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8"></circle>
@@ -280,7 +293,7 @@ const Bloglist = () => {
               <input
                 type="text"
                 className="blog-search-input"
-                placeholder="Search articles, tags..."
+                placeholder="Search keywords, localities..."
                 aria-label="Search blog posts"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -337,25 +350,32 @@ const Bloglist = () => {
             </div>
           )}
 
-          {/* Recent Posts Widget */}
+          {/* Recent Posts Widget (Clickable Link Items) */}
           {recentPosts.length > 0 && (
             <div className="blog-widget recent-widget">
               <h3 className="blog-widget-title">Recent Posts</h3>
               <ul className="blog-recent-list">
-                {recentPosts.map((blog) => (
-                  <li className="blog-recent-item" key={blog._id || blog.id}>
-                    <img
-                      src={getImageUrl(blog.blogImage)}
-                      alt={blog.title}
-                      className="blog-recent-thumb"
-                      loading="lazy"
-                    />
-                    <div className="blog-recent-info">
-                      <p className="blog-recent-title">{blog.title}</p>
-                      <span className="blog-recent-date">{blog.publishDate || ''}</span>
-                    </div>
-                  </li>
-                ))}
+                {recentPosts.map((blog) => {
+                  const blogId = blog._id || blog.id;
+                  const detailUrl = `/blog-details/${blogId}`;
+
+                  return (
+                    <li className="blog-recent-item" key={blogId}>
+                      <Link to={detailUrl} className="blog-recent-link">
+                        <img
+                          src={getImageUrl(blog.blogImage)}
+                          alt={blog.title}
+                          className="blog-recent-thumb"
+                          loading="lazy"
+                        />
+                        <div className="blog-recent-info">
+                          <p className="blog-recent-title">{blog.title}</p>
+                          <span className="blog-recent-date">{blog.publishDate || 'Recent'}</span>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

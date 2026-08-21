@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { FiMapPin, FiPhoneCall, FiMail, FiSend } from 'react-icons/fi';
+import { FiMapPin, FiPhoneCall, FiSend, FiClock } from 'react-icons/fi';
 import './AboutContactSection.css';
 
 export function AboutContactSection() {
   const [formData, setFormData] = useState({
     name: '',
-    emailOrPhone: '',
+    phone: '',
     propertyType: '',
     message: '',
   });
@@ -17,21 +17,34 @@ export function AboutContactSection() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Submitted:', formData);
+
+    // Directly open WhatsApp with structured form lead
+    const targetPhone = '919861566735';
+    const text = encodeURIComponent(
+      `*New Property Inquiry - Utkal Property*\n` +
+      `👤 *Name:* ${formData.name || 'Not provided'}\n` +
+      `📞 *Phone:* ${formData.phone || 'Not provided'}\n` +
+      `🏠 *Property Type:* ${formData.propertyType || 'General Inquiry'}\n` +
+      `💬 *Message:* ${formData.message || 'Looking for available properties.'}`
+    );
+
+    window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
   };
 
   return (
-    <section className="AboutContactSection-wrapper">
+    <section className="AboutContactSection-wrapper" aria-labelledby="contact-heading">
       {/* Top Hero Banner */}
       <div className="AboutContactSection-hero">
         <div className="AboutContactSection-hero-content">
-          {/* Main Heading styled matching reference image: White + Dark Green highlight */}
-          <h2 className="AboutContactSection-main-heading">
-            <span className="AboutContactSection-heading-white">We provide the most </span>
-            <span className="AboutContactSection-heading-green">suitable and quality real estate.</span>
+          <p className="AboutContactSection-badge">Top Real Estate Agency in Bhubaneswar</p>
+          
+          <h2 id="contact-heading" className="AboutContactSection-main-heading">
+            <span className="AboutContactSection-heading-white">Find Prime Verified Properties With </span>
+            <span className="AboutContactSection-heading-green">Utkal Property</span>
           </h2>
+          
           <p className="AboutContactSection-sub-heading">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed tristique metus proin id lorem odio
+            Connect directly with leading property experts for residential plots, luxury duplexes, flats, and prime commercial spaces across Bhubaneswar.
           </p>
 
           {/* Contact Details Row */}
@@ -39,39 +52,41 @@ export function AboutContactSection() {
             
             {/* Address */}
             <div className="AboutContactSection-info-item">
-              <div className="AboutContactSection-info-icon">
+              <div className="AboutContactSection-info-icon" aria-hidden="true">
                 <FiMapPin />
               </div>
               <div className="AboutContactSection-info-text">
-                <span className="AboutContactSection-info-label">Office address</span>
-                <p className="AboutContactSection-info-value">
-                  2715 Ash Dr. San Jose, South Dakota 83475
-                </p>
+                <span className="AboutContactSection-info-label">Visit Our Office</span>
+                <address className="AboutContactSection-info-value not-italic">
+                  Plot No-55, Ln 2, Jagannath Vihar, Baramunda, Bhubaneswar, Odisha 751003
+                </address>
               </div>
             </div>
 
-            {/* Phone */}
+            {/* Direct Phone / Call Back */}
             <div className="AboutContactSection-info-item">
-              <div className="AboutContactSection-info-icon">
+              <div className="AboutContactSection-info-icon" aria-hidden="true">
                 <FiPhoneCall />
               </div>
               <div className="AboutContactSection-info-text">
-                <span className="AboutContactSection-info-label">Request a call back</span>
+                <span className="AboutContactSection-info-label">Direct Call / WhatsApp</span>
                 <p className="AboutContactSection-info-value phone-highlight">
-                  314-555-0123
+                  <a href="tel:+919861566735" className="AboutContactSection-contact-link">
+                    +91 9861566735
+                  </a>
                 </p>
               </div>
             </div>
 
-            {/* Email */}
+            {/* Working Hours (Replaced Email) */}
             <div className="AboutContactSection-info-item">
-              <div className="AboutContactSection-info-icon">
-                <FiMail />
+              <div className="AboutContactSection-info-icon" aria-hidden="true">
+                <FiClock />
               </div>
               <div className="AboutContactSection-info-text">
-                <span className="AboutContactSection-info-label">Email us</span>
+                <span className="AboutContactSection-info-label">Consultation Hours</span>
                 <p className="AboutContactSection-info-value">
-                  hellosupport@gmail.com
+                  Mon - Sun: 9:00 AM - 8:00 PM
                 </p>
               </div>
             </div>
@@ -80,7 +95,7 @@ export function AboutContactSection() {
         </div>
       </div>
 
-      {/* Floating Card Form */}
+      {/* Floating Inquiry Form */}
       <div className="AboutContactSection-card-container">
         <form className="AboutContactSection-form" onSubmit={handleSubmit}>
           
@@ -88,31 +103,34 @@ export function AboutContactSection() {
             {/* Name Input */}
             <div className="AboutContactSection-field-group">
               <label htmlFor="name" className="AboutContactSection-label">
-                Your name
+                Full Name *
               </label>
               <input
                 type="text"
                 id="name"
                 name="name"
+                required
                 className="AboutContactSection-input"
-                placeholder="Your name"
+                placeholder="Enter your name"
                 value={formData.name}
                 onChange={handleChange}
               />
             </div>
 
-            {/* Email or Phone Input */}
+            {/* Phone Input */}
             <div className="AboutContactSection-field-group">
-              <label htmlFor="emailOrPhone" className="AboutContactSection-label">
-                Email or phone
+              <label htmlFor="phone" className="AboutContactSection-label">
+                Phone Number *
               </label>
               <input
-                type="text"
-                id="emailOrPhone"
-                name="emailOrPhone"
+                type="tel"
+                id="phone"
+                name="phone"
+                required
+                pattern="[0-9]{10}"
                 className="AboutContactSection-input"
-                placeholder="Email or phone number"
-                value={formData.emailOrPhone}
+                placeholder="10-digit mobile number"
+                value={formData.phone}
                 onChange={handleChange}
               />
             </div>
@@ -120,23 +138,24 @@ export function AboutContactSection() {
             {/* Property Type Dropdown */}
             <div className="AboutContactSection-field-group">
               <label htmlFor="propertyType" className="AboutContactSection-label">
-                Property type
+                Interested Property *
               </label>
               <div className="AboutContactSection-select-wrapper">
                 <select
                   id="propertyType"
                   name="propertyType"
+                  required
                   className="AboutContactSection-select"
                   value={formData.propertyType}
                   onChange={handleChange}
                 >
                   <option value="" disabled hidden>
-                    Choose
+                    Select Property Type
                   </option>
-                  <option value="apartment">Apartment</option>
-                  <option value="villa">Villa</option>
-                  <option value="commercial">Commercial</option>
-                  <option value="land">Land</option>
+                  <option value="Residential Plot / Land">Residential Plot / Land</option>
+                  <option value="Apartment / Flat">Apartment / Flat</option>
+                  <option value="Independent House / Villa">Independent House / Villa</option>
+                  <option value="Commercial Space / Shop">Commercial Space / Shop</option>
                 </select>
               </div>
             </div>
@@ -145,14 +164,14 @@ export function AboutContactSection() {
           {/* Message Area */}
           <div className="AboutContactSection-field-group full-width">
             <label htmlFor="message" className="AboutContactSection-label">
-              Message
+              Requirements / Location Preference
             </label>
             <textarea
               id="message"
               name="message"
               className="AboutContactSection-textarea"
-              placeholder="Your message"
-              rows={5}
+              placeholder="Tell us your budget, preferred locality (e.g., Baramunda, Patia, Khandagiri), or query..."
+              rows={4}
               value={formData.message}
               onChange={handleChange}
             />
@@ -161,7 +180,7 @@ export function AboutContactSection() {
           {/* Submit Button */}
           <button type="submit" className="AboutContactSection-submit-btn">
             <FiSend className="AboutContactSection-btn-icon" />
-            <span>Send request</span>
+            <span>Request Immediate Callback</span>
           </button>
 
         </form>

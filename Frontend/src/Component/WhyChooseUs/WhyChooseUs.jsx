@@ -7,14 +7,22 @@ import whyChoose2Img from '../../assets/why-choose-2.webp';
 import whyChoose3Img from '../../assets/why-choose-3.webp';
 
 export function WhyChooseUs() {
+  const whatsappNumber = '919861566735';
+  const whatsappMessage = encodeURIComponent(
+    'Hello Utkal Property, I would like to get a free consultation regarding real estate properties in Bhubaneswar.'
+  );
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
   const cards = [
     {
       id: 1,
-      title: 'Thousands of posts every day',
+      title: 'Verified Property Listings',
       image: whyChoose1Img,
-      description: 'The lists are always refreshed and updated constantly, you will never miss',
-      linkText: 'See all listings',
-      linkUrl: '#listings',
+      description:
+        'Explore 100% verified plots, luxury apartments, and commercial spaces in prime Bhubaneswar locations, updated daily.',
+      linkText: 'Explore Bhubaneswar Properties',
+      linkUrl: '/properties',
+      isExternal: false,
       icon: (
         <svg className="WhyChooseUs-svg-icon icon-posts" viewBox="0 0 80 80" fill="none" stroke="#18522e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <g className="doc-body">
@@ -41,11 +49,13 @@ export function WhyChooseUs() {
     },
     {
       id: 2,
-      title: 'Smart filter',
+      title: 'Smart Location & Budget Matching',
       image: whyChoose2Img,
-      description: 'Find the right house for you in the shortest amount of time',
-      linkText: 'See all listings',
-      linkUrl: '#listings',
+      description:
+        'Quickly match with high-ROI residential and commercial properties across Patia, Khandagiri, Pahala, and Jaydev Vihar.',
+      linkText: 'Find Dream Home',
+      linkUrl: '/properties',
+      isExternal: false,
       icon: (
         <svg className="WhyChooseUs-svg-icon icon-filter" viewBox="0 0 80 80" fill="none" stroke="#18522e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <g className="filter-paper">
@@ -69,11 +79,13 @@ export function WhyChooseUs() {
     },
     {
       id: 3,
-      title: 'Great support',
+      title: 'Legal & RERA Advisory',
       image: whyChoose3Img,
-      description: 'After-sales care service, helpful advice to avoid scams',
-      linkText: 'See all listings',
-      linkUrl: '#listings',
+      description:
+        'Complete peace of mind with expert legal documentation, clear title verification, and end-to-end home loan assistance.',
+      linkText: 'Get Free Consultation',
+      linkUrl: whatsappUrl,
+      isExternal: true,
       icon: (
         <svg className="WhyChooseUs-svg-icon icon-support" viewBox="0 0 80 80" fill="none" stroke="#18522e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <g className="support-box">
@@ -98,37 +110,51 @@ export function WhyChooseUs() {
   ];
 
   return (
-    <section className="WhyChooseUs-section">
+    <section className="WhyChooseUs-section" aria-labelledby="why-choose-heading">
       <div className="WhyChooseUs-container">
-        
+
         <div className="WhyChooseUs-header">
-          {/* Title styled matching second image: "Why" (Dark Navy) + "choose us" (Dark Green) */}
-          <h2 className="WhyChooseUs-title">
-            <span className="WhyChooseUs-title-dark">Why</span>{' '}
-            <span className="WhyChooseUs-title-green">choose us</span>
+          <p className="WhyChooseUs-tagline">Trusted Real Estate Partner</p>
+          <h2 id="why-choose-heading" className="WhyChooseUs-title">
+            <span className="WhyChooseUs-title-dark">Why Choose</span>{' '}
+            <span className="WhyChooseUs-title-green">Utkal Property?</span>
           </h2>
-          <p className="WhyChooseUs-subtitle">Save your time and effort with our tools</p>
+          <p className="WhyChooseUs-subtitle">
+            Partner with the <strong>top real estate agent in Bhubaneswar</strong> for seamless property buying, selling, and high-ROI investments.
+          </p>
         </div>
 
         <div className="WhyChooseUs-grid">
           {cards.map((card) => (
             <div key={card.id} className="WhyChooseUs-card">
-              
-              <div className="WhyChooseUs-icon-wrapper">
+
+              <div className="WhyChooseUs-icon-wrapper" aria-hidden="true">
                 {card.icon}
               </div>
 
               <h3 className="WhyChooseUs-card-title">{card.title}</h3>
 
               <div className="WhyChooseUs-img-wrapper">
-                <img src={card.image} alt={card.title} className="WhyChooseUs-img" />
+                <img
+                  src={card.image}
+                  alt={`${card.title} - Utkal Property Real Estate`}
+                  className="WhyChooseUs-img"
+                  loading="lazy"
+                />
               </div>
 
               <p className="WhyChooseUs-card-desc">{card.description}</p>
 
-              <a href={card.linkUrl} className="WhyChooseUs-link">
+              <a
+                href={card.linkUrl}
+                className="WhyChooseUs-link"
+                title={`${card.linkText} - Utkal Property`}
+                {...(card.isExternal
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
                 <span>{card.linkText}</span>
-                <FaArrowRight className="WhyChooseUs-arrow" />
+                <FaArrowRight className="WhyChooseUs-arrow" aria-hidden="true" />
               </a>
 
             </div>

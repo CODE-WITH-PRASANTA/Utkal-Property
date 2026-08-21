@@ -846,61 +846,6 @@ const GridBreadcrum = ({ onSearch }) => {
 
       </div>
 
-      {/* ============================================== */}
-      {/* HERO */}
-      {/* ============================================== */}
-
-      <div
-        className="GridBreadcrum-hero-banner"
-        style={bgStyle}
-      >
-
-        <div className="GridBreadcrum-hero-container">
-
-          <h1 className="GridBreadcrum-hero-title">
-            Gorgeous Apartment Building
-          </h1>
-
-          <div className="GridBreadcrum-hero-meta">
-
-            <span className="GridBreadcrum-meta-item">
-
-              <BiBed className="GridBreadcrum-meta-icon" />
-
-              Beds: <strong>4</strong>
-
-            </span>
-
-            <span className="GridBreadcrum-meta-item">
-
-              <BiBath className="GridBreadcrum-meta-icon" />
-
-              Baths: <strong>2</strong>
-
-            </span>
-
-            <span className="GridBreadcrum-meta-item">
-
-              <BiArea className="GridBreadcrum-meta-icon" />
-
-              Sqft: <strong>1150</strong>
-
-            </span>
-
-            <span className="GridBreadcrum-meta-item">
-
-              <HiOutlineMapPin className="GridBreadcrum-meta-icon" />
-
-              58 Hullbrook Road, Billesley, B13 0LA
-
-            </span>
-
-          </div>
-
-        </div>
-
-      </div>
-
     </div>
   );
 };

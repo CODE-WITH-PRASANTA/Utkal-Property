@@ -11,11 +11,13 @@ const BlogDetails = () => {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
+  // Sidebar dynamic state
   const [allBlogs, setAllBlogs] = useState([]);
   const [sidebarLoading, setSidebarLoading] = useState(true);
   const [sidebarError, setSidebarError] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Helper function to resolve image URL
   const getImageUrl = (imgPath) => {
     if (!imgPath) {
       return 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80';
@@ -28,6 +30,7 @@ const BlogDetails = () => {
     return `${baseUrl}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
   };
 
+  // Fetch current blog details by ID
   const fetchBlogById = useCallback(async () => {
     if (!id) return;
     try {
@@ -55,6 +58,7 @@ const BlogDetails = () => {
     }
   }, [id]);
 
+  // Fetch all blogs for the sidebar
   const fetchSidebarData = useCallback(async () => {
     try {
       setSidebarLoading(true);
@@ -81,6 +85,7 @@ const BlogDetails = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [id, fetchBlogById, fetchSidebarData]);
 
+  // Compute category counts
   const categories = useMemo(() => {
     const counts = {};
     allBlogs.forEach((b) => {
@@ -92,6 +97,7 @@ const BlogDetails = () => {
       .slice(0, 6);
   }, [allBlogs]);
 
+  // Compute featured listings (excluding current blog)
   const featuredListings = useMemo(() => {
     return allBlogs
       .filter((b) => String(b._id || b.id) !== String(id))
@@ -114,10 +120,13 @@ const BlogDetails = () => {
 
   if (loading) {
     return (
-      <article className="utkal-blog-details-container">
-        <div className="utkal-blog-content-wrapper">
-          <main className="utkal-blog-main">
-            <p className="utkal-status-text">Loading article...</p>
+      <article className="BlogDetails-section">
+        <div className="BlogDetails-container">
+          <main className="BlogDetails-main-content">
+            <div className="BlogDetails-status-box">
+              <div className="BlogDetails-spinner"></div>
+              <p className="BlogDetails-status-text">Loading article...</p>
+            </div>
           </main>
         </div>
       </article>
@@ -126,13 +135,13 @@ const BlogDetails = () => {
 
   if (notFound || !blog) {
     return (
-      <article className="utkal-blog-details-container">
-        <div className="utkal-blog-content-wrapper">
-          <main className="utkal-blog-main">
-            <div className="utkal-status-text">
-              <h2 style={{ color: '#0f172a', marginBottom: '10px' }}>Article Not Found</h2>
-              <p>This post may have been unpublished or removed.</p>
-              <Link to="/blog" className="utkal-back-link">← Back to Blog List</Link>
+      <article className="BlogDetails-section">
+        <div className="BlogDetails-container">
+          <main className="BlogDetails-main-content">
+            <div className="BlogDetails-status-box BlogDetails-not-found-box">
+              <h2 className="BlogDetails-not-found-title">Article Not Found</h2>
+              <p className="BlogDetails-not-found-text">This post may have been unpublished or removed.</p>
+              <Link to="/blog" className="BlogDetails-back-link">← Back to Blog List</Link>
             </div>
           </main>
         </div>
@@ -141,81 +150,96 @@ const BlogDetails = () => {
   }
 
   return (
-    <article className="utkal-blog-details-container">
-      <div className="utkal-blog-content-wrapper">
-        <main className="utkal-blog-main">
-          <header className="utkal-blog-header">
-            <h1 className="utkal-blog-title">{blog.title}</h1>
-            <div className="utkal-blog-meta">
-              <span className="utkal-meta-item">
-                <i className="far fa-user"></i> {blog.author || 'Utkal Property Consultant'}
+    <article className="BlogDetails-section">
+      <div className="BlogDetails-container">
+        {/* Main Article Body */}
+        <main className="BlogDetails-main-content">
+          <header className="BlogDetails-header">
+            <h1 className="BlogDetails-title">{blog.title}</h1>
+
+            <div className="BlogDetails-meta-row">
+              <span className="BlogDetails-meta-item">
+                <i className="far fa-user BlogDetails-meta-icon"></i>
+                <span>{blog.author || 'Utkal Property Consultant'}</span>
               </span>
-              <span className="utkal-meta-item">
-                <i className="far fa-folder"></i> {blog.category || 'Housing'}
+              <span className="BlogDetails-meta-item">
+                <i className="far fa-folder BlogDetails-meta-icon"></i>
+                <span>{blog.category || 'Housing'}</span>
               </span>
               {Array.isArray(blog.tags) && blog.tags.length > 0 && (
-                <span className="utkal-meta-item">
-                  <i className="far fa-tags"></i> {blog.tags.join(', ')}
+                <span className="BlogDetails-meta-item">
+                  <i className="far fa-tags BlogDetails-meta-icon"></i>
+                  <span>{blog.tags.join(', ')}</span>
                 </span>
               )}
-              <span className="utkal-meta-item">
-                <i className="far fa-calendar"></i> {formatDate(blog.publishDate)}
+              <span className="BlogDetails-meta-item">
+                <i className="far fa-calendar BlogDetails-meta-icon"></i>
+                <span>{formatDate(blog.publishDate)}</span>
               </span>
             </div>
           </header>
 
-          <div className="utkal-blog-body">
-            {blog.shortDesc && <p className="utkal-lead-text">{blog.shortDesc}</p>}
+          <div className="BlogDetails-body">
+            {blog.shortDesc && (
+              <p className="BlogDetails-lead-text">{blog.shortDesc}</p>
+            )}
 
-            <div className="utkal-blog-image-container">
-              <img src={getImageUrl(blog.blogImage)} alt={blog.title} className="utkal-featured-image" />
+            <div className="BlogDetails-image-container">
+              <img
+                src={getImageUrl(blog.blogImage)}
+                alt={blog.title}
+                className="BlogDetails-featured-image"
+              />
             </div>
 
-            {(blog.content || '').split('\n').map((para, idx) =>
-              para.trim() ? <p key={idx}>{para}</p> : null
-            )}
+            <div className="BlogDetails-article-text">
+              {(blog.content || '').split('\n').map((para, idx) =>
+                para.trim() ? <p key={idx}>{para}</p> : null
+              )}
+            </div>
           </div>
         </main>
 
-        <aside className="utkal-blog-sidebar">
+        {/* Sidebar */}
+        <aside className="BlogDetails-sidebar">
           {/* Search Widget */}
-          <div className="utkal-sidebar-widget utkal-search-widget">
-            <h3 className="utkal-widget-title">Search</h3>
-            <form className="utkal-search-box" onSubmit={handleSearchSubmit} role="search">
-              <i className="fas fa-search utkal-search-icon"></i>
+          <div className="BlogDetails-widget BlogDetails-search-widget">
+            <h3 className="BlogDetails-widget-title">Search</h3>
+            <form className="BlogDetails-search-form" onSubmit={handleSearchSubmit} role="search">
+              <i className="fas fa-search BlogDetails-search-icon"></i>
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search properties, blogs..."
-                className="utkal-search-input"
+                className="BlogDetails-search-input"
                 aria-label="Search"
               />
-              <button type="submit" className="utkal-search-submit" aria-label="Submit search">
+              <button type="submit" className="BlogDetails-search-btn" aria-label="Submit search">
                 <i className="fas fa-arrow-right"></i>
               </button>
             </form>
           </div>
 
           {/* Categories Widget */}
-          <div className="utkal-sidebar-widget utkal-categories-widget">
-            <h3 className="utkal-widget-title">Categories</h3>
+          <div className="BlogDetails-widget BlogDetails-categories-widget">
+            <h3 className="BlogDetails-widget-title">Categories</h3>
 
-            {sidebarLoading && <p className="utkal-widget-status">Loading categories...</p>}
+            {sidebarLoading && <p className="BlogDetails-widget-status">Loading categories...</p>}
             {!sidebarLoading && sidebarError && (
-              <p className="utkal-widget-status">Categories unavailable right now.</p>
+              <p className="BlogDetails-widget-status">Categories unavailable right now.</p>
             )}
             {!sidebarLoading && !sidebarError && categories.length === 0 && (
-              <p className="utkal-widget-status">No categories yet.</p>
+              <p className="BlogDetails-widget-status">No categories yet.</p>
             )}
 
             {!sidebarLoading && !sidebarError && categories.length > 0 && (
-              <ul className="utkal-category-list">
+              <ul className="BlogDetails-category-list">
                 {categories.map(([cat, count]) => (
-                  <li key={cat}>
-                    <Link to={`/blog?category=${encodeURIComponent(cat)}`}>
-                      <span>{cat}</span>
-                      <span className="utkal-count-pill">{count}</span>
+                  <li key={cat} className="BlogDetails-category-item">
+                    <Link to={`/blog?category=${encodeURIComponent(cat)}`} className="BlogDetails-category-link">
+                      <span className="BlogDetails-category-name">{cat}</span>
+                      <span className="BlogDetails-category-count">{count}</span>
                     </Link>
                   </li>
                 ))}
@@ -224,50 +248,50 @@ const BlogDetails = () => {
           </div>
 
           {/* Featured Listings Widget */}
-          <div className="utkal-sidebar-widget utkal-featured-widget">
-            <h3 className="utkal-widget-title">Featured listings</h3>
+          <div className="BlogDetails-widget BlogDetails-featured-widget">
+            <h3 className="BlogDetails-widget-title">Featured Listings</h3>
 
-            {sidebarLoading && <p className="utkal-widget-status">Loading listings...</p>}
+            {sidebarLoading && <p className="BlogDetails-widget-status">Loading listings...</p>}
             {!sidebarLoading && sidebarError && (
-              <p className="utkal-widget-status">Listings unavailable right now.</p>
+              <p className="BlogDetails-widget-status">Listings unavailable right now.</p>
             )}
             {!sidebarLoading && !sidebarError && featuredListings.length === 0 && (
-              <p className="utkal-widget-status">No other posts yet.</p>
+              <p className="BlogDetails-widget-status">No other posts yet.</p>
             )}
 
             {!sidebarLoading &&
               !sidebarError &&
               featuredListings.map((item) => (
                 <Link
-                  to={`/blog/${item._id || item.id}`}
-                  className="utkal-featured-item"
+                  to={`/blog-details/${item._id || item.id}`}
+                  className="BlogDetails-featured-item"
                   key={item._id || item.id}
                 >
                   <img
                     src={getImageUrl(item.blogImage)}
                     alt={item.title}
-                    className="utkal-featured-thumb"
+                    className="BlogDetails-featured-thumb"
                   />
-                  <div className="utkal-featured-info">
-                    <h4>{item.title}</h4>
-                    <span className="utkal-price">{formatDate(item.publishDate)}</span>
+                  <div className="BlogDetails-featured-info">
+                    <h4 className="BlogDetails-featured-title">{item.title}</h4>
+                    <span className="BlogDetails-featured-date">{formatDate(item.publishDate)}</span>
                   </div>
                 </Link>
               ))}
           </div>
 
-          {/* Business Info Quick Card */}
-          <div className="utkal-sidebar-widget utkal-consultant-card">
-            <div className="utkal-verified-ribbon">Verified Consultant</div>
-            <h3 className="utkal-widget-title">Utkal Property</h3>
-            <p className="utkal-consultant-tagline">Best Property Consultant in Bhubaneswar</p>
-            <p className="utkal-consultant-address">
+          {/* Consultant Quick Card */}
+          <div className="BlogDetails-widget BlogDetails-consultant-card">
+            <div className="BlogDetails-verified-badge">Verified Consultant</div>
+            <h3 className="BlogDetails-consultant-title">Utkal Property</h3>
+            <p className="BlogDetails-consultant-tagline">Best Property Consultant in Bhubaneswar</p>
+            <p className="BlogDetails-consultant-address">
               <strong>Address:</strong> Plot No-55, Ln 2, Jagannath Vihar, Baramunda, Bhubaneswar, Odisha 751003
             </p>
-            <p className="utkal-consultant-phone">
+            <p className="BlogDetails-consultant-phone">
               <strong>Phone:</strong> <a href="tel:09861566735">098615 66735</a>
             </p>
-            <div className="utkal-rating-badge">★ 4.4 (47 Google Reviews)</div>
+            <div className="BlogDetails-rating-pill">★ 4.4 (47 Google Reviews)</div>
           </div>
         </aside>
       </div>

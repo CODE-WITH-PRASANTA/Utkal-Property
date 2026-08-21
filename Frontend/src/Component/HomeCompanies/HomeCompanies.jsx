@@ -1,94 +1,96 @@
 import React from 'react';
 import { 
-  MdOutlineHouse, 
-  MdGraphicEq 
-} from 'react-icons/md';
-import { 
-  HiOutlineCheckBadge, 
-  HiOutlineBuildingOffice2 
+  HiOutlineBuildingOffice2, 
+  HiOutlineCheckBadge 
 } from 'react-icons/hi2';
 import { 
   TbBuildingEstate, 
-  TbSquareKey 
+  TbSquareKey, 
+  TbBuildingSkyscraper 
 } from 'react-icons/tb';
 import { 
-  BiTrendingUp 
-} from 'react-icons/bi';
+  MdOutlineApartment 
+} from 'react-icons/md';
 import './HomeCompanies.css';
 
 const HomeCompanies = () => {
-  const companies = [
+  const builders = [
     {
       id: 1,
-      icon: <TbBuildingEstate className="HomeCompanies-logoIcon" />,
-      title: 'Real Estate',
-      subtitle: 'your tagline goes here'
+      icon: <TbBuildingSkyscraper className="HomeCompanies-logoIcon" />,
+      title: 'Utkal Builders',
+      subtitle: 'Luxury Properties & Apartments'
     },
     {
       id: 2,
-      icon: <HiOutlineCheckBadge className="HomeCompanies-logoIcon" />,
-      title: 'C O M P A N Y',
-      subtitle: 'TAGLINE GOES HERE'
+      icon: <HiOutlineBuildingOffice2 className="HomeCompanies-logoIcon" />,
+      title: 'Pramod Signature',
+      subtitle: 'Premium Living Spaces'
     },
     {
       id: 3,
-      icon: <TbSquareKey className="HomeCompanies-logoIcon" />,
-      title: 'Bauhouse',
-      subtitle: 'REAL ESTATE'
+      icon: <TbBuildingEstate className="HomeCompanies-logoIcon" />,
+      title: 'DN Homes',
+      subtitle: 'Integrated Smart Townships'
     },
     {
       id: 4,
-      icon: <MdGraphicEq className="HomeCompanies-logoIcon" />,
-      title: 'Accusaf',
-      subtitle: 'accounting & financial'
+      icon: <HiOutlineCheckBadge className="HomeCompanies-logoIcon" />,
+      title: 'Mani Tribhuvan',
+      subtitle: 'Elite Residential Enclaves'
     },
     {
       id: 5,
-      icon: <HiOutlineBuildingOffice2 className="HomeCompanies-logoIcon" />,
-      title: 'COMPANY',
-      subtitle: 'TAGLINE GOES HERE'
+      icon: <MdOutlineApartment className="HomeCompanies-logoIcon" />,
+      title: 'Z Estates',
+      subtitle: 'Modern Lifestyle Infrastructure'
     },
     {
       id: 6,
-      icon: <BiTrendingUp className="HomeCompanies-logoIcon" />,
-      title: 'BUSINESS NAME',
-      subtitle: 'TAGLINE HERE'
+      icon: <TbSquareKey className="HomeCompanies-logoIcon" />,
+      title: 'Falcon Realties',
+      subtitle: 'Commercial & Luxury Housing'
     }
   ];
 
   return (
-    <div className="HomeCompanies">
+    <section className="HomeCompanies" aria-labelledby="real-estate-heading">
       <div className="HomeCompanies-container">
         
-        {/* Header Section */}
+        {/* SEO-Optimized Header Section */}
         <div className="HomeCompanies-header">
-          <span className="HomeCompanies-badgeTag">Trusted Partners</span>
-          <h2 className="HomeCompanies-title">
-            Trusted by over <span className="highlight-green">150+ major companies</span> across India
-          </h2>
+          <span className="HomeCompanies-badgeTag">Trusted Developer Network</span>
+          
+          <h1 id="real-estate-heading" className="HomeCompanies-title">
+            Best Real Estate Agency in Bhubaneswar — Partnered with <span className="highlight-green">Odisha's Top Builders</span>
+          </h1>
+          
+          <p className="HomeCompanies-description">
+            Connect with RERA-approved developers and premium residential projects across Bhubaneswar and Odisha.
+          </p>
         </div>
 
-        {/* Company Logos Grid */}
+        {/* Builder Brand Grid */}
         <div className="HomeCompanies-grid">
-          {companies.map((company) => (
-            <div key={company.id} className="HomeCompanies-card">
-              <div className="HomeCompanies-iconWrapper">
-                {company.icon}
+          {builders.map((builder) => (
+            <article key={builder.id} className="HomeCompanies-card">
+              <div className="HomeCompanies-iconWrapper" aria-hidden="true">
+                {builder.icon}
               </div>
               <div className="HomeCompanies-textGroup">
                 <span className="HomeCompanies-companyTitle">
-                  {company.title}
+                  {builder.title}
                 </span>
                 <span className="HomeCompanies-companySubtitle">
-                  {company.subtitle}
+                  {builder.subtitle}
                 </span>
               </div>
-            </div>
+            </article>
           ))}
         </div>
 
       </div>
-    </div>
+    </section>
   );
 };
 

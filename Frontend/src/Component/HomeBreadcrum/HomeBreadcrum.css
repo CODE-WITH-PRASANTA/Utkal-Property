@@ -1,31 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-/* Color Variables extracted from Utkal Property Logo */
 :root {
   --utkal-green: #0a682c;
   --utkal-green-hover: #074e20;
   --utkal-navy: #0c1b33;
-  --utkal-green-light: #eef7f2;
-  --utkal-green-border: #cde4d6;
+  --utkal-green-light: #edf7f2;
+  --utkal-green-border: #cfe4d7;
   --utkal-gray-subtle: #5a6b82;
+  --utkal-border: #e2e8f0;
+  --utkal-shadow-sm: 0 4px 14px rgba(12, 27, 51, 0.05);
+  --utkal-shadow-md: 0 16px 36px rgba(12, 27, 51, 0.08);
+  --utkal-shadow-lg: 0 24px 50px rgba(10, 104, 44, 0.14);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Base Wrapper */
 .HomeBreadcrum {
   width: 100%;
   min-height: 100vh;
-  background: radial-gradient(circle at 10% 20%, #ffffff 0%, #f4faf6 70%, #e8f5ed 100%);
+  background: radial-gradient(circle at 15% 20%, #ffffff 0%, #f4faf6 65%, #e6f4ec 100%);
   font-family: 'Plus Jakarta Sans', sans-serif;
   color: var(--utkal-navy);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 50px 24px;
+  padding: 60px 24px;
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
 }
 
-/* Subtle background accent glow */
 .HomeBreadcrum::before {
   content: '';
   position: absolute;
@@ -33,96 +37,97 @@
   right: -100px;
   width: 500px;
   height: 500px;
-  background: rgba(10, 104, 44, 0.05);
+  background: radial-gradient(circle, rgba(10, 104, 44, 0.08) 0%, rgba(10, 104, 44, 0) 70%);
   border-radius: 50%;
-  filter: blur(80px);
   pointer-events: none;
 }
 
 .HomeBreadcrum-container {
-  max-width: 1280px;
+  max-width: 1320px;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 48px;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 52px;
   align-items: center;
   position: relative;
+  z-index: 2;
 }
 
-/* Left Section */
+/* Left Hero Typography */
 .HomeBreadcrum-left {
   display: flex;
   flex-direction: column;
-  z-index: 5;
 }
 
 .HomeBreadcrum-badgeTag {
-  display: inline-block;
+  display: inline-flex;
   align-self: flex-start;
-  padding: 6px 14px;
+  padding: 6px 16px;
   background-color: var(--utkal-green-light);
   border: 1px solid var(--utkal-green-border);
   color: var(--utkal-green);
   font-size: 12px;
   font-weight: 700;
-  border-radius: 30px;
-  margin-bottom: 16px;
-  letter-spacing: 0.5px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
 .HomeBreadcrum-title {
-  font-size: 56px;
+  font-size: 52px;
   font-weight: 800;
-  line-height: 1.12;
+  line-height: 1.15;
   color: var(--utkal-navy);
-  margin: 0 0 20px 0;
-  letter-spacing: -1.2px;
+  margin: 0 0 18px 0;
+  letter-spacing: -1px;
 }
 
-.HomeBreadcrum-title .highlight-green {
+.highlight-green {
   color: var(--utkal-green);
-  position: relative;
   display: inline-block;
 }
 
 .HomeBreadcrum-subtitle {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.65;
   color: var(--utkal-gray-subtle);
-  max-width: 480px;
+  max-width: 520px;
   margin: 0 0 36px 0;
 }
 
-/* Search Container & Tabs */
+/* Search Tabs & Card */
 .HomeBreadcrum-searchCardContainer {
   position: relative;
   width: 100%;
   max-width: 720px;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 
 .HomeBreadcrum-tabs {
   display: inline-flex;
   background-color: var(--utkal-green-light);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-radius: 12px 12px 0 0;
   padding: 4px 4px 0 4px;
   border: 1px solid var(--utkal-green-border);
   border-bottom: none;
 }
 
 .HomeBreadcrum-tab {
-  padding: 10px 32px;
+  padding: 10px 28px;
   border: none;
   background: transparent;
+  font-family: inherit;
   font-size: 14px;
   font-weight: 700;
   color: var(--utkal-gray-subtle);
   cursor: pointer;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  transition: all 0.25s ease;
+  border-radius: 8px 8px 0 0;
+  transition: var(--transition);
+}
+
+.HomeBreadcrum-tab:hover {
+  color: var(--utkal-navy);
 }
 
 .HomeBreadcrum-tab.active {
@@ -130,16 +135,15 @@
   color: #ffffff;
 }
 
-/* Main Search Bar */
 .HomeBreadcrum-searchCard {
   background: #ffffff;
-  border-radius: 0 14px 14px 14px;
-  box-shadow: 0 16px 40px rgba(12, 27, 51, 0.08);
+  border-radius: 0 16px 16px 16px;
+  box-shadow: var(--utkal-shadow-md);
   border: 1px solid var(--utkal-green-border);
   display: flex;
   align-items: center;
   padding: 8px 12px;
-  gap: 8px;
+  gap: 10px;
   position: relative;
   z-index: 10;
 }
@@ -153,11 +157,12 @@
   width: 100%;
   border: none;
   outline: none;
-  padding: 12px 16px;
+  padding: 10px 14px;
   font-size: 14px;
   color: var(--utkal-navy);
   font-family: inherit;
   font-weight: 500;
+  background: transparent;
 }
 
 .HomeBreadcrum-inputField input::placeholder {
@@ -165,14 +170,14 @@
 }
 
 .HomeBreadcrum-dropdownField {
-  border-left: 1px solid #e2e8f0;
+  border-left: 1px solid var(--utkal-border);
 }
 
 .HomeBreadcrum-dropdownHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: 10px 14px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
@@ -182,11 +187,15 @@
 
 .HomeBreadcrum-arrowIcon {
   color: var(--utkal-green);
-  font-size: 16px;
-  transition: transform 0.2s ease;
+  font-size: 15px;
+  transition: transform 0.25s ease;
 }
 
-/* Property / Location Dropdown Menu */
+.HomeBreadcrum-arrowIcon.rotate {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
 .HomeBreadcrum-dropdownMenu {
   position: absolute;
   top: calc(100% + 12px);
@@ -194,18 +203,21 @@
   width: 220px;
   background: #ffffff;
   border: 1px solid var(--utkal-green-border);
-  border-radius: 10px;
-  box-shadow: 0 12px 32px rgba(12, 27, 51, 0.12);
+  border-radius: 12px;
+  box-shadow: var(--utkal-shadow-md);
   z-index: 100;
   overflow: hidden;
+  animation: dropdownFade 0.2s ease-out;
 }
 
 .HomeBreadcrum-dropdownTitle {
   background-color: var(--utkal-navy);
   color: #ffffff;
   font-weight: 700;
-  padding: 12px 18px;
-  font-size: 14px;
+  padding: 10px 16px;
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
 .HomeBreadcrum-dropdownMenu ul {
@@ -215,33 +227,35 @@
 }
 
 .HomeBreadcrum-dropdownMenu li {
-  padding: 10px 18px;
-  font-size: 14px;
+  padding: 10px 16px;
+  font-size: 13.5px;
   font-weight: 500;
   color: var(--utkal-navy);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: var(--transition);
 }
 
-.HomeBreadcrum-dropdownMenu li:hover {
+.HomeBreadcrum-dropdownMenu li:hover,
+.HomeBreadcrum-dropdownMenu li.selected {
   background-color: var(--utkal-green-light);
   color: var(--utkal-green);
+  font-weight: 600;
 }
 
-/* Action Buttons */
+/* Buttons */
 .HomeBreadcrum-filterBtn {
   background: var(--utkal-green-light);
   border: 1px solid var(--utkal-green-border);
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--utkal-green);
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: var(--transition);
   flex-shrink: 0;
 }
 
@@ -257,59 +271,63 @@
   color: #ffffff;
   border: none;
   padding: 0 24px;
-  height: 46px;
+  height: 44px;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
+  font-family: inherit;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(10, 104, 44, 0.25);
+  transition: var(--transition);
+  box-shadow: var(--utkal-shadow-sm);
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
 .HomeBreadcrum-searchBtn:hover {
   background: var(--utkal-green-hover);
   transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(10, 104, 44, 0.3);
 }
 
 .HomeBreadcrum-searchIcon {
   font-size: 16px;
 }
 
-/* Advanced Filter Panel */
+/* Filter Panel */
 .HomeBreadcrum-filterPanel {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 12px);
   left: 0;
   right: 0;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(12, 27, 51, 0.12);
+  border-radius: 16px;
+  box-shadow: var(--utkal-shadow-md);
   padding: 24px;
-  margin-top: 14px;
   z-index: 50;
   border: 1px solid var(--utkal-green-border);
+  animation: dropdownFade 0.25s ease-out;
 }
 
 .HomeBreadcrum-filterTop {
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .HomeBreadcrum-filterSelectGroup {
   display: flex;
-  gap: 16px;
+  gap: 12px;
 }
 
 .HomeBreadcrum-filterSelect {
   position: relative;
   border: 1px solid var(--utkal-green-border);
   background: var(--utkal-green-light);
-  border-radius: 6px;
+  border-radius: 8px;
   min-width: 140px;
 }
 
@@ -324,6 +342,7 @@
   color: var(--utkal-navy);
   appearance: none;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .HomeBreadcrum-selectArrow {
@@ -340,29 +359,29 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--utkal-navy);
-  margin-left: 20px;
 }
 
 .HomeBreadcrum-divider {
   height: 1px;
-  background-color: var(--utkal-green-border);
-  margin: 20px 0;
+  background-color: var(--utkal-border);
+  margin: 18px 0;
 }
 
 .HomeBreadcrum-amenitiesGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px 12px;
+  gap: 14px 10px;
 }
 
 .HomeBreadcrum-checkboxLabel {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
   color: var(--utkal-navy);
+  user-select: none;
 }
 
 .HomeBreadcrum-checkboxLabel input {
@@ -374,10 +393,11 @@
   height: 18px;
   border: 1.5px solid var(--utkal-green-border);
   background-color: #ffffff;
-  border-radius: 4px;
+  border-radius: 5px;
   display: inline-block;
   position: relative;
-  transition: all 0.2s;
+  transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .HomeBreadcrum-checkboxLabel input:checked + .HomeBreadcrum-customCheckbox {
@@ -392,7 +412,7 @@
   top: 2px;
   width: 4px;
   height: 8px;
-  border: solid white;
+  border: solid #ffffff;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -400,14 +420,14 @@
 /* Stats Counter */
 .HomeBreadcrum-stats {
   display: flex;
-  gap: 48px;
-  padding-top: 10px;
+  gap: 40px;
+  padding-top: 18px;
   border-top: 1px dashed var(--utkal-green-border);
   max-width: 480px;
 }
 
 .HomeBreadcrum-statItem h3 {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 800;
   color: var(--utkal-green);
   margin: 0 0 2px 0;
@@ -420,49 +440,56 @@
   margin: 0;
 }
 
-/* Right Section */
+/* Right Section & Arch Image */
 .HomeBreadcrum-right {
   position: relative;
   display: flex;
   justify-content: flex-end;
 }
 
-/* Arch Image */
 .HomeBreadcrum-imageArch {
   width: 100%;
-  max-width: 430px;
-  height: 540px;
-  border-top-left-radius: 215px;
-  border-top-right-radius: 215px;
+  max-width: 420px;
+  height: 520px;
+  border-top-left-radius: 210px;
+  border-top-right-radius: 210px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 24px 48px rgba(10, 104, 44, 0.15);
-  border: 4px solid #ffffff;
+  box-shadow: var(--utkal-shadow-lg);
+  border: 6px solid #ffffff;
 }
 
 .HomeBreadcrum-heroImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s ease;
 }
 
-/* Rotating Circular Badge */
+.HomeBreadcrum-imageArch:hover .HomeBreadcrum-heroImage {
+  transform: scale(1.03);
+}
+
+/* Rotating Badge */
 .HomeBreadcrum-badgeWrapper {
   position: absolute;
   top: -20px;
-  left: 10px;
-  width: 130px;
-  height: 130px;
+  left: -20px;
+  width: 120px;
+  height: 120px;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 10px 25px rgba(12, 27, 51, 0.12);
+  box-shadow: var(--utkal-shadow-md);
   border: 1px solid var(--utkal-green-border);
 }
 
 .HomeBreadcrum-badgeTextContainer {
+  position: absolute;
   width: 100%;
   height: 100%;
   animation: rotateBadge 16s linear infinite;
@@ -471,91 +498,106 @@
 .HomeBreadcrum-rotatingSvg {
   width: 100%;
   height: 100%;
-  overflow: visible;
 }
 
 .HomeBreadcrum-svgText {
   font-size: 8.5px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.8px;
   fill: var(--utkal-navy);
 }
 
 .HomeBreadcrum-badgeArrow {
   position: absolute;
-  font-size: 24px;
-  color: var(--utkal-green);
+  width: 44px;
+  height: 44px;
+  background: var(--utkal-green);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #ffffff;
+  font-size: 18px;
+  box-shadow: 0 4px 10px rgba(10, 104, 44, 0.3);
 }
 
+/* Keyframes */
 @keyframes rotateBadge {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes dropdownFade {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(-6px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Responsive Breakpoints */
+/* Responsive Media Queries */
 @media (max-width: 1024px) {
   .HomeBreadcrum-container {
     grid-template-columns: 1fr;
-    gap: 60px;
+    gap: 48px;
   }
-
   .HomeBreadcrum-title {
-    font-size: 44px;
+    font-size: 42px;
   }
-
   .HomeBreadcrum-right {
     justify-content: center;
   }
-
   .HomeBreadcrum-badgeWrapper {
-    left: 15%;
+    left: 10%;
   }
 }
 
 @media (max-width: 768px) {
+  .HomeBreadcrum {
+    padding: 40px 16px;
+  }
   .HomeBreadcrum-searchCard {
     flex-direction: column;
     align-items: stretch;
-    padding: 16px;
+    padding: 14px;
   }
-
   .HomeBreadcrum-dropdownField {
     border-left: none;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--utkal-border);
   }
-
-  .HomeBreadcrum-amenitiesGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .HomeBreadcrum-filterTop {
     flex-direction: column;
     align-items: flex-start;
   }
-
-  .HomeBreadcrum-filterHeaderLabel {
-    margin-left: 0;
+  .HomeBreadcrum-amenitiesGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
   .HomeBreadcrum-title {
-    font-size: 34px;
+    font-size: 32px;
   }
-
   .HomeBreadcrum-amenitiesGrid {
     grid-template-columns: 1fr;
   }
-
   .HomeBreadcrum-imageArch {
-    height: 400px;
+    height: 380px;
+    border-top-left-radius: 160px;
+    border-top-right-radius: 160px;
+  }
+  .HomeBreadcrum-badgeWrapper {
+    left: 0;
+    width: 100px;
+    height: 100px;
+  }
+  .HomeBreadcrum-badgeArrow {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
   }
 }

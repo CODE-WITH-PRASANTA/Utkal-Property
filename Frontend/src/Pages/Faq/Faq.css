@@ -1,0 +1,229 @@
+/* ==========================================================================
+   FAQ Root Page Styling - Utkal Property
+   ========================================================================== */
+
+.faq-page {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #ffffff;
+  color: #1f2937;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Hero Section */
+.faq-page-hero {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  padding: 4rem 1.5rem 3.5rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.faq-page-hero-container {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.faq-page-badge {
+  display: inline-block;
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.95rem;
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+}
+
+.faq-page-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+}
+
+.faq-page-description {
+  font-size: 1.125rem;
+  color: #475569;
+  max-width: 720px;
+  margin: 0 auto 1.75rem auto;
+  line-height: 1.6;
+}
+
+.faq-page-description strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* NAP (Name, Address, Phone) Box */
+.faq-page-nap-badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  font-size: 0.875rem;
+  color: #334155;
+  background-color: #ffffff;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.faq-page-nap-address {
+  font-weight: 500;
+}
+
+.faq-page-nap-divider {
+  color: #cbd5e1;
+}
+
+.faq-page-nap-phone {
+  font-weight: 700;
+  color: #2563eb;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.faq-page-nap-phone:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* FAQ Inner Component Container Spacing */
+.faq-page-component-wrapper {
+  width: 100%;
+}
+
+/* Bottom Lead-Generation CTA Banner */
+.faq-page-cta {
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 4.5rem 1.5rem;
+  text-align: center;
+}
+
+.faq-page-cta-container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.faq-page-cta-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.85rem 0;
+  line-height: 1.3;
+}
+
+.faq-page-cta-subtitle {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+}
+
+.faq-page-cta-subtitle strong {
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.faq-page-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Buttons */
+.faq-page-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.faq-page-btn-primary:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.faq-page-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #334155;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.faq-page-btn-secondary:hover {
+  background-color: #334155;
+  border-color: #475569;
+  transform: translateY(-1px);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .faq-page-hero {
+    padding: 3rem 1rem 2.25rem 1rem;
+  }
+
+  .faq-page-title {
+    font-size: 1.7rem;
+  }
+
+  .faq-page-description {
+    font-size: 0.975rem;
+  }
+
+  .faq-page-nap-divider {
+    display: none;
+  }
+
+  .faq-page-nap-badge {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.4rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .faq-page-cta {
+    padding: 3.5rem 1rem;
+  }
+
+  .faq-page-cta-title {
+    font-size: 1.55rem;
+  }
+
+  .faq-page-cta-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .faq-page-btn-primary,
+  .faq-page-btn-secondary {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
