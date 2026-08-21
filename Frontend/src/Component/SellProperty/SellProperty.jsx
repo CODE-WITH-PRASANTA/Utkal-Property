@@ -229,7 +229,6 @@ const SellProperty = () => {
         data.append('images', imgObj.file);
       });
 
-      // Send POST request to backend properties API
       const response = await API.post('/properties', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -264,7 +263,6 @@ const SellProperty = () => {
           pinCode: ''
         });
 
-        // Clean up preview object URLs
         uploadedImages.forEach(img => URL.revokeObjectURL(img.previewUrl));
         setUploadedImages([]);
       }

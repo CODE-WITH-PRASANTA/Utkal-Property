@@ -8,95 +8,71 @@ import {
   Phone,
   ChevronDown,
   CircleCheck,
+  MessageSquareText,
 } from "lucide-react";
 
 import "./FloatingForm.css";
 
 /* =========================================================
-   HEADER
+   HEADER SECTION
 ========================================================= */
-
 const FloatingFormHeader = ({ onClose }) => {
   return (
-    <div className="floating-form-header">
-      <div className="floating-home-icon">
+    <div className="FloatingForm-header">
+      <div className="FloatingForm-home-icon-box">
         <Home size={20} strokeWidth={2} />
       </div>
 
       <button
         type="button"
-        className="floating-close-btn"
+        className="FloatingForm-close-btn"
         onClick={onClose}
         aria-label="Close form"
       >
         <X size={14} />
       </button>
 
-      <div className="floating-header-content">
-        <h2>Enquire Now</h2>
-
-        <p>
-          Fill in your details and our expert
+      <div className="FloatingForm-header-content">
+        <h2 className="FloatingForm-header-title">Enquire Now</h2>
+        <p className="FloatingForm-header-subtitle">
+          Fill in your details and our property expert
           <br />
-          will <span>contact you soon.</span>
+          will <span className="FloatingForm-header-highlight">contact you soon.</span>
         </p>
-
-        <div className="header-line"></div>
+        <div className="FloatingForm-header-divider"></div>
       </div>
     </div>
   );
 };
 
 /* =========================================================
-   LOOKING FOR SECTION
+   LOOKING FOR (RADIO) SECTION
 ========================================================= */
-
 const LookingFor = ({ value, onChange }) => {
   return (
-    <div className="floating-field looking-field">
-      <div className="field-icon">
+    <div className="FloatingForm-field FloatingForm-field--looking">
+      <div className="FloatingForm-field-icon">
         <Home size={15} />
       </div>
 
-      <div className="field-content">
-        <label>Looking For</label>
+      <div className="FloatingForm-field-body">
+        <label className="FloatingForm-field-label">Looking For</label>
 
-        <div className="radio-group">
-          <label className="radio-option">
-            <input
-              type="radio"
-              name="lookingFor"
-              value="Rent"
-              checked={value === "Rent"}
-              onChange={(e) => onChange(e.target.value)}
-            />
-            <span className="custom-radio"></span>
-            <span>Rent</span>
-          </label>
-
-          <label className="radio-option">
-            <input
-              type="radio"
-              name="lookingFor"
-              value="Buy"
-              checked={value === "Buy"}
-              onChange={(e) => onChange(e.target.value)}
-            />
-            <span className="custom-radio"></span>
-            <span>Buy</span>
-          </label>
-
-          <label className="radio-option">
-            <input
-              type="radio"
-              name="lookingFor"
-              value="Sell"
-              checked={value === "Sell"}
-              onChange={(e) => onChange(e.target.value)}
-            />
-            <span className="custom-radio"></span>
-            <span>Sell</span>
-          </label>
+        <div className="FloatingForm-radio-group">
+          {["Rent", "Buy", "Sell"].map((option) => (
+            <label className="FloatingForm-radio-option" key={option}>
+              <input
+                type="radio"
+                name="lookingFor"
+                value={option}
+                checked={value === option}
+                onChange={(e) => onChange(e.target.value)}
+                className="FloatingForm-radio-input"
+              />
+              <span className="FloatingForm-radio-custom"></span>
+              <span className="FloatingForm-radio-text">{option}</span>
+            </label>
+          ))}
         </div>
       </div>
     </div>
@@ -106,7 +82,6 @@ const LookingFor = ({ value, onChange }) => {
 /* =========================================================
    SELECT FIELD
 ========================================================= */
-
 const SelectField = ({
   icon,
   label,
@@ -116,13 +91,18 @@ const SelectField = ({
   onChange,
 }) => {
   return (
-    <div className="floating-field select-field">
-      <div className="field-icon">{icon}</div>
+    <div className="FloatingForm-field FloatingForm-field--select">
+      <div className="FloatingForm-field-icon">{icon}</div>
 
-      <div className="field-content">
-        <label>{label}</label>
+      <div className="FloatingForm-field-body">
+        <label className="FloatingForm-field-label">{label}</label>
 
-        <select value={value} onChange={onChange} required>
+        <select
+          value={value}
+          onChange={onChange}
+          className="FloatingForm-select-element"
+          required
+        >
           <option value="" disabled>
             {placeholder}
           </option>
@@ -135,32 +115,34 @@ const SelectField = ({
         </select>
       </div>
 
-      <ChevronDown className="select-arrow" size={15} />
+      <ChevronDown className="FloatingForm-select-arrow" size={15} />
     </div>
   );
 };
 
 /* =========================================================
-   MOBILE NUMBER
+   MOBILE NUMBER FIELD
 ========================================================= */
-
 const MobileNumber = ({ value, onChange }) => {
   return (
-    <div className="floating-field mobile-field">
-      <div className="field-icon">
+    <div className="FloatingForm-field FloatingForm-field--mobile">
+      <div className="FloatingForm-field-icon">
         <Phone size={15} />
       </div>
 
-      <div className="field-content">
-        <label htmlFor="mobileNumber">Mobile Number</label>
+      <div className="FloatingForm-field-body">
+        <label htmlFor="FloatingFormMobile" className="FloatingForm-field-label">
+          Mobile Number
+        </label>
 
         <input
-          id="mobileNumber"
+          id="FloatingFormMobile"
           type="tel"
           value={value}
           onChange={onChange}
           placeholder="Enter mobile number"
           maxLength={10}
+          className="FloatingForm-input-element"
         />
       </div>
     </div>
@@ -170,17 +152,15 @@ const MobileNumber = ({ value, onChange }) => {
 /* =========================================================
    SUBMIT BUTTON
 ========================================================= */
-
 const SubmitButton = ({ onClick }) => {
   return (
     <button
       type="button"
-      className="floating-submit-btn"
+      className="FloatingForm-submit-btn"
       onClick={onClick}
     >
-      <span>Get Property Options</span>
-
-      <span className="submit-icon">
+      <span className="FloatingForm-submit-text">Get Property Options</span>
+      <span className="FloatingForm-submit-icon">
         <CircleCheck size={14} />
       </span>
     </button>
@@ -188,15 +168,13 @@ const SubmitButton = ({ onClick }) => {
 };
 
 /* =========================================================
-   FOOTER
+   FOOTER SECTION
 ========================================================= */
-
 const FloatingFormFooter = () => {
   return (
-    <div className="floating-form-footer">
-      <ShieldCheck size={11} />
-
-      <span>Free Consultation • No obligation</span>
+    <div className="FloatingForm-footer">
+      <ShieldCheck size={12} className="FloatingForm-footer-icon" />
+      <span className="FloatingForm-footer-text">Free Consultation • No obligation</span>
     </div>
   );
 };
@@ -204,7 +182,6 @@ const FloatingFormFooter = () => {
 /* =========================================================
    MAIN FLOATING FORM
 ========================================================= */
-
 const FloatingForm = () => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -223,28 +200,31 @@ const FloatingForm = () => {
       mobile,
     };
 
-    console.log("Property Enquiry:", formData);
+    console.log("Property Enquiry Submitted:", formData);
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="floating-form-wrapper">
-      <div className="floating-form-card">
+    <div className="FloatingForm-wrapper">
+      {/* Floating Toggle Button (Appears when form is minimized) */}
+      <button
+        type="button"
+        className={`FloatingForm-trigger-btn ${!isOpen ? "FloatingForm-trigger-btn--visible" : ""}`}
+        onClick={() => setIsOpen(true)}
+        aria-label="Open property enquiry form"
+      >
+        <MessageSquareText size={20} />
+        <span className="FloatingForm-trigger-text">Enquire Now</span>
+      </button>
 
+      {/* Main Form Popup Card */}
+      <div className={`FloatingForm-card ${isOpen ? "FloatingForm-card--open" : "FloatingForm-card--closed"}`}>
         {/* Header */}
-        <FloatingFormHeader
-          onClose={() => setIsOpen(false)}
-        />
+        <FloatingFormHeader onClose={() => setIsOpen(false)} />
 
-        {/* Form */}
-        <div className="floating-form-body">
-
+        {/* Form Body */}
+        <div className="FloatingForm-body">
           {/* Looking For */}
-          <LookingFor
-            value={lookingFor}
-            onChange={setLookingFor}
-          />
+          <LookingFor value={lookingFor} onChange={setLookingFor} />
 
           {/* Property Type */}
           <SelectField
@@ -278,7 +258,7 @@ const FloatingForm = () => {
             ]}
           />
 
-          {/* Budget */}
+          {/* Budget Range */}
           <SelectField
             icon={<ShieldCheck size={15} />}
             label="Budget Range"
@@ -294,20 +274,17 @@ const FloatingForm = () => {
             ]}
           />
 
-          {/* Mobile */}
+          {/* Mobile Number */}
           <MobileNumber
             value={mobile}
-            onChange={(e) =>
-              setMobile(e.target.value.replace(/\D/g, ""))
-            }
+            onChange={(e) => setMobile(e.target.value.replace(/\D/g, ""))}
           />
 
-          {/* Submit */}
+          {/* Submit Action */}
           <SubmitButton onClick={handleSubmit} />
 
-          {/* Footer */}
+          {/* Security / Assurance Footer */}
           <FloatingFormFooter />
-
         </div>
       </div>
     </div>
