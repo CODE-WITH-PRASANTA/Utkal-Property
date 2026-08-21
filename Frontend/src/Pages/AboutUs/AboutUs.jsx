@@ -6,11 +6,12 @@ import WhyChooseUs from '../../Component/WhyChooseUs/WhyChooseUs'
 import AboutContactSection from '../../Component/AboutContactSection/AboutContactSection'
 import AboutMeetAgents from '../../Component/AboutMeetAgents/AboutMeetAgents'
 import AboutFindDreamHome from '../../Component/AboutFindDreamHome/AboutFindDreamHome'
+import AboutBreadcrume from '../../Component/AboutBreadcrume/AboutBreadcrume'
 
 const AboutUs = () => {
   return (
     <div>
-        
+        <AboutBreadcrume/>
         <AboutBetterLives/>
         <AboutServicesWeOffer/>
         <TrustedBrands/>
