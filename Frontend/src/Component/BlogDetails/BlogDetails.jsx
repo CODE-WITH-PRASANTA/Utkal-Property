@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import './BlogDetails.css';
 import API, { IMG_URL } from '../../api/axios';
@@ -11,7 +11,6 @@ const BlogDetails = () => {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
-  // Sidebar data — driven by real backend content instead of static markup
   const [allBlogs, setAllBlogs] = useState([]);
   const [sidebarLoading, setSidebarLoading] = useState(true);
   const [sidebarError, setSidebarError] = useState(false);
@@ -29,7 +28,7 @@ const BlogDetails = () => {
     return `${baseUrl}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
   };
 
-  const fetchBlogById = async () => {
+  const fetchBlogById = useCallback(async () => {
     if (!id) return;
     try {
       setLoading(true);
@@ -54,11 +53,9 @@ const BlogDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  // Fetch the published blog list once — powers Categories (derived counts)
-  // and Featured listings (most recent, excluding the post being read)
-  const fetchSidebarData = async () => {
+  const fetchSidebarData = useCallback(async () => {
     try {
       setSidebarLoading(true);
       setSidebarError(false);
@@ -76,15 +73,14 @@ const BlogDetails = () => {
     } finally {
       setSidebarLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchBlogById();
     fetchSidebarData();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [id]);
+  }, [id, fetchBlogById, fetchSidebarData]);
 
-  // Categories with live counts, sorted by popularity
   const categories = useMemo(() => {
     const counts = {};
     allBlogs.forEach((b) => {
@@ -96,7 +92,6 @@ const BlogDetails = () => {
       .slice(0, 6);
   }, [allBlogs]);
 
-  // Most recent posts, excluding the one currently open
   const featuredListings = useMemo(() => {
     return allBlogs
       .filter((b) => String(b._id || b.id) !== String(id))
@@ -148,7 +143,6 @@ const BlogDetails = () => {
   return (
     <article className="utkal-blog-details-container">
       <div className="utkal-blog-content-wrapper">
-        {/* Main Blog Section */}
         <main className="utkal-blog-main">
           <header className="utkal-blog-header">
             <h1 className="utkal-blog-title">{blog.title}</h1>
@@ -183,7 +177,6 @@ const BlogDetails = () => {
           </div>
         </main>
 
-        {/* Sidebar Section */}
         <aside className="utkal-blog-sidebar">
           {/* Search Widget */}
           <div className="utkal-sidebar-widget utkal-search-widget">

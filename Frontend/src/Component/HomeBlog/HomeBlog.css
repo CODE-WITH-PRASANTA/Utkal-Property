@@ -162,9 +162,21 @@
   font-weight: 700;
   color: var(--utkal-navy);
   line-height: 1.45;
-  margin: 0 0 16px 0;
+  margin: 0 0 10px 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Short Description Styling */
+.HomeBlog-card-desc {
+  color: var(--utkal-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

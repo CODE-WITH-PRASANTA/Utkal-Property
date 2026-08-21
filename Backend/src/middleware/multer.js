@@ -10,6 +10,9 @@ const fs = require("fs");
 // Team images
 const teamUploadDir = path.join(__dirname, "../../uploads/team");
 
+// Blog images
+const blogUploadDir = path.join(__dirname, "../../uploads/blogs");
+
 // Property images
 const propertyUploadDir = path.join(__dirname, "../../uploads/property");
 
@@ -43,6 +46,7 @@ const amenityUploadDir = path.join(__dirname, "../../uploads/amenities");
 
 [
   teamUploadDir,
+  blogUploadDir,
   propertyUploadDir,
   propertyDocumentDir,
   floorPlanUploadDir,
@@ -133,46 +137,77 @@ const convertToWebp = async (req, res, next) => {
 };
 
 // =====================================================
+// BLOG IMAGE PROCESSOR
+// =====================================================
+
+const processBlogImage = async (req, res, next) => {
+  if (!req.file) {
+    return next();
+  }
+
+  try {
+    const filename = `blog-${Date.now()}-${Math.round(
+      Math.random() * 1e9,
+    )}.webp`;
+
+    const outputPath = path.join(blogUploadDir, filename);
+
+    await sharp(req.file.buffer)
+      .resize({
+        width: 1200,
+        withoutEnlargement: true,
+      })
+      .webp({
+        quality: 80,
+      })
+      .toFile(outputPath);
+
+    req.file.filename = filename;
+
+    const relativePath = `/uploads/blogs/${filename}`;
+    req.file.relativePath = relativePath;
+    req.processedBlogImage = relativePath;
+
+    console.log("BLOG IMAGE PROCESSED:", req.processedBlogImage);
+
+    return next();
+  } catch (error) {
+    console.error("BLOG IMAGE PROCESSING ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to process blog image.",
+      error: error.message,
+    });
+  }
+};
+
+// =====================================================
 // PROPERTY FILE FILTER
 // =====================================================
 
 const propertyFileFilter = (req, file, cb) => {
-  // ===================================================
   // PROPERTY IMAGES
-  // ===================================================
-
   if (file.fieldname === "propertyImages") {
     if (file.mimetype.startsWith("image/")) {
       return cb(null, true);
     }
-
     return cb(new Error("Property image must be an image file."), false);
   }
 
-  // ===================================================
   // FLOOR PLAN IMAGES
-  // ===================================================
-
   if (file.fieldname === "floorPlanImages") {
     if (file.mimetype.startsWith("image/")) {
       return cb(null, true);
     }
-
     return cb(new Error("Floor plan must be an image file."), false);
   }
 
-  // ===================================================
   // PROPERTY DOCUMENTS
-  // ===================================================
-
   if (file.fieldname === "documents") {
     const allowedTypes = [
       "application/pdf",
-
-      // DOC
       "application/msword",
-
-      // DOCX
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
 
@@ -186,10 +221,6 @@ const propertyFileFilter = (req, file, cb) => {
     );
   }
 
-  // ===================================================
-  // UNKNOWN FIELD
-  // ===================================================
-
   return cb(new Error(`Unexpected upload field: ${file.fieldname}`), false);
 };
 
@@ -199,14 +230,9 @@ const propertyFileFilter = (req, file, cb) => {
 
 const propertyUpload = multer({
   storage,
-
   fileFilter: propertyFileFilter,
-
   limits: {
-    // 10 MB per file
     fileSize: 10 * 1024 * 1024,
-
-    // Maximum total files
     files: 30,
   },
 });
@@ -218,16 +244,9 @@ const propertyUpload = multer({
 const processPropertyFiles = async (req, res, next) => {
   try {
     console.log("======================================");
-
     console.log("PROCESSING PROPERTY FILES");
-
     console.log("RECEIVED FILE FIELDS:", Object.keys(req.files || {}));
-
     console.log("======================================");
-
-    // =================================================
-    // PROPERTY IMAGES
-    // =================================================
 
     req.processedPropertyImages = [];
 
@@ -250,23 +269,12 @@ const processPropertyFiles = async (req, res, next) => {
           .toFile(outputPath);
 
         const imagePath = `/uploads/property/${filename}`;
-
         req.processedPropertyImages.push(imagePath);
       }
     }
 
-    // =================================================
-    // MAIN / COVER PROPERTY IMAGE
-    // =================================================
-
     req.processedPropertyImage = req.processedPropertyImages[0] || "";
-
-    // Keep compatibility with old controller
     req.processedImage = req.processedPropertyImage;
-
-    // =================================================
-    // PROPERTY DOCUMENTS
-    // =================================================
 
     req.processedDocuments = [];
 
@@ -284,15 +292,10 @@ const processPropertyFiles = async (req, res, next) => {
 
         req.processedDocuments.push({
           originalName: document.originalname,
-
           file: `/uploads/property/documents/${filename}`,
         });
       }
     }
-
-    // =================================================
-    // FLOOR PLAN IMAGES
-    // =================================================
 
     req.processedFloorPlanImages = [];
 
@@ -320,18 +323,10 @@ const processPropertyFiles = async (req, res, next) => {
       }
     }
 
-    // =================================================
-    // DEBUG
-    // =================================================
-
     console.log("PROPERTY IMAGES:", req.processedPropertyImages);
-
     console.log("MAIN PROPERTY IMAGE:", req.processedPropertyImage);
-
     console.log("PROPERTY DOCUMENTS:", req.processedDocuments);
-
     console.log("FLOOR PLAN IMAGES:", req.processedFloorPlanImages);
-
     console.log("======================================");
 
     return next();
@@ -340,36 +335,24 @@ const processPropertyFiles = async (req, res, next) => {
 
     return res.status(500).json({
       success: false,
-
       message: "Failed to process property files.",
-
       error: error.message,
     });
   }
 };
 
 // =====================================================
-// CATEGORY IMAGE UPLOAD
+// CATEGORY IMAGE UPLOAD & PROCESSOR
 // =====================================================
 
 const categoryUpload = multer({
   storage,
-
   fileFilter: imageFileFilter,
-
-  limits: {
-    fileSize: 5 * 1024 * 1024,
-  },
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// =====================================================
-// CATEGORY IMAGE PROCESSOR
-// =====================================================
-
 const processCategoryImage = async (req, res, next) => {
-  if (!req.file) {
-    return next();
-  }
+  if (!req.file) return next();
 
   try {
     const filename = `category-${Date.now()}-${Math.round(
@@ -379,57 +362,37 @@ const processCategoryImage = async (req, res, next) => {
     const outputPath = path.join(categoryUploadDir, filename);
 
     await sharp(req.file.buffer)
-      .resize({
-        width: 800,
-        withoutEnlargement: true,
-      })
-      .webp({
-        quality: 80,
-      })
+      .resize({ width: 800, withoutEnlargement: true })
+      .webp({ quality: 80 })
       .toFile(outputPath);
 
     req.file.filename = filename;
-
     req.processedCategoryImage = `/uploads/categories/${filename}`;
-
     console.log("CATEGORY IMAGE:", req.processedCategoryImage);
 
     return next();
   } catch (error) {
     console.error("CATEGORY IMAGE PROCESSING ERROR:", error);
-
     return res.status(500).json({
       success: false,
-
       message: "Failed to process category image.",
-
       error: error.message,
     });
   }
 };
 
 // =====================================================
-// LOCATION IMAGE UPLOAD
+// LOCATION IMAGE UPLOAD & PROCESSOR
 // =====================================================
 
 const locationUpload = multer({
   storage,
-
   fileFilter: imageFileFilter,
-
-  limits: {
-    fileSize: 5 * 1024 * 1024,
-  },
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// =====================================================
-// LOCATION IMAGE PROCESSOR
-// =====================================================
-
 const processLocationImage = async (req, res, next) => {
-  if (!req.file) {
-    return next();
-  }
+  if (!req.file) return next();
 
   try {
     const filename = `location-${Date.now()}-${Math.round(
@@ -439,58 +402,37 @@ const processLocationImage = async (req, res, next) => {
     const outputPath = path.join(locationUploadDir, filename);
 
     await sharp(req.file.buffer)
-      .resize({
-        width: 1200,
-        withoutEnlargement: true,
-      })
-      .webp({
-        quality: 80,
-      })
+      .resize({ width: 1200, withoutEnlargement: true })
+      .webp({ quality: 80 })
       .toFile(outputPath);
 
     req.file.filename = filename;
-
     req.processedLocationImage = `/uploads/locations/${filename}`;
-
     console.log("LOCATION IMAGE:", req.processedLocationImage);
 
     return next();
   } catch (error) {
     console.error("LOCATION IMAGE PROCESSING ERROR:", error);
-
     return res.status(500).json({
       success: false,
-
       message: "Failed to process location image.",
-
       error: error.message,
     });
   }
 };
 
 // =====================================================
-// USER IMAGE UPLOAD
+// USER IMAGE UPLOAD & PROCESSOR
 // =====================================================
 
 const userUpload = multer({
   storage,
-
   fileFilter: imageFileFilter,
-
-  limits: {
-    fileSize: 5 * 1024 * 1024,
-  },
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// =====================================================
-// USER IMAGE PROCESSOR
-// =====================================================
-
 const convertUserImageToWebp = async (req, res, next) => {
-  // Avatar is optional
-  if (!req.file) {
-    return next();
-  }
+  if (!req.file) return next();
 
   try {
     const filename = `user-${Date.now()}-${Math.round(
@@ -507,33 +449,26 @@ const convertUserImageToWebp = async (req, res, next) => {
         position: "center",
         withoutEnlargement: true,
       })
-      .webp({
-        quality: 80,
-      })
+      .webp({ quality: 80 })
       .toFile(outputPath);
 
     req.file.filename = filename;
-
     req.processedUserImage = `/uploads/users/${filename}`;
-
     console.log("USER IMAGE:", req.processedUserImage);
 
     return next();
   } catch (error) {
     console.error("USER IMAGE PROCESSING ERROR:", error);
-
     return res.status(500).json({
       success: false,
-
       message: "Failed to process user image.",
-
       error: error.message,
     });
   }
 };
 
 // =====================================================
-// AMENITY IMAGE FILTER
+// AMENITY IMAGE FILTER, UPLOAD & PROCESSOR
 // =====================================================
 
 const amenityFileFilter = (req, file, cb) => {
@@ -555,57 +490,30 @@ const amenityFileFilter = (req, file, cb) => {
   );
 };
 
-// =====================================================
-// AMENITY IMAGE UPLOAD
-// =====================================================
-
 const amenityUpload = multer({
   storage,
-
   fileFilter: amenityFileFilter,
-
-  limits: {
-    // Maximum 2 MB
-    fileSize: 2 * 1024 * 1024,
-  },
+  limits: { fileSize: 2 * 1024 * 1024 },
 });
 
-// =====================================================
-// AMENITY IMAGE PROCESSOR
-// =====================================================
-
 const processAmenityImage = async (req, res, next) => {
-  // Image is optional
-  if (!req.file) {
-    return next();
-  }
+  if (!req.file) return next();
 
   try {
-    // =========================================
-    // SVG FILE
-    // =========================================
-
     if (req.file.mimetype === "image/svg+xml") {
       const filename = `amenity-${Date.now()}-${Math.round(
         Math.random() * 1e9,
       )}.svg`;
 
       const outputPath = path.join(amenityUploadDir, filename);
-
       await fs.promises.writeFile(outputPath, req.file.buffer);
 
       req.file.filename = filename;
-
       req.processedAmenityImage = `/uploads/amenities/${filename}`;
-
       console.log("AMENITY SVG:", req.processedAmenityImage);
 
       return next();
     }
-
-    // =========================================
-    // PNG/JPG/JPEG/WEBP -> WEBP
-    // =========================================
 
     const filename = `amenity-${Date.now()}-${Math.round(
       Math.random() * 1e9,
@@ -620,26 +528,19 @@ const processAmenityImage = async (req, res, next) => {
         fit: "inside",
         withoutEnlargement: true,
       })
-      .webp({
-        quality: 80,
-      })
+      .webp({ quality: 80 })
       .toFile(outputPath);
 
     req.file.filename = filename;
-
     req.processedAmenityImage = `/uploads/amenities/${filename}`;
-
     console.log("AMENITY IMAGE:", req.processedAmenityImage);
 
     return next();
   } catch (error) {
     console.error("AMENITY IMAGE PROCESSING ERROR:", error);
-
     return res.status(500).json({
       success: false,
-
       message: "Failed to process amenity image.",
-
       error: error.message,
     });
   }
@@ -653,6 +554,9 @@ module.exports = {
   // Team
   upload,
   convertToWebp,
+
+  // Blog
+  processBlogImage,
 
   // Property
   propertyUpload,

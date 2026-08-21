@@ -1,33 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { signOut, getCurrentUser } from "aws-amplify/auth";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
-// Layout
+import {
+  signOut,
+  getCurrentUser,
+} from "aws-amplify/auth";
+
+// =====================================================
+// LAYOUT
+// =====================================================
+
 import MainLayout from "./Layout/MainLayout/MainLayout";
 
-// Authentication
+// =====================================================
+// AUTHENTICATION
+// =====================================================
+
 import LogIn from "./Pages/login/LogIn";
 
-// Dashboard
+// =====================================================
+// DASHBOARD
+// =====================================================
+
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
 
-// Properties
+// =====================================================
+// PROPERTIES
+// =====================================================
+
 import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
 import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 import NearbyPlaces from "./Components/NearbyPlaces/NearbyPlaces";
+import Amenities from "./Components/Amenities/Amenities";
+import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
 
-// Blogs
+// =====================================================
+// BLOGS
+// =====================================================
+
 import BlogPosting from "./Components/BlogPosting/BlogPosting";
 import BlogManagement from "./Components/BlogManagement/BlogManagement";
 
-// Other Components
+// =====================================================
+// OTHER COMPONENTS
+// =====================================================
+
 import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
 
-// Pages
+// =====================================================
+// PAGES
+// =====================================================
+
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
 import Report from "./Pages/Dashboard/Report/Report";
@@ -35,19 +67,36 @@ import Setting from "./Pages/Setting/Setting";
 import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
-import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
-import Amenities from "./Components/Amenities/Amenities";
-import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
+
+
+// =====================================================
+// PROTECTED ROUTE
+// =====================================================
 
 function ProtectedRoute({
   isAuthenticated,
   isCheckingAuth,
   children,
 }) {
+  // Check authentication
   if (isCheckingAuth) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "18px",
+          fontWeight: "600",
+        }}
+      >
+        Loading...
+      </div>
+    );
   }
 
+  // Redirect unauthenticated users
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -55,25 +104,54 @@ function ProtectedRoute({
   return children;
 }
 
+
+// =====================================================
+// APP
+// =====================================================
+
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] =
+    useState(false);
+
+  const [isCheckingAuth, setIsCheckingAuth] =
+    useState(true);
+
   const [user, setUser] = useState(null);
+
+
+  // ===================================================
+  // CHECK AUTHENTICATION
+  // ===================================================
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const storedUser = localStorage.getItem("utkal_user_session");
+        // -----------------------------------------------
+        // Check local session first
+        // -----------------------------------------------
+
+        const storedUser =
+          localStorage.getItem(
+            "utkal_user_session"
+          );
 
         if (storedUser) {
           const parsed = JSON.parse(storedUser);
+
           setUser(parsed);
           setIsAuthenticated(true);
           setIsCheckingAuth(false);
+
           return;
         }
 
-        const currentUser = await getCurrentUser();
+
+        // -----------------------------------------------
+        // Check AWS Amplify authentication
+        // -----------------------------------------------
+
+        const currentUser =
+          await getCurrentUser();
 
         if (currentUser) {
           const sessionUser = {
@@ -91,12 +169,17 @@ function App() {
           );
         }
       } catch (error) {
-        console.log(error);
+        console.log(
+          "Authentication check failed:",
+          error
+        );
 
         setUser(null);
         setIsAuthenticated(false);
 
-        localStorage.removeItem("utkal_user_session");
+        localStorage.removeItem(
+          "utkal_user_session"
+        );
       } finally {
         setIsCheckingAuth(false);
       }
@@ -104,6 +187,11 @@ function App() {
 
     checkAuth();
   }, []);
+
+
+  // ===================================================
+  // LOGIN SUCCESS
+  // ===================================================
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
@@ -115,193 +203,333 @@ function App() {
     );
   };
 
+
+  // ===================================================
+  // LOGOUT
+  // ===================================================
+
   const handleLogout = async () => {
     try {
       if (user && !user.isMock) {
         await signOut();
       }
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Logout error:",
+        error
+      );
     }
 
-    localStorage.removeItem("utkal_user_session");
+    localStorage.removeItem(
+      "utkal_user_session"
+    );
 
     setUser(null);
     setIsAuthenticated(false);
   };
 
+
+  // ===================================================
+  // ROUTES
+  // ===================================================
+
   return (
     <BrowserRouter>
+
       <Routes>
 
-        {/* Login */}
+        {/* =================================================
+            LOGIN
+        ================================================= */}
 
         <Route
           path="/login"
           element={
             isAuthenticated ? (
-              <Navigate to="/dashboard" replace />
+              <Navigate
+                to="/dashboard"
+                replace
+              />
             ) : (
-              <LogIn onLoginSuccess={handleLoginSuccess} />
+              <LogIn
+                onLoginSuccess={
+                  handleLoginSuccess
+                }
+              />
             )
           }
         />
 
-        {/* Protected Routes */}
+
+        {/* =================================================
+            PROTECTED ROUTES
+        ================================================= */}
 
         <Route
           element={
             <ProtectedRoute
-              isAuthenticated={isAuthenticated}
-              isCheckingAuth={isCheckingAuth}
+              isAuthenticated={
+                isAuthenticated
+              }
+              isCheckingAuth={
+                isCheckingAuth
+              }
             >
               <MainLayout
                 user={user}
-                onLogout={handleLogout}
+                onLogout={
+                  handleLogout
+                }
               />
             </ProtectedRoute>
           }
         >
 
-          {/* Dashboard */}
+          {/* =================================================
+              DEFAULT
+          ================================================= */}
 
           <Route
             path="/"
-            element={<Navigate to="/dashboard" replace />}
+            element={
+              <Navigate
+                to="/dashboard"
+                replace
+              />
+            }
           />
+
+
+          {/* =================================================
+              DASHBOARD
+          ================================================= */}
 
           <Route
             path="/dashboard"
-            element={<DashboardMain />}
+            element={
+              <DashboardMain />
+            }
           />
 
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<DashboardMain />} />
-  
-          {/* Properties */}
+
+          {/* =================================================
+              PROPERTIES
+          ================================================= */}
 
           <Route
             path="/properties/all"
-            element={<PropertiesDashboard />}
+            element={
+              <PropertiesDashboard />
+            }
           />
 
           <Route
             path="/properties/add"
-            element={<AddNewProperty />}
+            element={
+              <AddNewProperty />
+            }
           />
 
           <Route
             path="/properties/edit/:id"
-            element={<AddNewProperty />}
+            element={
+              <AddNewProperty />
+            }
           />
-          <Route path="/properties/Amenities" element={<Amenities />} />
-          <Route path="/properties/review" element={<AdminPropertyReviews />} />
 
           <Route
             path="/properties/categories"
-            element={<Categories />}
+            element={
+              <Categories />
+            }
           />
 
           <Route
             path="/properties/locations"
-            element={<Locations />}
+            element={
+              <Locations />
+            }
           />
 
           <Route
-            path="/properties/Nearby"
-            element={<NearbyPlaces />}
+            path="/properties/nearby"
+            element={
+              <NearbyPlaces />
+            }
           />
 
-          {/* Blogs */}
+          <Route
+            path="/properties/amenities"
+            element={
+              <Amenities />
+            }
+          />
+
+          <Route
+            path="/properties/review"
+            element={
+              <AdminPropertyReviews />
+            }
+          />
+
+
+          {/* =================================================
+              BLOGS
+          ================================================= */}
 
           <Route
             path="/blogposting"
-            element={<BlogPosting />}
+            element={
+              <BlogPosting />
+            }
           />
 
           <Route
             path="/blogmanagement"
-            element={<BlogManagement />}
+            element={
+              <BlogManagement />
+            }
           />
 
-          {/* Bookings */}
+
+          {/* =================================================
+              BOOKINGS
+          ================================================= */}
 
           <Route
             path="/bookings"
-            element={<Bookings />}
+            element={
+              <Bookings />
+            }
           />
 
-          {/* Leads */}
+
+          {/* =================================================
+              LEADS
+          ================================================= */}
 
           <Route
             path="/leads"
-            element={<LeadManagement />}
+            element={
+              <LeadManagement />
+            }
           />
 
-          {/* Enquiry */}
+
+          {/* =================================================
+              ENQUIRY
+          ================================================= */}
 
           <Route
             path="/enquiry"
-            element={<Enquire />}
+            element={
+              <Enquire />
+            }
           />
 
-          {/* Users */}
+
+          {/* =================================================
+              USERS
+          ================================================= */}
 
           <Route
             path="/users"
-            element={<User />}
+            element={
+              <User />
+            }
           />
 
-          {/* Reports */}
+
+          {/* =================================================
+              REPORTS
+          ================================================= */}
 
           <Route
             path="/reports"
-            element={<Report />}
+            element={
+              <Report />
+            }
           />
 
-          {/* Settings */}
+
+          {/* =================================================
+              SETTINGS
+          ================================================= */}
 
           <Route
             path="/settings"
-            element={<Setting />}
+            element={
+              <Setting />
+            }
           />
+
+
+          {/* =================================================
+              PROFILE
+          ================================================= */}
 
           <Route
             path="/profile"
-            element={<ProfileSetting />}
+            element={
+              <ProfileSetting />
+            }
           />
 
-          {/* Testimonial */}
+
+          {/* =================================================
+              TESTIMONIAL
+          ================================================= */}
 
           <Route
             path="/testimonial"
-            element={<Testimonial />}
+            element={
+              <Testimonial />
+            }
           />
 
-          {/* Gallery */}
+
+          {/* =================================================
+              GALLERY
+          ================================================= */}
 
           <Route
             path="/gallery"
-            element={<Gallery />}
+            element={
+              <Gallery />
+            }
           />
 
-          {/* Team */}
+
+          {/* =================================================
+              TEAM
+          ================================================= */}
 
           <Route
             path="/team"
-            element={<OurTeam />}
+            element={
+              <OurTeam />
+            }
           />
 
-          {/* 404 */}
+
+          {/* =================================================
+              404
+          ================================================= */}
 
           <Route
             path="*"
-            element={<Navigate to="/dashboard" replace />}
+            element={
+              <Navigate
+                to="/dashboard"
+                replace
+              />
+            }
           />
 
         </Route>
 
       </Routes>
+
     </BrowserRouter>
   );
 }

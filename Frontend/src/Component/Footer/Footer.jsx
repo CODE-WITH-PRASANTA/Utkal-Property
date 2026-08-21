@@ -1,6 +1,9 @@
 import React from 'react';
 import './Footer.css';
 
+// Import logo image from src/assets/
+import logo from '../../assets/logo.webp';
+
 // Importing icons from react-icons
 import {
   FaPhoneAlt,
@@ -22,8 +25,7 @@ const Footer = () => {
       <div className="footer-brand-row">
         <div className="footer-brand-mark">
           <div className="footer-brand-logo">
-            <span>U</span>
-            <div className="footer-brand-ring"></div>
+            <img src={logo} alt="Utkal Property Logo" className="footer-logo-img" />
           </div>
           <div className="footer-brand-text">
             <h2>
