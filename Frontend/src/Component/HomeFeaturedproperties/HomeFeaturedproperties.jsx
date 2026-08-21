@@ -93,7 +93,7 @@ const PROPERTIES_DATA = {
       images: [
         'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
         'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80'
+        'https://images.unsplash.com/photo-160058515526-990dced4db0d?auto=format&fit=crop&w=800&q=80'
       ]
     },
     {
@@ -203,7 +203,6 @@ CATEGORIES.slice(1).forEach((cat) => {
     title: `Utkal ${cat} Spot ${idx + 1}`,
     rawPrice: item.rawPrice + idx * 500000
   }));
-
 });
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80';
@@ -284,13 +283,14 @@ const PropertyCard = ({ property }) => {
   };
 
   return (
-    <div className="HomeFeaturedproperties-card">
+    <article className="HomeFeaturedproperties-card">
       {/* Image Wrapper */}
       <div className="HomeFeaturedproperties-card-img-wrapper">
         <img
           src={property.images[currentImgIndex]}
           alt={property.title}
           className="HomeFeaturedproperties-card-img"
+          loading="lazy"
         />
 
         {/* Badges */}
@@ -320,12 +320,14 @@ const PropertyCard = ({ property }) => {
               <button
                 className="HomeFeaturedproperties-arrow-btn"
                 onClick={handlePrevImage}
+                aria-label="Previous image"
               >
                 <FaArrowLeft />
               </button>
               <button
                 className="HomeFeaturedproperties-arrow-btn"
                 onClick={handleNextImage}
+                aria-label="Next image"
               >
                 <FaArrowRight />
               </button>
@@ -337,7 +339,7 @@ const PropertyCard = ({ property }) => {
       {/* Card Body */}
       <div className="HomeFeaturedproperties-card-content">
         <div className="HomeFeaturedproperties-card-header-row">
-          <h3 className="HomeFeaturedproperties-title">{property.title}</h3>
+          <h2 className="HomeFeaturedproperties-title">{property.title}</h2>
           {property.verified && (
             <span className="HomeFeaturedproperties-verified" title="Verified by Utkal Property">
               <FaCheckCircle />
@@ -382,7 +384,7 @@ const PropertyCard = ({ property }) => {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 
@@ -428,27 +430,29 @@ const HomeFeaturedproperties = () => {
   };
 
   return (
-    <div className="HomeFeaturedproperties">
+    <section className="HomeFeaturedproperties" aria-labelledby="featured-properties-heading">
       <div className="HomeFeaturedproperties-container">
         
-        {/* Header Section */}
-        <div className="HomeFeaturedproperties-header">
+        {/* SEO Header Section */}
+        <header className="HomeFeaturedproperties-header">
           <span className="HomeFeaturedproperties-badgeTag">
-            <FaShieldAlt className="tag-icon" /> Utkal Verified Properties
+            <FaShieldAlt className="tag-icon" /> Verified Property Listings
           </span>
-          <h1 className="HomeFeaturedproperties-main-heading">
-            Featured <span className="highlight-green">Properties</span>
+          <h1 id="featured-properties-heading" className="HomeFeaturedproperties-main-heading">
+            Best Property Dealers in Bhubaneswar — <span className="highlight-green">Featured Flats and Apartments</span>
           </h1>
           <p className="HomeFeaturedproperties-subheading">
-            Explore premium homes, apartments, and commercial sites curated across Odisha with verified pricing and clear documentation.
+            Looking for top-rated real estate consultants? Connect with the <strong>best property dealers in Bhubaneswar</strong> to explore RERA-registered luxury villas, independent duplexes, commercial offices, and verified residential plots across Patia, Jaydev Vihar, Khandagiri, and Cuttack.
           </p>
-        </div>
+        </header>
 
         {/* Category Tabs */}
-        <div className="HomeFeaturedproperties-tabs">
+        <div className="HomeFeaturedproperties-tabs" role="tablist" aria-label="Property categories">
           {CATEGORIES.map((category) => (
             <button
               key={category}
+              role="tab"
+              aria-selected={activeTab === category}
               className={`HomeFeaturedproperties-tab-btn ${
                 activeTab === category ? 'active' : ''
               }`}
@@ -498,11 +502,16 @@ const HomeFeaturedproperties = () => {
         )}
 
         {/* Scroll to Top Button */}
-        <button className="HomeFeaturedproperties-scroll-top-btn" onClick={scrollToTop} title="Back to Top">
+        <button 
+          className="HomeFeaturedproperties-scroll-top-btn" 
+          onClick={scrollToTop} 
+          title="Back to Top"
+          aria-label="Scroll back to top"
+        >
           <FaChevronUp />
         </button>
       </div>
-    </div>
+    </section>
   );
 };
 

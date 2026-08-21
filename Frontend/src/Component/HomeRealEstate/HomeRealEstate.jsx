@@ -3,7 +3,7 @@ import './HomeRealEstate.css';
 import API, { IMG_URL } from '../../api/axios'; // Adjust relative import path if needed
 
 // React Icons
-import { FaChevronUp, FaTimes, FaImage } from 'react-icons/fa';
+import { FaChevronUp, FaTimes, FaImage, FaMapMarkedAlt } from 'react-icons/fa';
 
 const HomeRealEstate = () => {
   const [galleryItems, setGalleryItems] = useState([]);
@@ -86,104 +86,121 @@ const HomeRealEstate = () => {
   };
 
   return (
-    <section className="HomeRealEstate">
-      {/* Header Section */}
-      <div className="HomeRealEstate-header">
-        <span className="HomeRealEstate-tag">Explore Properties</span>
-        <h1 className="HomeRealEstate-title">Search Real Estate By Area</h1>
-        <p className="HomeRealEstate-subtitle">
-          Discover premium commercial and residential spaces with Utkal Property
-        </p>
-      </div>
+    <section className="HomeRealEstate" aria-labelledby="apartment-dealers-heading">
+      <div className="HomeRealEstate-container">
+        
+        {/* SEO Header Section */}
+        <header className="HomeRealEstate-header">
+          <span className="HomeRealEstate-tag">
+            <FaMapMarkedAlt className="HomeRealEstate-tag-icon" /> Prime Location Showcase
+          </span>
+          <h1 id="apartment-dealers-heading" className="HomeRealEstate-title">
+            Best Apartment Dealers in Bhubaneswar — <span className="highlight-green">Explore Properties by Area</span>
+          </h1>
+          <p className="HomeRealEstate-subtitle">
+            Partner with the <strong>best apartment dealers in Bhubaneswar</strong> to discover luxury 2 BHK, 3 BHK, and 4 BHK residential flats, penthouses, and premium gated communities across top localities including Patia, Jaydev Vihar, Saheed Nagar, Khandagiri, and Rasulgarh.
+          </p>
+        </header>
 
-      {/* Grid Container */}
-      <div className="HomeRealEstate-grid">
-        {loading ? (
-          <div className="HomeRealEstate-loading">
-            <p>Loading gallery properties...</p>
-          </div>
-        ) : galleryItems.length > 0 ? (
-          galleryItems.map((item, index) => {
-            const itemId = item._id || item.id || index;
-            const imageUrl = getImageUrl(item.image);
-            const isBroken = brokenImages[itemId];
+        {/* Grid Container */}
+        <div className="HomeRealEstate-grid">
+          {loading ? (
+            <div className="HomeRealEstate-loading">
+              <p>Loading gallery properties...</p>
+            </div>
+          ) : galleryItems.length > 0 ? (
+            galleryItems.map((item, index) => {
+              const itemId = item._id || item.id || index;
+              const imageUrl = getImageUrl(item.image);
+              const isBroken = brokenImages[itemId];
 
-            return (
-              <div key={itemId} className="HomeRealEstate-card">
-                {!isBroken ? (
-                  <img
-                    src={imageUrl}
-                    alt={item.title || `Property ${index + 1}`}
-                    className="HomeRealEstate-card-img"
-                    onError={() => handleImageError(itemId)}
-                  />
-                ) : (
-                  <div className="HomeRealEstate-card-broken">
-                    <FaImage />
-                    <span>Image Unavailable</span>
+              return (
+                <article key={itemId} className="HomeRealEstate-card">
+                  {!isBroken ? (
+                    <img
+                      src={imageUrl}
+                      alt={item.title || `Luxury Apartment in Bhubaneswar - Area ${index + 1}`}
+                      className="HomeRealEstate-card-img"
+                      loading="lazy"
+                      onError={() => handleImageError(itemId)}
+                    />
+                  ) : (
+                    <div className="HomeRealEstate-card-broken">
+                      <FaImage />
+                      <span>Image Unavailable</span>
+                    </div>
+                  )}
+
+                  {/* Hover Crosshair (+) Overlay */}
+                  {!isBroken && (
+                    <div
+                      className="HomeRealEstate-hover-overlay"
+                      onClick={() => handleOpenModal(imageUrl)}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="View enlarged image"
+                    >
+                      <span className="HomeRealEstate-plus-icon">+</span>
+                    </div>
+                  )}
+
+                  {/* Bottom Content Overlay */}
+                  <div className="HomeRealEstate-card-content">
+                    <h2 className="HomeRealEstate-card-title">
+                      {item.title || 'Utkal Luxury Apartments'}
+                    </h2>
+                    <p className="HomeRealEstate-card-listings">
+                      {item.location || item.listings || 'Explore Area Listings'}
+                    </p>
                   </div>
-                )}
+                </article>
+              );
+            })
+          ) : (
+            <div className="HomeRealEstate-empty">
+              <p>No gallery images found. Upload new properties in the admin panel!</p>
+            </div>
+          )}
+        </div>
 
-                {/* Hover Crosshair (+) Overlay */}
-                {!isBroken && (
-                  <div
-                    className="HomeRealEstate-hover-overlay"
-                    onClick={() => handleOpenModal(imageUrl)}
-                  >
-                    <span className="HomeRealEstate-plus-icon">+</span>
-                  </div>
-                )}
+        {/* Scroll To Top Button */}
+        <button
+          className="HomeRealEstate-scroll-top"
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+        >
+          <FaChevronUp />
+        </button>
 
-                {/* Bottom Content Overlay */}
-                <div className="HomeRealEstate-card-content">
-                  <h3 className="HomeRealEstate-card-title">
-                    {item.title || 'Utkal Property'}
-                  </h3>
-                  <p className="HomeRealEstate-card-listings">
-                    {item.location || item.listings || 'Explore Listing'}
-                  </p>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className="HomeRealEstate-empty">
-            <p>No gallery images found. Upload new properties in the admin panel!</p>
+        {/* Fullscreen Lightbox Modal */}
+        {selectedImage && (
+          <div 
+            className="HomeRealEstate-modal-overlay" 
+            onClick={handleCloseModal}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div
+              className="HomeRealEstate-modal-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="HomeRealEstate-modal-close"
+                onClick={handleCloseModal}
+                aria-label="Close modal"
+              >
+                <FaTimes />
+              </button>
+              <img
+                src={selectedImage}
+                alt="Enlarged view of Bhubaneswar Apartment"
+                className="HomeRealEstate-modal-img"
+              />
+            </div>
           </div>
         )}
+
       </div>
-
-      {/* Scroll To Top Button */}
-      <button
-        className="HomeRealEstate-scroll-top"
-        onClick={scrollToTop}
-        aria-label="Scroll to top"
-      >
-        <FaChevronUp />
-      </button>
-
-      {/* Fullscreen Lightbox Modal */}
-      {selectedImage && (
-        <div className="HomeRealEstate-modal-overlay" onClick={handleCloseModal}>
-          <div
-            className="HomeRealEstate-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="HomeRealEstate-modal-close"
-              onClick={handleCloseModal}
-              aria-label="Close modal"
-            >
-              <FaTimes />
-            </button>
-            <img
-              src={selectedImage}
-              alt="Enlarged view"
-              className="HomeRealEstate-modal-img"
-            />
-          </div>
-        </div>
-      )}
     </section>
   );
 };

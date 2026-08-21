@@ -227,7 +227,6 @@
 @media screen and (max-width: 900px) {
   .AboutContactSection-info-grid {
     flex-direction: column;
-    align-items: center;
     gap: 24px;
   }
 

@@ -1,167 +1,749 @@
-import { useState } from 'react';
-import { FaStar, FaRegStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import './PropertyDetailsPeopleSay.css';
+import { useEffect, useState } from "react";
+import {
+  FaStar,
+  FaRegStar,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+import "./PropertyDetailsPeopleSay.css";
+import API from "../../api/Axios";
 
-const PropertyDetailsPeopleSay = ({ property }) => {
-  // Mock data for reviews. Added a few extra to demonstrate functional pagination.
-  const allReviews = [
-    {
-      id: 1,
-      name: "Bichitra Nayak",
-      initial: "B",
-      date: "30th June 2026",
-      rating: 5,
-      text: "Sand2Sky is one of the best property consultants in Bhubaneswar. Their knowledge of luxury apartments and premium properties helped us make the right investment decision. Highly recommended"
-    },
-    {
-      id: 2,
-      name: "Devayoni Services",
-      initial: "D",
-      date: "1st July 2026",
-      rating: 5,
-      text: "Very professional real estate company. Sand2Sky offers excellent options for luxury homes, villas, and premium apartments in Bhubaneswar. The team is responsive, knowledgeable, and customer-focused"
-    },
-    {
-      id: 3,
-      name: "Ankita Swain",
-      initial: "A",
-      date: "6th July 2026",
-      rating: 4,
-      text: "If you're looking for premium properties in Bhubaneswar, Sand2Sky is the right choice. Professional team, transparent advice, and excellent property options."
-    },
-    {
-      id: 4,
-      name: "Debaraj Sahoo",
-      initial: "D",
-      date: "7th July 2026",
-      rating: 5,
-      text: "Excellent experience with Sand2Sky! They helped me find the perfect luxury apartment in Bhubaneswar. Professional team, transparent guidance, and great support throughout the property buying process. Highly recommended for luxury..."
-    },
-    // Extra reviews to make pagination arrows functional
-    {
-      id: 5,
-      name: "Suresh Kumar",
-      initial: "S",
-      date: "12th July 2026",
-      rating: 5,
-      text: "Great properties and smooth paperwork. The agents were very helpful in finding a home within our budget."
-    },
-    {
-      id: 6,
-      name: "Priya Mohanty",
-      initial: "P",
-      date: "15th July 2026",
-      rating: 5,
-      text: "Highly professional and trustworthy. They guided us through every step of purchasing our new villa."
-    }
-  ];
+const PropertyDetailsPeopleSay = ({
+  property,
+}) => {
+  // =====================================================
+  // REVIEWS STATE
+  // =====================================================
 
-  // Pagination State
+  const [allReviews, setAllReviews] = useState([]);
+
+  const [loadingReviews, setLoadingReviews] =
+    useState(false);
+
+  // =====================================================
+  // PAGINATION STATE
+  // =====================================================
+
   const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 4;
-  const totalPages = Math.ceil(allReviews.length / reviewsPerPage);
 
-  // Pagination Logic
-  const indexOfLastReview = currentPage * reviewsPerPage;
-  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-  const currentReviews = allReviews.slice(indexOfFirstReview, indexOfLastReview);
+  const reviewsPerPage = 4;
+
+  // =====================================================
+  // FETCH APPROVED REVIEWS
+  // =====================================================
+
+  useEffect(() => {
+    const fetchApprovedReviews = async () => {
+      try {
+        setLoadingReviews(true);
+
+        // =================================================
+        // PROPERTY ID
+        // =================================================
+
+        const propertyId =
+          property?._id ||
+          property?.id;
+
+        console.log(
+          "PROPERTY ID FOR REVIEWS:",
+          propertyId
+        );
+
+        if (!propertyId) {
+          console.warn(
+            "Property ID not found."
+          );
+
+          setAllReviews([]);
+          return;
+        }
+
+        // =================================================
+        // API REQUEST
+        // =================================================
+
+        const response =
+          await API.get(
+            `/property-reviews/property/${propertyId}`
+          );
+
+        console.log(
+          "APPROVED REVIEWS RESPONSE:",
+          response.data
+        );
+
+        // =================================================
+        // SUPPORT DIFFERENT RESPONSE FORMATS
+        // =================================================
+
+        const responseReviews =
+          response.data?.reviews ||
+          response.data?.data ||
+          response.data ||
+          [];
+
+        // =================================================
+        // ONLY APPROVED REVIEWS
+        // =================================================
+        //
+        // Backend already returns approved reviews,
+        // but this additional check keeps the frontend safe.
+        //
+
+        const approvedReviews =
+          Array.isArray(responseReviews)
+            ? responseReviews.filter(
+                (review) =>
+                  !review.status ||
+                  review.status === "Approved"
+              )
+            : [];
+
+        // =================================================
+        // SET REVIEWS
+        // =================================================
+
+        setAllReviews(
+          approvedReviews
+        );
+
+        // =================================================
+        // RESET PAGINATION
+        // =================================================
+
+        setCurrentPage(1);
+
+      } catch (error) {
+        console.error(
+          "FETCH APPROVED REVIEWS ERROR:",
+          error.response?.data ||
+            error
+        );
+
+        setAllReviews([]);
+
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
+
+    fetchApprovedReviews();
+
+  }, [
+    property?._id,
+    property?.id,
+  ]);
+
+  // =====================================================
+  // TOTAL PAGES
+  // =====================================================
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        allReviews.length /
+          reviewsPerPage
+      )
+    );
+
+  // =====================================================
+  // PAGINATION LOGIC
+  // =====================================================
+
+  const indexOfLastReview =
+    currentPage *
+    reviewsPerPage;
+
+  const indexOfFirstReview =
+    indexOfLastReview -
+    reviewsPerPage;
+
+  const currentReviews =
+    allReviews.slice(
+      indexOfFirstReview,
+      indexOfLastReview
+    );
+
+  // =====================================================
+  // NEXT
+  // =====================================================
 
   const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    if (
+      currentPage <
+      totalPages
+    ) {
+      setCurrentPage(
+        currentPage + 1
+      );
+    }
   };
 
+  // =====================================================
+  // PREVIOUS
+  // =====================================================
+
   const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+    if (
+      currentPage > 1
+    ) {
+      setCurrentPage(
+        currentPage - 1
+      );
+    }
   };
+
+  // =====================================================
+  // VIEW ALL
+  // =====================================================
 
   const handleViewAll = (e) => {
     e.preventDefault();
-    alert("Navigating to all Google Reviews...");
+
+    alert(
+      "Showing all approved reviews..."
+    );
   };
 
-  // Helper to render stars based on rating
-  const renderStars = (rating) => {
+  // =====================================================
+  // FORMAT DATE
+  // =====================================================
+
+  const formatReviewDate = (
+    date
+  ) => {
+    if (!date) {
+      return "";
+    }
+
+    const reviewDate =
+      new Date(date);
+
+    if (
+      Number.isNaN(
+        reviewDate.getTime()
+      )
+    ) {
+      return date;
+    }
+
+    const day =
+      reviewDate.getDate();
+
+    const month =
+      reviewDate.toLocaleString(
+        "en-US",
+        {
+          month: "long",
+        }
+      );
+
+    const year =
+      reviewDate.getFullYear();
+
+    const getOrdinal = (
+      value
+    ) => {
+      if (
+        value > 3 &&
+        value < 21
+      ) {
+        return "th";
+      }
+
+      switch (
+        value % 10
+      ) {
+        case 1:
+          return "st";
+
+        case 2:
+          return "nd";
+
+        case 3:
+          return "rd";
+
+        default:
+          return "th";
+      }
+    };
+
+    return `${day}${getOrdinal(
+      day
+    )} ${month} ${year}`;
+  };
+
+  // =====================================================
+  // RENDER STARS
+  // =====================================================
+
+  const renderStars = (
+    rating
+  ) => {
     const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (i <= rating) {
-        stars.push(<FaStar key={i} className="PropertyDetailsPeopleSay-star filled" />);
+
+    const numericRating =
+      Number(rating) || 0;
+
+    for (
+      let i = 1;
+      i <= 5;
+      i++
+    ) {
+      if (
+        i <=
+        numericRating
+      ) {
+        stars.push(
+          <FaStar
+            key={i}
+            className="PropertyDetailsPeopleSay-star filled"
+          />
+        );
       } else {
-        stars.push(<FaRegStar key={i} className="PropertyDetailsPeopleSay-star empty" />);
+        stars.push(
+          <FaRegStar
+            key={i}
+            className="PropertyDetailsPeopleSay-star empty"
+          />
+        );
       }
     }
+
     return stars;
   };
 
+  // =====================================================
+  // AVERAGE RATING
+  // =====================================================
+
+  const averageRating =
+    allReviews.length > 0
+      ? (
+          allReviews.reduce(
+            (
+              total,
+              review
+            ) =>
+              total +
+              (Number(
+                review.rating
+              ) || 0),
+            0
+          ) /
+          allReviews.length
+        ).toFixed(1)
+      : "0";
+
+  // =====================================================
+  // UI
+  // =====================================================
+
   return (
     <div className="PropertyDetailsPeopleSay-wrapper">
+
       <div className="PropertyDetailsPeopleSay-card">
-        
-        {/* Header Section */}
+
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
         <div className="PropertyDetailsPeopleSay-header">
-          <h2 className="PropertyDetailsPeopleSay-title">What People Say About {property?.title || 'Us'}</h2>
+
+          <h2 className="PropertyDetailsPeopleSay-title">
+            What People Say About{" "}
+            {property?.title ||
+              "Us"}
+          </h2>
+
           <div className="PropertyDetailsPeopleSay-google-logo">
-            <span style={{ color: '#4285F4' }}>G</span>
-            <span style={{ color: '#EA4335' }}>o</span>
-            <span style={{ color: '#FBBC05' }}>o</span>
-            <span style={{ color: '#4285F4' }}>g</span>
-            <span style={{ color: '#34A853' }}>l</span>
-            <span style={{ color: '#EA4335' }}>e</span>
-            <span className="PropertyDetailsPeopleSay-reviews-text">Reviews</span>
+
+            <span
+              style={{
+                color: "#4285F4",
+              }}
+            >
+              G
+            </span>
+
+            <span
+              style={{
+                color: "#EA4335",
+              }}
+            >
+              o
+            </span>
+
+            <span
+              style={{
+                color: "#FBBC05",
+              }}
+            >
+              o
+            </span>
+
+            <span
+              style={{
+                color: "#4285F4",
+              }}
+            >
+              g
+            </span>
+
+            <span
+              style={{
+                color: "#34A853",
+              }}
+            >
+              l
+            </span>
+
+            <span
+              style={{
+                color: "#EA4335",
+              }}
+            >
+              e
+            </span>
+
+            <span className="PropertyDetailsPeopleSay-reviews-text">
+              Reviews
+            </span>
+
           </div>
+
         </div>
 
-        {/* Summary Section */}
+        {/* =================================================
+            SUMMARY
+        ================================================= */}
+
         <div className="PropertyDetailsPeopleSay-summary">
-          <span className="PropertyDetailsPeopleSay-summary-score">5</span>
+
+          <span className="PropertyDetailsPeopleSay-summary-score">
+            {averageRating}
+          </span>
+
           <div className="PropertyDetailsPeopleSay-summary-stars">
-            {renderStars(5)}
+
+            {renderStars(
+              Math.round(
+                Number(
+                  averageRating
+                )
+              )
+            )}
+
           </div>
-          <span className="PropertyDetailsPeopleSay-summary-count">(12 Reviews)</span>
-          <a href="#view-all" onClick={handleViewAll} className="PropertyDetailsPeopleSay-view-all">
+
+          <span className="PropertyDetailsPeopleSay-summary-count">
+
+            ({allReviews.length}{" "}
+
+            {allReviews.length ===
+            1
+              ? "Review"
+              : "Reviews"})
+
+          </span>
+
+          <a
+            href="#view-all"
+            onClick={
+              handleViewAll
+            }
+            className="PropertyDetailsPeopleSay-view-all"
+          >
             View All Reviews
           </a>
+
         </div>
 
-        {/* Reviews Grid */}
-        <div className="PropertyDetailsPeopleSay-grid">
-          {currentReviews.map((review) => (
-            <div key={review.id} className="PropertyDetailsPeopleSay-review-item">
-              <div className="PropertyDetailsPeopleSay-review-header">
-                <div className="PropertyDetailsPeopleSay-avatar">{review.initial}</div>
-                <div className="PropertyDetailsPeopleSay-meta">
-                  <h3 className="PropertyDetailsPeopleSay-reviewer-name">{review.name}</h3>
-                  <div className="PropertyDetailsPeopleSay-rating-row">
-                    <div className="PropertyDetailsPeopleSay-review-stars">
-                      {renderStars(review.rating)}
+        {/* =================================================
+            LOADING
+        ================================================= */}
+
+        {loadingReviews ? (
+
+          <div
+            style={{
+              width: "100%",
+              padding:
+                "30px 0",
+              textAlign:
+                "center",
+              color: "#777",
+              fontSize:
+                "14px",
+            }}
+          >
+            Loading reviews...
+          </div>
+
+        ) : allReviews.length ===
+          0 ? (
+
+          /* =================================================
+             NO APPROVED REVIEWS
+          ================================================= */
+
+          <div
+            style={{
+              width: "100%",
+              padding:
+                "30px 0",
+              textAlign:
+                "center",
+              color: "#777",
+              fontSize:
+                "14px",
+            }}
+          >
+            No approved reviews yet.
+          </div>
+
+        ) : (
+
+          <>
+            {/* =================================================
+                REVIEWS GRID
+            ================================================= */}
+
+            <div className="PropertyDetailsPeopleSay-grid">
+
+              {currentReviews.map(
+                (review) => {
+
+                  const reviewerName =
+                    review.name ||
+                    "Anonymous";
+
+                  const reviewerInitial =
+                    reviewerName
+                      .charAt(0)
+                      .toUpperCase();
+
+                  const reviewText =
+                    review.review ||
+                    review.text ||
+                    "";
+
+                  const adminReply =
+                    review.adminReply ||
+                    "";
+
+                  return (
+
+                    <div
+                      key={
+                        review._id ||
+                        review.id
+                      }
+                      className="PropertyDetailsPeopleSay-review-item"
+                    >
+
+                      {/* =================================================
+                          REVIEW HEADER
+                      ================================================= */}
+
+                      <div className="PropertyDetailsPeopleSay-review-header">
+
+                        <div className="PropertyDetailsPeopleSay-avatar">
+                          {reviewerInitial}
+                        </div>
+
+                        <div className="PropertyDetailsPeopleSay-meta">
+
+                          <h3 className="PropertyDetailsPeopleSay-reviewer-name">
+                            {reviewerName}
+                          </h3>
+
+                          <div className="PropertyDetailsPeopleSay-rating-row">
+
+                            <div className="PropertyDetailsPeopleSay-review-stars">
+
+                              {renderStars(
+                                review.rating
+                              )}
+
+                            </div>
+
+                            <span className="PropertyDetailsPeopleSay-date">
+
+                              {formatReviewDate(
+                                review.createdAt ||
+                                  review.date
+                              )}
+
+                            </span>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      {/* =================================================
+                          CUSTOMER REVIEW
+                      ================================================= */}
+
+                      <p className="PropertyDetailsPeopleSay-review-text">
+                        {reviewText}
+                      </p>
+
+                      {/* =================================================
+                          ADMIN REPLY
+                      ================================================= */}
+
+                      {adminReply.trim() !==
+                        "" && (
+
+                        <div
+                          style={{
+                            marginTop:
+                              "14px",
+                            padding:
+                              "12px 14px",
+                            background:
+                              "#f6f8f7",
+                            borderLeft:
+                              "3px solid #176634",
+                            borderRadius:
+                              "6px",
+                          }}
+                        >
+
+                          <div
+                            style={{
+                              display:
+                                "flex",
+                              alignItems:
+                                "center",
+                              gap:
+                                "7px",
+                              marginBottom:
+                                "6px",
+                            }}
+                          >
+
+                            <span
+                              style={{
+                                fontSize:
+                                  "13px",
+                                fontWeight:
+                                  "700",
+                                color:
+                                  "#176634",
+                              }}
+                            >
+                              Response from Management
+                            </span>
+
+                          </div>
+
+                          <p
+                            style={{
+                              margin:
+                                "0",
+                              fontSize:
+                                "13px",
+                              lineHeight:
+                                "1.6",
+                              color:
+                                "#4b5563",
+                            }}
+                          >
+                            {adminReply}
+                          </p>
+
+                          {review.repliedAt && (
+                            <span
+                              style={{
+                                display:
+                                  "block",
+                                marginTop:
+                                  "7px",
+                                fontSize:
+                                  "10px",
+                                color:
+                                  "#9ca3af",
+                              }}
+                            >
+                              Replied on{" "}
+                              {formatReviewDate(
+                                review.repliedAt
+                              )}
+                            </span>
+                          )}
+
+                        </div>
+
+                      )}
+
                     </div>
-                    <span className="PropertyDetailsPeopleSay-date">{review.date}</span>
-                  </div>
-                </div>
-              </div>
-              <p className="PropertyDetailsPeopleSay-review-text">{review.text}</p>
-            </div>
-          ))}
-        </div>
 
-        {/* Pagination Controls */}
-        <div className="PropertyDetailsPeopleSay-pagination">
-          <button 
-            className={`PropertyDetailsPeopleSay-nav-btn ${currentPage === 1 ? 'disabled' : ''}`}
-            onClick={handlePrev}
-            disabled={currentPage === 1}
-          >
-            <FaChevronLeft />
-          </button>
-          <button 
-            className={`PropertyDetailsPeopleSay-nav-btn ${currentPage === totalPages ? 'disabled' : 'active'}`}
-            onClick={handleNext}
-            disabled={currentPage === totalPages}
-          >
-            <FaChevronRight />
-          </button>
-        </div>
+                  );
+                }
+              )}
+
+            </div>
+
+            {/* =================================================
+                PAGINATION
+            ================================================= */}
+
+            {totalPages > 1 && (
+
+              <div className="PropertyDetailsPeopleSay-pagination">
+
+                <button
+                  className={`PropertyDetailsPeopleSay-nav-btn ${
+                    currentPage ===
+                    1
+                      ? "disabled"
+                      : ""
+                  }`}
+                  onClick={
+                    handlePrev
+                  }
+                  disabled={
+                    currentPage ===
+                    1
+                  }
+                >
+                  <FaChevronLeft />
+                </button>
+
+                <button
+                  className={`PropertyDetailsPeopleSay-nav-btn ${
+                    currentPage ===
+                    totalPages
+                      ? "disabled"
+                      : "active"
+                  }`}
+                  onClick={
+                    handleNext
+                  }
+                  disabled={
+                    currentPage ===
+                    totalPages
+                  }
+                >
+                  <FaChevronRight />
+                </button>
+
+              </div>
+
+            )}
+
+          </>
+
+        )}
 
       </div>
+
     </div>
   );
 };

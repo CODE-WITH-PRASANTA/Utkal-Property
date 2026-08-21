@@ -11,8 +11,10 @@ import Document from "../../Components/Document/Document";
 import NearbyPlaces from "../../Components/NearbyPlaces/NearbyPlaces";
 import AllProperty from "../../Components/AllProperty/AllProperty";
 
+
+
 import API from "../../api/Axios";
-import FetchAmenities from "../../Components/fetchAmenities/fetchAmenities";
+import FetchAmenities from "../../Components/fetchAmenities/FetchAmenities";
 
 const AddNewProperty = () => {
   const navigate = useNavigate();

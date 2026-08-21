@@ -1,56 +1,45 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiSearch, FiChevronDown, FiSliders, FiArrowUpRight } from 'react-icons/fi';
 import './HomeBreadcrum.css';
-
-// Import your local hero image from src/assets/
 import heroImg from '../../assets/slider-1.png'; 
 
 const HomeBreadcrum = () => {
   const [activeTab, setActiveTab] = useState('Rent');
   const [keyword, setKeyword] = useState('');
-  const [propertyType, setPropertyType] = useState('Property type');
-  const [location, setLocation] = useState('Location');
+  const [propertyType, setPropertyType] = useState('Flat / Apartment');
+  const [location, setLocation] = useState('Bhubaneswar, Odisha');
   
-  // Dropdown visibility states
   const [showPropertyDropdown, setShowPropertyDropdown] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  // Advanced Filter state
   const [baths, setBaths] = useState('Any');
   const [beds, setBeds] = useState('Any');
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
-  const dropdownRef = useRef(null);
+  const searchContainerRef = useRef(null);
 
-  // Dynamic readings/stats based on selected tab
   const statsData = {
-    Rent: {
-      properties: '1,500+',
-      customers: '700+'
-    },
-    Buy: {
-      properties: '3,200+',
-      customers: '1,400+'
-    }
+    Rent: { properties: '50+', customers: '200+' },
+    Buy: { properties: '50+', customers: '100+' }
   };
 
   const propertyTypes = [
-    'Bungalow',
-    'Apartment',
-    'House',
-    'Smart Home',
-    'Office',
-    'Villa'
+    'Flat / Apartment',
+    'Luxury Penthouse',
+    'Bungalow / Villa',
+    'Duplex Home',
+    'Commercial Office',
+    'Residential Plot'
   ];
 
   const locations = [
-    'Bhubaneswar, Odisha',
-    'Cuttack, Odisha',
-    'Puri, Odisha',
-    'Rourkela, Odisha',
-    'Sambalpur, Odisha',
-    'Bangalore, KA'
+    'Patia, Bhubaneswar',
+    'Jayadev Vihar, Bhubaneswar',
+    'Khandagiri, Bhubaneswar',
+    'Saheed Nagar, Bhubaneswar',
+    'Nayapalli, Bhubaneswar',
+    'Cuttack, Odisha'
   ];
 
   const amenitiesList = [
@@ -59,10 +48,9 @@ const HomeBreadcrum = () => {
     'Alarm system', 'Broadband', 'Gym', 'Outdoor spa'
   ];
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
         setShowPropertyDropdown(false);
         setShowLocationDropdown(false);
       }
@@ -80,23 +68,25 @@ const HomeBreadcrum = () => {
   };
 
   return (
-    <div className="HomeBreadcrum">
+    <section className="HomeBreadcrum">
       <div className="HomeBreadcrum-container">
         
-        {/* Left Column: Hero Content & Search Bar */}
+        {/* Left Column */}
         <div className="HomeBreadcrum-left">
-          <div className="HomeBreadcrum-badgeTag">Utkal Property Services</div>
+          <div className="HomeBreadcrum-badgeTag">
+            Utkal Property Services
+          </div>
+
           <h1 className="HomeBreadcrum-title">
-            We will find a <span className="highlight-green">perfect home</span> for you
+            Leading <span className="highlight-green">Premium Apartments and Flats</span> in Bhubaneswar
           </h1>
+
           <p className="HomeBreadcrum-subtitle">
-            Find a variety of premium properties that suit your lifestyle effortlessly. Forget all difficulties in finding your dream residence.
+            Find your dream home with the leading premium apartments dealer. Explore verified luxury residences, high-end gated communities, and modern spaces built for your lifestyle.
           </p>
 
-          {/* Search Card Container */}
-          <div className="HomeBreadcrum-searchCardContainer" ref={dropdownRef}>
-            
-            {/* Rent / Buy Tabs */}
+          {/* Search Card */}
+          <div className="HomeBreadcrum-searchCardContainer" ref={searchContainerRef}>
             <div className="HomeBreadcrum-tabs">
               <button
                 type="button"
@@ -114,13 +104,12 @@ const HomeBreadcrum = () => {
               </button>
             </div>
 
-            {/* Main Search Controls */}
             <div className="HomeBreadcrum-searchCard">
               {/* Keyword Input */}
               <div className="HomeBreadcrum-field HomeBreadcrum-inputField">
                 <input
                   type="text"
-                  placeholder="Type keyword..."
+                  placeholder="Search 2 BHK, 3 BHK, luxury flats..."
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                 />
@@ -136,16 +125,17 @@ const HomeBreadcrum = () => {
                   }}
                 >
                   <span>{propertyType}</span>
-                  <FiChevronDown className="HomeBreadcrum-arrowIcon" />
+                  <FiChevronDown className={`HomeBreadcrum-arrowIcon ${showPropertyDropdown ? 'rotate' : ''}`} />
                 </div>
 
                 {showPropertyDropdown && (
                   <div className="HomeBreadcrum-dropdownMenu">
-                    <div className="HomeBreadcrum-dropdownTitle">Property type</div>
+                    <div className="HomeBreadcrum-dropdownTitle">Property Type</div>
                     <ul>
                       {propertyTypes.map((type, idx) => (
                         <li
                           key={idx}
+                          className={propertyType === type ? 'selected' : ''}
                           onClick={() => {
                             setPropertyType(type);
                             setShowPropertyDropdown(false);
@@ -169,7 +159,7 @@ const HomeBreadcrum = () => {
                   }}
                 >
                   <span>{location}</span>
-                  <FiChevronDown className="HomeBreadcrum-arrowIcon" />
+                  <FiChevronDown className={`HomeBreadcrum-arrowIcon ${showLocationDropdown ? 'rotate' : ''}`} />
                 </div>
 
                 {showLocationDropdown && (
@@ -179,6 +169,7 @@ const HomeBreadcrum = () => {
                       {locations.map((loc, idx) => (
                         <li
                           key={idx}
+                          className={location === loc ? 'selected' : ''}
                           onClick={() => {
                             setLocation(loc);
                             setShowLocationDropdown(false);
@@ -192,23 +183,24 @@ const HomeBreadcrum = () => {
                 )}
               </div>
 
-              {/* Filter Button */}
+              {/* Action Buttons */}
               <button
                 type="button"
                 className={`HomeBreadcrum-filterBtn ${showAdvancedFilters ? 'active' : ''}`}
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
                 title="Toggle Filters"
+                aria-label="Filter Options"
               >
                 <FiSliders />
               </button>
 
-              {/* Search Button */}
               <button type="button" className="HomeBreadcrum-searchBtn">
-                Search Now <FiSearch className="HomeBreadcrum-searchIcon" />
+                <span>Search</span>
+                <FiSearch className="HomeBreadcrum-searchIcon" />
               </button>
             </div>
 
-            {/* Expanded Filter Panel */}
+            {/* Advanced Filters */}
             {showAdvancedFilters && (
               <div className="HomeBreadcrum-filterPanel">
                 <div className="HomeBreadcrum-filterTop">
@@ -225,22 +217,17 @@ const HomeBreadcrum = () => {
 
                     <div className="HomeBreadcrum-filterSelect">
                       <select value={beds} onChange={(e) => setBeds(e.target.value)}>
-                        <option value="Any">Beds: Any</option>
-                        <option value="1">Beds: 1+</option>
-                        <option value="2">Beds: 2+</option>
-                        <option value="3">Beds: 3+</option>
+                        <option value="Any">Bedrooms: Any</option>
+                        <option value="1">1 BHK</option>
+                        <option value="2">2 BHK</option>
+                        <option value="3">3 BHK</option>
+                        <option value="4">4+ BHK</option>
                       </select>
                       <FiChevronDown className="HomeBreadcrum-selectArrow" />
                     </div>
                   </div>
 
-                  <div className="HomeBreadcrum-filterHeaderLabel">
-                    <span>Form —</span>
-                  </div>
-
-                  <div className="HomeBreadcrum-filterHeaderLabel">
-                    <span>Size —</span>
-                  </div>
+                  <span className="HomeBreadcrum-filterHeaderLabel">Featured Amenities</span>
                 </div>
 
                 <div className="HomeBreadcrum-divider" />
@@ -253,7 +240,7 @@ const HomeBreadcrum = () => {
                         checked={selectedAmenities.includes(amenity)}
                         onChange={() => handleAmenityChange(amenity)}
                       />
-                      <span className="HomeBreadcrum-customCheckbox"></span>
+                      <span className="HomeBreadcrum-customCheckbox" />
                       <span className="HomeBreadcrum-amenityText">{amenity}</span>
                     </label>
                   ))}
@@ -262,23 +249,21 @@ const HomeBreadcrum = () => {
             )}
           </div>
 
-          {/* Dynamic Stats Counter Section */}
+          {/* Dynamic Stats */}
           <div className="HomeBreadcrum-stats">
             <div className="HomeBreadcrum-statItem">
               <h3>{statsData[activeTab].properties}</h3>
-              <p>Properties Ready</p>
+              <p>Properties Available</p>
             </div>
             <div className="HomeBreadcrum-statItem">
               <h3>{statsData[activeTab].customers}</h3>
-              <p>Happy Customers</p>
+              <p>Verified Listings</p>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Hero Image & Rotating Circular Badge */}
+        {/* Right Column */}
         <div className="HomeBreadcrum-right">
-          
-          {/* Rotating Circular Badge */}
           <div className="HomeBreadcrum-badgeWrapper">
             <div className="HomeBreadcrum-badgeTextContainer">
               <svg viewBox="0 0 100 100" className="HomeBreadcrum-rotatingSvg">
@@ -289,28 +274,27 @@ const HomeBreadcrum = () => {
                 />
                 <text className="HomeBreadcrum-svgText">
                   <textPath href="#circlePath" startOffset="0%">
-                    find your dreams real estate •
+                    PREMIUM APARTMENTS & FLATS IN BHUBANESWAR •
                   </textPath>
                 </text>
               </svg>
             </div>
             <div className="HomeBreadcrum-badgeArrow">
-              <FiArrowUpRight />
+              <FiArrowUpRight className="HomeBreadcrum-badgeIcon" />
             </div>
           </div>
 
-          {/* Arch Hero Image Container */}
           <div className="HomeBreadcrum-imageArch">
             <img
               src={heroImg}
-              alt="Real Estate Architecture"
+              alt="Premium Apartments in Bhubaneswar"
               className="HomeBreadcrum-heroImage"
             />
           </div>
         </div>
 
       </div>
-    </div>
+    </section>
   );
 };
 

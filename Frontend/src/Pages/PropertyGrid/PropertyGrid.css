@@ -1,0 +1,32 @@
+/* PropertyGrid.css */
+
+/* Main Container Wrapper */
+.PropertyGrid-main {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Accessible hidden H1 for SEO without affecting visual UI layout */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Global transitions and layout styling for subcomponents */
+.PropertyGrid-main > section,
+.PropertyGrid-main > div {
+  width: 100%;
+}

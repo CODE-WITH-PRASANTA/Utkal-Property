@@ -18,6 +18,7 @@ import Categories from "./Components/Categories/Categories";
 import Locations from "./Components/Locations/Locations";
 import NearbyPlaces from "./Components/NearbyPlaces/NearbyPlaces";
 import Amenities from "./Components/Amenities/Amenities";
+import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
 
 // Blogs
 import BlogPosting from "./Components/BlogPosting/BlogPosting";
@@ -144,10 +145,7 @@ function App() {
           }
         >
           {/* Main Dashboard */}
-          <Route
-            path="/"
-            element={<Navigate to="/dashboard" replace />}
-          />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardMain />} />
 
           {/* Properties Management */}
@@ -158,6 +156,7 @@ function App() {
           <Route path="/properties/categories" element={<Categories />} />
           <Route path="/properties/locations" element={<Locations />} />
           <Route path="/properties/nearby" element={<NearbyPlaces />} />
+          <Route path="/properties/review" element={<AdminPropertyReviews />} />
 
           {/* Blogs */}
           <Route path="/blogposting" element={<BlogPosting />} />

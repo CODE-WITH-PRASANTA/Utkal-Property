@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import bannerImg from '../../assets/mark-contact3.png'; // Adjust path/filename as needed for banner
+import bannerImg from '../../assets/mark-contact3.png';
 import './OurTeam.css';
-import API, { IMG_URL } from '../../api/axios'; // Adjust relative import path if needed
+import API, { IMG_URL } from '../../api/axios';
 
 // React Icons
 import {
@@ -17,20 +17,15 @@ const OurTeam = () => {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid');
   const [sortOrder, setSortOrder] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
   const [brokenImages, setBrokenImages] = useState({});
   const itemsPerPage = 9;
 
-  /**
-   * Universal Image URL Resolver
-   * Resolves absolute backend server paths for static WebP files (/uploads/team/filename.webp)
-   */
   const getImageUrl = (photoPath) => {
     if (!photoPath) return '';
 
-    // 1. Direct Blob previews or absolute web URLs
     if (
       photoPath.startsWith('http://') ||
       photoPath.startsWith('https://') ||
@@ -39,10 +34,7 @@ const OurTeam = () => {
       return photoPath;
     }
 
-    // 2. Normalize Windows backslashes
     let clean = photoPath.replace(/\\/g, '/');
-
-    // 3. Isolate path starting from uploads/
     const uploadsIndex = clean.indexOf('uploads/');
     if (uploadsIndex !== -1) {
       clean = '/' + clean.substring(uploadsIndex);
@@ -50,12 +42,10 @@ const OurTeam = () => {
       clean = clean.startsWith('/') ? clean : `/${clean}`;
     }
 
-    // 4. Attach base URL safely without double slashes
     const baseUrl = (IMG_URL || 'http://localhost:5000').replace(/\/+$/, '');
     return `${baseUrl}${clean}`;
   };
 
-  // Fetch Team Members from API
   const fetchTeamMembers = async () => {
     try {
       setLoading(true);
@@ -68,7 +58,6 @@ const OurTeam = () => {
         data = response.data;
       }
 
-      // Filter only Active members for the public website view
       const activeMembers = data.filter(
         (member) => member.status === 'Active'
       );
@@ -84,12 +73,10 @@ const OurTeam = () => {
     fetchTeamMembers();
   }, []);
 
-  // Track broken image URLs gracefully
   const handleImageError = (id) => {
     setBrokenImages((prev) => ({ ...prev, [id]: true }));
   };
 
-  // Filter agents based on search (Name or Designation/Role)
   const filteredAgents = agents.filter((agent) => {
     const name = agent.fullName || agent.name || '';
     const role = agent.designation || agent.role || '';
@@ -99,7 +86,6 @@ const OurTeam = () => {
     );
   });
 
-  // Sort agents based on dropdown selection
   const sortedAgents = [...filteredAgents].sort((a, b) => {
     const nameA = a.fullName || a.name || '';
     const nameB = b.fullName || b.name || '';
@@ -107,11 +93,9 @@ const OurTeam = () => {
     if (sortOrder === 'name-asc') return nameA.localeCompare(nameB);
     if (sortOrder === 'name-desc') return nameB.localeCompare(nameA);
     
-    // Default: Sort by display order first
     return (a.displayOrder || 1) - (b.displayOrder || 1);
   });
 
-  // Pagination Logic
   const totalPages = Math.ceil(sortedAgents.length / itemsPerPage) || 1;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -123,16 +107,21 @@ const OurTeam = () => {
   };
 
   return (
-    <section className="utkal-agents-section" aria-labelledby="agents-heading">
+    <section 
+      className="utkal-agents-section" 
+      aria-labelledby="agents-heading"
+      itemScope 
+      itemType="https://schema.org/RealEstateAgent"
+    >
       {/* Header & Controls Bar */}
       <div className="utkal-agents-header-container">
         <div className="utkal-agents-title-wrap">
-          <span className="utkal-agents-tag">Expert Consultants</span>
+          <span className="utkal-agents-tag">Trusted Property Advisors</span>
           <h1 id="agents-heading" className="utkal-agents-main-title">
-            Our Agents
+            Our Property Advisors &amp; Real Estate Agents
           </h1>
           <p className="utkal-agents-subtitle">
-            Meet the expert team at <strong>Utkal Property</strong> — the best property consultant in Bhubaneswar.
+            Connect with dedicated property specialists at <strong>Utkal Property</strong> — recognized as the <strong>best real estate agency in Bhubaneswar</strong> and the leading <strong>Best Property Consultant in Bhubaneswar</strong> for residential and commercial investments.
           </p>
         </div>
 
@@ -144,14 +133,14 @@ const OurTeam = () => {
             </span>
             <input
               type="text"
-              placeholder="Search agent's name or role..."
+              placeholder="Search agent by name or specialty..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
               className="utkal-agents-search-input"
-              aria-label="Search agent's name"
+              aria-label="Search real estate agent"
             />
           </div>
 
@@ -187,7 +176,7 @@ const OurTeam = () => {
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
               className="utkal-agents-sort-select"
-              aria-label="Default order"
+              aria-label="Sort agents order"
             >
               <option value="default">Default Order</option>
               <option value="name-asc">Name: A to Z</option>
@@ -200,7 +189,7 @@ const OurTeam = () => {
       {/* Agents Card Container */}
       {loading ? (
         <div className="utkal-agents-loading" style={{ textAlign: 'center', padding: '40px' }}>
-          <p>Loading property consultants...</p>
+          <p>Loading real estate consultants...</p>
         </div>
       ) : currentAgents.length > 0 ? (
         <div className={`utkal-agents-grid ${viewMode === 'list' ? 'list-view-mode' : ''}`}>
@@ -212,17 +201,35 @@ const OurTeam = () => {
             const role = agent.designation || agent.role;
 
             return (
-              <article key={agentId} className="utkal-agent-card">
+              <article 
+                key={agentId} 
+                className="utkal-agent-card" 
+                itemScope 
+                itemType="https://schema.org/Person"
+              >
                 <div className="utkal-agent-img-container">
                   {!isBroken ? (
                     <img
                       src={photoUrl}
-                      alt={`${name} - ${role} at Utkal Property Bhubaneswar`}
+                      alt={`${name} - Property Consultant at Utkal Property, Best Real Estate Agency in Bhubaneswar`}
                       className="utkal-agent-img"
+                      itemProp="image"
+                      loading="lazy"
                       onError={() => handleImageError(agentId)}
                     />
                   ) : (
-                    <div className="utkal-agent-placeholder" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: '#f5f5f5', fontSize: '48px', color: '#ccc' }}>
+                    <div 
+                      className="utkal-agent-placeholder" 
+                      style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        height: '100%', 
+                        background: '#f5f5f5', 
+                        fontSize: '48px', 
+                        color: '#ccc' 
+                      }}
+                    >
                       <FaUserCircle />
                     </div>
                   )}
@@ -230,19 +237,19 @@ const OurTeam = () => {
 
                 <div className="utkal-agent-content">
                   <div className="utkal-agent-info-group">
-                    <h2 className="utkal-agent-name">{name}</h2>
-                    <p className="utkal-agent-role">{role}</p>
+                    <h2 className="utkal-agent-name" itemProp="name">{name}</h2>
+                    <p className="utkal-agent-role" itemProp="jobTitle">{role}</p>
                   </div>
 
                   <div className="utkal-agent-contact-details">
                     {agent.phone && (
-                      <a href={`tel:${agent.phone}`} className="utkal-agent-contact-row">
+                      <a href={`tel:${agent.phone}`} className="utkal-agent-contact-row" itemProp="telephone">
                         <span className="utkal-contact-icon" aria-hidden="true"><FaPhoneAlt /></span>
                         <span>{agent.phone}</span>
                       </a>
                     )}
                     {agent.email && (
-                      <a href={`mailto:${agent.email}`} className="utkal-agent-contact-row">
+                      <a href={`mailto:${agent.email}`} className="utkal-agent-contact-row" itemProp="email">
                         <span className="utkal-contact-icon" aria-hidden="true"><FaEnvelope /></span>
                         <span className="utkal-email-text">{agent.email}</span>
                       </a>
@@ -273,7 +280,7 @@ const OurTeam = () => {
         </div>
       ) : (
         <div className="utkal-agents-no-results">
-          <p>No active agents found matching your criteria. Please try another search or check back later.</p>
+          <p>No active property consultants found matching your criteria. Please try another search or contact our office directly.</p>
         </div>
       )}
 
@@ -315,37 +322,49 @@ const OurTeam = () => {
       )}
 
       {/* Banner Section */}
-      <section className="utkal-promo-banner" aria-label="Investment Opportunities">
+      <section className="utkal-promo-banner" aria-label="Real Estate Investment & Advisory Services">
         <div className="utkal-promo-content">
           <h2 className="utkal-promo-title">
-            Find your dream home & boost your investment opportunities
+            Find Your Dream Home &amp; Maximize Investment Value in Bhubaneswar
           </h2>
           <p className="utkal-promo-desc">
-            Buying your first home can be fun and exciting, but it requires careful research. With Utkal Property, the best property consultant in Bhubaneswar, you can easily find your dream home without reaching out to multiple brokers—all at the best market prices.
+            Navigating property options should be seamless and rewarding. As the <strong>best real estate agency in Bhubaneswar</strong>, <strong>Utkal Property (Best Property Consultant in Bhubaneswar)</strong> eliminates broker hassles by connecting you directly with verified luxury flats, residential plots, and modern duplexes at transparent market pricing.
           </p>
           <a href="tel:+919861566735" className="utkal-contact-seller-btn">
-            <span aria-hidden="true"><FaPhoneAlt /></span> Contact Seller
+            <span aria-hidden="true"><FaPhoneAlt /></span> Call +91 98615 66735
           </a>
         </div>
         <div className="utkal-promo-image-container">
           <img
             src={bannerImg}
-            alt="Utkal Property Consultant in Bhubaneswar helping client find dream home"
+            alt="Utkal Property - Best Real Estate Agency and Property Consultant in Bhubaneswar"
             className="utkal-promo-img"
+            loading="lazy"
           />
         </div>
       </section>
 
-      {/* SEO Footer Description */}
+      {/* SEO Footer Description with Schema Microdata */}
       <footer className="utkal-team-seo-footer">
         <div className="utkal-seo-content">
-          <h3>Utkal Property (Best Property Consultant in Bhubaneswar)</h3>
-          <p>
-            "Buying your first home can be fun and exciting but requires lots of research and visits to various brokers to find a perfect home for you and your family. With Utkal Property, now you can find the place of your dreams easily without reaching out to different brokers at the best possible market price. We have a complete list of houses, apartments, and bungalows on sale in various parts of Odisha."
+          <h3 itemProp="name">Utkal Property (Best Property Consultant in Bhubaneswar)</h3>
+          <p itemProp="description">
+            Buying your first home or expanding your commercial portfolio requires verified listings, clear titles, and strategic local insights. As the premier <strong>best real estate agency in Bhubaneswar</strong>, <strong>Utkal Property</strong> offers a comprehensive inventory of BDA-approved residential plots, luxury duplexes, and affordable 2 &amp; 3 BHK apartments across Baramunda, Patia, Khandagiri, and Sundarpada.
           </p>
-          <p className="utkal-seo-address">
-            <strong>Office Address:</strong> Plot No-55, Ln 2, Jagannath Vihar, Baramunda, Bhubaneswar, Odisha 751003 | <strong>Phone:</strong> 098615 66735
-          </p>
+          <address 
+            className="utkal-seo-address" 
+            itemProp="address" 
+            itemScope 
+            itemType="https://schema.org/PostalAddress"
+          >
+            <strong>Office Address:</strong>{' '}
+            <span itemProp="streetAddress">Plot No-55, Ln 2, Jagannath Vihar, Baramunda</span>,{' '}
+            <span itemProp="addressLocality">Bhubaneswar</span>,{' '}
+            <span itemProp="addressRegion">Odisha</span>{' '}
+            <span itemProp="postalCode">751003</span> |{' '}
+            <strong>Phone:</strong>{' '}
+            <a href="tel:+919861566735" itemProp="telephone">+91 9861566735</a>
+          </address>
         </div>
       </footer>
     </section>
