@@ -18,6 +18,8 @@ import RentProperty from "./Component/RentProperty/RentProperty";
 
 // ⭐ NEW — Page Loader
 import PageLoader from "./Component/PageLoader/PageLoader";
+import FloatingIcons from "./Component/FloatingIcons/FloatingIcons";
+import FloatingForm from "./Component/FloatingForm/FloatingForm";
 
 function App() {
   return (
@@ -122,6 +124,8 @@ function App() {
       </Routes>
 
       <Footer />
+      <FloatingIcons/>
+      <FloatingForm/>
 
     </BrowserRouter>
   );
