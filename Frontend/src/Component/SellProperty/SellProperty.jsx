@@ -389,9 +389,6 @@ const SellProperty = () => {
             <h1>
               Sell a Property with <span className="highlight-green">Utkal Property</span>
             </h1>
-            <p>List your property for sale and find the right buyer easily.</p>
-            <h1>Sell a Property with Utkal Property</h1>
-            <p>List your property for sale and connect with potential buyers across Odisha.</p>
             <p>List your property for sale and connect with potential buyers across Odisha easily.</p>
           </div>
         </div>
@@ -642,13 +639,6 @@ const SellProperty = () => {
                 value={formData.state}
                 onChange={(e) => handleInputChange('state', e.target.value)}
               >
-                {fieldConfigMap.state.options.map((opt, i) => (
-                  <option key={i} value={opt}>{opt}</option>
-                ))}
-                <option value="Odisha">Odisha</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Delhi">Delhi</option>
                 {FIELD_CONFIG_MAP.state.options.map((opt, i) => (
                   <option key={i} value={opt}>{opt}</option>
                 ))}
@@ -662,13 +652,6 @@ const SellProperty = () => {
                 value={formData.city}
                 onChange={(e) => handleInputChange('city', e.target.value)}
               >
-                {fieldConfigMap.city.options.map((opt, i) => (
-                  <option key={i} value={opt}>{opt}</option>
-                ))}
-                <option value="Bhubaneswar">Bhubaneswar</option>
-                <option value="Cuttack">Cuttack</option>
-                <option value="Puri">Puri</option>
-                <option value="Sambalpur">Sambalpur</option>
                 {FIELD_CONFIG_MAP.city.options.map((opt, i) => (
                   <option key={i} value={opt}>{opt}</option>
                 ))}
@@ -714,8 +697,6 @@ const SellProperty = () => {
           </div>
         </div>
 
-        {/* Section 4: Upload More Images */}
-        {/* Upload Images Section */}
         {/* Section 4: Image Upload */}
         <div className="sell-property-section">
           <h3 className="sell-property-section-title">
