@@ -17,7 +17,6 @@ import {
   FaArrowLeft,
   FaArrowRight,
   FaMapMarkerAlt,
-  FaChevronUp,
   FaTimes,
   FaUserCheck,
 } from "react-icons/fa";
@@ -26,7 +25,6 @@ import {
 // IMAGE BASE URL
 // =====================================================
 
-// Change only if your backend runs on another port
 const BACKEND_URL = "http://localhost:5000";
 
 // =====================================================
@@ -38,7 +36,6 @@ const getImageUrl = (image) => {
     return "";
   }
 
-  // Already full URL
   if (
     image.startsWith("http://") ||
     image.startsWith("https://") ||
@@ -47,7 +44,6 @@ const getImageUrl = (image) => {
     return image;
   }
 
-  // Backend uploaded image
   if (image.startsWith("/")) {
     return `${BACKEND_URL}${image}`;
   }
@@ -385,13 +381,6 @@ const Propertiesforsale = () => {
     setSelectedImage(null);
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   return (
     <section className="Propertiesforsale" aria-labelledby="consultant-heading">
       <div className="Propertiesforsale-container">
@@ -425,15 +414,6 @@ const Propertiesforsale = () => {
             ))
           )}
         </div>
-
-        {/* SCROLL TOP */}
-        <button
-          className="Propertiesforsale-scroll-top-btn"
-          onClick={scrollToTop}
-          aria-label="Scroll back to top"
-        >
-          <FaChevronUp />
-        </button>
 
         {/* IMAGE LIGHTBOX MODAL */}
         {selectedImage && (

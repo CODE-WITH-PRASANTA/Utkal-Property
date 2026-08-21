@@ -17,7 +17,6 @@ import {
   FaArrowLeft,
   FaArrowRight,
   FaMapMarkerAlt,
-  FaChevronUp,
   FaTimes,
   FaHandshake,
 } from "react-icons/fa";
@@ -381,13 +380,6 @@ const Propertiesforrent = () => {
     setSelectedImage(null);
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   return (
     <section className="Propertiesforrent" aria-labelledby="rental-brokers-heading">
       <div className="Propertiesforrent-container">
@@ -429,15 +421,6 @@ const Propertiesforrent = () => {
               />
             ))}
         </div>
-
-        {/* SCROLL TO TOP */}
-        <button
-          className="Propertiesforrent-scroll-top-btn"
-          onClick={scrollToTop}
-          aria-label="Scroll to top"
-        >
-          <FaChevronUp />
-        </button>
 
         {/* IMAGE MODAL */}
         {selectedImage && (

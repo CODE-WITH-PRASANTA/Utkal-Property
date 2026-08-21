@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './HomeRealEstate.css';
-import API, { IMG_URL } from '../../api/axios'; // Adjust relative import path if needed
+import API, { IMG_URL } from '../../api/axios';
 
 // React Icons
-import { FaChevronUp, FaTimes, FaImage, FaMapMarkedAlt } from 'react-icons/fa';
+import { FaTimes, FaImage, FaMapMarkedAlt } from 'react-icons/fa';
 
 const HomeRealEstate = () => {
   const [galleryItems, setGalleryItems] = useState([]);
@@ -79,10 +79,6 @@ const HomeRealEstate = () => {
 
   const handleCloseModal = () => {
     setSelectedImage(null);
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -162,15 +158,6 @@ const HomeRealEstate = () => {
             </div>
           )}
         </div>
-
-        {/* Scroll To Top Button */}
-        <button
-          className="HomeRealEstate-scroll-top"
-          onClick={scrollToTop}
-          aria-label="Scroll to top"
-        >
-          <FaChevronUp />
-        </button>
 
         {/* Fullscreen Lightbox Modal */}
         {selectedImage && (
