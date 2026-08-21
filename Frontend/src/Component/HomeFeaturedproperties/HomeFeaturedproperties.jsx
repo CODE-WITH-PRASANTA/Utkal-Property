@@ -12,7 +12,6 @@ import {
   FaArrowLeft,
   FaArrowRight,
   FaMapMarkerAlt,
-  FaChevronUp,
   FaShieldAlt,
   FaCheckCircle
 } from 'react-icons/fa';
@@ -425,10 +424,6 @@ const HomeFeaturedproperties = () => {
     setCurrentPage(1);
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <section className="HomeFeaturedproperties" aria-labelledby="featured-properties-heading">
       <div className="HomeFeaturedproperties-container">
@@ -500,16 +495,6 @@ const HomeFeaturedproperties = () => {
             </button>
           </div>
         )}
-
-        {/* Scroll to Top Button */}
-        <button 
-          className="HomeFeaturedproperties-scroll-top-btn" 
-          onClick={scrollToTop} 
-          title="Back to Top"
-          aria-label="Scroll back to top"
-        >
-          <FaChevronUp />
-        </button>
       </div>
     </section>
   );

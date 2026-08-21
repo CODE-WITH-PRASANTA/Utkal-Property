@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
-// Layout Components
+// Layout & Global Components
 import Navbar from "./Component/Navbar/Navbar";
 import Footer from "./Component/Footer/Footer";
+import PageLoader from "./Component/PageLoader/PageLoader";
+import FloatingIcons from "./Component/FloatingIcons/FloatingIcons";
+import FloatingForm from "./Component/FloatingForm/FloatingForm";
 
 // Page Components
 import Home from "./Pages/Home/Home";
@@ -22,22 +25,44 @@ import Contacts from "./Pages/Contacts/Contacts";
 function App() {
   return (
     <BrowserRouter>
+      {/* Global Page Loader */}
+      <PageLoader />
+
       <Navbar />
+
       <Routes>
+        {/* Core Pages */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/abot" element={<AboutUs />} /> {/* Fallback alias */}
+        
+        {/* Properties */}
         <Route path="/properties" element={<PropertyGrid />} />
         <Route path="/properties/:id" element={<PropertyDetails />} />
+        <Route path="/property-details/:id" element={<PropertyDetails />} />
+        <Route path="/property-details" element={<PropertyDetails />} />
         <Route path="/sell-property" element={<SellProperty />} />
         <Route path="/rent-property" element={<RentProperty />} />
         <Route path="/near-properties" element={<RealNear />} />
+        <Route path="/real" element={<RealNear />} />
+
+        {/* Company & Support */}
         <Route path="/our-team" element={<OurTeam />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:id" element={<BlogDetails />} />
         <Route path="/faq" element={<Faq />} />
+        <Route path="/Faq" element={<Faq />} />
         <Route path="/contact" element={<Contacts />} />
+
+        {/* Blog & Content */}
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blogposting" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogDetails />} />
+        <Route path="/blogmanagement/:id" element={<BlogDetails />} />
+        <Route path="/details/:id" element={<BlogDetails />} />
       </Routes>
+
       <Footer />
+      <FloatingIcons />
+      <FloatingForm />
     </BrowserRouter>
   );
 }
