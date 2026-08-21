@@ -37,6 +37,7 @@ import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
 
 import Amenities from "./Components/Amenities/Amenities";
+import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
 
 function ProtectedRoute({
   isAuthenticated,
@@ -194,6 +195,7 @@ function App() {
             element={<AddNewProperty />}
           />
           <Route path="/properties/Amenities" element={<Amenities />} />
+          <Route path="/properties/review" element={<AdminPropertyReviews />} />
 
           <Route
             path="/properties/categories"

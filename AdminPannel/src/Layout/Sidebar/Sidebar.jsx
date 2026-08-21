@@ -39,6 +39,7 @@ const menuItems = [
       { title: 'Categories', path: '/properties/categories', icon: FiGrid },
       { title: 'Locations', path: '/properties/locations', icon: FiMapPin },
       { title: 'Amenities', path: '/properties/Amenities', icon: FiMapPin },
+      { title: 'Property Review', path: '/properties/review', icon: FiMapPin },
     ],
   },
   {

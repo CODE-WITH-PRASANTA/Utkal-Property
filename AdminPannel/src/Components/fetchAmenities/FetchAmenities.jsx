@@ -6,17 +6,17 @@ const FetchAmenities = ({
   propertyData,
   setPropertyData,
 }) => {
-  const [amenitiesList, setAmenitiesList] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [fapList, setFapList] = useState([]);
+  const [fapLoading, setFapLoading] = useState(false);
 
   // ============================================
-  // FETCH AMENITIES
+  // FETCH DATA
   // ============================================
 
   useEffect(() => {
-    const fetchAmenities = async () => {
+    const loadFapData = async () => {
       try {
-        setLoading(true);
+        setFapLoading(true);
 
         const response = await API.get("/amenities");
 
@@ -25,170 +25,328 @@ const FetchAmenities = ({
           response.data
         );
 
-        // Support:
-        // { amenities: [...] }
-        // { data: [...] }
-        // [...]
-
-        const data =
+        const responseData =
           response.data?.amenities ||
           response.data?.data ||
           response.data ||
           [];
 
-        if (Array.isArray(data)) {
-          setAmenitiesList(data);
+        if (Array.isArray(responseData)) {
+          setFapList(responseData);
         } else {
-          setAmenitiesList([]);
+          setFapList([]);
         }
       } catch (error) {
         console.error(
-          "FETCH AMENITIES ERROR:",
+          "FETCH ERROR:",
           error.response?.data || error
         );
 
-        setAmenitiesList([]);
+        setFapList([]);
       } finally {
-        setLoading(false);
+        setFapLoading(false);
       }
     };
 
-    fetchAmenities();
+    loadFapData();
   }, []);
 
   // ============================================
-  // SELECTED AMENITIES
+  // SELECTED DATA
   // ============================================
 
-  const selectedAmenities =
-    Array.isArray(propertyData?.amenities)
-      ? propertyData.amenities
-      : [];
+  const fapSelected = Array.isArray(
+    propertyData?.amenities
+  )
+    ? propertyData.amenities
+    : [];
 
   // ============================================
-  // CHECKBOX CHANGE
+  // ACTIVE DATA
   // ============================================
 
-  const handleAmenityChange = (amenityName) => {
-    setPropertyData((previous) => {
-      const currentAmenities =
-        Array.isArray(previous.amenities)
-          ? previous.amenities
-          : [];
+  const fapActive = fapList.filter(
+    (item) =>
+      !item.status ||
+      item.status === "Active"
+  );
 
-      // Already selected -> remove
-      if (currentAmenities.includes(amenityName)) {
+  // ============================================
+  // TOGGLE AMENITY
+  // ============================================
+
+  const handleFapChange = (itemName) => {
+    setPropertyData((previousData) => {
+      const currentItems = Array.isArray(
+        previousData?.amenities
+      )
+        ? previousData.amenities
+        : [];
+
+      const exists =
+        currentItems.includes(itemName);
+
+      // REMOVE
+      if (exists) {
         return {
-          ...previous,
+          ...previousData,
 
-          amenities: currentAmenities.filter(
-            (item) => item !== amenityName
+          amenities: currentItems.filter(
+            (item) => item !== itemName
           ),
         };
       }
 
-      // Not selected -> add
+      // ADD
       return {
-        ...previous,
+        ...previousData,
 
         amenities: [
-          ...currentAmenities,
-          amenityName,
+          ...currentItems,
+          itemName,
         ],
       };
     });
   };
 
   // ============================================
-  // ACTIVE AMENITIES
+  // SELECTED COUNT
   // ============================================
 
-  const activeAmenities = amenitiesList.filter(
-    (amenity) =>
-      !amenity.status ||
-      amenity.status === "Active"
-  );
+  const fapSelectedCount =
+    fapSelected.length;
 
   // ============================================
   // UI
   // ============================================
 
   return (
-    <div className="amenities-container">
+    <section className="fap-container">
 
-      <div className="amenities-header">
-        <h2 className="amenities-title">
-          Amenities
-        </h2>
+      {/* ======================================
+          PREMIUM HEADER
+      ====================================== */}
+
+      <div className="fap-header">
+
+        <div className="fap-heading">
+
+          <div className="fap-heading-icon">
+            <span>✦</span>
+          </div>
+
+          <div className="fap-heading-content">
+
+            <div className="fap-title-row">
+
+              <h2 className="fap-title">
+                Property Amenities
+              </h2>
+
+              {!fapLoading &&
+                fapActive.length > 0 && (
+                  <span className="fap-available-badge">
+                    {fapActive.length} Available
+                  </span>
+                )}
+
+            </div>
+
+            <p className="fap-description">
+              Select the facilities and services
+              available at this property.
+            </p>
+
+          </div>
+
+        </div>
+
+        {!fapLoading &&
+          fapActive.length > 0 && (
+            <div
+              className={`fap-counter ${
+                fapSelectedCount > 0
+                  ? "fap-counter-active"
+                  : ""
+              }`}
+            >
+
+              <span className="fap-counter-number">
+                {fapSelectedCount}
+              </span>
+
+              <span className="fap-counter-label">
+                Selected
+              </span>
+
+            </div>
+          )}
+
       </div>
 
-      {loading ? (
-        <div className="amenities-loading">
-          Loading amenities...
-        </div>
-      ) : activeAmenities.length === 0 ? (
-        <div className="amenities-empty">
-          No amenities found.
-        </div>
-      ) : (
-        <div className="amenities-grid">
+      {/* ======================================
+          DIVIDER
+      ====================================== */}
 
-          {activeAmenities.map((amenity) => {
-            const amenityName =
-              amenity.name ||
-              amenity.title ||
+      <div className="fap-divider" />
+
+      {/* ======================================
+          LOADING
+      ====================================== */}
+
+      {fapLoading ? (
+        <div className="fap-loading">
+
+          <div className="fap-loading-animation">
+            <span className="fap-spinner" />
+          </div>
+
+          <div className="fap-loading-content">
+            <span className="fap-loading-title">
+              Loading amenities
+            </span>
+
+            <span className="fap-loading-text">
+              Please wait...
+            </span>
+          </div>
+
+        </div>
+      ) : fapActive.length === 0 ? (
+
+        /* ====================================
+           EMPTY STATE
+        ==================================== */
+
+        <div className="fap-empty">
+
+          <div className="fap-empty-icon">
+            <span>✦</span>
+          </div>
+
+          <div className="fap-empty-content">
+
+            <h3>
+              No facilities available
+            </h3>
+
+            <p>
+              Active facilities will appear here.
+            </p>
+
+          </div>
+
+        </div>
+
+      ) : (
+
+        /* ====================================
+           AMENITIES GRID
+        ==================================== */
+
+        <div className="fap-grid">
+
+          {fapActive.map((item) => {
+
+            const itemName =
+              item.name ||
+              item.title ||
               "";
 
-            if (!amenityName) {
+            if (!itemName) {
               return null;
             }
 
-            const isChecked =
-              selectedAmenities.includes(
-                amenityName
-              );
+            const isSelected =
+              fapSelected.includes(itemName);
 
             return (
               <label
-                key={amenity._id || amenityName}
-                className={`amenities-item ${
-                  isChecked ? "selected" : ""
+                key={
+                  item._id ||
+                  itemName
+                }
+                className={`fap-item ${
+                  isSelected
+                    ? "fap-item-active"
+                    : ""
                 }`}
               >
 
+                {/* =================================
+                    REAL CHECKBOX
+                ================================= */}
+
                 <input
                   type="checkbox"
-                  className="amenities-checkbox"
-                  checked={isChecked}
+                  className="fap-input"
+                  checked={isSelected}
                   onChange={() =>
-                    handleAmenityChange(
-                      amenityName
+                    handleFapChange(
+                      itemName
                     )
                   }
                 />
 
-                <span className="amenities-check-box">
-                  {isChecked && "✓"}
+                {/* =================================
+                    CHECKBOX
+                ================================= */}
+
+                <span className="fap-check">
+
+                  {isSelected && (
+                    <span className="fap-check-mark">
+                      ✓
+                    </span>
+                  )}
+
                 </span>
 
-                {/* ICON / IMAGE */}
+                {/* =================================
+                    ICON / IMAGE
+                ================================= */}
 
-                {amenity.icon && (
-                  <span className="amenities-icon">
-                    {amenity.icon}
-                  </span>
-                )}
+                <span className="fap-visual">
 
-                {amenity.image && (
-                  <img
-                    src={amenity.image}
-                    alt={amenityName}
-                    className="amenities-image"
-                  />
-                )}
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt={itemName}
+                      className="fap-image"
+                    />
+                  ) : item.icon ? (
+                    <span className="fap-icon">
+                      {item.icon}
+                    </span>
+                  ) : (
+                    <span className="fap-default-icon">
+                      ✦
+                    </span>
+                  )}
 
-                <span className="amenities-name">
-                  {amenityName}
+                </span>
+
+                {/* =================================
+                    NAME
+                ================================= */}
+
+                <span className="fap-name">
+                  {itemName}
+                </span>
+
+                {/* =================================
+                    SELECTED INDICATOR
+                ================================= */}
+
+                <span
+                  className={`fap-selected ${
+                    isSelected
+                      ? "fap-selected-visible"
+                      : ""
+                  }`}
+                  aria-hidden="true"
+                >
+                  {isSelected && "✓"}
                 </span>
 
               </label>
@@ -198,7 +356,7 @@ const FetchAmenities = ({
         </div>
       )}
 
-    </div>
+    </section>
   );
 };
 
