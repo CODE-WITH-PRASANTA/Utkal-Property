@@ -7,6 +7,7 @@ const fs = require("fs");
 // DIRECTORIES
 // =====================================================
 
+
 // Team images
 const teamUploadDir = path.join(__dirname, "../../uploads/team");
 

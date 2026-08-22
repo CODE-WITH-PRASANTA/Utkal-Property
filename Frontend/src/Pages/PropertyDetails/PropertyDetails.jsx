@@ -23,16 +23,19 @@ import PropertyDetailsPeopleSay from "../../Component/PropertyDetailsPeopleSay/P
 
 import PropertyDetailsFaq from "../../Component/PropertyDetailsFaq/PropertyDetailsFaq";
 
+
 const PropertyDetails = () => {
-  // ============================================
+
+  // =====================================================
   // GET PROPERTY ID FROM URL
-  // ============================================
+  // =====================================================
 
   const { id } = useParams();
 
-  // ============================================
+
+  // =====================================================
   // STATE
-  // ============================================
+  // =====================================================
 
   const [
     property,
@@ -49,236 +52,352 @@ const PropertyDetails = () => {
     setError,
   ] = useState("");
 
-  // ============================================
+
+  // =====================================================
   // FETCH PROPERTY BY ID
-  // ============================================
+  // =====================================================
 
   useEffect(() => {
-    const fetchPropertyById =
-      async () => {
-        try {
-          setLoading(true);
 
-          setError("");
+    const fetchPropertyById = async () => {
 
-          console.log(
-            "================================"
-          );
+      try {
 
-          console.log(
-            "FETCH PROPERTY DETAILS"
-          );
+        setLoading(true);
 
-          console.log(
-            "PROPERTY ID:",
-            id
-          );
+        setError("");
 
-          console.log(
-            "================================"
-          );
 
-          // ====================================
-          // API REQUEST
-          // ====================================
+        // =================================================
+        // CHECK PROPERTY ID
+        // =================================================
 
-          const response =
-            await API.get(
-              `/properties/${id}`
-            );
+        if (!id) {
 
-          console.log(
-            "PROPERTY DETAILS RESPONSE:",
-            response.data
-          );
-
-          // ====================================
-          // GET PROPERTY FROM RESPONSE
-          // ====================================
-
-          const propertyData =
-            response.data?.property ||
-            response.data?.data ||
-            response.data;
-
-          console.log(
-            "PROPERTY DATA:",
-            propertyData
-          );
-
-          // ====================================
-          // VALIDATE PROPERTY
-          // ====================================
-
-          if (
-            !propertyData ||
-            typeof propertyData !==
-              "object"
-          ) {
-            throw new Error(
-              "Property data not found."
-            );
-          }
-
-          // ====================================
-          // SAVE PROPERTY
-          // ====================================
-
-          setProperty(
-            propertyData
-          );
-
-          console.log(
-            "================================"
-          );
-        } catch (error) {
-          console.error(
-            "================================"
-          );
-
-          console.error(
-            "FETCH PROPERTY DETAILS ERROR"
-          );
-
-          console.error(
-            error.response?.data ||
-              error
-          );
-
-          console.error(
-            "================================"
+          setError(
+            "Property ID not found."
           );
 
           setProperty(null);
 
-          setError(
-            error.response?.data
-              ?.message ||
-              error.message ||
-              "Failed to load property details."
-          );
-        } finally {
-          setLoading(false);
+          return;
         }
-      };
 
-    // ============================================
-    // CALL ONLY WHEN ID EXISTS
-    // ============================================
 
-    if (id) {
-      fetchPropertyById();
-    } else {
-      setLoading(false);
+        // =================================================
+        // DEBUG
+        // =================================================
 
-      setError(
-        "Property ID not found."
-      );
-    }
+        console.log(
+          "================================"
+        );
+
+        console.log(
+          "FETCH PROPERTY DETAILS"
+        );
+
+        console.log(
+          "PROPERTY ID:",
+          id
+        );
+
+        console.log(
+          "API URL:",
+          `/properties/${id}`
+        );
+
+        console.log(
+          "================================"
+        );
+
+
+        // =================================================
+        // API REQUEST
+        // =================================================
+
+        const response =
+          await API.get(
+            `/properties/${id}`
+          );
+
+
+        // =================================================
+        // RESPONSE
+        // =================================================
+
+        console.log(
+          "PROPERTY DETAILS RESPONSE:",
+          response.data
+        );
+
+
+        // =================================================
+        // GET PROPERTY DATA
+        // =================================================
+
+        const propertyData =
+          response.data?.property ||
+          response.data?.data ||
+          response.data;
+
+
+        console.log(
+          "PROPERTY DATA:",
+          propertyData
+        );
+
+
+        // =================================================
+        // VALIDATE PROPERTY
+        // =================================================
+
+        if (
+          !propertyData ||
+          typeof propertyData !==
+            "object"
+        ) {
+
+          throw new Error(
+            "Property data not found."
+          );
+        }
+
+
+        // =================================================
+        // MAKE SURE PROPERTY ID EXISTS
+        // =================================================
+
+        const propertyId =
+          propertyData?._id ||
+          propertyData?.id ||
+          id;
+
+
+        // =================================================
+        // SAVE PROPERTY
+        // =================================================
+
+        setProperty({
+          ...propertyData,
+
+          // Preserve MongoDB property ID
+          _id: propertyId,
+
+          // Also keep id for compatibility
+          id: propertyId,
+        });
+
+
+        console.log(
+          "================================"
+        );
+
+        console.log(
+          "PROPERTY SAVED"
+        );
+
+        console.log(
+          "PROPERTY ID:",
+          propertyId
+        );
+
+        console.log(
+          "================================"
+        );
+
+      } catch (error) {
+
+        console.error(
+          "================================"
+        );
+
+        console.error(
+          "FETCH PROPERTY DETAILS ERROR"
+        );
+
+        console.error(
+          error.response?.data ||
+            error
+        );
+
+        console.error(
+          "================================"
+        );
+
+
+        setProperty(null);
+
+
+        setError(
+          error.response?.data
+            ?.message ||
+            error.message ||
+            "Failed to load property details."
+        );
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+
+    // =====================================================
+    // CALL API
+    // =====================================================
+
+    fetchPropertyById();
+
   }, [id]);
 
-  // ============================================
+
+  // =====================================================
   // LOADING
-  // ============================================
+  // =====================================================
 
   if (loading) {
+
     return (
+
       <div>
+
         Loading property
         details...
+
       </div>
+
     );
+
   }
 
-  // ============================================
+
+  // =====================================================
   // ERROR
-  // ============================================
+  // =====================================================
 
   if (error) {
+
     return (
+
       <div>
+
         {error}
+
       </div>
+
     );
+
   }
 
-  // ============================================
+
+  // =====================================================
   // PROPERTY NOT FOUND
-  // ============================================
+  // =====================================================
 
   if (!property) {
+
     return (
+
       <div>
+
         Property not found.
+
       </div>
+
     );
+
   }
 
-  // ============================================
+
+  // =====================================================
+  // PROPERTY ID
+  // =====================================================
+
+  const propertyId =
+    property?._id ||
+    property?.id ||
+    id;
+
+
+  // =====================================================
   // PROPERTY DETAILS PAGE
-  // ============================================
+  // =====================================================
 
   return (
+
     <div>
 
-      {/* ================================= */}
-      {/* PROPERTY CARD */}
-      {/* ================================= */}
+      {/* ===============================================
+          PROPERTY CARD
+      =============================================== */}
 
       <PropertyDetailsCard
         property={property}
       />
 
-      {/* ================================= */}
-      {/* PROJECT OVERVIEW */}
-      {/* ================================= */}
+
+      {/* ===============================================
+          PROJECT OVERVIEW
+      =============================================== */}
 
       <PropertyDetailsProjectOverview
         property={property}
       />
 
-      {/* ================================= */}
-      {/* AMENITIES */}
-      {/* ================================= */}
+
+      {/* ===============================================
+          AMENITIES
+          PROPERTY ID IS EXPLICITLY PASSED
+      =============================================== */}
 
       <PropertyDetailsAmenities
         property={property}
+        propertyId={propertyId}
       />
 
-      {/* ================================= */}
-      {/* MAP */}
-      {/* ================================= */}
+
+      {/* ===============================================
+          MAP
+      =============================================== */}
 
       <PropertyDetailsMap
         property={property}
       />
 
-      {/* ================================= */}
-      {/* SIMILAR PROJECTS */}
-      {/* ================================= */}
+
+      {/* ===============================================
+          SIMILAR PROJECTS
+      =============================================== */}
 
       <PropertyDetailsSimilarProjects
         property={property}
       />
 
-      {/* ================================= */}
-      {/* FAQ */}
-      {/* ================================= */}
+
+      {/* ===============================================
+          FAQ
+      =============================================== */}
 
       <PropertyDetailsFaq
         property={property}
       />
 
-      {/* ================================= */}
-      {/* PEOPLE SAY */}
-      {/* ================================= */}
+
+      {/* ===============================================
+          PEOPLE SAY
+      =============================================== */}
 
       <PropertyDetailsPeopleSay
         property={property}
       />
 
     </div>
+
   );
+
 };
+
 
 export default PropertyDetails;

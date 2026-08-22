@@ -1,548 +1,1570 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './Enquire.css';
+import React, { useState, useRef, useEffect } from "react";
+import "./Enquire.css";
+import API from "../../api/Axios";
 
-const initialEnquiries = [
-  { id: 1, name: 'Ravi Patel', property: 'Gorgeous Apartment', email: 'ravi.patel@gmail.com', phone: '+91 9876543210', status: 'New', date: '22 Mar 2023', source: 'Website', message: 'Interested in a 3BHK flat.' },
-  { id: 2, name: 'Anita Desai', property: 'Luxury Villa', email: 'anita.desai@gmail.com', phone: '+91 9123456780', status: 'Contacted', date: '21 Mar 2023', source: 'Instagram', message: 'Looking for villa pricing.' },
-  { id: 3, name: 'Mohit Sharma', property: 'Modern Studio', email: 'mohit.sharma@gmail.com', phone: '+91 9988776655', status: 'Follow Up', date: '20 Mar 2023', source: 'Direct Call', message: 'Requires a callback tomorrow.' },
-  { id: 4, name: 'Neha Gupta', property: 'City Apartment', email: 'neha.gupta@gmail.com', phone: '+91 9090909090', status: 'Converted', date: '19 Mar 2023', source: 'Referral', message: 'Booking completed.' },
-  { id: 5, name: 'Karan Mehta', property: 'Penthouse Suite', email: 'karan.mehta@gmail.com', phone: '+91 8888888888', status: 'Closed', date: '18 Mar 2023', source: 'Facebook', message: 'Not interested at this time.' },
-  { id: 6, name: 'Priya Sharma', property: 'Luxury Villa', email: 'priya.s@gmail.com', phone: '+91 9876500011', status: 'New', date: '17 Mar 2023', source: 'Website', message: 'Wants weekend visit schedule.' },
-  { id: 7, name: 'Sanjay Dutt', property: 'Modern Studio', email: 'sanjay.d@gmail.com', phone: '+91 9112233445', status: 'Contacted', date: '16 Mar 2023', source: 'Direct Call', message: 'Shared brochure PDF.' },
-  { id: 8, name: 'Ritu Varma', property: 'Gorgeous Apartment', email: 'ritu.v@gmail.com', phone: '+91 9554433221', status: 'Follow Up', date: '15 Mar 2023', source: 'Instagram', message: 'Discussing loan details.' },
-];
+// =====================================================
+// ENQUIRE COMPONENT
+// =====================================================
 
 const Enquire = () => {
-  const [enquiries, setEnquiries] = useState(initialEnquiries);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
-  const [propertyFilter, setPropertyFilter] = useState('All');
+  // ===================================================
+  // ENQUIRIES
+  // ===================================================
+
+  const [enquiries, setEnquiries] = useState([]);
+
+  // ===================================================
+  // SEARCH
+  // ===================================================
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // ===================================================
+  // FILTERS
+  // ===================================================
+
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [propertyFilter, setPropertyFilter] = useState("All");
+
+  // ===================================================
+  // PAGINATION
+  // ===================================================
+
   const [currentPage, setCurrentPage] = useState(1);
+
   const itemsPerPage = 5;
 
-  // Modals state
-  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [selectedEnquiry, setSelectedEnquiry] = useState(null);
+  // ===================================================
+  // MODALS
+  // ===================================================
 
-  // Form State
+  const [isFormModalOpen, setIsFormModalOpen] =
+    useState(false);
+
+  const [editingId, setEditingId] = useState(null);
+
+  const [selectedEnquiry, setSelectedEnquiry] =
+    useState(null);
+
+  // ===================================================
+  // FORM
+  // ===================================================
+
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    property: '',
-    source: '',
-    status: 'New',
-    message: ''
+    fullName: "",
+    email: "",
+    phone: "",
+    status: "New",
   });
 
-  // Filter dropdown refs
+  // ===================================================
+  // LOADING
+  // ===================================================
+
+  const [loading, setLoading] = useState(false);
+
+  const [saving, setSaving] = useState(false);
+
+  const [deletingId, setDeletingId] = useState(null);
+
   const filterRefs = useRef({});
 
-  // Dynamic unique properties list for dropdown filter
-  const propertyOptions = Array.from(new Set(enquiries.map(item => item.property)));
+  // ===================================================
+  // FORMAT DATE
+  // ===================================================
 
-  // Dynamic Filter Logic - FULLY WORKING
-  const filteredEnquiries = enquiries.filter(item => {
-    const matchesSearch = 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.property.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.phone.includes(searchTerm);
+  const formatDate = (dateValue) => {
+    if (!dateValue) {
+      return "N/A";
+    }
 
-    const matchesStatus = statusFilter === 'All' || item.status === statusFilter;
-    const matchesProperty = propertyFilter === 'All' || item.property === propertyFilter;
+    try {
+      const date = new Date(dateValue);
 
-    return matchesSearch && matchesStatus && matchesProperty;
-  });
+      if (Number.isNaN(date.getTime())) {
+        return "N/A";
+      }
 
-  // Pagination Calculations
-  const totalPages = Math.ceil(filteredEnquiries.length / itemsPerPage) || 1;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentEnquiries = filteredEnquiries.slice(startIndex, startIndex + itemsPerPage);
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    } catch (error) {
+      return "N/A";
+    }
+  };
 
-  // Reset to page 1 when filters change
+  // ===================================================
+  // GET PROPERTY NAME
+  // ===================================================
+
+  const getPropertyName = (item) => {
+    if (!item?.propertyId) {
+      return "N/A";
+    }
+
+    if (typeof item.propertyId === "string") {
+      return item.propertyId;
+    }
+
+    return (
+      item.propertyId.name ||
+      item.propertyId.title ||
+      "N/A"
+    );
+  };
+
+  // ===================================================
+  // MAP BACKEND DATA
+  // ===================================================
+
+  const mapBackendEnquiry = (item) => {
+    return {
+      id: item._id,
+      _id: item._id,
+
+      name: item.name || "N/A",
+
+      email: item.email || "N/A",
+
+      phone: item.mobile || "N/A",
+
+      status: item.status || "New",
+
+      date: formatDate(item.createdAt),
+
+      property: getPropertyName(item),
+
+      propertyId:
+        typeof item.propertyId === "object"
+          ? item.propertyId?._id
+          : item.propertyId,
+    };
+  };
+
+  // ===================================================
+  // FETCH ENQUIRIES
+  // ===================================================
+
+  const fetchEnquiries = async () => {
+    try {
+      setLoading(true);
+
+      const response =
+        await API.get("/property-contacts");
+
+      console.log(
+        "PROPERTY CONTACTS RESPONSE:",
+        response.data
+      );
+
+      const backendData =
+        response.data?.data || [];
+
+      if (Array.isArray(backendData)) {
+        const mappedData =
+          backendData.map(
+            mapBackendEnquiry
+          );
+
+        setEnquiries(mappedData);
+      } else {
+        setEnquiries([]);
+      }
+    } catch (error) {
+      console.error(
+        "FETCH ENQUIRIES ERROR:",
+        error.response?.data || error
+      );
+
+      alert(
+        error.response?.data?.message ||
+          "Failed to load enquiries."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ===================================================
+  // LOAD DATA
+  // ===================================================
+
+  useEffect(() => {
+    fetchEnquiries();
+  }, []);
+
+  // ===================================================
+  // PROPERTY OPTIONS
+  // ===================================================
+
+  const propertyOptions = Array.from(
+    new Set(
+      enquiries.map(
+        (item) => item.property
+      )
+    )
+  ).filter(Boolean);
+
+  // ===================================================
+  // FILTER
+  // ===================================================
+
+  const filteredEnquiries =
+    enquiries.filter((item) => {
+      const search =
+        searchTerm.toLowerCase();
+
+      const matchesSearch =
+        String(item.name || "")
+          .toLowerCase()
+          .includes(search) ||
+        String(item.email || "")
+          .toLowerCase()
+          .includes(search) ||
+        String(item.property || "")
+          .toLowerCase()
+          .includes(search) ||
+        String(item.phone || "")
+          .toLowerCase()
+          .includes(search);
+
+      const matchesStatus =
+        statusFilter === "All" ||
+        item.status === statusFilter;
+
+      const matchesProperty =
+        propertyFilter === "All" ||
+        item.property === propertyFilter;
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesProperty
+      );
+    });
+
+  // ===================================================
+  // PAGINATION
+  // ===================================================
+
+  const totalPages =
+    Math.ceil(
+      filteredEnquiries.length /
+        itemsPerPage
+    ) || 1;
+
+  const startIndex =
+    (currentPage - 1) *
+    itemsPerPage;
+
+  const currentEnquiries =
+    filteredEnquiries.slice(
+      startIndex,
+      startIndex + itemsPerPage
+    );
+
+  // ===================================================
+  // RESET PAGE
+  // ===================================================
+
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, statusFilter, propertyFilter]);
+  }, [
+    searchTerm,
+    statusFilter,
+    propertyFilter,
+  ]);
+
+  // ===================================================
+  // PAGE CHANGE
+  // ===================================================
 
   const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
+    if (
+      page >= 1 &&
+      page <= totalPages
+    ) {
       setCurrentPage(page);
     }
   };
 
+  // ===================================================
+  // INPUT CHANGE
+  // ===================================================
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const {
+      name,
+      value,
+    } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  // Open Form Modal for Adding
-  const handleOpenAddModal = () => {
-    setEditingId(null);
-    setFormData({ fullName: '', email: '', phone: '', property: '', source: '', status: 'New', message: '' });
-    setIsFormModalOpen(true);
-  };
+  // ===================================================
+  // RESET FORM
+  // ===================================================
 
-  // Open Form Modal for Editing
-  const handleOpenEditModal = (item) => {
-    setEditingId(item.id);
+  const resetForm = () => {
     setFormData({
-      fullName: item.name,
-      email: item.email,
-      phone: item.phone,
-      property: item.property,
-      source: item.source,
-      status: item.status,
-      message: item.message
+      fullName: "",
+      email: "",
+      phone: "",
+      status: "New",
     });
+
+    setEditingId(null);
+  };
+
+  // ===================================================
+  // OPEN EDIT
+  // ===================================================
+
+  const handleOpenEditModal = (item) => {
+    setEditingId(
+      item._id || item.id
+    );
+
+    setFormData({
+      fullName: item.name || "",
+
+      email: item.email || "",
+
+      phone: item.phone || "",
+
+      status:
+        item.status || "New",
+    });
+
     setIsFormModalOpen(true);
   };
 
-  // Submit Handler for Add & Edit
-  const handleFormSubmit = (e) => {
+  // ===================================================
+  // UPDATE ENQUIRY
+  // ===================================================
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.email || !formData.property) {
-      alert('Please fill out all required fields');
+
+    if (!editingId) {
+      alert(
+        "Customer enquiries are submitted from the property details page."
+      );
+
       return;
     }
 
-    if (editingId) {
-      // Update existing enquiry
-      setEnquiries(enquiries.map(item => item.id === editingId ? {
-        ...item,
-        name: formData.fullName,
-        email: formData.email,
-        phone: formData.phone || 'N/A',
-        property: formData.property,
-        source: formData.source || 'Website',
-        status: formData.status || 'New',
-        message: formData.message || ''
-      } : item));
-    } else {
-      // Create new enquiry
-      const newEntry = {
-        id: Date.now(),
-        name: formData.fullName,
-        property: formData.property,
-        email: formData.email,
-        phone: formData.phone || 'N/A',
-        status: formData.status || 'New',
-        source: formData.source || 'Website',
-        message: formData.message || '',
-        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-      };
-      setEnquiries([newEntry, ...enquiries]);
+    // ================================================
+    // VALIDATION
+    // ================================================
+
+    if (!formData.fullName.trim()) {
+      alert("Name is required.");
+      return;
     }
 
-    setIsFormModalOpen(false);
-    setFormData({ fullName: '', email: '', phone: '', property: '', source: '', status: 'New', message: '' });
-  };
+    if (!formData.email.trim()) {
+      alert("Email is required.");
+      return;
+    }
 
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this enquiry?')) {
-      setEnquiries(enquiries.filter(item => item.id !== id));
+    if (!formData.phone.trim()) {
+      alert("Mobile number is required.");
+      return;
+    }
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+      !emailRegex.test(
+        formData.email.trim()
+      )
+    ) {
+      alert(
+        "Please enter a valid email address."
+      );
+
+      return;
+    }
+
+    // ================================================
+    // BACKEND PAYLOAD
+    // ================================================
+
+    const payload = {
+      name:
+        formData.fullName.trim(),
+
+      email:
+        formData.email
+          .trim()
+          .toLowerCase(),
+
+      mobile:
+        formData.phone.trim(),
+
+      status:
+        formData.status,
+    };
+
+    try {
+      setSaving(true);
+
+      console.log(
+        "UPDATE CONTACT PAYLOAD:",
+        payload
+      );
+
+      const response =
+        await API.put(
+          `/property-contacts/${editingId}`,
+          payload
+        );
+
+      console.log(
+        "UPDATE CONTACT RESPONSE:",
+        response.data
+      );
+
+      alert(
+        response.data?.message ||
+          "Enquiry updated successfully."
+      );
+
+      await fetchEnquiries();
+
+      setIsFormModalOpen(false);
+
+      resetForm();
+    } catch (error) {
+      console.error(
+        "UPDATE ENQUIRY ERROR:",
+        error.response?.data ||
+          error
+      );
+
+      alert(
+        error.response?.data?.message ||
+          "Failed to update enquiry."
+      );
+    } finally {
+      setSaving(false);
     }
   };
+
+  // ===================================================
+  // DELETE
+  // ===================================================
+
+  const handleDelete = async (id) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this enquiry?"
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setDeletingId(id);
+
+      const response =
+        await API.delete(
+          `/property-contacts/${id}`
+        );
+
+      alert(
+        response.data?.message ||
+          "Enquiry deleted successfully."
+      );
+
+      await fetchEnquiries();
+    } catch (error) {
+      console.error(
+        "DELETE ENQUIRY ERROR:",
+        error.response?.data ||
+          error
+      );
+
+      alert(
+        error.response?.data?.message ||
+          "Failed to delete enquiry."
+      );
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  // ===================================================
+  // RESET FILTERS
+  // ===================================================
 
   const handleResetFilters = () => {
-    setSearchTerm('');
-    setStatusFilter('All');
-    setPropertyFilter('All');
+    setSearchTerm("");
+    setStatusFilter("All");
+    setPropertyFilter("All");
     setCurrentPage(1);
   };
 
-  // Get status count for filter display
+  // ===================================================
+  // STATUS COUNT
+  // ===================================================
+
   const getStatusCount = (status) => {
-    return enquiries.filter(item => item.status === status).length;
+    return enquiries.filter(
+      (item) =>
+        item.status === status
+    ).length;
   };
+
+  // ===================================================
+  // RETURN
+  // ===================================================
 
   return (
     <div className="enquiry-container">
-      {/* Header */}
+
+      {/* HEADER */}
+
       <div className="enquiry-header">
+
         <div className="enquiry-header__text">
-          <h1 className="enquiry-header__title">Enquiry</h1>
-          <p className="enquiry-header__subtitle">View and manage all property enquiries.</p>
+
+          <h1 className="enquiry-header__title">
+            Enquiry
+          </h1>
+
+          <p className="enquiry-header__subtitle">
+            View and manage all property enquiries.
+          </p>
+
         </div>
-        <button className="enquiry-header__add-btn" onClick={handleOpenAddModal}>
-          <span className="add-icon">+</span> Add Enquiry
-        </button>
+
       </div>
 
-      {/* Main Card */}
+      {/* MAIN CARD */}
+
       <div className="enquiry-card">
-        {/* Controls Bar */}
+
+        {/* CONTROLS */}
+
         <div className="enquiry-controls">
+
           <div className="enquiry-controls__search">
-            <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+
+            <svg
+              className="search-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#9CA3AF"
+              strokeWidth="2"
+            >
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+
+              <line
+                x1="21"
+                y1="21"
+                x2="16.65"
+                y2="16.65"
+              />
             </svg>
-            <input 
-              type="text" 
-              placeholder="Search enquiries..." 
+
+            <input
+              type="text"
+              placeholder="Search enquiries..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) =>
+                setSearchTerm(
+                  e.target.value
+                )
+              }
             />
+
           </div>
 
           <div className="enquiry-controls__filters">
-            <div className="filter-group">
-              <select 
-                className="filter-select" 
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="All">All Status ({enquiries.length})</option>
-                <option value="New">New ({getStatusCount('New')})</option>
-                <option value="Contacted">Contacted ({getStatusCount('Contacted')})</option>
-                <option value="Follow Up">Follow Up ({getStatusCount('Follow Up')})</option>
-                <option value="Converted">Converted ({getStatusCount('Converted')})</option>
-                <option value="Closed">Closed ({getStatusCount('Closed')})</option>
-              </select>
-            </div>
+
+            {/* STATUS */}
 
             <div className="filter-group">
-              <select 
+
+              <select
+                className="filter-select"
+                value={statusFilter}
+                onChange={(e) =>
+                  setStatusFilter(
+                    e.target.value
+                  )
+                }
+              >
+
+                <option value="All">
+                  All Status ({enquiries.length})
+                </option>
+
+                <option value="New">
+                  New ({getStatusCount("New")})
+                </option>
+
+                <option value="Contacted">
+                  Contacted (
+                  {getStatusCount(
+                    "Contacted"
+                  )}
+                  )
+                </option>
+
+                <option value="Closed">
+                  Closed (
+                  {getStatusCount(
+                    "Closed"
+                  )}
+                  )
+                </option>
+
+              </select>
+
+            </div>
+
+            {/* PROPERTY */}
+
+            <div className="filter-group">
+
+              <select
                 className="filter-select"
                 value={propertyFilter}
-                onChange={(e) => setPropertyFilter(e.target.value)}
+                onChange={(e) =>
+                  setPropertyFilter(
+                    e.target.value
+                  )
+                }
               >
-                <option value="All">All Properties</option>
-                {propertyOptions.map((prop, idx) => (
-                  <option key={idx} value={prop}>{prop}</option>
-                ))}
+
+                <option value="All">
+                  All Properties
+                </option>
+
+                {propertyOptions.map(
+                  (prop, idx) => (
+                    <option
+                      key={idx}
+                      value={prop}
+                    >
+                      {prop}
+                    </option>
+                  )
+                )}
+
               </select>
+
             </div>
 
-            <button className="filter-btn" onClick={handleResetFilters} title="Reset Filters">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            {/* RESET */}
+
+            <button
+              className="filter-btn"
+              onClick={
+                handleResetFilters
+              }
+              title="Reset Filters"
+            >
+
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+
               </svg>
+
               Reset
+
             </button>
+
           </div>
+
         </div>
 
-        {/* Filter Status Bar */}
-        {(statusFilter !== 'All' || propertyFilter !== 'All' || searchTerm) && (
+        {/* ACTIVE FILTERS */}
+
+        {(statusFilter !== "All" ||
+          propertyFilter !== "All" ||
+          searchTerm) && (
+
           <div className="enquiry-filter-status">
-            <span className="filter-status-label">Active Filters:</span>
+
+            <span className="filter-status-label">
+              Active Filters:
+            </span>
+
             {searchTerm && (
               <span className="filter-tag">
+
                 Search: "{searchTerm}"
-                <button className="filter-tag-remove" onClick={() => setSearchTerm('')}>×</button>
+
+                <button
+                  className="filter-tag-remove"
+                  onClick={() =>
+                    setSearchTerm("")
+                  }
+                >
+                  ×
+                </button>
+
               </span>
             )}
-            {statusFilter !== 'All' && (
+
+            {statusFilter !== "All" && (
               <span className="filter-tag">
+
                 Status: {statusFilter}
-                <button className="filter-tag-remove" onClick={() => setStatusFilter('All')}>×</button>
+
+                <button
+                  className="filter-tag-remove"
+                  onClick={() =>
+                    setStatusFilter(
+                      "All"
+                    )
+                  }
+                >
+                  ×
+                </button>
+
               </span>
             )}
-            {propertyFilter !== 'All' && (
+
+            {propertyFilter !== "All" && (
               <span className="filter-tag">
+
                 Property: {propertyFilter}
-                <button className="filter-tag-remove" onClick={() => setPropertyFilter('All')}>×</button>
+
+                <button
+                  className="filter-tag-remove"
+                  onClick={() =>
+                    setPropertyFilter(
+                      "All"
+                    )
+                  }
+                >
+                  ×
+                </button>
+
               </span>
             )}
+
             <span className="filter-results-count">
-              {filteredEnquiries.length} result{filteredEnquiries.length !== 1 ? 's' : ''}
+
+              {filteredEnquiries.length}{" "}
+              result
+              {filteredEnquiries.length !== 1
+                ? "s"
+                : ""}
+
             </span>
+
           </div>
         )}
 
-        {/* Table View */}
+        {/* TABLE */}
+
         <div className="enquiry-table-wrapper">
+
           <table className="enquiry-table">
+
             <thead>
+
               <tr>
+
                 <th>Name</th>
+
                 <th>Property</th>
+
                 <th>Contact</th>
+
                 <th>Status</th>
+
                 <th>Date</th>
-                <th className="text-right">Action</th>
+
+                <th className="text-right">
+                  Action
+                </th>
+
               </tr>
+
             </thead>
+
             <tbody>
-              {currentEnquiries.length > 0 ? (
-                currentEnquiries.map((item) => (
-                  <tr key={item.id}>
-                    <td className="font-semibold">{item.name}</td>
-                    <td className="text-secondary">{item.property}</td>
-                    <td>
-                      <div className="contact-cell">
-                        <span className="contact-email">{item.email}</span>
-                        <span className="contact-phone">{item.phone}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`status-badge status-badge--${item.status.toLowerCase().replace(/\s+/g, '-')}`}>
-                        {item.status}
-                      </span>
-                    </td>
-                    <td className="text-secondary">{item.date}</td>
-                    <td className="text-right">
-                      <div className="action-buttons">
-                        <button className="action-btn action-btn--view" title="View Details" onClick={() => setSelectedEnquiry(item)}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                          </svg>
-                        </button>
-                        <button className="action-btn action-btn--edit" title="Edit Enquiry" onClick={() => handleOpenEditModal(item)}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                          </svg>
-                        </button>
-                        <button className="action-btn action-btn--delete" title="Delete" onClick={() => handleDelete(item.id)}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
+
+              {loading ? (
+
                 <tr>
-                  <td colSpan="6" className="no-data">
+
+                  <td
+                    colSpan="6"
+                    className="no-data"
+                  >
+
                     <div className="no-data-content">
-                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
-                      <p>No enquiries found</p>
-                      <span>Try adjusting your search or filter criteria</span>
+
+                      <p>
+                        Loading enquiries...
+                      </p>
+
                     </div>
+
                   </td>
+
                 </tr>
+
+              ) : currentEnquiries.length > 0 ? (
+
+                currentEnquiries.map(
+                  (item) => (
+
+                    <tr
+                      key={
+                        item._id ||
+                        item.id
+                      }
+                    >
+
+                      <td className="font-semibold">
+                        {item.name}
+                      </td>
+
+                      <td className="text-secondary">
+                        {item.property}
+                      </td>
+
+                      <td>
+
+                        <div className="contact-cell">
+
+                          <span className="contact-email">
+                            {item.email}
+                          </span>
+
+                          <span className="contact-phone">
+                            {item.phone}
+                          </span>
+
+                        </div>
+
+                      </td>
+
+                      <td>
+
+                        <span
+                          className={`status-badge status-badge--${item.status
+                            .toLowerCase()
+                            .replace(
+                              /\s+/g,
+                              "-"
+                            )}`}
+                        >
+                          {item.status}
+                        </span>
+
+                      </td>
+
+                      <td className="text-secondary">
+                        {item.date}
+                      </td>
+
+                      <td className="text-right">
+
+                        <div className="action-buttons">
+
+                          {/* VIEW */}
+
+                          <button
+                            className="action-btn action-btn--view"
+                            title="View Details"
+                            onClick={() =>
+                              setSelectedEnquiry(
+                                item
+                              )
+                            }
+                          >
+
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="3"
+                              />
+
+                            </svg>
+
+                          </button>
+
+                          {/* EDIT */}
+
+                          <button
+                            className="action-btn action-btn--edit"
+                            title="Edit Enquiry"
+                            onClick={() =>
+                              handleOpenEditModal(
+                                item
+                              )
+                            }
+                          >
+
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+
+                            </svg>
+
+                          </button>
+
+                          {/* DELETE */}
+
+                          <button
+                            className="action-btn action-btn--delete"
+                            title="Delete"
+                            disabled={
+                              deletingId ===
+                              (
+                                item._id ||
+                                item.id
+                              )
+                            }
+                            onClick={() =>
+                              handleDelete(
+                                item._id ||
+                                item.id
+                              )
+                            }
+                          >
+
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+
+                              <polyline points="3 6 5 6 21 6" />
+
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+
+                            </svg>
+
+                          </button>
+
+                        </div>
+
+                      </td>
+
+                    </tr>
+
+                  )
+                )
+
+              ) : (
+
+                <tr>
+
+                  <td
+                    colSpan="6"
+                    className="no-data"
+                  >
+
+                    <div className="no-data-content">
+
+                      <svg
+                        width="48"
+                        height="48"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#94a3b8"
+                        strokeWidth="1.5"
+                      >
+
+                        <circle
+                          cx="11"
+                          cy="11"
+                          r="8"
+                        />
+
+                        <line
+                          x1="21"
+                          y1="21"
+                          x2="16.65"
+                          y2="16.65"
+                        />
+
+                      </svg>
+
+                      <p>
+                        No enquiries found
+                      </p>
+
+                      <span>
+                        Try adjusting your search or filter criteria
+                      </span>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
               )}
+
             </tbody>
+
           </table>
+
         </div>
 
-        {/* Footer / Pagination */}
+        {/* FOOTER */}
+
         <div className="enquiry-footer">
+
           <span className="enquiry-footer__info">
-            Showing <strong>{filteredEnquiries.length === 0 ? 0 : startIndex + 1}</strong> to <strong>{Math.min(startIndex + itemsPerPage, filteredEnquiries.length)}</strong> of <strong>{filteredEnquiries.length}</strong> enquiries
+
+            Showing{" "}
+
+            <strong>
+              {filteredEnquiries.length === 0
+                ? 0
+                : startIndex + 1}
+            </strong>{" "}
+
+            to{" "}
+
+            <strong>
+              {Math.min(
+                startIndex +
+                  itemsPerPage,
+                filteredEnquiries.length
+              )}
+            </strong>{" "}
+
+            of{" "}
+
+            <strong>
+              {filteredEnquiries.length}
+            </strong>{" "}
+
+            enquiries
+
           </span>
 
           <div className="pagination">
-            <button 
-              className="pagination__arrow" 
-              disabled={currentPage === 1} 
-              onClick={() => handlePageChange(currentPage - 1)}
+
+            <button
+              className="pagination__arrow"
+              disabled={
+                currentPage === 1
+              }
+              onClick={() =>
+                handlePageChange(
+                  currentPage - 1
+                )
+              }
             >
               &#8249;
             </button>
-            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-              let pageNum;
-              if (totalPages <= 5) {
-                pageNum = i + 1;
-              } else if (currentPage <= 3) {
-                pageNum = i + 1;
-              } else if (currentPage >= totalPages - 2) {
-                pageNum = totalPages - 4 + i;
-              } else {
-                pageNum = currentPage - 2 + i;
+
+            {Array.from(
+              {
+                length: Math.min(
+                  totalPages,
+                  5
+                ),
+              },
+              (_, i) => {
+
+                let pageNum;
+
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (
+                  currentPage <= 3
+                ) {
+                  pageNum = i + 1;
+                } else if (
+                  currentPage >=
+                  totalPages - 2
+                ) {
+                  pageNum =
+                    totalPages -
+                    4 +
+                    i;
+                } else {
+                  pageNum =
+                    currentPage -
+                    2 +
+                    i;
+                }
+
+                return (
+                  <button
+                    key={pageNum}
+                    className={`pagination__page ${
+                      currentPage ===
+                      pageNum
+                        ? "pagination__page--active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handlePageChange(
+                        pageNum
+                      )
+                    }
+                  >
+                    {pageNum}
+                  </button>
+                );
               }
-              return (
-                <button
-                  key={pageNum}
-                  className={`pagination__page ${currentPage === pageNum ? 'pagination__page--active' : ''}`}
-                  onClick={() => handlePageChange(pageNum)}
-                >
-                  {pageNum}
-                </button>
-              );
-            })}
-            {totalPages > 5 && currentPage < totalPages - 2 && (
-              <>
-                <span className="pagination__ellipsis">…</span>
-                <button
-                  className="pagination__page"
-                  onClick={() => handlePageChange(totalPages)}
-                >
-                  {totalPages}
-                </button>
-              </>
             )}
-            <button 
-              className="pagination__arrow" 
-              disabled={currentPage === totalPages} 
-              onClick={() => handlePageChange(currentPage + 1)}
+
+            {totalPages > 5 &&
+              currentPage <
+                totalPages - 2 && (
+                <>
+                  <span className="pagination__ellipsis">
+                    …
+                  </span>
+
+                  <button
+                    className="pagination__page"
+                    onClick={() =>
+                      handlePageChange(
+                        totalPages
+                      )
+                    }
+                  >
+                    {totalPages}
+                  </button>
+                </>
+              )}
+
+            <button
+              className="pagination__arrow"
+              disabled={
+                currentPage ===
+                totalPages
+              }
+              onClick={() =>
+                handlePageChange(
+                  currentPage + 1
+                )
+              }
             >
               &#8250;
             </button>
+
           </div>
+
         </div>
+
       </div>
 
-      {/* Add / Edit Enquiry Modal */}
+      {/* =================================================
+          EDIT ENQUIRY FORM
+      ================================================= */}
+
       {isFormModalOpen && (
-        <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && setIsFormModalOpen(false)}>
+
+        <div
+          className="modal-backdrop"
+          onClick={(e) => {
+            if (
+              e.target ===
+              e.currentTarget
+            ) {
+              setIsFormModalOpen(false);
+              resetForm();
+            }
+          }}
+        >
+
           <div className="modal-container">
+
             <div className="modal-header">
-              <h2>{editingId ? 'Edit Enquiry' : 'Add New Enquiry'}</h2>
-              <button className="modal-close" onClick={() => setIsFormModalOpen(false)}>&times;</button>
+
+              <h2>
+                Edit Enquiry
+              </h2>
+
+              <button
+                className="modal-close"
+                onClick={() => {
+                  setIsFormModalOpen(
+                    false
+                  );
+                  resetForm();
+                }}
+              >
+                &times;
+              </button>
+
             </div>
-            
-            <form onSubmit={handleFormSubmit}>
+
+            <form
+              onSubmit={
+                handleFormSubmit
+              }
+            >
+
               <div className="modal-body">
+
                 <div className="form-grid">
+
+                  {/* NAME */}
+
                   <div className="form-group">
-                    <label>Full Name *</label>
-                    <input 
-                      type="text" 
-                      name="fullName" 
-                      placeholder="Enter full name" 
-                      value={formData.fullName}
-                      onChange={handleInputChange}
-                      required 
+
+                    <label>
+                      Full Name *
+                    </label>
+
+                    <input
+                      type="text"
+                      name="fullName"
+                      placeholder="Enter full name"
+                      value={
+                        formData.fullName
+                      }
+                      onChange={
+                        handleInputChange
+                      }
+                      required
                     />
+
                   </div>
 
+                  {/* EMAIL */}
+
                   <div className="form-group">
-                    <label>Email Address *</label>
-                    <input 
-                      type="email" 
-                      name="email" 
-                      placeholder="Enter email address" 
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required 
+
+                    <label>
+                      Email Address *
+                    </label>
+
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Enter email address"
+                      value={
+                        formData.email
+                      }
+                      onChange={
+                        handleInputChange
+                      }
+                      required
                     />
+
                   </div>
 
+                  {/* MOBILE */}
+
                   <div className="form-group">
-                    <label>Phone Number</label>
-                    <input 
-                      type="text" 
-                      name="phone" 
-                      placeholder="Enter phone number" 
-                      value={formData.phone}
-                      onChange={handleInputChange}
+
+                    <label>
+                      Phone Number *
+                    </label>
+
+                    <input
+                      type="text"
+                      name="phone"
+                      placeholder="Enter phone number"
+                      value={
+                        formData.phone
+                      }
+                      onChange={
+                        handleInputChange
+                      }
+                      required
                     />
+
                   </div>
+
+                  {/* STATUS */}
 
                   <div className="form-group">
-                    <label>Property *</label>
-                    <select name="property" value={formData.property} onChange={handleInputChange} required>
-                      <option value="" disabled>Select property</option>
-                      <option value="Gorgeous Apartment">Gorgeous Apartment</option>
-                      <option value="Luxury Villa">Luxury Villa</option>
-                      <option value="Modern Studio">Modern Studio</option>
-                      <option value="City Apartment">City Apartment</option>
-                      <option value="Penthouse Suite">Penthouse Suite</option>
+
+                    <label>
+                      Status
+                    </label>
+
+                    <select
+                      name="status"
+                      value={
+                        formData.status
+                      }
+                      onChange={
+                        handleInputChange
+                      }
+                    >
+
+                      <option value="New">
+                        New
+                      </option>
+
+                      <option value="Contacted">
+                        Contacted
+                      </option>
+
+                      <option value="Closed">
+                        Closed
+                      </option>
+
                     </select>
+
                   </div>
 
-                  <div className="form-group">
-                    <label>Enquiry Source</label>
-                    <select name="source" value={formData.source} onChange={handleInputChange}>
-                      <option value="" disabled>Select source</option>
-                      <option value="Website">Website</option>
-                      <option value="Instagram">Instagram</option>
-                      <option value="Facebook">Facebook</option>
-                      <option value="Direct Call">Direct Call</option>
-                      <option value="Referral">Referral</option>
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label>Status</label>
-                    <select name="status" value={formData.status} onChange={handleInputChange}>
-                      <option value="New">New</option>
-                      <option value="Contacted">Contacted</option>
-                      <option value="Follow Up">Follow Up</option>
-                      <option value="Converted">Converted</option>
-                      <option value="Closed">Closed</option>
-                    </select>
-                  </div>
-
-                  <div className="form-group form-group--full">
-                    <label>Message</label>
-                    <textarea 
-                      name="message" 
-                      rows="3" 
-                      placeholder="Enter your message or notes..." 
-                      value={formData.message}
-                      onChange={handleInputChange}
-                    ></textarea>
-                  </div>
                 </div>
+
               </div>
 
               <div className="modal-footer">
-                <button type="button" className="btn btn--cancel" onClick={() => setIsFormModalOpen(false)}>
+
+                <button
+                  type="button"
+                  className="btn btn--cancel"
+                  onClick={() => {
+                    setIsFormModalOpen(
+                      false
+                    );
+
+                    resetForm();
+                  }}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn--submit">
-                  {editingId ? 'Save Changes' : 'Add Enquiry'}
+
+                <button
+                  type="submit"
+                  className="btn btn--submit"
+                  disabled={saving}
+                >
+                  {saving
+                    ? "Saving..."
+                    : "Save Changes"}
                 </button>
+
               </div>
+
             </form>
+
           </div>
+
         </div>
+
       )}
 
-      {/* View Details Modal */}
+      {/* =================================================
+          VIEW DETAILS
+      ================================================= */}
+
       {selectedEnquiry && (
-        <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && setSelectedEnquiry(null)}>
+
+        <div
+          className="modal-backdrop"
+          onClick={(e) => {
+            if (
+              e.target ===
+              e.currentTarget
+            ) {
+              setSelectedEnquiry(
+                null
+              );
+            }
+          }}
+        >
+
           <div className="modal-container modal-container--sm">
+
             <div className="modal-header">
-              <h2>Enquiry Details</h2>
-              <button className="modal-close" onClick={() => setSelectedEnquiry(null)}>&times;</button>
+
+              <h2>
+                Enquiry Details
+              </h2>
+
+              <button
+                className="modal-close"
+                onClick={() =>
+                  setSelectedEnquiry(
+                    null
+                  )
+                }
+              >
+                &times;
+              </button>
+
             </div>
+
             <div className="modal-body detail-view">
+
+              {/* NAME */}
+
               <div className="detail-row">
-                <span className="detail-label">Name</span>
-                <span className="detail-value">{selectedEnquiry.name}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Property</span>
-                <span className="detail-value">{selectedEnquiry.property}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Email</span>
-                <span className="detail-value">{selectedEnquiry.email}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Phone</span>
-                <span className="detail-value">{selectedEnquiry.phone}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Status</span>
-                <span className={`status-badge status-badge--${selectedEnquiry.status.toLowerCase().replace(/\s+/g, '-')}`}>
-                  {selectedEnquiry.status}
+
+                <span className="detail-label">
+                  Name
                 </span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Source</span>
-                <span className="detail-value">{selectedEnquiry.source}</span>
-              </div>
-              <div className="detail-row">
-                <span className="detail-label">Date</span>
-                <span className="detail-value">{selectedEnquiry.date}</span>
-              </div>
-              <div className="detail-row detail-row--full">
-                <span className="detail-label">Message</span>
-                <span className="detail-value detail-value--message">
-                  {selectedEnquiry.message || 'No notes provided.'}
+
+                <span className="detail-value">
+                  {
+                    selectedEnquiry.name
+                  }
                 </span>
+
               </div>
+
+              {/* PROPERTY */}
+
+              <div className="detail-row">
+
+                <span className="detail-label">
+                  Property
+                </span>
+
+                <span className="detail-value">
+                  {
+                    selectedEnquiry.property
+                  }
+                </span>
+
+              </div>
+
+              {/* EMAIL */}
+
+              <div className="detail-row">
+
+                <span className="detail-label">
+                  Email
+                </span>
+
+                <span className="detail-value">
+                  {
+                    selectedEnquiry.email
+                  }
+                </span>
+
+              </div>
+
+              {/* MOBILE */}
+
+              <div className="detail-row">
+
+                <span className="detail-label">
+                  Phone
+                </span>
+
+                <span className="detail-value">
+                  {
+                    selectedEnquiry.phone
+                  }
+                </span>
+
+              </div>
+
+              {/* STATUS */}
+
+              <div className="detail-row">
+
+                <span className="detail-label">
+                  Status
+                </span>
+
+                <span
+                  className={`status-badge status-badge--${selectedEnquiry.status
+                    .toLowerCase()
+                    .replace(
+                      /\s+/g,
+                      "-"
+                    )}`}
+                >
+                  {
+                    selectedEnquiry.status
+                  }
+                </span>
+
+              </div>
+
+              {/* DATE */}
+
+              <div className="detail-row">
+
+                <span className="detail-label">
+                  Date
+                </span>
+
+                <span className="detail-value">
+                  {
+                    selectedEnquiry.date
+                  }
+                </span>
+
+              </div>
+
             </div>
+
             <div className="modal-footer">
-              <button className="btn btn--cancel" onClick={() => setSelectedEnquiry(null)}>Close</button>
+
+              <button
+                className="btn btn--cancel"
+                onClick={() =>
+                  setSelectedEnquiry(
+                    null
+                  )
+                }
+              >
+                Close
+              </button>
+
             </div>
+
           </div>
+
         </div>
+
       )}
+
     </div>
   );
 };

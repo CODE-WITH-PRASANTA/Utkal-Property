@@ -42,65 +42,35 @@ const BACKEND_URL = "http://localhost:5000";
 
 const AMENITY_ICON_MAP = {
   "Swimming Pool": <FaSwimmingPool />,
-
   "Children Play Area": <FaChild />,
-
   "Children's Play Area": <FaChild />,
-
   "Kids Play Area": <FaTableTennis />,
-
   "Kids' Play Area": <FaTableTennis />,
-
   "Conference Rooms": <FaDoorClosed />,
-
   "Conference Room": <FaDoorClosed />,
-
   "Reserved Parking": <FaParking />,
-
   Parking: <FaParking />,
-
   "Basketball Court": <FaBasketballBall />,
-
   "Table Tennis": <FaTableTennis />,
-
   "Pet Friendly": <FaDog />,
-
   Security: <FaShieldAlt />,
-
   "24x7 Security": <FaShieldAlt />,
-
   CCTV: <FaVideo />,
-
   "CCTV Camera": <FaVideo />,
-
   "Guest Parking": <FaCar />,
-
   "Multipurpose Hall": <MdOutlineCurtains />,
-
   "Club House": <FaCheckCircle />,
-
   Clubhouse: <FaCheckCircle />,
-
   "Power Backup": <FaCarBattery />,
-
   Landscape: <FaTree />,
-
   Garden: <FaTree />,
-
   "Grand Entrance": <FaToriiGate />,
-
   "Society Office": <FaCheckCircle />,
-
   Library: <FaBookOpen />,
-
   Gym: <FaDumbbell />,
-
   Gymnasium: <FaDumbbell />,
-
   "Indoor Game": <FaTableTennis />,
-
   "Indoor Games": <FaTableTennis />,
-
   "Banquet Hall": <FaArchway />,
 };
 
@@ -163,7 +133,10 @@ const getFileUrl = (filePath) => {
 // PROPERTY DETAILS AMENITIES
 // =====================================================
 
-const PropertyDetailsAmenities = ({ property }) => {
+const PropertyDetailsAmenities = ({
+  property,
+  propertyId,
+}) => {
   // =================================================
   // REVIEW
   // =================================================
@@ -196,11 +169,15 @@ const PropertyDetailsAmenities = ({ property }) => {
   const [captchaCode, setCaptchaCode] =
     useState("");
 
+  const [contactSubmitting, setContactSubmitting] =
+    useState(false);
+
   // =================================================
   // FLOOR PLAN
   // =================================================
 
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] =
+    useState(0);
 
   const [isModalOpen, setIsModalOpen] =
     useState(false);
@@ -305,7 +282,8 @@ const PropertyDetailsAmenities = ({ property }) => {
     // GET PROPERTY ID
     // ==============================================
 
-    const propertyId =
+    const currentPropertyId =
+      propertyId ||
       property?._id ||
       property?.id;
 
@@ -316,14 +294,14 @@ const PropertyDetailsAmenities = ({ property }) => {
 
     console.log(
       "PROPERTY ID:",
-      propertyId
+      currentPropertyId
     );
 
     // ==============================================
     // CHECK PROPERTY ID
     // ==============================================
 
-    if (!propertyId) {
+    if (!currentPropertyId) {
       console.error(
         "PROPERTY ID NOT FOUND:",
         property
@@ -383,20 +361,23 @@ const PropertyDetailsAmenities = ({ property }) => {
       setReviewSubmitting(true);
 
       const reviewPayload = {
-        propertyId,
+        propertyId: currentPropertyId,
 
-        name: reviewForm.name.trim(),
+        name:
+          reviewForm.name.trim(),
 
         email:
           reviewForm.email
             .trim()
             .toLowerCase(),
 
-        phone: reviewForm.phone.trim(),
+        phone:
+          reviewForm.phone.trim(),
 
         rating: Number(rating),
 
-        review: reviewForm.review.trim(),
+        review:
+          reviewForm.review.trim(),
       };
 
       console.log(
@@ -432,9 +413,7 @@ const PropertyDetailsAmenities = ({ property }) => {
       });
 
       setRating(0);
-
       setHover(0);
-
     } catch (error) {
       console.error(
         "SUBMIT REVIEW ERROR:",
@@ -455,11 +434,23 @@ const PropertyDetailsAmenities = ({ property }) => {
   // SUBMIT CONTACT
   // =================================================
 
-  const submitContact = (e) => {
+  const submitContact = async (e) => {
     e.preventDefault();
 
+    // ==============================================
+    // PREVENT DOUBLE SUBMIT
+    // ==============================================
+
+    if (contactSubmitting) {
+      return;
+    }
+
+    // ==============================================
+    // CAPTCHA VALIDATION
+    // ==============================================
+
     if (
-      contactForm.captchaInput !==
+      contactForm.captchaInput.trim() !==
       captchaCode
     ) {
       alert(
@@ -476,18 +467,207 @@ const PropertyDetailsAmenities = ({ property }) => {
       return;
     }
 
-    alert(
-      `Contact Details Submitted!\nName: ${contactForm.name}`
+    // ==============================================
+    // GET CURRENT PROPERTY ID
+    // ==============================================
+
+    const currentPropertyId =
+      propertyId ||
+      property?._id ||
+      property?.id;
+
+    console.log(
+      "================================"
     );
 
-    setContactForm({
-      name: "",
-      email: "",
-      mobile: "",
-      captchaInput: "",
-    });
+    console.log(
+      "CONTACT PROPERTY:"
+    );
 
-    generateCaptcha();
+    console.log(
+      property
+    );
+
+    console.log(
+      "CONTACT PROPERTY ID:",
+      currentPropertyId
+    );
+
+    console.log(
+      "================================"
+    );
+
+    // ==============================================
+    // CHECK PROPERTY ID
+    // ==============================================
+
+    if (!currentPropertyId) {
+      console.error(
+        "CONTACT PROPERTY ID NOT FOUND:",
+        property
+      );
+
+      alert(
+        "Property information is missing."
+      );
+
+      return;
+    }
+
+    // ==============================================
+    // VALIDATE NAME
+    // ==============================================
+
+    if (!contactForm.name.trim()) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    // ==============================================
+    // VALIDATE EMAIL
+    // ==============================================
+
+    if (!contactForm.email.trim()) {
+      alert("Please enter your email.");
+      return;
+    }
+
+    // ==============================================
+    // VALIDATE MOBILE
+    // ==============================================
+
+    if (!contactForm.mobile.trim()) {
+      alert(
+        "Please enter your contact number."
+      );
+
+      return;
+    }
+
+    // ==============================================
+    // MOBILE VALIDATION
+    // ==============================================
+
+    const mobileRegex =
+      /^[0-9]{10}$/;
+
+    if (
+      !mobileRegex.test(
+        contactForm.mobile.trim()
+      )
+    ) {
+      alert(
+        "Please enter a valid 10 digit mobile number."
+      );
+
+      return;
+    }
+
+    // ==============================================
+    // EMAIL VALIDATION
+    // ==============================================
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+      !emailRegex.test(
+        contactForm.email.trim()
+      )
+    ) {
+      alert(
+        "Please enter a valid email address."
+      );
+
+      return;
+    }
+
+    // ==============================================
+    // CREATE CONTACT PAYLOAD
+    // ==============================================
+
+    const contactPayload = {
+      propertyId:
+        currentPropertyId,
+
+      name:
+        contactForm.name.trim(),
+
+      email:
+        contactForm.email
+          .trim()
+          .toLowerCase(),
+
+      mobile:
+        contactForm.mobile.trim(),
+    };
+
+    console.log(
+      "CONTACT PAYLOAD:",
+      contactPayload
+    );
+
+    // ==============================================
+    // SUBMIT CONTACT
+    // ==============================================
+
+    try {
+      setContactSubmitting(true);
+
+      const response =
+        await API.post(
+          "/property-contacts",
+          contactPayload
+        );
+
+      console.log(
+        "CONTACT RESPONSE:",
+        response.data
+      );
+
+      // ==========================================
+      // SUCCESS
+      // ==========================================
+
+      alert(
+        response.data?.message ||
+          "Contact details submitted successfully."
+      );
+
+      // ==========================================
+      // RESET CONTACT FORM
+      // ==========================================
+
+      setContactForm({
+        name: "",
+        email: "",
+        mobile: "",
+        captchaInput: "",
+      });
+
+      // ==========================================
+      // GENERATE NEW CAPTCHA
+      // ==========================================
+
+      generateCaptcha();
+    } catch (error) {
+      console.error(
+        "SUBMIT CONTACT ERROR:",
+        error
+      );
+
+      console.error(
+        "CONTACT ERROR RESPONSE:",
+        error.response?.data
+      );
+
+      alert(
+        error.response?.data?.message ||
+          "Failed to submit contact details."
+      );
+    } finally {
+      setContactSubmitting(false);
+    }
   };
 
   // =================================================
@@ -531,14 +711,17 @@ const PropertyDetailsAmenities = ({ property }) => {
   // =================================================
 
   const currentFloorPlan =
-    floorPlans[activeTab] || null;
+    floorPlans[activeTab] ||
+    null;
 
   // =================================================
   // NEARBY PLACES
   // =================================================
 
   const nearbyPlaces =
-    Array.isArray(property?.nearbyPlaces)
+    Array.isArray(
+      property?.nearbyPlaces
+    )
       ? property.nearbyPlaces
       : [];
 
@@ -547,7 +730,9 @@ const PropertyDetailsAmenities = ({ property }) => {
   // =================================================
 
   const documents =
-    Array.isArray(property?.documents)
+    Array.isArray(
+      property?.documents
+    )
       ? property.documents
       : [];
 
@@ -591,7 +776,8 @@ const PropertyDetailsAmenities = ({ property }) => {
                     (amenity, index) => {
 
                       const amenityName =
-                        typeof amenity === "string"
+                        typeof amenity ===
+                        "string"
                           ? amenity
                           : amenity?.name ||
                             amenity?.title ||
@@ -611,9 +797,11 @@ const PropertyDetailsAmenities = ({ property }) => {
                         >
 
                           <div className="PropertyDetailsAmenities-icon">
+
                             {getAmenityIcon(
                               amenityName
                             )}
+
                           </div>
 
                           <span className="PropertyDetailsAmenities-name">
@@ -628,7 +816,8 @@ const PropertyDetailsAmenities = ({ property }) => {
                 ) : (
 
                   <p>
-                    No amenities available for this property.
+                    No amenities available
+                    for this property.
                   </p>
 
                 )}
@@ -636,6 +825,7 @@ const PropertyDetailsAmenities = ({ property }) => {
               </div>
 
             </div>
+
 
             {/* ===============================
                 2. KEY FEATURES
@@ -690,6 +880,7 @@ const PropertyDetailsAmenities = ({ property }) => {
               </div>
 
             </div>
+
 
             {/* ===============================
                 3. FLOOR PLANS & DOCUMENTS
@@ -876,7 +1067,8 @@ const PropertyDetailsAmenities = ({ property }) => {
                 <div className="PropertyDetailsAmenities-tab-content">
 
                   <p>
-                    No floor plans available for this property.
+                    No floor plans available
+                    for this property.
                   </p>
 
                 </div>
@@ -928,6 +1120,7 @@ const PropertyDetailsAmenities = ({ property }) => {
 
             </div>
 
+
             {/* ===============================
                 4. NEARBY PLACES
             =============================== */}
@@ -940,8 +1133,11 @@ const PropertyDetailsAmenities = ({ property }) => {
             >
 
               <h2 className="PropertyDetailsAmenities-title">
+
                 Explore Neighbourhood -{" "}
+
                 {propertyName}
+
               </h2>
 
               <div className="PropertyDetailsAmenities-underline"></div>
@@ -1011,6 +1207,7 @@ const PropertyDetailsAmenities = ({ property }) => {
             </div>
 
           </div>
+
 
           {/* =================================
               RIGHT COLUMN
@@ -1091,6 +1288,7 @@ const PropertyDetailsAmenities = ({ property }) => {
 
               </div>
 
+
               {/* =================================
                   SELECTED RATING
               ================================= */}
@@ -1100,7 +1298,9 @@ const PropertyDetailsAmenities = ({ property }) => {
                 <div className="PropertyDetailsAmenities-rating-text">
 
                   You selected{" "}
+
                   {rating}{" "}
+
                   {rating === 1
                     ? "star"
                     : "stars"}
@@ -1109,12 +1309,15 @@ const PropertyDetailsAmenities = ({ property }) => {
 
               )}
 
+
               {/* =================================
                   REVIEW FORM
               ================================= */}
 
               <form
-                onSubmit={submitReview}
+                onSubmit={
+                  submitReview
+                }
                 className="PropertyDetailsAmenities-form"
               >
 
@@ -1134,6 +1337,7 @@ const PropertyDetailsAmenities = ({ property }) => {
                   required
                 />
 
+
                 {/* EMAIL */}
 
                 <input
@@ -1150,6 +1354,7 @@ const PropertyDetailsAmenities = ({ property }) => {
                   required
                 />
 
+
                 {/* PHONE */}
 
                 <input
@@ -1165,6 +1370,7 @@ const PropertyDetailsAmenities = ({ property }) => {
                   className="PropertyDetailsAmenities-input"
                   required
                 />
+
 
                 {/* REVIEW */}
 
@@ -1183,6 +1389,7 @@ const PropertyDetailsAmenities = ({ property }) => {
                   required
                 ></textarea>
 
+
                 {/* CHARACTER COUNT */}
 
                 <div className="PropertyDetailsAmenities-review-count">
@@ -1191,9 +1398,11 @@ const PropertyDetailsAmenities = ({ property }) => {
                     reviewForm.review
                       .length
                   }
+
                   /1000
 
                 </div>
+
 
                 {/* SUBMIT */}
 
@@ -1206,13 +1415,17 @@ const PropertyDetailsAmenities = ({ property }) => {
                 >
 
                   {reviewSubmitting ? (
+
                     <>
                       <span className="PropertyDetailsAmenities-button-spinner" />
 
                       Submitting...
                     </>
+
                   ) : (
+
                     "Submit Review"
+
                   )}
 
                 </button>
@@ -1221,6 +1434,7 @@ const PropertyDetailsAmenities = ({ property }) => {
 
             </div>
 
+
             {/* ===============================
                 CONTACT FORM
             =============================== */}
@@ -1228,7 +1442,10 @@ const PropertyDetailsAmenities = ({ property }) => {
             <div className="PropertyDetailsAmenities-sidebar-card">
 
               <p className="PropertyDetailsAmenities-contact-heading">
-                Kindly fill in your details to view the contact number.
+
+                Kindly fill in your details
+                to view the contact number.
+
               </p>
 
               <form
@@ -1237,6 +1454,8 @@ const PropertyDetailsAmenities = ({ property }) => {
                 }
                 className="PropertyDetailsAmenities-contact-form"
               >
+
+                {/* NAME */}
 
                 <div className="PropertyDetailsAmenities-input-group">
 
@@ -1260,6 +1479,9 @@ const PropertyDetailsAmenities = ({ property }) => {
 
                 </div>
 
+
+                {/* EMAIL */}
+
                 <div className="PropertyDetailsAmenities-input-group">
 
                   <label>
@@ -1281,6 +1503,9 @@ const PropertyDetailsAmenities = ({ property }) => {
                   />
 
                 </div>
+
+
+                {/* MOBILE */}
 
                 <div className="PropertyDetailsAmenities-input-group">
 
@@ -1304,6 +1529,9 @@ const PropertyDetailsAmenities = ({ property }) => {
 
                 </div>
 
+
+                {/* CAPTCHA */}
+
                 <div className="PropertyDetailsAmenities-input-group">
 
                   <label>
@@ -1313,7 +1541,9 @@ const PropertyDetailsAmenities = ({ property }) => {
                   <div className="PropertyDetailsAmenities-captcha-row">
 
                     <div className="PropertyDetailsAmenities-captcha-box">
+
                       {captchaCode}
+
                     </div>
 
                     <button
@@ -1329,6 +1559,9 @@ const PropertyDetailsAmenities = ({ property }) => {
                   </div>
 
                 </div>
+
+
+                {/* ENTER CAPTCHA */}
 
                 <div className="PropertyDetailsAmenities-input-group">
 
@@ -1352,14 +1585,24 @@ const PropertyDetailsAmenities = ({ property }) => {
 
                 </div>
 
+
+                {/* SUBMIT */}
+
                 <button
                   type="submit"
                   className="PropertyDetailsAmenities-submit-btn"
                   style={{
                     marginTop: "10px",
                   }}
+                  disabled={
+                    contactSubmitting
+                  }
                 >
-                  Submit
+
+                  {contactSubmitting
+                    ? "Submitting..."
+                    : "Submit"}
+
                 </button>
 
               </form>
@@ -1371,6 +1614,7 @@ const PropertyDetailsAmenities = ({ property }) => {
         </div>
 
       </div>
+
 
       {/* =====================================
           FULL SCREEN FLOOR PLAN MODAL
@@ -1400,7 +1644,9 @@ const PropertyDetailsAmenities = ({ property }) => {
                   setIsModalOpen(false)
                 }
               >
+
                 <FaTimes />
+
               </button>
 
               <h3 className="PropertyDetailsAmenities-modal-title">

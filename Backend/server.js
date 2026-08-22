@@ -18,7 +18,7 @@ const amenityRoutes = require("./src/routes/amenityRoutes");
 
 const blogRoutes = require("./src/routes/blogRoutes");
 const propertyReviewRoutes = require("./src/routes/propertyReview.routes");
-
+const contactRoutes = require("./src/routes/contactRoutes");
 // Initialize MongoDB Connection
 connectDB();
 
@@ -44,6 +44,10 @@ app.use("/api/property-reviews", propertyReviewRoutes);
 app.use("/api/amenities", amenityRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use(
+  "/api/property-contacts",
+  contactRoutes
+);
 
 app.get("/", (req, res) => {
   res.json({ message: "Server Running Successfully" });
