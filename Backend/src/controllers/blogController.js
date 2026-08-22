@@ -54,8 +54,8 @@ const createBlog = async (req, res) => {
   try {
     // 1. Determine image path (File upload via Multer OR URL string passed in body)
     let blogImagePath = req.body.blogImage;
-    if (req.file && req.file.relativePath) {
-      blogImagePath = req.file.relativePath;
+    if (req.file && (req.file.relativePath || req.processedBlogImage)) {
+      blogImagePath = req.file.relativePath || req.processedBlogImage;
     }
 
     // 2. Parse Tags if sent as JSON string via FormData
@@ -118,10 +118,10 @@ const updateBlog = async (req, res) => {
 
     // 1. Handle image replacement
     let blogImagePath = blog.blogImage; // default to existing
-    if (req.file && req.file.relativePath) {
+    if (req.file && (req.file.relativePath || req.processedBlogImage)) {
       // New file uploaded -> remove old image from disk if it was stored locally
       deleteFileFromDisk(blog.blogImage);
-      blogImagePath = req.file.relativePath;
+      blogImagePath = req.file.relativePath || req.processedBlogImage;
     } else if (req.body.blogImage) {
       blogImagePath = req.body.blogImage;
     }

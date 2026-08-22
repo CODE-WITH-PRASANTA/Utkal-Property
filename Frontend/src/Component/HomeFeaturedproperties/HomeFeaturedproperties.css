@@ -12,7 +12,7 @@
 
 .HomeFeaturedproperties {
   width: 100%;
-  padding: 80px 24px;
+  padding: 40px 24px;
   background: radial-gradient(circle at 50% 0%, #ffffff 0%, #f2f9f5 65%, #e5f4ec 100%);
   font-family: 'Plus Jakarta Sans', sans-serif;
   box-sizing: border-box;
@@ -70,7 +70,6 @@
   font-size: 15px;
   color: var(--utkal-gray-subtle);
   margin: 0;
-  max-width: 580px;
   line-height: 1.65;
 }
 
@@ -504,6 +503,6 @@
   }
 
   .HomeFeaturedproperties-main-heading {
-    font-size: 30px;
+    font-size: 25px;
   }
 }

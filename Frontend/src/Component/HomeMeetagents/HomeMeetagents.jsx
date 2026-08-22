@@ -10,7 +10,8 @@ import {
   FaTwitter,
   FaLinkedinIn,
   FaInstagram,
-  FaUserCircle
+  FaUserCircle,
+  FaUserTie
 } from 'react-icons/fa';
 
 const HomeMeetagents = () => {
@@ -25,7 +26,6 @@ const HomeMeetagents = () => {
   const getImageUrl = (photoPath) => {
     if (!photoPath) return '';
 
-    // 1. Direct Blob previews or absolute web URLs
     if (
       photoPath.startsWith('http://') ||
       photoPath.startsWith('https://') ||
@@ -34,10 +34,8 @@ const HomeMeetagents = () => {
       return photoPath;
     }
 
-    // 2. Normalize Windows backslashes
     let clean = photoPath.replace(/\\/g, '/');
 
-    // 3. Isolate path starting from uploads/
     const uploadsIndex = clean.indexOf('uploads/');
     if (uploadsIndex !== -1) {
       clean = '/' + clean.substring(uploadsIndex);
@@ -45,7 +43,6 @@ const HomeMeetagents = () => {
       clean = clean.startsWith('/') ? clean : `/${clean}`;
     }
 
-    // 4. Attach base URL safely without double slashes
     const baseUrl = (IMG_URL || 'http://localhost:5000').replace(/\/+$/, '');
     return `${baseUrl}${clean}`;
   };
@@ -86,22 +83,27 @@ const HomeMeetagents = () => {
   };
 
   return (
-    <section className="HomeMeetagents">
+    <section className="HomeMeetagents" aria-labelledby="consultants-team-heading">
       <div className="HomeMeetagents-container">
-        {/* Section Header */}
-        <div className="HomeMeetagents-header">
-          <span className="HomeMeetagents-tag">Expert Team</span>
-          <h1 className="HomeMeetagents-main-heading">Meet Our Agents</h1>
+        
+        {/* SEO Header Section */}
+        <header className="HomeMeetagents-header">
+          <span className="HomeMeetagents-tag">
+            <FaUserTie className="HomeMeetagents-tag-icon" /> Verified Property Specialists
+          </span>
+          <h1 id="consultants-team-heading" className="HomeMeetagents-main-heading">
+            Best Property Consultant in Bhubaneswar — <span className="highlight-green">Meet Our Best Apartment Consultants</span>
+          </h1>
           <p className="HomeMeetagents-subheading">
-            Our experienced team at Utkal Property is ready to guide you to your ideal real estate investment
+            Get personalized real estate advisory from the <strong>best property consultant in Bhubaneswar</strong>. Consult our verified luxury flat and plot specialists for market valuations, RERA legal checks, home loan assistance, and smooth property registrations across Patia, Jaydev Vihar, Nayapalli, and Khandagiri.
           </p>
-        </div>
+        </header>
 
         {/* Agents Grid */}
         <div className="HomeMeetagents-grid">
           {loading ? (
             <div className="HomeMeetagents-loading">
-              <p>Loading expert team members...</p>
+              <p>Loading real estate consultants...</p>
             </div>
           ) : agents.length > 0 ? (
             agents.map((agent) => {
@@ -110,14 +112,15 @@ const HomeMeetagents = () => {
               const isBroken = brokenImages[agentId];
 
               return (
-                <div key={agentId} className="HomeMeetagents-card">
+                <article key={agentId} className="HomeMeetagents-card">
                   {/* Image Box with Hover Overlay Bar */}
                   <div className="HomeMeetagents-img-wrapper">
                     {!isBroken ? (
                       <img
                         src={photoUrl}
-                        alt={agent.fullName}
+                        alt={`${agent.fullName} - Property Consultant in Bhubaneswar`}
                         className="HomeMeetagents-img"
+                        loading="lazy"
                         onError={() => handleImageError(agentId)}
                       />
                     ) : (
@@ -126,7 +129,7 @@ const HomeMeetagents = () => {
                       </div>
                     )}
 
-                    {/* Utkal Green Vertical Social Bar */}
+                    {/* Vertical Social Bar */}
                     <div className="HomeMeetagents-social-sidebar">
                       {agent.facebook && (
                         <a
@@ -134,7 +137,7 @@ const HomeMeetagents = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="HomeMeetagents-social-icon"
-                          aria-label="Facebook"
+                          aria-label={`Visit ${agent.fullName}'s Facebook profile`}
                         >
                           <FaFacebookF />
                         </a>
@@ -145,7 +148,7 @@ const HomeMeetagents = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="HomeMeetagents-social-icon"
-                          aria-label="Twitter"
+                          aria-label={`Visit ${agent.fullName}'s Twitter profile`}
                         >
                           <FaTwitter />
                         </a>
@@ -156,7 +159,7 @@ const HomeMeetagents = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="HomeMeetagents-social-icon"
-                          aria-label="LinkedIn"
+                          aria-label={`Visit ${agent.fullName}'s LinkedIn profile`}
                         >
                           <FaLinkedinIn />
                         </a>
@@ -167,7 +170,7 @@ const HomeMeetagents = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="HomeMeetagents-social-icon"
-                          aria-label="Instagram"
+                          aria-label={`Visit ${agent.fullName}'s Instagram profile`}
                         >
                           <FaInstagram />
                         </a>
@@ -178,8 +181,8 @@ const HomeMeetagents = () => {
                   {/* Agent Details & Action Buttons */}
                   <div className="HomeMeetagents-card-body">
                     <div className="HomeMeetagents-info">
-                      <h3 className="HomeMeetagents-name">{agent.fullName}</h3>
-                      <p className="HomeMeetagents-role">{agent.designation}</p>
+                      <h2 className="HomeMeetagents-name">{agent.fullName}</h2>
+                      <p className="HomeMeetagents-role">{agent.designation || 'Apartment & Property Consultant'}</p>
                     </div>
 
                     <div className="HomeMeetagents-actions">
@@ -188,7 +191,7 @@ const HomeMeetagents = () => {
                           href={`tel:${agent.phone}`}
                           className="HomeMeetagents-action-btn"
                           title={`Call ${agent.fullName}`}
-                          aria-label="Call Agent"
+                          aria-label={`Call ${agent.fullName}`}
                         >
                           <FaPhoneAlt />
                         </a>
@@ -198,28 +201,28 @@ const HomeMeetagents = () => {
                           href={`mailto:${agent.email}`}
                           className="HomeMeetagents-action-btn"
                           title={`Email ${agent.fullName}`}
-                          aria-label="Email Agent"
+                          aria-label={`Email ${agent.fullName}`}
                         >
                           <FaEnvelope />
                         </a>
                       )}
                     </div>
                   </div>
-                </div>
+                </article>
               );
             })
           ) : (
             <div className="HomeMeetagents-empty">
-              <p>No active agents found. Add team members from the admin panel!</p>
+              <p>No active property consultants found. Add team members from the admin panel!</p>
             </div>
           )}
         </div>
 
         {/* Footer Callout Link */}
         <div className="HomeMeetagents-footer-text">
-          Become an agent and get the commission you deserve.{' '}
+          Join Bhubaneswar's top real estate advisory network.{' '}
           <a href="#contact" className="HomeMeetagents-contact-link">
-            Contact us
+            Partner with us
           </a>
         </div>
       </div>

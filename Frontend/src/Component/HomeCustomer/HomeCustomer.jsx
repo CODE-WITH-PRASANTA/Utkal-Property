@@ -92,10 +92,20 @@ const HomeCustomer = () => {
     <section className="HomeCustomer">
       <div className="HomeCustomer-container">
         
-        {/* Section Header */}
+        {/* Section Header with Managed Heading Hierarchy */}
         <div className="HomeCustomer-header">
           <span className="HomeCustomer-tag">Testimonials</span>
-          <h2 className="HomeCustomer-main-title">From Our Happy Customers</h2>
+          
+          {/* SEO Primary Target Keyword */}
+          <h1 className="HomeCustomer-seo-title">
+            Top Real Estate Company in Bhubaneswar, Odisha
+          </h1>
+          
+          {/* Customer Reviews Subheading */}
+          <h2 className="HomeCustomer-main-title">
+            What Our Happy Customers Say
+          </h2>
+          
           <p className="HomeCustomer-subtitle">
             See how Utkal Property has helped families and businesses find their ideal properties across Odisha
           </p>
