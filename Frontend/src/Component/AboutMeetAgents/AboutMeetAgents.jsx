@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaPhoneAlt, FaWhatsapp } from 'react-icons/fa';
 import './AboutMeetAgents.css';
 
 // Image Imports
@@ -8,63 +8,70 @@ import agent2Img from '../../assets/agent2.webp';
 import agent3Img from '../../assets/agent3.webp';
 
 export function AboutMeetAgents() {
+  const directPhone = '+919861566735';
+  const whatsappUrl = 'https://wa.me/919861566735?text=Hello%20Utkal%20Property%20Team%2C%20I%20would%20like%20to%20connect%20with%20a%20property%20consultant.';
+
   const agents = [
     {
       id: 1,
-      name: 'Wade Warren',
-      role: 'Salesperson',
+      name: 'Rakesh Mohanty',
+      role: 'Residential Property Specialist',
+      specialty: 'Patia, Pahala & Hanspal',
       image: agent1Img,
-      phone: '#',
-      email: '#',
+      phone: directPhone,
+      whatsapp: `${whatsappUrl}%20Regarding%20Residential%20Plots%20and%20Flats.`,
       socials: {
-        facebook: '#',
-        twitter: '#',
-        linkedin: '#',
-        instagram: '#',
+        facebook: 'https://facebook.com',
+        twitter: 'https://twitter.com',
+        linkedin: 'https://linkedin.com',
+        instagram: 'https://instagram.com',
       },
     },
     {
       id: 2,
-      name: 'Leslie Alexander',
-      role: 'Commercial Broker',
+      name: 'Satyajit Mishra',
+      role: 'Commercial Real Estate Advisor',
+      specialty: 'Jaydev Vihar, Saheed Nagar & Rasulgarh',
       image: agent2Img,
-      phone: '#',
-      email: '#',
+      phone: directPhone,
+      whatsapp: `${whatsappUrl}%20Regarding%20Commercial%20Investments.`,
       socials: {
-        facebook: '#',
-        twitter: '#',
-        linkedin: '#',
-        instagram: '#',
+        facebook: 'https://facebook.com',
+        twitter: 'https://twitter.com',
+        linkedin: 'https://linkedin.com',
+        instagram: 'https://instagram.com',
       },
     },
     {
       id: 3,
-      name: 'Darlene Robertson',
-      role: 'Realtor',
+      name: 'Priyanka Das',
+      role: 'Legal & RERA Land Consultant',
+      specialty: 'Khandagiri, Sundarpada & Jatni',
       image: agent3Img,
-      phone: '#',
-      email: '#',
+      phone: directPhone,
+      whatsapp: `${whatsappUrl}%20Regarding%20Legal%20Documentation%20and%20Land%20Verification.`,
       socials: {
-        facebook: '#',
-        twitter: '#',
-        linkedin: '#',
-        instagram: '#',
+        facebook: 'https://facebook.com',
+        twitter: 'https://twitter.com',
+        linkedin: 'https://linkedin.com',
+        instagram: 'https://instagram.com',
       },
     },
   ];
 
   return (
-    <section className="AboutMeetAgents-wrapper">
+    <section className="AboutMeetAgents-wrapper" aria-labelledby="property-consultant-heading">
       <div className="AboutMeetAgents-container">
         
-        {/* Header Section with Dual-Color Typography */}
+        {/* Header Section with Target SEO Keyword */}
         <div className="AboutMeetAgents-header">
-          <h2 className="AboutMeetAgents-title">
-            <span className="AboutMeetAgents-title-dark">Meet</span>{' '}
-            <span className="AboutMeetAgents-title-green">the agents</span>
-          </h2>
+          <p className="AboutMeetAgents-badge">Utkal Property Expert Team</p>
+          <h1 id="property-consultant-heading" className="AboutMeetAgents-title">
+            <span className="AboutMeetAgents-title-dark">Meet the </span>
+            <span className="AboutMeetAgents-title-green">Best Property Consultant in Bhubaneswar</span>
+          </h1>
           <p className="AboutMeetAgents-subtitle">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel lobortis justo
+            Get personalized advice from certified local real estate consultants specializing in RERA-approved plots, luxury villas, and high-ROI commercial properties across Bhubaneswar.
           </p>
         </div>
 
@@ -75,15 +82,21 @@ export function AboutMeetAgents() {
               
               {/* Image Container with Hover Overlay */}
               <div className="AboutMeetAgents-img-container">
-                <img src={agent.image} alt={agent.name} className="AboutMeetAgents-img" />
+                <img 
+                  src={agent.image} 
+                  alt={`${agent.name} - Property Consultant at Utkal Property Bhubaneswar`} 
+                  className="AboutMeetAgents-img"
+                  loading="lazy"
+                />
                 
-                {/* Right Floating Social Strip (Visible on Hover) */}
-                <div className="AboutMeetAgents-social-overlay">
+                {/* Right Floating Social Strip */}
+                <div className="AboutMeetAgents-social-overlay" aria-label={`Social profiles of ${agent.name}`}>
                   <a 
                     href={agent.socials.facebook} 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="AboutMeetAgents-social-link AboutMeetAgents-social-facebook"
+                    aria-label="Facebook Profile"
                   >
                     <FaFacebookF />
                   </a>
@@ -92,6 +105,7 @@ export function AboutMeetAgents() {
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="AboutMeetAgents-social-link AboutMeetAgents-social-twitter"
+                    aria-label="Twitter Profile"
                   >
                     <FaTwitter />
                   </a>
@@ -100,6 +114,7 @@ export function AboutMeetAgents() {
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="AboutMeetAgents-social-link AboutMeetAgents-social-linkedin"
+                    aria-label="LinkedIn Profile"
                   >
                     <FaLinkedinIn />
                   </a>
@@ -108,6 +123,7 @@ export function AboutMeetAgents() {
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="AboutMeetAgents-social-link AboutMeetAgents-social-instagram"
+                    aria-label="Instagram Profile"
                   >
                     <FaInstagram />
                   </a>
@@ -119,22 +135,27 @@ export function AboutMeetAgents() {
                 <div className="AboutMeetAgents-text-group">
                   <h3 className="AboutMeetAgents-name">{agent.name}</h3>
                   <p className="AboutMeetAgents-role">{agent.role}</p>
+                  <span className="AboutMeetAgents-locality">{agent.specialty}</span>
                 </div>
 
                 <div className="AboutMeetAgents-contact-icons">
                   <a 
                     href={`tel:${agent.phone}`} 
                     className="AboutMeetAgents-icon-btn AboutMeetAgents-btn-phone" 
-                    title="Call Agent"
+                    title={`Call ${agent.name}`}
+                    aria-label={`Call ${agent.name}`}
                   >
                     <FaPhoneAlt />
                   </a>
                   <a 
-                    href={`mailto:${agent.email}`} 
-                    className="AboutMeetAgents-icon-btn AboutMeetAgents-btn-email" 
-                    title="Email Agent"
+                    href={agent.whatsapp} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="AboutMeetAgents-icon-btn AboutMeetAgents-btn-whatsapp" 
+                    title={`WhatsApp ${agent.name}`}
+                    aria-label={`Chat with ${agent.name} on WhatsApp`}
                   >
-                    <FaEnvelope />
+                    <FaWhatsapp />
                   </a>
                 </div>
               </div>
@@ -145,8 +166,10 @@ export function AboutMeetAgents() {
 
         {/* Bottom Banner Note */}
         <div className="AboutMeetAgents-footer-note">
-          Become an agent and get the commission you deserve.{' '}
-          <a href="#contact" className="AboutMeetAgents-contact-link">Contact us</a>
+          Looking for trusted property deals or want to partner with us?{' '}
+          <a href="tel:+919861566735" className="AboutMeetAgents-contact-link">
+            Speak to an expert consultant at +91 9861566735
+          </a>
         </div>
 
       </div>

@@ -39,10 +39,12 @@ const HomeBlog = () => {
         
         {/* Section Header */}
         <div className="HomeBlog-header">
-          <span className="HomeBlog-tag">Latest Updates</span>
-          <h2 className="HomeBlog-main-title">From Our Blog</h2>
+          <span className="HomeBlog-tag">Utkal Property Insights</span>
+          <h1 className="HomeBlog-main-title">
+            Premium Apartments and Flats Dealer in Bhubaneswar
+          </h1>
           <p className="HomeBlog-subtitle">
-            Stay informed with expert insights, market updates, and home-buying advice from Utkal Property
+            Explore verified listings, market trends, and expert real estate advice from Bhubaneswar’s trusted property dealers.
           </p>
         </div>
 
