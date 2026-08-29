@@ -1,319 +1,1803 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FiSearch, FiChevronDown, FiSliders, FiArrowUpRight } from 'react-icons/fi';
-import './HomeBreadcrum.css';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 
-// Import your local hero image from src/assets/
-import heroImg from '../../assets/slider-1.png'; 
+import {
+  FiSearch,
+  FiChevronDown,
+  FiSliders,
+  FiArrowUpRight,
+  FiMapPin,
+} from "react-icons/fi";
+
+import { useNavigate } from "react-router-dom";
+
+import API from "../../api/axios";
+
+import "./HomeBreadcrum.css";
+
+import heroImg from "../../assets/slider-1.png";
 
 const HomeBreadcrum = () => {
-  const [activeTab, setActiveTab] = useState('Rent');
-  const [keyword, setKeyword] = useState('');
-  const [propertyType, setPropertyType] = useState('Property type');
-  const [location, setLocation] = useState('Location');
-  
-  // Dropdown visibility states
-  const [showPropertyDropdown, setShowPropertyDropdown] = useState(false);
-  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  // =====================================================
+  // NAVIGATION
+  // =====================================================
 
-  // Advanced Filter state
-  const [baths, setBaths] = useState('Any');
-  const [beds, setBeds] = useState('Any');
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const navigate = useNavigate();
+
+  // =====================================================
+  // ACTIVE TAB
+  // =====================================================
+
+  const [activeTab, setActiveTab] =
+    useState("Rent");
+
+  // =====================================================
+  // SEARCH
+  // =====================================================
+
+  const [keyword, setKeyword] =
+    useState("");
+
+  const [propertyType, setPropertyType] =
+    useState("Property type");
+
+  const [location, setLocation] =
+    useState("Location");
+
+  // =====================================================
+  // SELECTED PROPERTY
+  // =====================================================
+
+  const [
+    selectedProperty,
+    setSelectedProperty,
+  ] = useState(null);
+
+  // =====================================================
+  // DROPDOWNS
+  // =====================================================
+
+  const [
+    showPropertyDropdown,
+    setShowPropertyDropdown,
+  ] = useState(false);
+
+  const [
+    showLocationDropdown,
+    setShowLocationDropdown,
+  ] = useState(false);
+
+  const [
+    showAdvancedFilters,
+    setShowAdvancedFilters,
+  ] = useState(false);
+
+  // =====================================================
+  // ADVANCED FILTERS
+  // =====================================================
+
+  const [baths, setBaths] =
+    useState("Any");
+
+  const [beds, setBeds] =
+    useState("Any");
+
+  const [
+    selectedAmenities,
+    setSelectedAmenities,
+  ] = useState([]);
+
+  // =====================================================
+  // BACKEND DATA
+  // =====================================================
+
+  const [properties, setProperties] =
+    useState([]);
+
+  const [locations, setLocations] =
+    useState([]);
+
+  const [
+    loadingProperties,
+    setLoadingProperties,
+  ] = useState(false);
+
+  const [
+    loadingLocations,
+    setLoadingLocations,
+  ] = useState(false);
+
+  const [
+    searchLoading,
+    setSearchLoading,
+  ] = useState(false);
+
+  // =====================================================
+  // REF
+  // =====================================================
 
   const dropdownRef = useRef(null);
 
-  // Dynamic readings/stats based on selected tab (Rent vs Buy)
+  // =====================================================
+  // STATS
+  // =====================================================
+
   const statsData = {
     Rent: {
-      properties: '1,500+',
-      customers: '700+'
+      properties: "1,500+",
+      customers: "700+",
     },
+
     Buy: {
-      properties: '3,200+',
-      customers: '1,400+'
+      properties: "3,200+",
+      customers: "1,400+",
+    },
+  };
+
+  // =====================================================
+  // AMENITIES
+  // =====================================================
+
+  const amenitiesList = [
+    "Swimming pool",
+    "Balcony",
+    "Ensuite",
+    "Tennis court",
+    "Garage",
+    "Outdoor area",
+    "Built in robes",
+    "Study",
+    "Alarm system",
+    "Broadband",
+    "Gym",
+    "Outdoor spa",
+  ];
+
+  // =====================================================
+  // FETCH PROPERTIES
+  // =====================================================
+
+  const fetchProperties = async () => {
+    try {
+      setLoadingProperties(true);
+
+      const response =
+        await API.get("/properties");
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "PROPERTIES RESPONSE:",
+        response.data
+      );
+
+      const propertyData =
+        response.data?.properties ||
+        response.data?.data ||
+        response.data?.results ||
+        response.data;
+
+      if (Array.isArray(propertyData)) {
+        setProperties(propertyData);
+
+        console.log(
+          "PROPERTIES LOADED:",
+          propertyData
+        );
+      } else {
+        setProperties([]);
+      }
+    } catch (error) {
+      console.error(
+        "FETCH PROPERTIES ERROR:",
+        error.response?.data ||
+          error
+      );
+
+      setProperties([]);
+    } finally {
+      setLoadingProperties(false);
     }
   };
 
-  // Property types matching Reference Image 2
-  const propertyTypes = [
-    'Bungalow',
-    'Apartment',
-    'House',
-    'Smart Home',
-    'Office',
-    'Villa'
-  ];
+  // =====================================================
+  // FETCH LOCATIONS
+  // =====================================================
 
-  // Dummy Location Data
-  const locations = [
-    'New York, USA',
-    'Los Angeles, CA',
-    'Chicago, IL',
-    'London, UK',
-    'Dubai, UAE',
-    'Tokyo, Japan'
-  ];
+  const fetchLocations = async () => {
+    try {
+      setLoadingLocations(true);
 
-  // Amenities matching Reference Image 3
-  const amenitiesList = [
-    'Swimming pool', 'Balcony', 'Ensuite', 'Tennis court',
-    'Garage', 'Outdoor area', 'Built in robes', 'Study',
-    'Alarm system', 'Broadband', 'Gym', 'Outdoor spa'
-  ];
+      const response =
+        await API.get("/locations");
 
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowPropertyDropdown(false);
-        setShowLocationDropdown(false);
+      console.log(
+        "LOCATIONS RESPONSE:",
+        response.data
+      );
+
+      const locationData =
+        response.data?.locations ||
+        response.data?.data ||
+        response.data?.results ||
+        response.data;
+
+      if (Array.isArray(locationData)) {
+        setLocations(locationData);
+      } else {
+        setLocations([]);
       }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    } catch (error) {
+      console.error(
+        "FETCH LOCATIONS ERROR:",
+        error.response?.data ||
+          error
+      );
+
+      setLocations([]);
+    } finally {
+      setLoadingLocations(false);
+    }
+  };
+
+  // =====================================================
+  // LOAD DATA
+  // =====================================================
+
+  useEffect(() => {
+    fetchProperties();
+    fetchLocations();
   }, []);
 
-  const handleAmenityChange = (amenity) => {
-    setSelectedAmenities(prev =>
+  // =====================================================
+  // CLOSE DROPDOWNS
+  // =====================================================
+
+  useEffect(() => {
+    const handleClickOutside = (
+      event
+    ) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(
+          event.target
+        )
+      ) {
+        setShowPropertyDropdown(
+          false
+        );
+
+        setShowLocationDropdown(
+          false
+        );
+      }
+    };
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
+
+  // =====================================================
+  // GET PROPERTY NAME
+  // =====================================================
+
+  const getPropertyName = (
+    property
+  ) => {
+    return String(
+      property?.name ||
+        property?.title ||
+        "Unnamed Property"
+    ).trim();
+  };
+
+  // =====================================================
+  // GET LOCATION NAME
+  // SUPPORT STRING + OBJECT
+  // =====================================================
+
+  const getPropertyLocationName = (
+    property
+  ) => {
+    const locationValue =
+      property?.location;
+
+    // -------------------------------
+    // LOCATION IS STRING
+    // -------------------------------
+
+    if (
+      typeof locationValue ===
+      "string"
+    ) {
+      return locationValue.trim();
+    }
+
+    // -------------------------------
+    // LOCATION IS OBJECT
+    // -------------------------------
+
+    if (
+      locationValue &&
+      typeof locationValue ===
+        "object"
+    ) {
+      return String(
+        locationValue?.name ||
+          locationValue?.title ||
+          locationValue?.city ||
+          locationValue?.locationName ||
+          locationValue?.area ||
+          locationValue?.address ||
+          ""
+      ).trim();
+    }
+
+    // -------------------------------
+    // FALLBACK
+    // -------------------------------
+
+    return String(
+      property?.city ||
+        property?.state ||
+        property?.address ||
+        "Location not available"
+    ).trim();
+  };
+
+  // =====================================================
+  // GET LOCATION NAME
+  // =====================================================
+
+  const getLocationName = (
+    locationItem
+  ) => {
+    if (
+      typeof locationItem ===
+      "string"
+    ) {
+      return locationItem.trim();
+    }
+
+    if (
+      !locationItem ||
+      typeof locationItem !==
+        "object"
+    ) {
+      return "";
+    }
+
+    return String(
+      locationItem?.name ||
+        locationItem?.title ||
+        locationItem?.locationName ||
+        locationItem?.city ||
+        locationItem?.area ||
+        locationItem?.address ||
+        ""
+    ).trim();
+  };
+
+  // =====================================================
+  // GET PROPERTY ID
+  // =====================================================
+
+  const getPropertyId = (
+    property
+  ) => {
+    return (
+      property?._id ||
+      property?.id ||
+      property?.propertyId
+    );
+  };
+
+  // =====================================================
+  // AMENITY CHANGE
+  // =====================================================
+
+  const handleAmenityChange = (
+    amenity
+  ) => {
+    setSelectedAmenities((prev) =>
       prev.includes(amenity)
-        ? prev.filter(item => item !== amenity)
+        ? prev.filter(
+            (item) =>
+              item !== amenity
+          )
         : [...prev, amenity]
     );
   };
 
+  // =====================================================
+  // SELECT PROPERTY
+  // =====================================================
+
+  const handlePropertySelect = (
+    property
+  ) => {
+    const propertyId =
+      getPropertyId(property);
+
+    if (!propertyId) {
+      alert(
+        "Property ID not found."
+      );
+
+      return;
+    }
+
+    const propertyName =
+      getPropertyName(property);
+
+    const propertyLocation =
+      getPropertyLocationName(
+        property
+      );
+
+    console.log(
+      "===================================="
+    );
+
+    console.log(
+      "PROPERTY SELECTED"
+    );
+
+    console.log(
+      "PROPERTY ID:",
+      propertyId
+    );
+
+    console.log(
+      "PROPERTY NAME:",
+      propertyName
+    );
+
+    console.log(
+      "PROPERTY LOCATION:",
+      propertyLocation
+    );
+
+    console.log(
+      "PROPERTY:",
+      property
+    );
+
+    console.log(
+      "===================================="
+    );
+
+    setSelectedProperty(
+      property
+    );
+
+    setPropertyType(
+      propertyName
+    );
+
+    setLocation(
+      propertyLocation
+    );
+
+    setShowPropertyDropdown(
+      false
+    );
+
+    setShowLocationDropdown(
+      false
+    );
+  };
+
+  // =====================================================
+  // SELECT LOCATION
+  // =====================================================
+
+  const handleLocationSelect = (
+    loc
+  ) => {
+    const locationName =
+      getLocationName(loc);
+
+    setLocation(
+      locationName
+    );
+
+    // Location search should not keep
+    // an old selected property.
+    setSelectedProperty(null);
+
+    setPropertyType(
+      "Property type"
+    );
+
+    setShowLocationDropdown(
+      false
+    );
+
+    setShowPropertyDropdown(
+      false
+    );
+  };
+
+  // =====================================================
+  // RESET PROPERTY SELECTION
+  // =====================================================
+
+  const clearSelectedProperty = () => {
+    setSelectedProperty(null);
+
+    setPropertyType(
+      "Property type"
+    );
+  };
+
+  // =====================================================
+  // SEARCH
+  // =====================================================
+
+  const handleSearch = async () => {
+    try {
+      setSearchLoading(true);
+
+      // =================================================
+      // IMPORTANT:
+      // IF USER SELECTED A PROPERTY,
+      // GO DIRECTLY TO THAT PROPERTY.
+      // DO NOT FILTER IT AGAIN.
+      // =================================================
+
+      if (selectedProperty) {
+        const propertyId =
+          getPropertyId(
+            selectedProperty
+          );
+
+        console.log(
+          "===================================="
+        );
+
+        console.log(
+          "DIRECT PROPERTY SEARCH"
+        );
+
+        console.log(
+          "PROPERTY:",
+          selectedProperty
+        );
+
+        console.log(
+          "PROPERTY NAME:",
+          getPropertyName(
+            selectedProperty
+          )
+        );
+
+        console.log(
+          "PROPERTY LOCATION:",
+          getPropertyLocationName(
+            selectedProperty
+          )
+        );
+
+        console.log(
+          "PROPERTY ID:",
+          propertyId
+        );
+
+        console.log(
+          "===================================="
+        );
+
+        if (!propertyId) {
+          alert(
+            "Property ID not found."
+          );
+
+          return;
+        }
+
+        setShowPropertyDropdown(
+          false
+        );
+
+        setShowLocationDropdown(
+          false
+        );
+
+        setShowAdvancedFilters(
+          false
+        );
+
+        navigate(
+          `/property-details/${propertyId}`
+        );
+
+        return;
+      }
+
+      // =================================================
+      // NORMAL SEARCH
+      // =================================================
+
+      const searchKeyword =
+        keyword
+          .trim()
+          .toLowerCase();
+
+      const selectedPropertyName =
+        propertyType !==
+        "Property type"
+          ? propertyType
+              .trim()
+              .toLowerCase()
+          : "";
+
+      const selectedLocation =
+        location !== "Location"
+          ? location
+              .trim()
+              .toLowerCase()
+          : "";
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "PROPERTY SEARCH"
+      );
+
+      console.log(
+        "Active Tab:",
+        activeTab
+      );
+
+      console.log(
+        "Keyword:",
+        searchKeyword
+      );
+
+      console.log(
+        "Property Name:",
+        selectedPropertyName
+      );
+
+      console.log(
+        "Location:",
+        selectedLocation
+      );
+
+      console.log(
+        "Beds:",
+        beds
+      );
+
+      console.log(
+        "Baths:",
+        baths
+      );
+
+      console.log(
+        "Total Properties:",
+        properties.length
+      );
+
+      console.log(
+        "===================================="
+      );
+
+      // =================================================
+      // START WITH ALL PROPERTIES
+      // =================================================
+
+      let filteredProperties = [
+        ...properties,
+      ];
+
+      // =================================================
+      // RENT
+      // =================================================
+
+      if (
+        activeTab === "Rent"
+      ) {
+        filteredProperties =
+          filteredProperties.filter(
+            (property) => {
+              const categoryParent =
+                String(
+                  property?.categoryParent ||
+                    ""
+                ).toLowerCase();
+
+              const statusType =
+                String(
+                  property?.statusType ||
+                    ""
+                ).toLowerCase();
+
+              const transactionType =
+                String(
+                  property?.transactionType ||
+                    ""
+                ).toLowerCase();
+
+              return (
+                categoryParent ===
+                  "rent" ||
+                statusType.includes(
+                  "rent"
+                ) ||
+                transactionType.includes(
+                  "rent"
+                )
+              );
+            }
+          );
+      }
+
+      // =================================================
+      // BUY
+      // =================================================
+
+      if (
+        activeTab === "Buy"
+      ) {
+        filteredProperties =
+          filteredProperties.filter(
+            (property) => {
+              const categoryParent =
+                String(
+                  property?.categoryParent ||
+                    ""
+                ).toLowerCase();
+
+              const statusType =
+                String(
+                  property?.statusType ||
+                    ""
+                ).toLowerCase();
+
+              const transactionType =
+                String(
+                  property?.transactionType ||
+                    ""
+                ).toLowerCase();
+
+              return (
+                categoryParent !==
+                  "rent" &&
+                (
+                  statusType.includes(
+                    "sale"
+                  ) ||
+                  transactionType.includes(
+                    "sale"
+                  )
+                )
+              );
+            }
+          );
+      }
+
+      // =================================================
+      // KEYWORD
+      // =================================================
+
+      if (searchKeyword) {
+        filteredProperties =
+          filteredProperties.filter(
+            (property) => {
+              const propertyName =
+                getPropertyName(
+                  property
+                ).toLowerCase();
+
+              const propertyLocation =
+                getPropertyLocationName(
+                  property
+                ).toLowerCase();
+
+              const city =
+                String(
+                  property?.city ||
+                    ""
+                ).toLowerCase();
+
+              const state =
+                String(
+                  property?.state ||
+                    ""
+                ).toLowerCase();
+
+              const category =
+                String(
+                  property?.category ||
+                    ""
+                ).toLowerCase();
+
+              const type =
+                String(
+                  property?.type ||
+                    ""
+                ).toLowerCase();
+
+              return (
+                propertyName.includes(
+                  searchKeyword
+                ) ||
+                propertyLocation.includes(
+                  searchKeyword
+                ) ||
+                city.includes(
+                  searchKeyword
+                ) ||
+                state.includes(
+                  searchKeyword
+                ) ||
+                category.includes(
+                  searchKeyword
+                ) ||
+                type.includes(
+                  searchKeyword
+                )
+              );
+            }
+          );
+      }
+
+      // =================================================
+      // PROPERTY NAME
+      // =================================================
+
+      if (
+        selectedPropertyName
+      ) {
+        filteredProperties =
+          filteredProperties.filter(
+            (property) => {
+              const propertyName =
+                getPropertyName(
+                  property
+                ).toLowerCase();
+
+              return propertyName.includes(
+                selectedPropertyName
+              );
+            }
+          );
+      }
+
+      // =================================================
+      // LOCATION
+      // =================================================
+
+      if (
+        selectedLocation
+      ) {
+        filteredProperties =
+          filteredProperties.filter(
+            (property) => {
+              const propertyLocation =
+                getPropertyLocationName(
+                  property
+                ).toLowerCase();
+
+              const city =
+                String(
+                  property?.city ||
+                    ""
+                ).toLowerCase();
+
+              const state =
+                String(
+                  property?.state ||
+                    ""
+                ).toLowerCase();
+
+              const address =
+                String(
+                  property?.address ||
+                    ""
+                ).toLowerCase();
+
+              return (
+                propertyLocation.includes(
+                  selectedLocation
+                ) ||
+                city.includes(
+                  selectedLocation
+                ) ||
+                state.includes(
+                  selectedLocation
+                ) ||
+                address.includes(
+                  selectedLocation
+                )
+              );
+            }
+          );
+      }
+
+      // =================================================
+      // BEDROOMS
+      // =================================================
+
+      if (
+        beds !== "Any"
+      ) {
+        const minimumBeds =
+          Number(beds);
+
+        filteredProperties =
+          filteredProperties.filter(
+            (property) => {
+              const propertyBeds =
+                Number(
+                  property?.bedrooms ||
+                    property?.beds ||
+                    0
+                );
+
+              return (
+                propertyBeds >=
+                minimumBeds
+              );
+            }
+          );
+      }
+
+      // =================================================
+      // BATHROOMS
+      // =================================================
+
+      if (
+        baths !== "Any"
+      ) {
+        const minimumBaths =
+          Number(baths);
+
+        filteredProperties =
+          filteredProperties.filter(
+            (property) => {
+              const propertyBaths =
+                Number(
+                  property?.bathrooms ||
+                    property?.baths ||
+                    0
+                );
+
+              return (
+                propertyBaths >=
+                minimumBaths
+              );
+            }
+          );
+      }
+
+      // =================================================
+      // AMENITIES
+      // =================================================
+
+      if (
+        selectedAmenities.length >
+        0
+      ) {
+        filteredProperties =
+          filteredProperties.filter(
+            (property) => {
+              const propertyAmenities =
+                Array.isArray(
+                  property?.amenities
+                )
+                  ? property.amenities
+                  : [];
+
+              return selectedAmenities.every(
+                (selectedAmenity) =>
+                  propertyAmenities.some(
+                    (propertyAmenity) =>
+                      String(
+                        propertyAmenity
+                      )
+                        .toLowerCase()
+                        .includes(
+                          selectedAmenity.toLowerCase()
+                        )
+                  )
+              );
+            }
+          );
+      }
+
+      // =================================================
+      // FINAL RESULT
+      // =================================================
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "FINAL FILTERED PROPERTIES:",
+        filteredProperties
+      );
+
+      console.log(
+        "FINAL COUNT:",
+        filteredProperties.length
+      );
+
+      console.log(
+        "===================================="
+      );
+
+      // =================================================
+      // NO PROPERTY
+      // =================================================
+
+      if (
+        filteredProperties.length ===
+        0
+      ) {
+        alert(
+          "No properties found for your search."
+        );
+
+        return;
+      }
+
+      // =================================================
+      // TAKE FIRST MATCH
+      // =================================================
+
+      const property =
+        filteredProperties[0];
+
+      const propertyId =
+        getPropertyId(property);
+
+      if (!propertyId) {
+        alert(
+          "Property ID not found."
+        );
+
+        return;
+      }
+
+      // =================================================
+      // SAVE
+      // =================================================
+
+      setSelectedProperty(
+        property
+      );
+
+      setPropertyType(
+        getPropertyName(property)
+      );
+
+      setLocation(
+        getPropertyLocationName(
+          property
+        )
+      );
+
+      // =================================================
+      // CLOSE
+      // =================================================
+
+      setShowPropertyDropdown(
+        false
+      );
+
+      setShowLocationDropdown(
+        false
+      );
+
+      setShowAdvancedFilters(
+        false
+      );
+
+      // =================================================
+      // DETAILS PAGE
+      // =================================================
+
+      navigate(
+        `/property-details/${propertyId}`
+      );
+    } catch (error) {
+      console.error(
+        "PROPERTY SEARCH ERROR:",
+        error
+      );
+
+      alert(
+        error.response?.data
+          ?.message ||
+          "Unable to search properties."
+      );
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  // =====================================================
+  // RENDER
+  // =====================================================
+
   return (
     <div className="HomeBreadcrum">
+
       <div className="HomeBreadcrum-container">
-        
-        {/* Left Column: Hero Content & Search Bar */}
+
+        {/* =================================================
+            LEFT
+        ================================================= */}
+
         <div className="HomeBreadcrum-left">
+
+          <div className="HomeBreadcrum-badgeTag">
+            Utkal Property Services
+          </div>
+
           <h1 className="HomeBreadcrum-title">
-            We will find a perfect home for you
+            We will find a{" "}
+            <span className="highlight-green">
+              perfect home
+            </span>{" "}
+            for you
           </h1>
+
           <p className="HomeBreadcrum-subtitle">
-            Find a variety of properties that suit you very easily, forget all difficulties in finding a residence for you
+            Find a variety of premium
+            properties that suit your
+            lifestyle effortlessly. Forget
+            all difficulties in finding your
+            dream residence.
           </p>
 
-          {/* Search Card Container */}
-          <div className="HomeBreadcrum-searchCardContainer" ref={dropdownRef}>
-            
-            {/* Rent / Buy Tabs */}
+          {/* =================================================
+              SEARCH
+          ================================================= */}
+
+          <div
+            className="HomeBreadcrum-searchCardContainer"
+            ref={dropdownRef}
+          >
+
+            {/* =================================================
+                TABS
+            ================================================= */}
+
             <div className="HomeBreadcrum-tabs">
+
               <button
                 type="button"
-                className={`HomeBreadcrum-tab ${activeTab === 'Rent' ? 'active' : ''}`}
-                onClick={() => setActiveTab('Rent')}
+                className={`HomeBreadcrum-tab ${
+                  activeTab === "Rent"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("Rent");
+
+                  clearSelectedProperty();
+                }}
               >
                 Rent
               </button>
+
               <button
                 type="button"
-                className={`HomeBreadcrum-tab ${activeTab === 'Buy' ? 'active' : ''}`}
-                onClick={() => setActiveTab('Buy')}
+                className={`HomeBreadcrum-tab ${
+                  activeTab === "Buy"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("Buy");
+
+                  clearSelectedProperty();
+                }}
               >
                 Buy
               </button>
+
             </div>
 
-            {/* Main Search Controls */}
+            {/* =================================================
+                SEARCH CARD
+            ================================================= */}
+
             <div className="HomeBreadcrum-searchCard">
-              {/* Keyword Input */}
+
+              {/* =================================================
+                  KEYWORD
+              ================================================= */}
+
               <div className="HomeBreadcrum-field HomeBreadcrum-inputField">
+
                 <input
                   type="text"
                   placeholder="Type keyword..."
                   value={keyword}
-                  onChange={(e) => setKeyword(e.target.value)}
+                  onChange={(e) => {
+                    setKeyword(
+                      e.target.value
+                    );
+
+                    if (
+                      selectedProperty
+                    ) {
+                      setSelectedProperty(
+                        null
+                      );
+
+                      setPropertyType(
+                        "Property type"
+                      );
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (
+                      e.key ===
+                      "Enter"
+                    ) {
+                      handleSearch();
+                    }
+                  }}
                 />
+
               </div>
 
-              {/* Property Type Dropdown */}
+              {/* =================================================
+                  PROPERTY
+              ================================================= */}
+
               <div className="HomeBreadcrum-field HomeBreadcrum-dropdownField">
+
                 <div
                   className="HomeBreadcrum-dropdownHeader"
                   onClick={() => {
-                    setShowPropertyDropdown(!showPropertyDropdown);
-                    setShowLocationDropdown(false);
+                    setShowPropertyDropdown(
+                      !showPropertyDropdown
+                    );
+
+                    setShowLocationDropdown(
+                      false
+                    );
                   }}
                 >
-                  <span>{propertyType}</span>
+
+                  <div className="HomeBreadcrum-selectedProperty">
+
+                    <span className="HomeBreadcrum-selectedPropertyName">
+                      {selectedProperty
+                        ? getPropertyName(
+                            selectedProperty
+                          )
+                        : propertyType}
+                    </span>
+
+                    {selectedProperty && (
+                      <span className="HomeBreadcrum-selectedPropertyLocation">
+                        <FiMapPin />
+                        {getPropertyLocationName(
+                          selectedProperty
+                        )}
+                      </span>
+                    )}
+
+                  </div>
+
                   <FiChevronDown className="HomeBreadcrum-arrowIcon" />
+
                 </div>
 
-                {/* Reference Image 2: Property Type Dropdown */}
                 {showPropertyDropdown && (
+
                   <div className="HomeBreadcrum-dropdownMenu">
-                    <div className="HomeBreadcrum-dropdownTitle">Property type</div>
+
+                    <div className="HomeBreadcrum-dropdownTitle">
+                      Select Property
+                    </div>
+
                     <ul>
-                      {propertyTypes.map((type, idx) => (
-                        <li
-                          key={idx}
-                          onClick={() => {
-                            setPropertyType(type);
-                            setShowPropertyDropdown(false);
-                          }}
-                        >
-                          {type}
+
+                      {loadingProperties ? (
+
+                        <li className="HomeBreadcrum-loadingItem">
+                          Loading properties...
                         </li>
-                      ))}
+
+                      ) : properties.length >
+                        0 ? (
+
+                        properties.map(
+                          (
+                            property,
+                            index
+                          ) => {
+
+                            const propertyName =
+                              getPropertyName(
+                                property
+                              );
+
+                            const propertyLocation =
+                              getPropertyLocationName(
+                                property
+                              );
+
+                            const propertyId =
+                              getPropertyId(
+                                property
+                              );
+
+                            return (
+                              <li
+                                key={
+                                  propertyId ||
+                                  index
+                                }
+                                className={`HomeBreadcrum-propertyItem ${
+                                  selectedProperty &&
+                                  getPropertyId(
+                                    selectedProperty
+                                  ) ===
+                                    propertyId
+                                    ? "selected"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handlePropertySelect(
+                                    property
+                                  )
+                                }
+                              >
+
+                                <div className="HomeBreadcrum-propertyIcon">
+                                  <FiMapPin />
+                                </div>
+
+                                <div className="HomeBreadcrum-propertyContent">
+
+                                  <strong>
+                                    {
+                                      propertyName
+                                    }
+                                  </strong>
+
+                                  <span>
+                                    {
+                                      propertyLocation
+                                    }
+                                  </span>
+
+                                </div>
+
+                              </li>
+                            );
+                          }
+                        )
+
+                      ) : (
+
+                        <li className="HomeBreadcrum-emptyItem">
+                          No properties found
+                        </li>
+
+                      )}
+
                     </ul>
+
                   </div>
+
                 )}
+
               </div>
 
-              {/* Location Dropdown */}
+              {/* =================================================
+                  LOCATION
+              ================================================= */}
+
               <div className="HomeBreadcrum-field HomeBreadcrum-dropdownField">
+
                 <div
                   className="HomeBreadcrum-dropdownHeader"
                   onClick={() => {
-                    setShowLocationDropdown(!showLocationDropdown);
-                    setShowPropertyDropdown(false);
+                    setShowLocationDropdown(
+                      !showLocationDropdown
+                    );
+
+                    setShowPropertyDropdown(
+                      false
+                    );
                   }}
                 >
-                  <span>{location}</span>
+
+                  <span>
+                    {location}
+                  </span>
+
                   <FiChevronDown className="HomeBreadcrum-arrowIcon" />
+
                 </div>
 
-                {/* Location Dummy Dropdown */}
                 {showLocationDropdown && (
+
                   <div className="HomeBreadcrum-dropdownMenu">
-                    <div className="HomeBreadcrum-dropdownTitle">Location</div>
+
+                    <div className="HomeBreadcrum-dropdownTitle">
+                      Select Location
+                    </div>
+
                     <ul>
-                      {locations.map((loc, idx) => (
-                        <li
-                          key={idx}
-                          onClick={() => {
-                            setLocation(loc);
-                            setShowLocationDropdown(false);
-                          }}
-                        >
-                          {loc}
+
+                      {loadingLocations ? (
+
+                        <li className="HomeBreadcrum-loadingItem">
+                          Loading locations...
                         </li>
-                      ))}
+
+                      ) : locations.length >
+                        0 ? (
+
+                        locations.map(
+                          (
+                            loc,
+                            index
+                          ) => {
+
+                            const locationName =
+                              getLocationName(
+                                loc
+                              );
+
+                            return (
+                              <li
+                                key={
+                                  loc?._id ||
+                                  index
+                                }
+                                className="HomeBreadcrum-locationItem"
+                                onClick={() =>
+                                  handleLocationSelect(
+                                    loc
+                                  )
+                                }
+                              >
+
+                                <FiMapPin />
+
+                                <span>
+                                  {
+                                    locationName
+                                  }
+                                </span>
+
+                              </li>
+                            );
+                          }
+                        )
+
+                      ) : (
+
+                        <li className="HomeBreadcrum-emptyItem">
+                          No locations found
+                        </li>
+
+                      )}
+
                     </ul>
+
                   </div>
+
                 )}
+
               </div>
 
-              {/* Filter Button */}
+              {/* =================================================
+                  FILTER
+              ================================================= */}
+
               <button
                 type="button"
-                className={`HomeBreadcrum-filterBtn ${showAdvancedFilters ? 'active' : ''}`}
-                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                className={`HomeBreadcrum-filterBtn ${
+                  showAdvancedFilters
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setShowAdvancedFilters(
+                    !showAdvancedFilters
+                  )
+                }
                 title="Toggle Filters"
               >
                 <FiSliders />
               </button>
 
-              {/* Search Button */}
-              <button type="button" className="HomeBreadcrum-searchBtn">
-                Search Now <FiSearch className="HomeBreadcrum-searchIcon" />
+              {/* =================================================
+                  SEARCH BUTTON
+              ================================================= */}
+
+              <button
+                type="button"
+                className="HomeBreadcrum-searchBtn"
+                onClick={
+                  handleSearch
+                }
+                disabled={
+                  searchLoading
+                }
+              >
+
+                <span>
+                  {searchLoading
+                    ? "Searching..."
+                    : "Search Now"}
+                </span>
+
+                <FiSearch className="HomeBreadcrum-searchIcon" />
+
               </button>
+
             </div>
 
-            {/* Reference Image 3: Expanded Filter Panel */}
+            {/* =================================================
+                ADVANCED FILTER
+            ================================================= */}
+
             {showAdvancedFilters && (
+
               <div className="HomeBreadcrum-filterPanel">
+
                 <div className="HomeBreadcrum-filterTop">
+
                   <div className="HomeBreadcrum-filterSelectGroup">
+
                     <div className="HomeBreadcrum-filterSelect">
-                      <select value={baths} onChange={(e) => setBaths(e.target.value)}>
-                        <option value="Any">Baths: Any</option>
-                        <option value="1">Baths: 1+</option>
-                        <option value="2">Baths: 2+</option>
-                        <option value="3">Baths: 3+</option>
+
+                      <select
+                        value={baths}
+                        onChange={(e) =>
+                          setBaths(
+                            e.target.value
+                          )
+                        }
+                      >
+
+                        <option value="Any">
+                          Baths: Any
+                        </option>
+
+                        <option value="1">
+                          Baths: 1+
+                        </option>
+
+                        <option value="2">
+                          Baths: 2+
+                        </option>
+
+                        <option value="3">
+                          Baths: 3+
+                        </option>
+
                       </select>
+
                       <FiChevronDown className="HomeBreadcrum-selectArrow" />
+
                     </div>
 
                     <div className="HomeBreadcrum-filterSelect">
-                      <select value={beds} onChange={(e) => setBeds(e.target.value)}>
-                        <option value="Any">Beds: Any</option>
-                        <option value="1">Beds: 1+</option>
-                        <option value="2">Beds: 2+</option>
-                        <option value="3">Beds: 3+</option>
+
+                      <select
+                        value={beds}
+                        onChange={(e) =>
+                          setBeds(
+                            e.target.value
+                          )
+                        }
+                      >
+
+                        <option value="Any">
+                          Beds: Any
+                        </option>
+
+                        <option value="1">
+                          Beds: 1+
+                        </option>
+
+                        <option value="2">
+                          Beds: 2+
+                        </option>
+
+                        <option value="3">
+                          Beds: 3+
+                        </option>
+
                       </select>
+
                       <FiChevronDown className="HomeBreadcrum-selectArrow" />
+
                     </div>
+
                   </div>
 
                   <div className="HomeBreadcrum-filterHeaderLabel">
-                    <span>Form —</span>
+                    <span>
+                      Form —
+                    </span>
                   </div>
 
                   <div className="HomeBreadcrum-filterHeaderLabel">
-                    <span>Size —</span>
+                    <span>
+                      Size —
+                    </span>
                   </div>
+
                 </div>
 
                 <div className="HomeBreadcrum-divider" />
 
                 <div className="HomeBreadcrum-amenitiesGrid">
-                  {amenitiesList.map((amenity, index) => (
-                    <label key={index} className="HomeBreadcrum-checkboxLabel">
-                      <input
-                        type="checkbox"
-                        checked={selectedAmenities.includes(amenity)}
-                        onChange={() => handleAmenityChange(amenity)}
-                      />
-                      <span className="HomeBreadcrum-customCheckbox"></span>
-                      <span className="HomeBreadcrum-amenityText">{amenity}</span>
-                    </label>
-                  ))}
+
+                  {amenitiesList.map(
+                    (
+                      amenity,
+                      index
+                    ) => (
+
+                      <label
+                        key={index}
+                        className="HomeBreadcrum-checkboxLabel"
+                      >
+
+                        <input
+                          type="checkbox"
+                          checked={selectedAmenities.includes(
+                            amenity
+                          )}
+                          onChange={() =>
+                            handleAmenityChange(
+                              amenity
+                            )
+                          }
+                        />
+
+                        <span className="HomeBreadcrum-customCheckbox"></span>
+
+                        <span className="HomeBreadcrum-amenityText">
+                          {amenity}
+                        </span>
+
+                      </label>
+
+                    )
+                  )}
+
                 </div>
+
               </div>
+
             )}
+
           </div>
 
-          {/* Dynamic Stats Counter Section */}
+          {/* =================================================
+              STATS
+          ================================================= */}
+
           <div className="HomeBreadcrum-stats">
+
             <div className="HomeBreadcrum-statItem">
-              <h3>{statsData[activeTab].properties}</h3>
-              <p>Property ready</p>
+
+              <h3>
+                {
+                  statsData[
+                    activeTab
+                  ].properties
+                }
+              </h3>
+
+              <p>
+                Properties Ready
+              </p>
+
             </div>
+
             <div className="HomeBreadcrum-statItem">
-              <h3>{statsData[activeTab].customers}</h3>
-              <p>Happy customer</p>
+
+              <h3>
+                {
+                  statsData[
+                    activeTab
+                  ].customers
+                }
+              </h3>
+
+              <p>
+                Happy Customers
+              </p>
+
             </div>
+
           </div>
+
         </div>
 
-        {/* Right Column: Hero Image & Rotating Circular Badge */}
+        {/* =================================================
+            RIGHT HERO
+        ================================================= */}
+
         <div className="HomeBreadcrum-right">
-          
-          {/* Reference Image 4: Rotating Circular Badge */}
+
           <div className="HomeBreadcrum-badgeWrapper">
+
             <div className="HomeBreadcrum-badgeTextContainer">
-              <svg viewBox="0 0 100 100" className="HomeBreadcrum-rotatingSvg">
+
+              <svg
+                viewBox="0 0 100 100"
+                className="HomeBreadcrum-rotatingSvg"
+              >
+
                 <path
                   id="circlePath"
                   d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
                   fill="transparent"
                 />
+
                 <text className="HomeBreadcrum-svgText">
-                  <textPath href="#circlePath" startOffset="0%">
+
+                  <textPath
+                    href="#circlePath"
+                    startOffset="0%"
+                  >
                     find your dreams real estate •
                   </textPath>
+
                 </text>
+
               </svg>
+
             </div>
+
             <div className="HomeBreadcrum-badgeArrow">
               <FiArrowUpRight />
             </div>
+
           </div>
 
-          {/* Arch Hero Image Container */}
           <div className="HomeBreadcrum-imageArch">
+
             <img
               src={heroImg}
               alt="Real Estate Architecture"
               className="HomeBreadcrum-heroImage"
             />
+
           </div>
+
         </div>
 
       </div>
+
     </div>
   );
 };

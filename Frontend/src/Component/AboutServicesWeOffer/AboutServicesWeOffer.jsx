@@ -1,32 +1,32 @@
 import React from 'react';
-import { FiKey, FiBriefcase, FiTrendingUp } from 'react-icons/fi';
+import { FiHome, FiTrendingUp, FiShield } from 'react-icons/fi';
 import './AboutServicesWeOffer.css';
 
 export function AboutServicesWeOffer() {
   const services = [
     {
       id: 1,
-      icon: <FiKey className="ServicesWeOffer-icon mgmt-portal-anim" />,
-      tag: 'MANAGEMENT',
-      title: 'Property Management',
+      icon: <FiHome className="ServicesWeOffer-icon mgmt-portal-anim" />,
+      tag: 'RESIDENTIAL',
+      title: 'Premium Apartments and Flats Dealer in Bhubaneswar',
       description:
-        'Seamless operations, asset protection, and tenant management tailored to maximize your real estate potential.',
+        'Explore verified 2, 3 & 4 BHK luxury duplexes and gated community apartments across prime localities in Bhubaneswar, Odisha.',
     },
     {
       id: 2,
-      icon: <FiBriefcase className="ServicesWeOffer-icon adv-flip-teleport" />,
-      tag: 'ADVISORY',
-      title: 'Consulting Service',
+      icon: <FiTrendingUp className="ServicesWeOffer-icon adv-flip-teleport" />,
+      tag: 'CONSULTANCY',
+      title: 'Best Real Estate Company in Bhubaneswar',
       description:
-        'Strategic market insights and valuation analysis to empower confident, high-yield investment decisions.',
+        'Strategic property valuation, legal advisory, and verified market consulting to help you secure the highest ROI on property investments.',
     },
     {
       id: 3,
-      icon: <FiTrendingUp className="ServicesWeOffer-icon creative-anim-3" />,
-      tag: 'TRANSACTIONS',
-      title: 'Buy and Sell Real Estate',
+      icon: <FiShield className="ServicesWeOffer-icon creative-anim-3" />,
+      tag: 'COMMERCIAL & PLOTS',
+      title: 'Top Real Estate Company in Bhubaneswar, Odisha',
       description:
-        'End-to-end guidance for residential and commercial transactions with high market efficiency.',
+        'End-to-end solutions for buying, selling, and leasing high-growth commercial properties and residential plots across Odisha.',
     },
   ];
 
@@ -34,15 +34,21 @@ export function AboutServicesWeOffer() {
     <section className="ServicesWeOffer-section">
       <div className="ServicesWeOffer-container">
         
+        {/* Section Header with Targeted SEO Keywords */}
         <div className="ServicesWeOffer-header">
+          <span className="ServicesWeOffer-badge">Our Real Estate Services</span>
+          
           <h2 className="ServicesWeOffer-title">
-            Services <span className="ServicesWeOffer-title-highlight">We Offer</span>
+            <span className="ServicesWeOffer-title-dark">Top Real Estate Company</span>{' '}
+            <span className="ServicesWeOffer-title-green">in Bhubaneswar, Odisha</span>
           </h2>
+          
           <p className="ServicesWeOffer-subtitle">
-            Tailored solutions and expert guidance designed to elevate your real estate portfolio.
+            Recognized as the <strong>best real estate company in Bhubaneswar</strong> and the leading <strong>premium apartments and flats dealer in Bhubaneswar</strong>, Utkal Property provides verified listings, seamless site visits, and trusted legal assistance across Odisha.
           </p>
         </div>
 
+        {/* Services Grid with Integrated Keywords */}
         <div className="ServicesWeOffer-grid">
           {services.map((service) => (
             <div key={service.id} className="ServicesWeOffer-card">

@@ -1,304 +1,1027 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+/* =====================================================
+   HOME BREADCRUM
+===================================================== */
 
 .HomeBreadcrum {
   width: 100%;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #fffcf5 0%, #fff8e7 50%, #fff3d6 100%);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: #1a1a1a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  box-sizing: border-box;
-  overflow: hidden;
+  min-height: 720px;
+
+  padding: 80px 0;
+
+  position: relative;
+
+  overflow: visible;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(49, 155, 75, 0.06),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f9fcfa 100%
+    );
 }
+
+/* =====================================================
+   CONTAINER
+===================================================== */
 
 .HomeBreadcrum-container {
-  max-width: 1280px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 40px;
+  width: 90%;
+  max-width: 1420px;
+
+  margin: 0 auto;
+
+  display: flex;
+
   align-items: center;
-  position: relative;
+
+  justify-content: space-between;
+
+  gap: 70px;
 }
 
-/* Left Section */
+/* =====================================================
+   LEFT
+===================================================== */
+
 .HomeBreadcrum-left {
-  display: flex;
-  flex-direction: column;
-  z-index: 5;
+  width: 55%;
+
+  position: relative;
+
+  z-index: 100;
 }
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.HomeBreadcrum-badgeTag {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 9px 18px;
+
+  margin-bottom: 22px;
+
+  border: 1px solid
+    rgba(49, 155, 75, 0.15);
+
+  border-radius: 100px;
+
+  background:
+    rgba(49, 155, 75, 0.07);
+
+  color: #319b4b;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+
+  text-transform: uppercase;
+}
+
+/* =====================================================
+   TITLE
+===================================================== */
 
 .HomeBreadcrum-title {
-  font-size: 54px;
-  font-weight: 700;
-  line-height: 1.15;
-  color: #111827;
-  margin: 0 0 20px 0;
-  letter-spacing: -1px;
+  max-width: 700px;
+
+  margin: 0;
+
+  color: #151a17;
+
+  font-size: clamp(
+    42px,
+    5vw,
+    68px
+  );
+
+  line-height: 1.03;
+
+  letter-spacing: -2.5px;
+
+  font-weight: 750;
 }
+
+.highlight-green {
+  color: #319b4b;
+
+  position: relative;
+}
+
+.highlight-green::after {
+  content: "";
+
+  position: absolute;
+
+  left: 2px;
+
+  right: 2px;
+
+  bottom: -5px;
+
+  height: 3px;
+
+  border-radius: 10px;
+
+  background: #319b4b;
+
+  opacity: 0.3;
+}
+
+/* =====================================================
+   SUBTITLE
+===================================================== */
 
 .HomeBreadcrum-subtitle {
-  font-size: 14px;
-  line-height: 1.6;
-  color: #555555;
-  max-width: 460px;
-  margin: 0 0 35px 0;
+  max-width: 620px;
+
+  margin: 24px 0 36px;
+
+  color: #6f7772;
+
+  font-size: 15px;
+
+  line-height: 1.8;
 }
 
-/* Search Container & Tabs */
+/* =====================================================
+   SEARCH CONTAINER
+===================================================== */
+
 .HomeBreadcrum-searchCardContainer {
-  position: relative;
   width: 100%;
-  max-width: 700px;
-  margin-bottom: 40px;
+
+  position: relative;
+
+  z-index: 1000;
+
+  overflow: visible;
 }
+
+/* =====================================================
+   TABS
+===================================================== */
 
 .HomeBreadcrum-tabs {
-  display: inline-flex;
-  background-color: #fcecd7;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  overflow: hidden;
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
 }
 
 .HomeBreadcrum-tab {
-  padding: 10px 32px;
+  min-width: 90px;
+
+  padding: 12px 22px;
+
   border: none;
-  background: transparent;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
+
+  border-radius:
+    12px 12px 0 0;
+
+  background: #eef1ef;
+
+  color: #727873;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
   cursor: pointer;
-  transition: all 0.2s ease;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.HomeBreadcrum-tab:hover {
+  color: #319b4b;
+
+  background: #e6f3e9;
 }
 
 .HomeBreadcrum-tab.active {
-  background-color: #f3a835;
   color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #319b4b,
+      #287f3d
+    );
+
+  box-shadow:
+    0 -3px 12px
+      rgba(49, 155, 75, 0.12);
 }
 
-/* Main Bar */
+/* =====================================================
+   SEARCH CARD
+===================================================== */
+
 .HomeBreadcrum-searchCard {
-  background: #ffffff;
-  border-radius: 0 12px 12px 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  width: 100%;
+
+  min-height: 74px;
+
+  padding: 8px;
+
   display: flex;
+
   align-items: center;
-  padding: 8px 12px;
-  gap: 8px;
+
+  gap: 4px;
+
   position: relative;
-  z-index: 10;
+
+  z-index: 1001;
+
+  background:
+    rgba(255, 255, 255, 0.96);
+
+  border: 1px solid
+    rgba(25, 35, 28, 0.08);
+
+  border-radius:
+    0 14px 14px 14px;
+
+  box-shadow:
+    0 20px 50px
+      rgba(22, 45, 29, 0.1),
+    0 5px 15px
+      rgba(22, 45, 29, 0.04);
+
+  backdrop-filter:
+    blur(14px);
 }
+
+/* =====================================================
+   FIELD
+===================================================== */
 
 .HomeBreadcrum-field {
   position: relative;
+
+  min-width: 0;
+
   flex: 1;
+
+  border-right:
+    1px solid #edf0ed;
+}
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.HomeBreadcrum-inputField {
+  min-width: 170px;
 }
 
 .HomeBreadcrum-inputField input {
   width: 100%;
+
+  height: 54px;
+
+  padding: 0 16px;
+
   border: none;
+
   outline: none;
-  padding: 12px 14px;
+
+  background: transparent;
+
+  color: #202521;
+
   font-size: 13px;
-  color: #333;
-  font-family: inherit;
 }
 
 .HomeBreadcrum-inputField input::placeholder {
-  color: #9ea3ae;
+  color: #a0a6a2;
 }
+
+/* =====================================================
+   DROPDOWN FIELD
+===================================================== */
 
 .HomeBreadcrum-dropdownField {
-  border-left: 1px solid #f0f0f0;
+  min-width: 190px;
 }
+
+/* =====================================================
+   DROPDOWN HEADER
+===================================================== */
 
 .HomeBreadcrum-dropdownHeader {
+  height: 54px;
+
+  padding: 5px 14px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
-  padding: 12px 14px;
+
+  gap: 12px;
+
   cursor: pointer;
-  font-size: 13px;
-  color: #333;
-  user-select: none;
+
+  border-radius: 8px;
+
+  transition:
+    background 0.2s ease;
 }
+
+.HomeBreadcrum-dropdownHeader:hover {
+  background: #f5faf6;
+}
+
+.HomeBreadcrum-dropdownHeader > span {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #333936;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+/* =====================================================
+   SELECTED PROPERTY
+===================================================== */
+
+.HomeBreadcrum-selectedProperty {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 2px;
+
+  overflow: hidden;
+}
+
+.HomeBreadcrum-selectedPropertyName {
+  display: block;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #252b27;
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+.HomeBreadcrum-selectedPropertyLocation {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  color: #929994;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.HomeBreadcrum-selectedPropertyLocation svg {
+  flex-shrink: 0;
+
+  font-size: 11px;
+
+  color: #319b4b;
+}
+
+/* =====================================================
+   ARROW
+===================================================== */
 
 .HomeBreadcrum-arrowIcon {
-  color: #888;
+  flex-shrink: 0;
+
+  color: #858c87;
+
   font-size: 16px;
+
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
 }
 
-/* Reference Image 2: Dropdown Style */
+.HomeBreadcrum-dropdownHeader:hover
+  .HomeBreadcrum-arrowIcon {
+  color: #319b4b;
+
+  transform:
+    translateY(1px);
+}
+
+/* =====================================================
+   DROPDOWN MENU
+===================================================== */
+
 .HomeBreadcrum-dropdownMenu {
   position: absolute;
-  top: calc(100% + 8px);
+
+  top: calc(100% + 10px);
+
   left: 0;
-  width: 200px;
+
+  width: 100%;
+
+  min-width: 300px;
+
+  max-height: 360px;
+
+  overflow-y: auto;
+
+  padding: 7px;
+
   background: #ffffff;
-  border: 1px solid #d1d5db;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-  z-index: 100;
+
+  border:
+    1px solid #e9edea;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 24px 60px
+      rgba(20, 35, 24, 0.14),
+    0 5px 20px
+      rgba(20, 35, 24, 0.06);
+
+  z-index: 99999;
+
+  animation:
+    HomeBreadcrumDropdownIn
+    0.18s ease;
 }
 
+@keyframes HomeBreadcrumDropdownIn {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+/* =====================================================
+   DROPDOWN TITLE
+===================================================== */
+
 .HomeBreadcrum-dropdownTitle {
-  background-color: #6b7280;
+  padding: 11px 13px;
+
+  margin-bottom: 4px;
+
+  border-bottom:
+    1px solid #f0f2f0;
+
+  color: #89908b;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+
+  text-transform: uppercase;
+}
+
+/* =====================================================
+   DROPDOWN UL
+===================================================== */
+
+.HomeBreadcrum-dropdownMenu ul {
+  margin: 0;
+
+  padding: 0;
+
+  list-style: none;
+}
+
+/* =====================================================
+   PROPERTY ITEM
+===================================================== */
+
+.HomeBreadcrum-propertyItem {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 12px;
+
+  margin: 2px 0;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.HomeBreadcrum-propertyItem:hover {
+  background:
+    linear-gradient(
+      90deg,
+      #f1faf3,
+      #fbfefb
+    );
+
+  transform:
+    translateX(2px);
+}
+
+.HomeBreadcrum-propertyItem.selected {
+  background: #eef8f0;
+}
+
+/* =====================================================
+   PROPERTY ICON
+===================================================== */
+
+.HomeBreadcrum-propertyIcon {
+  width: 36px;
+
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f0f8f2;
+
+  color: #319b4b;
+
+  font-size: 15px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.HomeBreadcrum-propertyItem:hover
+  .HomeBreadcrum-propertyIcon {
   color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #319b4b,
+      #287e3d
+    );
+}
+
+/* =====================================================
+   PROPERTY CONTENT
+===================================================== */
+
+.HomeBreadcrum-propertyContent {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.HomeBreadcrum-propertyContent strong {
+  display: block;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #252a27;
+
+  font-size: 13px;
+
   font-weight: 700;
-  padding: 10px 16px;
+}
+
+.HomeBreadcrum-propertyContent span {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #929994;
+
+  font-size: 11px;
+}
+
+.HomeBreadcrum-propertyItem:hover
+  .HomeBreadcrum-propertyContent strong {
+  color: #287f3d;
+}
+
+/* =====================================================
+   LOCATION ITEM
+===================================================== */
+
+.HomeBreadcrum-locationItem {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px;
+
+  margin: 2px 0;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  color: #3d433f;
+
+  font-size: 13px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.HomeBreadcrum-locationItem svg {
+  flex-shrink: 0;
+
+  color: #319b4b;
+
   font-size: 15px;
 }
 
-.HomeBreadcrum-dropdownMenu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.HomeBreadcrum-locationItem:hover {
+  color: #287f3d;
+
+  background: #f1faf3;
 }
 
-.HomeBreadcrum-dropdownMenu li {
-  padding: 10px 16px;
-  font-size: 14px;
-  color: #1f2937;
-  cursor: pointer;
-  transition: background 0.15s;
+/* =====================================================
+   EMPTY / LOADING
+===================================================== */
+
+.HomeBreadcrum-loadingItem,
+.HomeBreadcrum-emptyItem {
+  padding: 18px 14px;
+
+  text-align: center;
+
+  color: #969d98;
+
+  font-size: 12px;
 }
 
-.HomeBreadcrum-dropdownMenu li:hover {
-  background-color: #f3f4f6;
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.HomeBreadcrum-dropdownMenu::-webkit-scrollbar {
+  width: 5px;
 }
 
-/* Action Buttons */
+.HomeBreadcrum-dropdownMenu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.HomeBreadcrum-dropdownMenu::-webkit-scrollbar-thumb {
+  background: #d4dbd5;
+
+  border-radius: 20px;
+}
+
+.HomeBreadcrum-dropdownMenu::-webkit-scrollbar-thumb:hover {
+  background: #319b4b;
+}
+
+/* =====================================================
+   FILTER BUTTON
+===================================================== */
+
 .HomeBreadcrum-filterBtn {
-  background: #fef5e7;
-  border: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #f3a835;
-  font-size: 18px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  width: 54px;
+
+  height: 54px;
+
   flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #606761;
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .HomeBreadcrum-filterBtn:hover,
 .HomeBreadcrum-filterBtn.active {
-  background: #f3a835;
-  color: #fff;
+  color: #319b4b;
+
+  background: #edf8ef;
 }
+
+/* =====================================================
+   SEARCH BUTTON
+===================================================== */
 
 .HomeBreadcrum-searchBtn {
-  background: #f3a835;
-  color: #ffffff;
-  border: none;
-  padding: 0 22px;
-  height: 44px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background 0.2s ease;
+  height: 54px;
+
+  min-width: 135px;
+
+  padding: 0 19px;
+
   flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #319b4b,
+      #267b3a
+    );
+
+  box-shadow:
+    0 7px 18px
+      rgba(49, 155, 75, 0.22);
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.HomeBreadcrum-searchBtn:hover {
-  background: #e09322;
+.HomeBreadcrum-searchBtn:hover:not(
+    :disabled
+  ) {
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 11px 25px
+      rgba(49, 155, 75, 0.28);
+}
+
+.HomeBreadcrum-searchBtn:active:not(
+    :disabled
+  ) {
+  transform:
+    translateY(0);
+}
+
+.HomeBreadcrum-searchBtn:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
 }
 
 .HomeBreadcrum-searchIcon {
-  font-size: 14px;
+  font-size: 16px;
 }
 
-/* Reference Image 3: Advanced Filter Panel */
+/* =====================================================
+   FILTER PANEL
+===================================================== */
+
 .HomeBreadcrum-filterPanel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+  width: 100%;
+
+  margin-top: 10px;
+
+  padding: 22px;
+
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-  padding: 24px;
-  margin-top: 12px;
-  z-index: 50;
-  border: 1px solid #f0f0f0;
+
+  border:
+    1px solid #e8ede9;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 20px 50px
+      rgba(20, 35, 24, 0.08);
+
+  position: relative;
+
+  z-index: 900;
 }
 
 .HomeBreadcrum-filterTop {
-  display: flex;
-  align-items: center;
+  display: grid;
+
+  grid-template-columns:
+    1.5fr
+    1fr
+    1fr;
+
   gap: 20px;
+
+  align-items: center;
 }
 
 .HomeBreadcrum-filterSelectGroup {
   display: flex;
-  gap: 16px;
+
+  gap: 10px;
 }
 
 .HomeBreadcrum-filterSelect {
+  flex: 1;
+
   position: relative;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  min-width: 140px;
 }
 
 .HomeBreadcrum-filterSelect select {
   width: 100%;
-  padding: 10px 32px 10px 12px;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 13px;
-  color: #374151;
+
+  height: 44px;
+
+  padding: 0 36px 0 13px;
+
   appearance: none;
+
+  outline: none;
+
+  border:
+    1px solid #e2e7e3;
+
+  border-radius: 8px;
+
+  background: #fafcfb;
+
+  color: #555c57;
+
+  font-size: 12px;
+
   cursor: pointer;
+}
+
+.HomeBreadcrum-filterSelect select:focus {
+  border-color: #319b4b;
+
+  box-shadow:
+    0 0 0 3px
+      rgba(49, 155, 75, 0.08);
 }
 
 .HomeBreadcrum-selectArrow {
   position: absolute;
-  right: 10px;
+
+  right: 12px;
+
   top: 50%;
-  transform: translateY(-50%);
+
+  transform:
+    translateY(-50%);
+
   pointer-events: none;
-  color: #6b7280;
+
+  color: #7d857f;
+
   font-size: 14px;
 }
 
 .HomeBreadcrum-filterHeaderLabel {
-  font-size: 13px;
-  font-weight: 700;
-  color: #111827;
-  margin-left: 20px;
+  color: #8a918c;
+
+  font-size: 12px;
+
+  font-weight: 600;
 }
 
 .HomeBreadcrum-divider {
   height: 1px;
-  background-color: #e5e7eb;
+
+  width: 100%;
+
   margin: 20px 0;
+
+  background: #edf0ed;
 }
+
+/* =====================================================
+   AMENITIES
+===================================================== */
 
 .HomeBreadcrum-amenitiesGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px 12px;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 13px;
 }
 
 .HomeBreadcrum-checkboxLabel {
   display: flex;
+
   align-items: center;
+
   gap: 8px;
+
   cursor: pointer;
-  font-size: 13px;
-  color: #374151;
+
+  color: #666d68;
+
+  font-size: 12px;
 }
 
 .HomeBreadcrum-checkboxLabel input {
@@ -307,181 +1030,583 @@
 
 .HomeBreadcrum-customCheckbox {
   width: 16px;
+
   height: 16px;
-  border: 1px solid #d1d5db;
+
+  flex-shrink: 0;
+
+  border:
+    1px solid #cfd6d0;
+
   border-radius: 4px;
-  display: inline-block;
-  position: relative;
-  transition: all 0.2s;
+
+  transition:
+    background 0.2s ease,
+    border 0.2s ease;
 }
 
-.HomeBreadcrum-checkboxLabel input:checked + .HomeBreadcrum-customCheckbox {
-  background-color: #f3a835;
-  border-color: #f3a835;
+.HomeBreadcrum-checkboxLabel
+  input:checked
+  + .HomeBreadcrum-customCheckbox {
+  border-color: #319b4b;
+
+  background: #319b4b;
 }
 
-.HomeBreadcrum-checkboxLabel input:checked + .HomeBreadcrum-customCheckbox::after {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 2px;
+.HomeBreadcrum-checkboxLabel
+  input:checked
+  + .HomeBreadcrum-customCheckbox::after {
+  content: "";
+
+  display: block;
+
   width: 4px;
+
   height: 8px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+
+  margin: 2px 0 0 5px;
+
+  border:
+    solid #ffffff;
+
+  border-width:
+    0 2px 2px 0;
+
+  transform:
+    rotate(45deg);
 }
 
-/* Stats Counter */
+.HomeBreadcrum-amenityText {
+  line-height: 1.3;
+}
+
+/* =====================================================
+   STATS
+===================================================== */
+
 .HomeBreadcrum-stats {
   display: flex;
-  gap: 48px;
+
+  align-items: center;
+
+  gap: 55px;
+
+  margin-top: 40px;
+}
+
+.HomeBreadcrum-statItem {
+  position: relative;
+}
+
+.HomeBreadcrum-statItem:not(
+    :last-child
+  )::after {
+  content: "";
+
+  position: absolute;
+
+  right: -28px;
+
+  top: 3px;
+
+  width: 1px;
+
+  height: 42px;
+
+  background: #e0e4e1;
 }
 
 .HomeBreadcrum-statItem h3 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 4px 0;
+  margin: 0;
+
+  color: #1f2521;
+
+  font-size: 25px;
+
+  font-weight: 750;
 }
 
 .HomeBreadcrum-statItem p {
-  font-size: 12px;
-  color: #6b7280;
-  margin: 0;
+  margin: 5px 0 0;
+
+  color: #8b928d;
+
+  font-size: 11px;
+
+  font-weight: 500;
 }
 
-/* Right Section */
+/* =====================================================
+   RIGHT
+===================================================== */
+
 .HomeBreadcrum-right {
+  width: 45%;
+
+  min-height: 570px;
+
   position: relative;
+
   display: flex;
-  justify-content: flex-end;
+
+  align-items: center;
+
+  justify-content: center;
 }
 
-/* Arch Image */
 .HomeBreadcrum-imageArch {
   width: 100%;
-  max-width: 420px;
-  height: 520px;
-  border-top-left-radius: 210px;
-  border-top-right-radius: 210px;
+
+  height: 570px;
+
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+
+  border-radius:
+    48% 48% 12px 12px /
+    32% 32% 12px 12px;
+
+  position: relative;
+
+  box-shadow:
+    0 25px 60px
+      rgba(25, 45, 31, 0.14);
+}
+
+.HomeBreadcrum-imageArch::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent 55%,
+      rgba(0, 0, 0, 0.18)
+    );
+
+  pointer-events: none;
 }
 
 .HomeBreadcrum-heroImage {
   width: 100%;
+
   height: 100%;
+
+  display: block;
+
   object-fit: cover;
+
+  transition:
+    transform 0.8s ease;
 }
 
-/* Reference Image 4: Rotating Circular Badge */
+.HomeBreadcrum-imageArch:hover
+  .HomeBreadcrum-heroImage {
+  transform:
+    scale(1.025);
+}
+
+/* =====================================================
+   ROTATING BADGE
+===================================================== */
+
 .HomeBreadcrum-badgeWrapper {
-  position: absolute;
-  top: -25px;
-  left: 20px;
   width: 120px;
+
   height: 120px;
-  z-index: 10;
+
+  position: absolute;
+
+  top: 15px;
+
+  left: -20px;
+
+  z-index: 20;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #319b4b,
+      #267c3a
+    );
+
+  box-shadow:
+    0 18px 40px
+      rgba(49, 155, 75, 0.25);
 }
 
 .HomeBreadcrum-badgeTextContainer {
-  width: 100%;
-  height: 100%;
-  animation: rotateBadge 16s linear infinite;
+  position: absolute;
+
+  inset: 0;
 }
 
 .HomeBreadcrum-rotatingSvg {
   width: 100%;
+
   height: 100%;
-  overflow: visible;
+
+  animation:
+    HomeBreadcrumRotate
+    18s linear infinite;
 }
 
 .HomeBreadcrum-svgText {
-  font-size: 9px;
+  fill: #ffffff;
+
+  font-size: 8px;
+
   font-weight: 600;
-  text-transform: lowercase;
-  letter-spacing: 2px;
-  fill: #111827;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+@keyframes HomeBreadcrumRotate {
+  from {
+    transform:
+      rotate(0deg);
+  }
+
+  to {
+    transform:
+      rotate(360deg);
+  }
 }
 
 .HomeBreadcrum-badgeArrow {
-  position: absolute;
-  font-size: 24px;
-  color: #111827;
+  width: 43px;
+
+  height: 43px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #319b4b;
+
+  font-size: 19px;
+
+  box-shadow:
+    0 8px 20px
+      rgba(0, 0, 0, 0.12);
 }
 
-@keyframes rotateBadge {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* =====================================================
+   LARGE TABLET
+===================================================== */
 
-/* Responsive Styles */
-@media (max-width: 1024px) {
+@media (max-width: 1150px) {
+
   .HomeBreadcrum-container {
-    grid-template-columns: 1fr;
-    gap: 60px;
+    gap: 35px;
   }
 
-  .HomeBreadcrum-title {
-    font-size: 42px;
+  .HomeBreadcrum-left {
+    width: 58%;
   }
 
   .HomeBreadcrum-right {
-    justify-content: center;
+    width: 42%;
   }
 
-  .HomeBreadcrum-badgeWrapper {
-    left: 10%;
+  .HomeBreadcrum-title {
+    font-size: 48px;
   }
-}
 
-@media (max-width: 768px) {
   .HomeBreadcrum-searchCard {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px;
+    flex-wrap: wrap;
+  }
+
+  .HomeBreadcrum-inputField {
+    min-width: 100%;
+    border-right: none;
+    border-bottom:
+      1px solid #edf0ed;
   }
 
   .HomeBreadcrum-dropdownField {
-    border-left: none;
-    border-top: 1px solid #f0f0f0;
+    min-width: 31%;
+  }
+
+  .HomeBreadcrum-searchBtn {
+    flex: 1;
   }
 
   .HomeBreadcrum-amenitiesGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .HomeBreadcrum {
+    padding: 60px 0;
+  }
+
+  .HomeBreadcrum-container {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .HomeBreadcrum-left,
+  .HomeBreadcrum-right {
+    width: 100%;
+  }
+
+  .HomeBreadcrum-title {
+    max-width: 650px;
+
+    font-size: 48px;
+  }
+
+  .HomeBreadcrum-right {
+    min-height: 480px;
+  }
+
+  .HomeBreadcrum-imageArch {
+    height: 480px;
+  }
+
+  .HomeBreadcrum-badgeWrapper {
+    left: 10px;
+  }
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .HomeBreadcrum {
+    min-height: auto;
+
+    padding: 45px 0;
+  }
+
+  .HomeBreadcrum-container {
+    width: 92%;
+
+    gap: 45px;
+  }
+
+  .HomeBreadcrum-title {
+    font-size: 36px;
+
+    letter-spacing: -1.5px;
+  }
+
+  .HomeBreadcrum-subtitle {
+    margin:
+      18px 0 25px;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+  }
+
+  /* ==============================================
+     SEARCH
+  ============================================== */
+
+  .HomeBreadcrum-searchCard {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    padding: 8px;
+
+    gap: 5px;
+  }
+
+  .HomeBreadcrum-field {
+    width: 100%;
+
+    border-right: none;
+
+    border-bottom:
+      1px solid #edf0ed;
+  }
+
+  .HomeBreadcrum-inputField {
+    min-width: 100%;
+  }
+
+  .HomeBreadcrum-inputField input,
+  .HomeBreadcrum-dropdownHeader {
+    height: 50px;
+  }
+
+  .HomeBreadcrum-dropdownField {
+    min-width: 100%;
+  }
+
+  /* ==============================================
+     MOBILE DROPDOWN
+  ============================================== */
+
+  .HomeBreadcrum-dropdownMenu {
+    position: absolute;
+
+    top: calc(100% + 6px);
+
+    left: 0;
+
+    width: 100%;
+
+    min-width: 0;
+
+    max-height: 300px;
+  }
+
+  /* ==============================================
+     SEARCH BUTTON
+  ============================================== */
+
+  .HomeBreadcrum-filterBtn {
+    width: 100%;
+
+    height: 48px;
+  }
+
+  .HomeBreadcrum-searchBtn {
+    width: 100%;
+
+    height: 50px;
+  }
+
+  /* ==============================================
+     FILTER
+  ============================================== */
+
+  .HomeBreadcrum-filterPanel {
+    padding: 16px;
   }
 
   .HomeBreadcrum-filterTop {
+    grid-template-columns: 1fr;
+  }
+
+  .HomeBreadcrum-filterSelectGroup {
     flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .HomeBreadcrum-filterHeaderLabel {
-    margin-left: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .HomeBreadcrum-title {
-    font-size: 32px;
   }
 
   .HomeBreadcrum-amenitiesGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  /* ==============================================
+     STATS
+  ============================================== */
+
+  .HomeBreadcrum-stats {
+    gap: 35px;
+
+    margin-top: 30px;
+  }
+
+  .HomeBreadcrum-statItem h3 {
+    font-size: 21px;
+  }
+
+  /* ==============================================
+     HERO
+  ============================================== */
+
+  .HomeBreadcrum-right {
+    min-height: 380px;
   }
 
   .HomeBreadcrum-imageArch {
     height: 380px;
+
+    border-radius:
+      45% 45% 12px 12px /
+      25% 25% 12px 12px;
   }
+
+  .HomeBreadcrum-badgeWrapper {
+    width: 90px;
+
+    height: 90px;
+
+    top: -10px;
+
+    left: 0;
+  }
+
+  .HomeBreadcrum-badgeArrow {
+    width: 34px;
+
+    height: 34px;
+
+    font-size: 16px;
+  }
+
+  .HomeBreadcrum-svgText {
+    font-size: 7px;
+  }
+
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 400px) {
+
+  .HomeBreadcrum-title {
+    font-size: 31px;
+  }
+
+  .HomeBreadcrum-tab {
+    min-width: 75px;
+
+    padding:
+      10px 16px;
+
+    font-size: 12px;
+  }
+
+  .HomeBreadcrum-amenitiesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .HomeBreadcrum-stats {
+    gap: 25px;
+  }
+
+  .HomeBreadcrum-statItem:not(
+      :last-child
+    )::after {
+    right: -14px;
+  }
+
 }

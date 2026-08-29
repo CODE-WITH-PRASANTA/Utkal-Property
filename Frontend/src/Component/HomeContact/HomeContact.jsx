@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import './HomeContact.css';
 
 // React Icons
-import { FiUser, FiMail, FiPhone, FiChevronDown, FiSend } from 'react-icons/fi';
-import { HiOutlineMapPin, HiOutlinePhone, HiOutlineEnvelope } from 'react-icons/hi2';
+import { FiUser, FiPhone, FiChevronDown, FiSend } from 'react-icons/fi';
+import { HiOutlineMapPin, HiOutlinePhone } from 'react-icons/hi2';
 import { BsChatDots } from 'react-icons/bs';
 
 const HomeContact = () => {
-  // Form State Management
+  // Form State Management (Optimized without Email)
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
     phone: '',
     propertyType: '',
     message: ''
@@ -27,7 +26,7 @@ const HomeContact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form Submitted Data:', formData);
-    alert('Request sent successfully!');
+    alert('Thank you! Your request has been sent to Utkal Property.');
   };
 
   return (
@@ -36,27 +35,28 @@ const HomeContact = () => {
         
         {/* Left Info Column */}
         <div className="HomeContact-info-section">
+          <span className="HomeContact-tag">Contact Utkal Property</span>
           <h1 className="HomeContact-title">
-            We provide the most suitable and quality real estate.
+            Best Real Estate Agency in Bhubaneswar for Flats, Apartments & Plots
           </h1>
           
           <p className="HomeContact-description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed tristique metus proin id lorem odio
+            Looking to buy, sell, or invest in premium properties across Odisha? Connect with <strong>Utkal Property</strong>—the best real estate agency in Bhubaneswar for verified listings, legal assistance, and complete property guidance.
           </p>
 
-          {/* Contact Details Grid */}
+          {/* Contact Details List (NAP-Compliant) */}
           <div className="HomeContact-details-list">
             
-            {/* Address */}
+            {/* Locate At Us / Address */}
             <div className="HomeContact-detail-item">
               <div className="HomeContact-detail-icon-wrapper">
                 <HiOutlineMapPin className="HomeContact-detail-icon" />
               </div>
               <div className="HomeContact-detail-divider"></div>
               <div className="HomeContact-detail-text">
-                <span className="HomeContact-detail-label">Office address</span>
+                <span className="HomeContact-detail-label">Locate At Us</span>
                 <p className="HomeContact-detail-value">
-                  2715 Ash Dr. San Jose, South Dakota 83475
+                  Plot No-55, Ln 2, Jagannath Vihar, Baramunda, Bhubaneswar, Odisha 751003
                 </p>
               </div>
             </div>
@@ -68,23 +68,11 @@ const HomeContact = () => {
               </div>
               <div className="HomeContact-detail-divider"></div>
               <div className="HomeContact-detail-text">
-                <span className="HomeContact-detail-label">Request a call back</span>
+                <span className="HomeContact-detail-label">Call / WhatsApp</span>
                 <p className="HomeContact-detail-value HomeContact-phone-highlight">
-                  314-555-0123
-                </p>
-              </div>
-            </div>
-
-            {/* Email */}
-            <div className="HomeContact-detail-item">
-              <div className="HomeContact-detail-icon-wrapper">
-                <HiOutlineEnvelope className="HomeContact-detail-icon" />
-              </div>
-              <div className="HomeContact-detail-divider"></div>
-              <div className="HomeContact-detail-text">
-                <span className="HomeContact-detail-label">Email us</span>
-                <p className="HomeContact-detail-value HomeContact-email-highlight">
-                  hellosupport@gmail.com
+                  <a href="tel:+919861566735" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    +91 9861566735
+                  </a>
                 </p>
               </div>
             </div>
@@ -96,9 +84,9 @@ const HomeContact = () => {
         <div className="HomeContact-form-card">
           <div className="HomeContact-form-header">
             <div>
-              <h2 className="HomeContact-form-title">Contact us</h2>
+              <h2 className="HomeContact-form-title">Schedule a Consultation</h2>
               <p className="HomeContact-form-subtitle">
-                We will respond as soon as we receive your message.
+                Get in touch with our Bhubaneswar property consultants today.
               </p>
             </div>
             <div className="HomeContact-badge-icon">
@@ -108,15 +96,15 @@ const HomeContact = () => {
 
           <form className="HomeContact-form" onSubmit={handleSubmit}>
             
-            {/* Your Name */}
+            {/* Full Name */}
             <div className="HomeContact-form-group">
-              <label className="HomeContact-label">Your name</label>
+              <label className="HomeContact-label">Your Name</label>
               <div className="HomeContact-input-wrapper">
                 <FiUser className="HomeContact-field-icon" />
                 <input
                   type="text"
                   name="name"
-                  placeholder="Your name"
+                  placeholder="Enter full name"
                   value={formData.name}
                   onChange={handleInputChange}
                   className="HomeContact-input"
@@ -125,57 +113,41 @@ const HomeContact = () => {
               </div>
             </div>
 
-            {/* Email & Phone Two-Column Row */}
-            <div className="HomeContact-form-row">
-              <div className="HomeContact-form-group">
-                <label className="HomeContact-label">Email</label>
-                <div className="HomeContact-input-wrapper">
-                  <FiMail className="HomeContact-field-icon" />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="HomeContact-input"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="HomeContact-form-group">
-                <label className="HomeContact-label">Phone</label>
-                <div className="HomeContact-input-wrapper">
-                  <FiPhone className="HomeContact-field-icon" />
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder="Phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="HomeContact-input"
-                  />
-                </div>
+            {/* Phone Number */}
+            <div className="HomeContact-form-group">
+              <label className="HomeContact-label">Phone Number</label>
+              <div className="HomeContact-input-wrapper">
+                <FiPhone className="HomeContact-field-icon" />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="+91 98615 66735"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="HomeContact-input"
+                  required
+                />
               </div>
             </div>
 
             {/* Property Type Dropdown */}
             <div className="HomeContact-form-group">
-              <label className="HomeContact-label">Property type</label>
+              <label className="HomeContact-label">Property Requirement</label>
               <div className="HomeContact-select-wrapper">
                 <select
                   name="propertyType"
                   value={formData.propertyType}
                   onChange={handleInputChange}
                   className="HomeContact-select"
+                  required
                 >
                   <option value="" disabled hidden>
-                    Choose
+                    Select property type
                   </option>
-                  <option value="apartment">Apartment</option>
-                  <option value="house">Single Family House</option>
-                  <option value="commercial">Commercial Space</option>
-                  <option value="villa">Luxury Villa</option>
+                  <option value="apartment">2/3/4 BHK Residential Apartment</option>
+                  <option value="duplex">Duplex & Luxury Villa</option>
+                  <option value="commercial">Commercial Shop / Office Space</option>
+                  <option value="plot">Residential / Commercial Plot</option>
                 </select>
                 <FiChevronDown className="HomeContact-select-icon" />
               </div>
@@ -183,10 +155,10 @@ const HomeContact = () => {
 
             {/* Message Area */}
             <div className="HomeContact-form-group">
-              <label className="HomeContact-label">Message</label>
+              <label className="HomeContact-label">Requirement Details</label>
               <textarea
                 name="message"
-                placeholder="Your message"
+                placeholder="Tell us your preferred location, budget, or specific requirements..."
                 value={formData.message}
                 onChange={handleInputChange}
                 className="HomeContact-textarea"
@@ -197,7 +169,7 @@ const HomeContact = () => {
             {/* Submit Button */}
             <button type="submit" className="HomeContact-submit-btn">
               <FiSend className="HomeContact-btn-icon" />
-              Send request
+              Get Free Consultation
             </button>
 
           </form>

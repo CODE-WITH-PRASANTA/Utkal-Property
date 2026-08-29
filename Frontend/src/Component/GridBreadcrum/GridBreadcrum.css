@@ -1,3 +1,10 @@
+/* Color Palette Variables:
+   - Primary Dark Green: #0b3b24
+   - Active Green Hover: #14532d
+   - Light Green Background: #eef7f2
+   - 50/50 Black & Dark Green Text Color: #091b12
+*/
+
 /* Component Container */
 .GridBreadcrum {
   width: 100%;
@@ -30,14 +37,14 @@
   font-size: 14px;
   font-weight: 700;
   border: none;
-  background-color: #fff8eb;
-  color: #121026;
+  background-color: #eef7f2;
+  color: #091b12; /* 50% Black & 50% Dark Green */
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .GridBreadcrum-tab-btn.active {
-  background-color: #f5a623;
+  background-color: #0b3b24; /* Dark Green replaces Yellow */
   color: #ffffff;
 }
 
@@ -65,7 +72,7 @@
 .GridBreadcrum-input-icon {
   position: absolute;
   left: 14px;
-  color: #8c8c9a;
+  color: #0b3b24;
   font-size: 16px;
   pointer-events: none;
 }
@@ -73,17 +80,22 @@
 .GridBreadcrum-input {
   width: 100%;
   padding: 12px 14px 12px 38px;
-  border: 1px solid #e4e4e7;
+  border: 1px solid #d1e2d7;
   border-radius: 8px;
   font-size: 13.5px;
-  color: #121026;
+  color: #091b12; /* 50/50 blend */
   outline: none;
   box-sizing: border-box;
   background-color: #ffffff;
 }
 
 .GridBreadcrum-input::placeholder {
-  color: #121026;
+  color: #091b12;
+  opacity: 0.75;
+}
+
+.GridBreadcrum-input:focus {
+  border-color: #0b3b24;
 }
 
 /* Dropdown Boxes */
@@ -98,10 +110,10 @@
 .GridBreadcrum-select {
   width: 100%;
   padding: 12px 32px 12px 14px;
-  border: 1px solid #e4e4e7;
+  border: 1px solid #d1e2d7;
   border-radius: 8px;
   font-size: 13.5px;
-  color: #121026;
+  color: #091b12; /* 50/50 blend */
   outline: none;
   background-color: #ffffff;
   appearance: none;
@@ -109,10 +121,14 @@
   box-sizing: border-box;
 }
 
+.GridBreadcrum-select:focus {
+  border-color: #0b3b24;
+}
+
 .GridBreadcrum-select-icon {
   position: absolute;
   right: 12px;
-  color: #8c8c9a;
+  color: #0b3b24;
   font-size: 16px;
   pointer-events: none;
 }
@@ -124,18 +140,20 @@
   gap: 8px;
   padding: 12px 20px;
   border-radius: 8px;
-  background-color: #fff8eb;
-  border: none;
+  background-color: #eef7f2;
+  border: 1px solid #d1e2d7;
   font-size: 13.5px;
   font-weight: 700;
-  color: #121026;
+  color: #091b12; /* 50/50 blend */
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .GridBreadcrum-filters-toggle-btn:hover,
 .GridBreadcrum-filters-toggle-btn.active {
-  background-color: #ffecc8;
+  background-color: #0b3b24;
+  color: #ffffff;
+  border-color: #0b3b24;
 }
 
 .GridBreadcrum-sliders-icon {
@@ -149,32 +167,31 @@
   gap: 8px;
   padding: 12px 22px;
   border-radius: 8px;
-  background-color: #fff8eb;
+  background-color: #0b3b24; /* Primary Dark Green replacing Yellow */
   border: none;
   font-size: 13.5px;
   font-weight: 700;
-  color: #121026;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .GridBreadcrum-search-btn:hover {
-  background-color: #f5a623;
-  color: #ffffff;
+  background-color: #14532d;
 }
 
 .GridBreadcrum-btn-search-icon {
   font-size: 15px;
 }
 
-/* Extended Filter Panel (2nd Reference Image) */
+/* Extended Filter Panel */
 .GridBreadcrum-extended-panel {
   background-color: #ffffff;
-  border: 1px solid #f0f0f3;
+  border: 1px solid #d1e2d7;
   border-radius: 12px;
   padding: 24px;
   margin-top: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 30px rgba(11, 59, 36, 0.08);
 }
 
 .GridBreadcrum-extended-header-row {
@@ -192,12 +209,12 @@
 .GridBreadcrum-filter-range-label {
   font-size: 14px;
   font-weight: 700;
-  color: #121026;
+  color: #091b12; /* 50/50 blend */
 }
 
 .GridBreadcrum-divider {
   height: 1px;
-  background-color: #ededf2;
+  background-color: #e2ede6;
   margin: 20px 0;
 }
 
@@ -213,7 +230,7 @@
   align-items: center;
   gap: 10px;
   font-size: 13.5px;
-  color: #121026;
+  color: #091b12; /* 50/50 blend */
   cursor: pointer;
   user-select: none;
 }
@@ -221,7 +238,7 @@
 .GridBreadcrum-checkbox-label input[type='checkbox'] {
   width: 18px;
   height: 18px;
-  accent-color: #f5a623;
+  accent-color: #0b3b24; /* Accent color updated to Dark Green */
   cursor: pointer;
   border-radius: 4px;
 }
@@ -251,7 +268,8 @@
   font-size: 42px;
   font-weight: 800;
   margin: 0 0 16px 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  color: #14532d;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .GridBreadcrum-hero-meta {
@@ -260,7 +278,8 @@
   gap: 20px;
   flex-wrap: wrap;
   font-size: 14px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  color: #f0fdf4;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
 .GridBreadcrum-meta-item {
@@ -271,6 +290,7 @@
 
 .GridBreadcrum-meta-icon {
   font-size: 18px;
+  color: #86efac; /* Soft green highlight icon */
 }
 
 /* Responsive Media Queries */
@@ -296,6 +316,12 @@
 
   .GridBreadcrum-hero-title {
     font-size: 30px;
+  }
+  .highlight-black { 
+    color: #091b12;
+    position: relative;
+    display: inline-block;
+
   }
 
   .GridBreadcrum-hero-banner {

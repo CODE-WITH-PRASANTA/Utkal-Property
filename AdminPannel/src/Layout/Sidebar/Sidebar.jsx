@@ -16,12 +16,16 @@ import {
   FiHelpCircle, 
   FiPlus, 
   FiMapPin, 
-  FiGrid 
+  FiGrid,
+  FiMessageSquare,
+  FiImage,
+  FiEdit3,
+  FiBookOpen
 } from 'react-icons/fi';
 import './Sidebar.css';
 
-// Import your custom logo image asset here (adjust the path as needed)
-import logoImg from '../../assets/Utkal Property Outro (2).png'; 
+// Import custom logo image asset
+import logoImg from '../../assets/Utkal Property Logo.webp'; 
 
 const menuItems = [
   { title: 'Dashboard', path: '/dashboard', icon: LuLayoutDashboard },
@@ -30,9 +34,22 @@ const menuItems = [
     path: '/properties',
     icon: PiBuildings,
     subItems: [
+      { title: 'All Properties', path: '/properties/all', icon: FiGrid },
       { title: 'Add Property', path: '/properties/add', icon: FiPlus },
       { title: 'Categories', path: '/properties/categories', icon: FiGrid },
       { title: 'Locations', path: '/properties/locations', icon: FiMapPin },
+      { title: 'Amenities', path: '/properties/Amenities', icon: FiMapPin },
+      { title: 'Property Review', path: '/properties/review', icon: FiMapPin },
+    ],
+  },
+  {
+    title: 'Blogs',
+    path: '/blogmanagement',
+    icon: FiBookOpen,
+    subItems: [
+       { title: 'Add Blog', path: '/blogposting', icon: FiEdit3 },
+      { title: 'Blog Management', path: '/blogmanagement', icon: FiBookOpen },
+    
     ],
   },
   { title: 'Bookings', path: '/bookings', icon: HiOutlineHome },
@@ -41,9 +58,12 @@ const menuItems = [
   { title: 'Enquiry', path: '/enquiry', icon: FiHelpCircle },
   { title: 'Reports', path: '/reports', icon: FiFileText },
   { title: 'Settings', path: '/settings', icon: FiSettings },
+  { title: 'Testimonial', path: '/testimonial', icon: FiMessageSquare },
+  { title: 'Gallery', path: '/gallery', icon: FiImage },
+  { title: 'Our Team', path: '/team', icon: FiUsers },
 ];
 
-const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {
+const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen, user, onLogout }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const location = useLocation();
 
@@ -76,14 +96,14 @@ const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {
           {/* Logo Header */}
           <div className="sidebar-logo-container">
             {isCollapsed ? (
-              <div className="sidebar-logo-icon">R</div>
+              <div className="sidebar-logo-icon">U</div>
             ) : (
               <motion.img 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 src={logoImg} 
-                alt="Utkal Estate Logo" 
+                alt="Utkal Property Logo" 
                 className="sidebar-logo-img" 
               />
             )}
@@ -117,9 +137,13 @@ const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {
                       }
                     >
                       <div className="sidebar-link-content">
-                        <motion.div whileHover={{ rotate: 5 }}>
-                          <Icon size={20} color={isActive ? '#fff' : 'var(--color-gold)'} />
+                        <motion.div
+                          whileHover={{ rotate: 5 }}
+                          className="sidebar-icon"
+                        >
+                          <Icon size={20} />
                         </motion.div>
+
                         {!isCollapsed && (
                           <span className="sidebar-link-text">
                             {item.title}
@@ -150,6 +174,9 @@ const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {
                             <NavLink
                               key={sub.title}
                               to={sub.path}
+                              onClick={() => {
+                                if (window.innerWidth < 768) setIsMobileOpen(false);
+                              }}
                               className={({ isActive: isSubActive }) => 
                                 `sidebar-sublink ${isSubActive ? 'active' : ''}`
                               }
@@ -190,18 +217,24 @@ const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen }) => {
           <div className={`profile-card ${isCollapsed ? 'center' : 'between'}`}>
             <div className="profile-card-user">
               <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
+                src={user?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"}
                 alt="Profile"
               />
               {!isCollapsed && (
                 <div>
-                  <h5>Alex Morgan</h5>
-                  <p>Super Admin</p>
+                  <h5>{user?.name || "Alex Morgan"}</h5>
+                  <p>{user?.role || "Super Admin"}</p>
                 </div>
               )}
             </div>
             {!isCollapsed && (
-              <LuLogOut size={16} className="logout-icon" />
+              <LuLogOut 
+                size={16} 
+                className="logout-icon" 
+                onClick={onLogout} 
+                title="Logout"
+                style={{ cursor: 'pointer' }}
+              />
             )}
           </div>
         </div>

@@ -1,0 +1,118 @@
+/* Main Container Styling */
+.ld-main-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px 0 20px 4%;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+ 
+/* Header Section */
+.ld-header-wrapper {
+  margin-bottom: 22px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 16px;
+}
+
+.ld-main-header {
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.ld-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  color: #4f46e5; /* Modern accent color */
+}
+
+/* Form Layout */
+.ld-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ld-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.ld-w-full {
+  width: 100%;
+}
+
+/* Labels */
+.ld-label {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.ld-bold-label {
+  font-weight: 600;
+}
+
+.ld-asterisk {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+/* Input Fields & Select Dropdowns */
+.ld-input-field {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  color: #1f2937;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.ld-input-field:focus {
+  border-color: #4f46e5;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.ld-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236B7280%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 10px;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* Responsive Grid Row for City, State, Country */
+.ld-form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 768px) {
+  .ld-main-container {
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  .ld-form-row {
+    grid-template-columns: 1fr; /* Stack fields vertically on tablets and mobile */
+    gap: 16px;
+  }
+}

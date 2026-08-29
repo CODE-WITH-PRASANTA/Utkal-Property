@@ -5,10 +5,19 @@ import Sidebar from '../Sidebar/Sidebar';
 import Topbar from '../Topbar/Topbar';
 import './MainLayout.css';
 
-const MainLayout = () => {
+const MainLayout = ({ user, onLogout }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+
+  const toggleSidebar = () => {
+    // Toggles collapse on desktop or mobile drawer on smaller screens
+    if (window.innerWidth < 768) {
+      setIsMobileOpen((prev) => !prev);
+    } else {
+      setIsCollapsed((prev) => !prev);
+    }
+  };
 
   return (
     <div className="layout">
@@ -17,12 +26,18 @@ const MainLayout = () => {
         isCollapsed={isCollapsed} 
         isMobileOpen={isMobileOpen}
         setIsMobileOpen={setIsMobileOpen}
+        user={user}
+        onLogout={onLogout}
       />
 
       {/* Main Container */}
       <div className="main">
         {/* Topbar Component */}
         <Topbar 
+          user={user}
+          onLogout={onLogout}
+          toggleSidebar={toggleSidebar}
+          isSidebarOpen={!isCollapsed}
           isCollapsed={isCollapsed} 
           setIsCollapsed={setIsCollapsed}
           setIsMobileOpen={setIsMobileOpen}

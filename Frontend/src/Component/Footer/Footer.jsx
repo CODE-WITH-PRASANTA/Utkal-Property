@@ -1,8 +1,19 @@
 import React from 'react';
 import './Footer.css';
 
+// Import logo image from src/assets/
+import logo from '../../assets/logo.webp';
+
 // Importing icons from react-icons
-import { FaPhoneAlt, FaChevronRight, FaArrowRight, FaChevronUp } from 'react-icons/fa';
+import {
+  FaPhoneAlt,
+  FaChevronRight,
+  FaArrowRight,
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTwitter,
+} from 'react-icons/fa';
 import { FaHouseUser, FaBuildingCircleCheck } from 'react-icons/fa6';
 import { FiPhoneCall, FiMail } from 'react-icons/fi';
 import { BiHomeAlt2 } from 'react-icons/bi';
@@ -10,6 +21,36 @@ import { BiHomeAlt2 } from 'react-icons/bi';
 const Footer = () => {
   return (
     <footer className="footer-container">
+      {/* Brand Header Row */}
+      <div className="footer-brand-row">
+        <div className="footer-brand-mark">
+          <div className="footer-brand-logo">
+            <img src={logo} alt="Utkal Property Logo" className="footer-logo-img" />
+          </div>
+          <div className="footer-brand-text">
+            <h2>
+              UTKAL<span>PROPERTY</span>
+            </h2>
+            <p>A Unit of Legwork Services Pvt Ltd</p>
+          </div>
+        </div>
+
+        <div className="footer-social-row">
+          <a href="#" className="footer-social-icon" aria-label="Facebook">
+            <FaFacebookF size={14} />
+          </a>
+          <a href="#" className="footer-social-icon" aria-label="Twitter">
+            <FaTwitter size={14} />
+          </a>
+          <a href="#" className="footer-social-icon" aria-label="Instagram">
+            <FaInstagram size={14} />
+          </a>
+          <a href="#" className="footer-social-icon" aria-label="LinkedIn">
+            <FaLinkedinIn size={14} />
+          </a>
+        </div>
+      </div>
+
       {/* Top Banner Cards */}
       <div className="footer-top-cards">
         {/* Card 1 */}
@@ -60,7 +101,7 @@ const Footer = () => {
         {/* Column 1: Office Address */}
         <div className="footer-column footer-office-address">
           <h4 className="footer-column-title">Office Address</h4>
-          
+
           <div className="address-group">
             <span className="address-label">Head office:</span>
             <p className="address-text bold-address">
@@ -92,15 +133,15 @@ const Footer = () => {
           {/* Agent Item */}
           <div className="contact-agent-row">
             <div className="agent-avatar-wrapper">
-              <img 
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" 
-                alt="Darrell Steward" 
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200"
+                alt="Darrell Steward"
                 className="agent-avatar"
               />
             </div>
             <div className="agent-info">
               <span className="agent-name">Darrell Steward</span>
-              <span className="agent-phone">(405) 555-0128</span>
+              <span className="agent-phone">9876543210</span>
             </div>
             <button className="agent-action-btn" aria-label="Contact Agent">
               <FaChevronRight size={12} />
@@ -114,7 +155,7 @@ const Footer = () => {
             </div>
             <div className="contact-detail-text">
               <span className="detail-label">Hotline:</span>
-              <span className="detail-value bold-value">(201) 555-0124</span>
+              <span className="detail-value bold-value">9876543210</span>
             </div>
           </div>
 
@@ -149,10 +190,10 @@ const Footer = () => {
           <p className="newsletter-subtitle">Sign up to receive the latest articles</p>
 
           <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              type="email" 
-              placeholder="Your email address" 
-              className="newsletter-input" 
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="newsletter-input"
               required
             />
             <button type="submit" className="newsletter-submit-btn">
@@ -169,14 +210,15 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Floating Scroll-to-Top Button */}
-      <button 
-        className="scroll-to-top-btn" 
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        aria-label="Scroll to top"
-      >
-        <FaChevronUp size={16} />
-      </button>
+      {/* Bottom Bar */}
+      <div className="footer-bottom-bar">
+        <p>© {new Date().getFullYear()} PRWEBSTOCK All rights reserved.</p>
+        <div className="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <span className="footer-bottom-dot">•</span>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
     </footer>
   );
 };

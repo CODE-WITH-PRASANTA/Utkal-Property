@@ -1,0 +1,2665 @@
+/* =====================================================
+   AMENITIES MANAGEMENT
+   PREMIUM UI
+   PREFIX: amx-
+===================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.amx-container {
+  width: 100%;
+  min-height: 100vh;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc 0%,
+      #f7f8fc 50%,
+      #f9faff 100%
+    );
+
+  color: #111827;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.amx-header {
+  width: 100%;
+
+  min-height: 74px;
+
+  padding: 14px 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  background: rgba(
+    255,
+    255,
+    255,
+    0.92
+  );
+
+  border-bottom: 1px solid #e8ebf0;
+
+  backdrop-filter: blur(16px);
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 100;
+}
+
+
+/* =====================================================
+   HEADER TITLE
+===================================================== */
+
+.amx-header-title {
+  min-width: 0;
+}
+
+.amx-header-main {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.amx-header-main h1 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 20px;
+
+  font-weight: 750;
+
+  letter-spacing: -0.35px;
+}
+
+.amx-header-icon {
+  width: 21px;
+  height: 21px;
+
+  color: #5b55e8;
+}
+
+.amx-breadcrumb {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #98a1b2;
+
+  font-size: 11px;
+}
+
+
+/* =====================================================
+   USER ACTIONS
+===================================================== */
+
+.amx-user-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+
+/* =====================================================
+   NOTIFICATION
+===================================================== */
+
+.amx-notification {
+  position: relative;
+
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #f8f9fc;
+
+  border: 1px solid #e8ebf0;
+
+  color: #687386;
+}
+
+.amx-notification-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.amx-notification-badge {
+  position: absolute;
+
+  top: -4px;
+  right: -4px;
+
+  min-width: 15px;
+  height: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0 4px;
+
+  border-radius: 999px;
+
+  background: #ef4444;
+
+  color: white;
+
+  font-size: 8px;
+
+  font-weight: 750;
+
+  border: 2px solid white;
+}
+
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+.amx-profile {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.amx-avatar {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #4f46e5
+    );
+
+  color: white;
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  box-shadow:
+    0 4px 12px rgba(
+      79,
+      70,
+      229,
+      0.22
+    );
+}
+
+.amx-user-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.amx-user-name {
+  color: #374151;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.amx-user-role {
+  color: #9aa2b1;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.amx-content {
+  width: 100%;
+
+  padding: 24px 28px 35px;
+}
+
+.amx-main {
+  width: 100%;
+
+  max-width: 1500px;
+
+  margin: 0 auto;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.amx-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 18px;
+}
+
+.amx-stat-card {
+  min-width: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 17px;
+
+  background: rgba(
+    255,
+    255,
+    255,
+    0.95
+  );
+
+  border: 1px solid #e7eaf0;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 5px 20px rgba(
+      15,
+      23,
+      42,
+      0.035
+    );
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.amx-stat-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 25px rgba(
+      15,
+      23,
+      42,
+      0.065
+    );
+}
+
+
+/* =====================================================
+   STAT ICON
+===================================================== */
+
+.amx-stat-icon {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 12px;
+
+  font-size: 18px;
+}
+
+.amx-stat-purple {
+  background: #efefff;
+  color: #5b55e8;
+}
+
+.amx-stat-green {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.amx-stat-orange {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.amx-stat-blue {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* =====================================================
+   STAT INFO
+===================================================== */
+
+.amx-stat-info {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.amx-stat-info span {
+  color: #8a94a6;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.amx-stat-info strong {
+  color: #111827;
+
+  font-size: 21px;
+
+  line-height: 1.2;
+
+  font-weight: 750;
+}
+
+.amx-stat-info small {
+  color: #a1a9b7;
+
+  font-size: 8.5px;
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.amx-toolbar {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 14px;
+
+  padding: 14px;
+
+  background: white;
+
+  border: 1px solid #e7eaf0;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 4px 16px rgba(
+      15,
+      23,
+      42,
+      0.025
+    );
+}
+
+.amx-filter-group {
+  min-width: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.amx-search {
+  width: 230px;
+
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 11px;
+
+  background: #fafbfc;
+
+  border: 1px solid #e2e6ec;
+
+  border-radius: 9px;
+
+  color: #9aa2b1;
+}
+
+.amx-search:focus-within {
+  border-color: #aaa5f4;
+
+  background: white;
+
+  box-shadow:
+    0 0 0 3px rgba(
+      99,
+      102,
+      241,
+      0.08
+    );
+}
+
+.amx-search svg {
+  width: 15px;
+  height: 15px;
+}
+
+.amx-search input {
+  width: 100%;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #374151;
+
+  font-size: 11px;
+}
+
+.amx-search input::placeholder {
+  color: #a1a9b7;
+}
+
+
+/* =====================================================
+   SELECT
+===================================================== */
+
+.amx-filter {
+  height: 36px;
+
+  padding: 0 10px;
+
+  border: 1px solid #e2e6ec;
+
+  border-radius: 9px;
+
+  background: #fafbfc;
+
+  color: #596273;
+
+  font-size: 10px;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.amx-filter:focus {
+  border-color: #aaa5f4;
+
+  box-shadow:
+    0 0 0 3px rgba(
+      99,
+      102,
+      241,
+      0.08
+    );
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.amx-search-button,
+.amx-reset-button,
+.amx-add-button,
+.amx-apply-button {
+  height: 36px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.amx-search-button {
+  padding: 0 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 4px 10px rgba(
+      79,
+      70,
+      229,
+      0.18
+    );
+}
+
+.amx-reset-button {
+  padding: 0 13px;
+
+  background: #f3f4f6;
+
+  color: #667085;
+}
+
+.amx-search-button:hover,
+.amx-reset-button:hover,
+.amx-add-button:hover {
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   ADD BUTTON
+===================================================== */
+
+.amx-add-button {
+  flex-shrink: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 5px 14px rgba(
+      79,
+      70,
+      229,
+      0.18
+    );
+}
+
+.amx-add-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.amx-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  background: white;
+
+  border: 1px solid #e7eaf0;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 5px 20px rgba(
+      15,
+      23,
+      42,
+      0.035
+    );
+}
+
+.amx-table {
+  width: 100%;
+
+  min-width: 850px;
+
+  border-collapse: collapse;
+}
+
+.amx-table th {
+  height: 47px;
+
+  padding: 0 14px;
+
+  background: #fafbfc;
+
+  border-bottom: 1px solid #e8ebf0;
+
+  color: #8b94a4;
+
+  text-align: left;
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.4px;
+}
+
+.amx-table td {
+  height: 62px;
+
+  padding: 10px 14px;
+
+  border-bottom: 1px solid #f0f2f5;
+
+  color: #697386;
+
+  font-size: 11px;
+}
+
+.amx-table tbody tr {
+  transition:
+    background 0.18s ease;
+}
+
+.amx-table tbody tr:hover {
+  background: #fafbff;
+}
+
+.amx-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =====================================================
+   CHECK
+===================================================== */
+
+.amx-table input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+
+  accent-color: #5b55e8;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.amx-table-icon {
+  width: 38px;
+  height: 38px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f2f3ff,
+      #f7f7fb
+    );
+
+  border: 1px solid #e3e5ef;
+}
+
+.amx-table-icon img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  padding: 5px;
+}
+
+.amx-table-emoji {
+  font-size: 20px;
+}
+
+
+/* =====================================================
+   NAME
+===================================================== */
+
+.amx-name-cell {
+  color: #374151 !important;
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.amx-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 5px 8px;
+
+  border-radius: 999px;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+.amx-status-active {
+  background: #ecfdf3;
+
+  color: #15803d;
+}
+
+.amx-status-inactive {
+  background: #fff7ed;
+
+  color: #c2410c;
+}
+
+.amx-status-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.amx-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.amx-action {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+
+.amx-action:hover {
+  transform: translateY(-1px);
+}
+
+.amx-action svg {
+  width: 13px;
+  height: 13px;
+}
+
+.amx-action-edit {
+  background: #eff6ff;
+
+  color: #2563eb;
+}
+
+.amx-action-delete {
+  background: #fff1f2;
+
+  color: #e11d48;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.amx-table-message {
+  height: 130px !important;
+
+  text-align: center;
+
+  color: #9aa2b1 !important;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.amx-footer {
+  min-height: 62px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 12px;
+
+  padding: 12px 14px;
+
+  background: white;
+
+  border: 1px solid #e7eaf0;
+
+  border-radius: 13px;
+}
+
+.amx-pagination-info {
+  color: #98a1b1;
+
+  font-size: 10px;
+}
+
+.amx-footer-controls {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+
+/* =====================================================
+   BULK
+===================================================== */
+
+.amx-bulk {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.amx-apply-button {
+  padding: 0 12px;
+
+  background: #eef2ff;
+
+  color: #4f46e5;
+}
+
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+.amx-pagination {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+}
+
+.amx-page-button {
+  width: 29px;
+  height: 29px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid #e3e6ec;
+
+  border-radius: 7px;
+
+  background: white;
+
+  color: #697386;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.amx-page-button:hover {
+  background: #f7f7ff;
+
+  border-color: #d6d3f8;
+}
+
+.amx-page-active {
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #4f46e5
+    );
+
+  border-color: #4f46e5;
+
+  color: white;
+}
+
+.amx-page-dots {
+  color: #9aa2b1;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+   MODAL OVERLAY
+===================================================== */
+
+.amx-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 5000;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(
+      15,
+      23,
+      42,
+      0.48
+    );
+
+  backdrop-filter: blur(7px);
+
+  animation:
+    amx-fade-in
+    0.2s ease;
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.amx-modal-container {
+  width: 100%;
+
+  max-width: 650px;
+
+  max-height: calc(
+    100vh - 40px
+  );
+
+  overflow-y: auto;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fbfcff
+    );
+
+  border: 1px solid rgba(
+    255,
+    255,
+    255,
+    0.8
+  );
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 25px 70px rgba(
+      15,
+      23,
+      42,
+      0.22
+    );
+
+  animation:
+    amx-modal-up
+    0.25s ease;
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #d5d8e1
+    transparent;
+}
+
+
+/* =====================================================
+   MODAL HEADER
+===================================================== */
+
+.amx-modal-header {
+  position: sticky;
+
+  top: 0;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 19px 21px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.94
+    );
+
+  border-bottom: 1px solid #edf0f4;
+
+  backdrop-filter: blur(15px);
+}
+
+.amx-modal-heading {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.amx-modal-heading-icon {
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef2ff,
+      #e6e4ff
+    );
+
+  color: #5b55e8;
+
+  font-size: 17px;
+}
+
+.amx-modal-heading h2 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 17px;
+
+  font-weight: 750;
+}
+
+.amx-modal-heading p {
+  margin: 3px 0 0;
+
+  color: #9aa2b1;
+
+  font-size: 10px;
+}
+
+.amx-modal-close {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid #e5e8ee;
+
+  border-radius: 9px;
+
+  background: #f8f9fb;
+
+  color: #687386;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.amx-modal-close:hover {
+  background: #fff1f2;
+
+  color: #e11d48;
+}
+
+.amx-modal-close svg {
+  width: 15px;
+  height: 15px;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.amx-modal-form {
+  padding: 21px;
+}
+
+.amx-form-group {
+  margin-bottom: 17px;
+}
+
+.amx-form-group > label,
+.amx-label-row > label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #374151;
+
+  font-size: 10px;
+
+  font-weight: 750;
+}
+
+.amx-form-group label span,
+.amx-label-row label span {
+  margin-left: 3px;
+
+  color: #ef4444;
+}
+
+
+/* =====================================================
+   LABEL ROW
+===================================================== */
+
+.amx-label-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.amx-label-row label {
+  margin-bottom: 7px;
+}
+
+.amx-choice-hint {
+  margin-bottom: 7px;
+
+  color: #9aa2b1;
+
+  font-size: 8.5px;
+}
+
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.amx-text-input {
+  width: 100%;
+
+  height: 40px;
+
+  padding: 0 12px;
+
+  outline: none;
+
+  border: 1px solid #dfe3ea;
+
+  border-radius: 9px;
+
+  background: #fbfcfd;
+
+  color: #374151;
+
+  font-size: 11px;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.amx-text-input:focus {
+  background: white;
+
+  border-color: #aaa5f4;
+
+  box-shadow:
+    0 0 0 3px rgba(
+      99,
+      102,
+      241,
+      0.08
+    );
+}
+
+.amx-text-input::placeholder {
+  color: #a7afbc;
+}
+
+
+/* =====================================================
+   ICON CHOICE CARDS
+===================================================== */
+
+.amx-icon-choice-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+
+  margin-bottom: 15px;
+}
+
+.amx-choice-card {
+  position: relative;
+
+  min-height: 78px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 11px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fafbfe
+    );
+
+  border: 1px solid #e3e7ed;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.amx-choice-card:hover {
+  transform: translateY(-1px);
+
+  border-color: #cfd4e0;
+
+  box-shadow:
+    0 7px 20px rgba(
+      15,
+      23,
+      42,
+      0.055
+    );
+}
+
+.amx-choice-card-active {
+  background:
+    linear-gradient(
+      145deg,
+      #fafaff,
+      #f4f4ff
+    );
+
+  border-color: #8179ed;
+
+  box-shadow:
+    0 7px 20px rgba(
+      79,
+      70,
+      229,
+      0.095
+    );
+}
+
+
+/* =====================================================
+   HIDDEN FILE
+===================================================== */
+
+.amx-hidden-file {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   CHOICE ICON
+===================================================== */
+
+.amx-choice-icon {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f2f4f8,
+      #eaedf2
+    );
+
+  border: 1px solid #e1e4e9;
+
+  color: #788397;
+
+  font-size: 18px;
+}
+
+.amx-upload-choice-icon {
+  color: #5b55e8;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef2ff,
+      #e6e5ff
+    );
+
+  border-color: #dedcff;
+}
+
+.amx-preset-choice-icon {
+  font-size: 20px;
+}
+
+
+/* =====================================================
+   CHOICE CONTENT
+===================================================== */
+
+.amx-choice-content {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  flex: 1;
+}
+
+.amx-choice-content strong {
+  color: #374151;
+
+  font-size: 10.5px;
+
+  font-weight: 750;
+}
+
+.amx-choice-content span {
+  color: #9aa2b1;
+
+  font-size: 8.5px;
+
+  line-height: 1.4;
+}
+
+
+/* =====================================================
+   CHOICE CHECK
+===================================================== */
+
+.amx-choice-check {
+  width: 19px;
+  height: 19px;
+
+  flex: 0 0 19px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #5b55e8;
+}
+
+.amx-choice-check svg {
+  width: 17px;
+  height: 17px;
+}
+
+
+/* =====================================================
+   UPLOAD PREVIEW
+===================================================== */
+
+.amx-upload-preview-wrapper {
+  position: relative;
+
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 42px;
+}
+
+.amx-upload-preview {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  padding: 4px;
+
+  border-radius: 10px;
+
+  background: #f3f4f7;
+
+  border: 1px solid #e0e3e9;
+}
+
+.amx-preview-remove {
+  position: absolute;
+
+  top: -6px;
+  right: -6px;
+
+  width: 17px;
+  height: 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 2px solid white;
+
+  border-radius: 50%;
+
+  background: #ef4444;
+
+  color: white;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 7px rgba(
+      15,
+      23,
+      42,
+      0.15
+    );
+}
+
+.amx-preview-remove svg {
+  width: 9px;
+  height: 9px;
+}
+
+
+/* =====================================================
+   PRESET SECTION
+===================================================== */
+
+.amx-preset-section {
+  padding: 13px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fafbfe,
+      #f7f8fc
+    );
+
+  border: 1px solid #e8ebf0;
+
+  border-radius: 13px;
+}
+
+
+/* =====================================================
+   PRESET HEADER
+===================================================== */
+
+.amx-preset-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 10px;
+}
+
+.amx-preset-header > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.amx-preset-title {
+  color: #4b5563;
+
+  font-size: 10px;
+
+  font-weight: 750;
+}
+
+.amx-preset-description {
+  color: #a0a8b5;
+
+  font-size: 8px;
+}
+
+
+/* =====================================================
+   MORE BUTTON
+===================================================== */
+
+.amx-more-icon-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  height: 27px;
+
+  padding: 0 9px;
+
+  border: 1px solid #dfe3ea;
+
+  border-radius: 7px;
+
+  background: white;
+
+  color: #5b55e8;
+
+  font-size: 8.5px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.amx-more-icon-button:hover {
+  background: #f5f5ff;
+
+  border-color: #cfcdf8;
+}
+
+.amx-more-icon-button-active {
+  background: #eeedff;
+
+  border-color: #d3d0ff;
+}
+
+.amx-more-arrow {
+  display: inline-flex;
+
+  font-size: 10px;
+
+  transform: rotate(0deg);
+
+  transition:
+    transform 0.2s ease;
+}
+
+.amx-more-arrow-up {
+  transform: rotate(180deg);
+}
+
+
+/* =====================================================
+   ICON GRID
+===================================================== */
+
+.amx-icon-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(8, minmax(0, 1fr));
+
+  gap: 7px;
+}
+
+
+/* =====================================================
+   PRESET ICON
+===================================================== */
+
+.amx-preset-icon {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  min-width: 35px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid #e3e6ec;
+
+  border-radius: 9px;
+
+  background: white;
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.amx-preset-icon:hover {
+  transform: translateY(-2px) scale(1.02);
+
+  border-color: #c7c3fa;
+
+  background: #f8f8ff;
+
+  box-shadow:
+    0 5px 12px rgba(
+      79,
+      70,
+      229,
+      0.08
+    );
+}
+
+.amx-preset-icon-selected {
+  background:
+    linear-gradient(
+      135deg,
+      #efefff,
+      #e6e4ff
+    );
+
+  border-color: #7169e8;
+
+  box-shadow:
+    0 4px 12px rgba(
+      79,
+      70,
+      229,
+      0.13
+    );
+
+  transform: scale(1.03);
+}
+
+.amx-preset-icon small {
+  position: absolute;
+
+  right: 3px;
+  bottom: 3px;
+
+  width: 13px;
+  height: 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #4f46e5;
+
+  color: white;
+
+  font-size: 7px;
+
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   CURRENT SELECTION
+===================================================== */
+
+.amx-current-selection {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 10px;
+
+  padding: 9px 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7f7ff,
+      #f2f2ff
+    );
+
+  border: 1px solid #dddafe;
+
+  border-radius: 10px;
+}
+
+.amx-selection-preview {
+  width: 32px;
+  height: 32px;
+
+  flex: 0 0 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 8px;
+
+  background: white;
+
+  border: 1px solid #dedcff;
+
+  font-size: 17px;
+}
+
+.amx-selection-preview img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  padding: 4px;
+}
+
+.amx-selection-info {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.amx-selection-info strong {
+  color: #4f46e5;
+
+  font-size: 9px;
+
+  font-weight: 750;
+}
+
+.amx-selection-info span {
+  color: #929aaa;
+
+  font-size: 8px;
+}
+
+
+/* =====================================================
+   CLEAR SELECTED ICON
+===================================================== */
+
+.amx-selected-icon-clear {
+  position: absolute;
+
+  top: 7px;
+  right: 7px;
+
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #fff1f2;
+
+  color: #e11d48;
+
+  cursor: pointer;
+}
+
+.amx-selected-icon-clear svg {
+  width: 11px;
+  height: 11px;
+}
+
+
+/* =====================================================
+   TEXTAREA
+===================================================== */
+
+.amx-textarea-wrapper {
+  position: relative;
+}
+
+.amx-textarea-wrapper textarea {
+  width: 100%;
+
+  min-height: 85px;
+
+  resize: vertical;
+
+  padding: 11px 12px 25px;
+
+  outline: none;
+
+  border: 1px solid #dfe3ea;
+
+  border-radius: 9px;
+
+  background: #fbfcfd;
+
+  color: #374151;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+.amx-textarea-wrapper textarea:focus {
+  background: white;
+
+  border-color: #aaa5f4;
+
+  box-shadow:
+    0 0 0 3px rgba(
+      99,
+      102,
+      241,
+      0.08
+    );
+}
+
+.amx-character-counter {
+  position: absolute;
+
+  right: 10px;
+  bottom: 8px;
+
+  color: #a1a9b7;
+
+  font-size: 8px;
+}
+
+
+/* =====================================================
+   RADIO
+===================================================== */
+
+.amx-radio-group {
+  display: flex;
+
+  gap: 9px;
+}
+
+.amx-radio-option {
+  position: relative;
+
+  min-width: 105px;
+
+  height: 38px;
+
+  display: flex !important;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin: 0 !important;
+
+  padding: 0 11px;
+
+  background: #fafbfc;
+
+  border: 1px solid #e2e6ec;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  color: #697386 !important;
+
+  font-size: 10px !important;
+
+  font-weight: 650 !important;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.amx-radio-option input {
+  position: absolute;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.amx-radio-custom {
+  width: 14px !important;
+  height: 14px !important;
+
+  margin: 0 !important;
+
+  border: 1.5px solid #cbd1dc;
+
+  border-radius: 50%;
+
+  position: relative;
+
+  flex: 0 0 14px;
+}
+
+.amx-radio-option input:checked
+~ .amx-radio-custom {
+  border-color: #5b55e8;
+}
+
+.amx-radio-option input:checked
+~ .amx-radio-custom::after {
+  content: "";
+
+  position: absolute;
+
+  width: 6px;
+  height: 6px;
+
+  top: 50%;
+  left: 50%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  border-radius: 50%;
+
+  background: #5b55e8;
+}
+
+.amx-radio-active {
+  background: #f3f2ff;
+
+  border-color: #cbc8fa;
+}
+
+.amx-radio-inactive {
+  background: #fff8f2;
+
+  border-color: #f2d9c0;
+}
+
+
+/* =====================================================
+   HELPER
+===================================================== */
+
+.amx-helper-text {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #9aa2b1;
+
+  font-size: 8.5px;
+}
+
+
+/* =====================================================
+   MODAL FOOTER
+===================================================== */
+
+.amx-modal-footer {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  padding-top: 5px;
+}
+
+.amx-cancel-button,
+.amx-save-button {
+  height: 38px;
+
+  padding: 0 15px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  border-radius: 9px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.amx-cancel-button {
+  background: white;
+
+  border: 1px solid #dfe3ea;
+
+  color: #697386;
+}
+
+.amx-save-button {
+  border: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 5px 14px rgba(
+      79,
+      70,
+      229,
+      0.2
+    );
+}
+
+.amx-cancel-button:hover,
+.amx-save-button:hover {
+  transform: translateY(-1px);
+}
+
+.amx-save-button svg {
+  width: 13px;
+  height: 13px;
+}
+
+
+/* =====================================================
+   BUTTON SPINNER
+===================================================== */
+
+.amx-button-spinner {
+  width: 12px;
+  height: 12px;
+
+  border: 2px solid rgba(
+    255,
+    255,
+    255,
+    0.35
+  );
+
+  border-top-color: white;
+
+  border-radius: 50%;
+
+  animation:
+    amx-spin
+    0.65s linear infinite;
+}
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes amx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes amx-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes amx-modal-up {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(15px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .amx-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .amx-toolbar {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .amx-add-button {
+    width: 100%;
+  }
+
+  .amx-filter-group {
+    width: 100%;
+  }
+
+}
+
+
+/* =====================================================
+   TABLET SMALL
+===================================================== */
+
+@media (max-width: 800px) {
+
+  .amx-header {
+    padding: 13px 18px;
+  }
+
+  .amx-content {
+    padding: 18px;
+  }
+
+  .amx-user-info {
+    display: none;
+  }
+
+  .amx-toolbar {
+    padding: 12px;
+  }
+
+  .amx-filter-group {
+    display: grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    width: 100%;
+  }
+
+  .amx-search {
+    width: 100%;
+
+    grid-column: 1 / -1;
+  }
+
+  .amx-filter {
+    width: 100%;
+  }
+
+  .amx-search-button,
+  .amx-reset-button {
+    width: 100%;
+  }
+
+  .amx-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .amx-footer-controls {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  .amx-icon-grid {
+    grid-template-columns:
+      repeat(6, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .amx-header {
+    min-height: 64px;
+
+    padding: 11px 13px;
+  }
+
+  .amx-header-main h1 {
+    font-size: 16px;
+  }
+
+  .amx-header-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .amx-breadcrumb {
+    font-size: 9px;
+  }
+
+  .amx-notification {
+    width: 32px;
+    height: 32px;
+  }
+
+  .amx-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .amx-content {
+    padding: 13px;
+  }
+
+  .amx-stats {
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+  }
+
+  .amx-stat-card {
+    padding: 13px;
+  }
+
+  .amx-filter-group {
+    grid-template-columns: 1fr;
+  }
+
+  .amx-search {
+    grid-column: auto;
+  }
+
+  .amx-toolbar {
+    border-radius: 12px;
+  }
+
+  .amx-footer-controls {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .amx-bulk {
+    width: 100%;
+  }
+
+  .amx-bulk .amx-filter {
+    flex: 1;
+  }
+
+  .amx-pagination {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+
+  /* ---------------------------------------------
+     MODAL
+  --------------------------------------------- */
+
+  .amx-modal-overlay {
+    align-items: flex-end;
+
+    padding: 0;
+  }
+
+  .amx-modal-container {
+    max-width: none;
+
+    max-height: 92vh;
+
+    border-radius:
+      20px
+      20px
+      0
+      0;
+  }
+
+  .amx-modal-header {
+    padding: 16px;
+  }
+
+  .amx-modal-form {
+    padding: 16px;
+  }
+
+  .amx-modal-heading h2 {
+    font-size: 15px;
+  }
+
+  .amx-modal-heading p {
+    font-size: 9px;
+  }
+
+  .amx-icon-choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .amx-icon-grid {
+    grid-template-columns:
+      repeat(6, minmax(0, 1fr));
+  }
+
+  .amx-preset-icon {
+    min-width: 34px;
+
+    font-size: 18px;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+  .amx-header {
+    padding: 10px 11px;
+  }
+
+  .amx-user-actions {
+    gap: 7px;
+  }
+
+  .amx-content {
+    padding: 10px;
+  }
+
+  .amx-header-main h1 {
+    font-size: 14px;
+  }
+
+  .amx-breadcrumb {
+    display: none;
+  }
+
+  .amx-stat-info strong {
+    font-size: 19px;
+  }
+
+  .amx-modal-header {
+    padding: 14px;
+  }
+
+  .amx-modal-form {
+    padding: 14px;
+  }
+
+  .amx-choice-card {
+    min-height: 70px;
+  }
+
+  .amx-choice-icon,
+  .amx-upload-preview-wrapper {
+    width: 38px;
+    height: 38px;
+
+    flex-basis: 38px;
+  }
+
+  .amx-icon-grid {
+    grid-template-columns:
+      repeat(5, minmax(0, 1fr));
+  }
+
+  .amx-radio-group {
+    flex-direction: column;
+  }
+
+  .amx-radio-option {
+    width: 100%;
+  }
+
+  .amx-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .amx-cancel-button,
+  .amx-save-button {
+    width: 100%;
+  }
+
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 340px) {
+
+  .amx-modal-heading-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .amx-modal-heading h2 {
+    font-size: 14px;
+  }
+
+  .amx-icon-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+
+  .amx-preset-icon {
+    font-size: 17px;
+  }
+
+}

@@ -1,63 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HomeRealEstate.css';
+import API, { IMG_URL } from '../../api/axios';
 
 // React Icons
-import { FaChevronUp, FaTimes } from 'react-icons/fa';
-
-// Mock Data for the 8 Area Cards matching the reference images
-const AREA_DATA = [
-  {
-    id: 1,
-    title: 'California',
-    listings: '1570 listing',
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 2,
-    title: 'California',
-    listings: '1570 listing',
-    image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 3,
-    title: 'California',
-    listings: '1570 listing',
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 4,
-    title: 'California',
-    listings: '1570 listing',
-    image: 'https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 5,
-    title: 'California',
-    listings: '1570 listing',
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 6,
-    title: 'California',
-    listings: '1570 listing',
-    image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 7,
-    title: 'California',
-    listings: '1570 listing',
-    image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 8,
-    title: 'California',
-    listings: '1570 listing',
-    image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1000&q=80'
-  }
-];
+import { FaTimes, FaImage, FaMapMarkedAlt } from 'react-icons/fa';
 
 const HomeRealEstate = () => {
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [brokenImages, setBrokenImages] = useState({});
+
+  /**
+   * Universal Image URL Resolver
+   * Resolves absolute backend server paths for static files (/uploads/gallery/filename.webp)
+   */
+  const getImageUrl = (photoPath) => {
+    if (!photoPath) return '';
+
+    // 1. Direct Blob previews or absolute web URLs
+    if (
+      photoPath.startsWith('http://') ||
+      photoPath.startsWith('https://') ||
+      photoPath.startsWith('blob:')
+    ) {
+      return photoPath;
+    }
+
+    // 2. Normalize Windows backslashes
+    let clean = photoPath.replace(/\\/g, '/');
+
+    // 3. Isolate path starting from uploads/
+    const uploadsIndex = clean.indexOf('uploads/');
+    if (uploadsIndex !== -1) {
+      clean = '/' + clean.substring(uploadsIndex);
+    } else {
+      clean = clean.startsWith('/') ? clean : `/${clean}`;
+    }
+
+    // 4. Attach base URL safely without double slashes
+    const baseUrl = (IMG_URL || 'http://localhost:5000').replace(/\/+$/, '');
+    return `${baseUrl}${clean}`;
+  };
+
+  // Fetch all gallery items from Backend API
+  const fetchGalleryItems = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get('/gallery');
+      let data = [];
+
+      if (response.data && response.data.data) {
+        data = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        data = response.data;
+      }
+
+      setGalleryItems(data);
+    } catch (error) {
+      console.error('Error fetching real estate gallery items:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchGalleryItems();
+  }, []);
+
+  // Track broken image links gracefully
+  const handleImageError = (id) => {
+    setBrokenImages((prev) => ({ ...prev, [id]: true }));
+  };
 
   const handleOpenModal = (image) => {
     setSelectedImage(image);
@@ -67,78 +81,113 @@ const HomeRealEstate = () => {
     setSelectedImage(null);
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
-    <section className="HomeRealEstate">
-      {/* Header Area */}
-      <div className="HomeRealEstate-header">
-        <h1 className="HomeRealEstate-title">Search real estate by area</h1>
-        <p className="HomeRealEstate-subtitle">
-          Find your dream apartment with our listing
-        </p>
-      </div>
+    <section className="HomeRealEstate" aria-labelledby="apartment-dealers-heading">
+      <div className="HomeRealEstate-container">
+        
+        {/* SEO Header Section */}
+        <header className="HomeRealEstate-header">
+          <span className="HomeRealEstate-tag">
+            <FaMapMarkedAlt className="HomeRealEstate-tag-icon" /> Prime Location Showcase
+          </span>
+          <h1 id="apartment-dealers-heading" className="HomeRealEstate-title">
+            Best Apartment Dealers in Bhubaneswar — <span className="highlight-green">Explore Properties by Area</span>
+          </h1>
+          <p className="HomeRealEstate-subtitle">
+            Partner with the <strong>best apartment dealers in Bhubaneswar</strong> to discover luxury 2 BHK, 3 BHK, and 4 BHK residential flats, penthouses, and premium gated communities across top localities including Patia, Jaydev Vihar, Saheed Nagar, Khandagiri, and Rasulgarh.
+          </p>
+        </header>
 
-      {/* 4x2 Grid Container */}
-      <div className="HomeRealEstate-grid">
-        {AREA_DATA.map((item) => (
-          <div key={item.id} className="HomeRealEstate-card">
-            <img
-              src={item.image}
-              alt={item.title}
-              className="HomeRealEstate-card-img"
-            />
-
-            {/* Hover Crosshair (+) Overlay */}
-            <div
-              className="HomeRealEstate-hover-overlay"
-              onClick={() => handleOpenModal(item.image)}
-            >
-              <span className="HomeRealEstate-plus-icon">+</span>
+        {/* Grid Container */}
+        <div className="HomeRealEstate-grid">
+          {loading ? (
+            <div className="HomeRealEstate-loading">
+              <p>Loading gallery properties...</p>
             </div>
+          ) : galleryItems.length > 0 ? (
+            galleryItems.map((item, index) => {
+              const itemId = item._id || item.id || index;
+              const imageUrl = getImageUrl(item.image);
+              const isBroken = brokenImages[itemId];
 
-            {/* Always Visible Text Overlay */}
-            <div className="HomeRealEstate-card-content">
-              <h3 className="HomeRealEstate-card-title">{item.title}</h3>
-              <p className="HomeRealEstate-card-listings">{item.listings}</p>
+              return (
+                <article key={itemId} className="HomeRealEstate-card">
+                  {!isBroken ? (
+                    <img
+                      src={imageUrl}
+                      alt={item.title || `Luxury Apartment in Bhubaneswar - Area ${index + 1}`}
+                      className="HomeRealEstate-card-img"
+                      loading="lazy"
+                      onError={() => handleImageError(itemId)}
+                    />
+                  ) : (
+                    <div className="HomeRealEstate-card-broken">
+                      <FaImage />
+                      <span>Image Unavailable</span>
+                    </div>
+                  )}
+
+                  {/* Hover Crosshair (+) Overlay */}
+                  {!isBroken && (
+                    <div
+                      className="HomeRealEstate-hover-overlay"
+                      onClick={() => handleOpenModal(imageUrl)}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="View enlarged image"
+                    >
+                      <span className="HomeRealEstate-plus-icon">+</span>
+                    </div>
+                  )}
+
+                  {/* Bottom Content Overlay */}
+                  <div className="HomeRealEstate-card-content">
+                    <h2 className="HomeRealEstate-card-title">
+                      {item.title || 'Utkal Luxury Apartments'}
+                    </h2>
+                    <p className="HomeRealEstate-card-listings">
+                      {item.location || item.listings || 'Explore Area Listings'}
+                    </p>
+                  </div>
+                </article>
+              );
+            })
+          ) : (
+            <div className="HomeRealEstate-empty">
+              <p>No gallery images found. Upload new properties in the admin panel!</p>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Scroll To Top Button */}
-      <button
-        className="HomeRealEstate-scroll-top"
-        onClick={scrollToTop}
-        aria-label="Scroll to top"
-      >
-        <FaChevronUp />
-      </button>
-
-      {/* Lightbox / Fullscreen Modal when '+' is clicked */}
-      {selectedImage && (
-        <div className="HomeRealEstate-modal-overlay" onClick={handleCloseModal}>
-          <div
-            className="HomeRealEstate-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="HomeRealEstate-modal-close"
-              onClick={handleCloseModal}
-              aria-label="Close modal"
-            >
-              <FaTimes />
-            </button>
-            <img
-              src={selectedImage}
-              alt="Enlarged view"
-              className="HomeRealEstate-modal-img"
-            />
-          </div>
+          )}
         </div>
-      )}
+
+        {/* Fullscreen Lightbox Modal */}
+        {selectedImage && (
+          <div 
+            className="HomeRealEstate-modal-overlay" 
+            onClick={handleCloseModal}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div
+              className="HomeRealEstate-modal-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="HomeRealEstate-modal-close"
+                onClick={handleCloseModal}
+                aria-label="Close modal"
+              >
+                <FaTimes />
+              </button>
+              <img
+                src={selectedImage}
+                alt="Enlarged view of Bhubaneswar Apartment"
+                className="HomeRealEstate-modal-img"
+              />
+            </div>
+          </div>
+        )}
+
+      </div>
     </section>
   );
 };

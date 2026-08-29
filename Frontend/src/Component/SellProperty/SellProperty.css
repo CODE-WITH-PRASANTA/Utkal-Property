@@ -1,0 +1,647 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --sp-bg: #f8fafc;
+  --sp-card-bg: #ffffff;
+  --sp-primary: #18522e;
+  --sp-primary-hover: #113c21;
+  --sp-primary-light: #f0fdf4;
+  --sp-indicator-blue: #2563eb;
+  --sp-border: #cbd5e1;
+  --sp-table-border: #cbd5e1;
+  --sp-text-main: #0f172a;
+  --sp-text-muted: #64748b;
+  --sp-radius: 12px;
+  --sp-blue: #2563eb;
+  --sp-blue-light: #eff6ff;
+  --sp-zebra: #f8fafc;
+  --utkal-green: #126229;
+  --utkal-green-hover: #0e4c20;
+  --utkal-navy: #0c1d2e;
+  --utkal-text-main: #0c1d2e;
+  --utkal-text-muted: #64748b;
+  --utkal-border: #e2e8f0;
+  --utkal-bg-light: #f8fafc;
+  --utkal-radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Full Width Container Setup */
+.sell-property-container {
+  background-color: var(--utkal-bg-light);
+  color: var(--utkal-text-main);
+  min-height: 100vh;
+  padding: 30px 40px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Full-Width Banner Styling */
+.sell-property-banner {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: var(--sp-radius);
+  padding: 24px 32px;
+  background: linear-gradient(135deg, #f0f7f2 0%, #e1efe4 100%);
+  border: 1px solid rgba(18, 98, 41, 0.2);
+  border-radius: var(--utkal-radius);
+  padding: 28px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  width: 100%;
+  box-shadow: 0 4px 16px rgba(18, 98, 41, 0.04);
+}
+
+.sell-property-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.sell-property-banner-badge {
+  background: #18522e;
+  background: linear-gradient(135deg, #126229 0%, #0e4c20 100%);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
+  box-shadow: 0 4px 14px rgba(18, 98, 41, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.sell-property-banner-badge span {
+  font-size: 18px;
+}
+
+.sell-property-banner-text h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--sp-text-main);
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+
+.sell-property-banner-text h1 .highlight-green {
+  color: #18522e;
+  font-weight: 800;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--utkal-navy);
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+
+.sell-property-banner-text p {
+  font-size: 14px;
+  color: var(--utkal-text-muted);
+}
+
+.sell-property-banner-illustration {
+  font-size: 48px;
+}
+
+/* Full-Width Main Form Wrapper */
+.sell-property-form-wrapper {
+  background: var(--sp-card-bg);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius);
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  background: #ffffff;
+  border: 1px solid var(--utkal-border);
+  border-radius: var(--utkal-radius);
+  padding: 40px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(12, 29, 46, 0.04);
+}
+
+.sell-property-section {
+  margin-bottom: 32px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #f1f5f9;
+  width: 100%;
+}
+
+.sell-property-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.sell-property-section-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--utkal-navy);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.sell-property-section-desc {
+  font-size: 13px;
+  color: var(--utkal-text-muted);
+  margin-bottom: 16px;
+}
+
+.title-indicator {
+  width: 5px;
+  height: 22px;
+  background-color: var(--sp-indicator-blue);
+  border-radius: 4px;
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  background-color: var(--utkal-green);
+  border-radius: 2px;
+}
+
+/* Form Controls & Full-Width Grid Layouts */
+.sell-property-form-group {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.sell-property-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--utkal-navy);
+  margin-bottom: 6px;
+}
+
+.sell-property-label span {
+  color: #18522e;
+}
+
+.sell-property-input, 
+.sell-property-select {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1.5px solid var(--sp-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--sp-text-main);
+  border: 1px solid var(--utkal-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--utkal-navy);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.sell-property-input:hover,
+.sell-property-select:hover {
+  border-color: #94a3b8;}
+  
+.sell-property-input::placeholder {
+  color: #94a3b8;
+}
+
+.sell-property-input:focus, 
+.sell-property-select:focus {
+  border-color: var(--sp-indicator-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: var(--utkal-green);
+  box-shadow: 0 0 0 3px rgba(18, 98, 41, 0.15);
+}
+
+.sell-property-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23126229' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 14px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+/* Grid Variations */
+/* Full Width Grid Variations */
+.sell-property-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.sell-property-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.sell-property-grid-price {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+/* Radio Group */
+.sell-property-radio-group {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  height: 44px;
+}
+
+.sell-property-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--utkal-navy);
+  cursor: pointer;
+}
+
+.sell-property-radio input[type="radio"] {
+  accent-color: var(--utkal-green);
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Image Upload Zone */
+.sell-property-upload-zone {
+  border: 2px dashed #bbf7d0;
+  background-color: var(--sp-primary-light);
+  border-radius: 10px;
+  padding: 32px;
+  width: 100%;
+  border: 2px dashed rgba(18, 98, 41, 0.3);
+  background-color: rgba(18, 98, 41, 0.04);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s, border-color 0.2s;
+  width: 100%;
+}
+
+.sell-property-upload-zone:hover {
+  background-color: #dcfce7;
+  background-color: rgba(18, 98, 41, 0.08);
+  border-color: var(--utkal-green);
+}
+
+.upload-icon {
+  font-size: 36px;
+  margin-bottom: 4px;
+}
+
+.sell-property-upload-zone strong {
+  font-size: 15px;
+  color: var(--utkal-navy);
+}
+
+.sell-property-upload-zone span {
+  font-size: 13px;
+  color: var(--utkal-text-muted);
+}
+
+/* Preview Grid */
+.sell-property-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.sell-property-preview-item {
+  position: relative;
+  width: 100%;
+  height: 110px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--utkal-border);
+}
+
+.sell-property-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-img-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(12, 29, 46, 0.85);
+  color: #fff;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.remove-img-btn:hover {
+  background: #18522e;
+}
+
+/* ============================================================ */
+/* Interactive Form Summary Table                               */
+/* ============================================================ */
+
+.sp-summary-table-wrapper {
+  border: 1.5px solid var(--sp-table-border);
+  border-radius: 10px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.sp-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 650px;
+}
+
+.sp-summary-table thead th {
+  background-color: var(--sp-primary-light);
+  color: var(--sp-text-main);
+  font-weight: 800;
+  font-size: 13px;
+  text-align: left;
+  padding: 14px 18px;
+  border: 1px solid var(--sp-table-border);
+  border-top: none;
+}
+
+.sp-summary-table thead th:first-child {
+  border-left: none;
+}
+
+.sp-summary-table thead th:last-child {
+  border-right: none;
+}
+
+.sp-summary-table thead th.sp-col-section {
+  width: 22%;
+}
+
+.sp-summary-table thead th.sp-col-fields {
+  width: 28%;
+}
+
+.sp-summary-table thead th.sp-col-types {
+  width: 50%;
+}
+
+.sp-summary-table tbody td {
+  padding: 10px 14px;
+  border: 1px solid var(--sp-table-border);
+  vertical-align: middle;
+  color: var(--sp-text-main);
+}
+
+.sp-summary-table tbody tr td:first-child {
+  border-left: none;
+}
+
+.sp-summary-table tbody tr td:last-child {
+  border-right: none;
+}
+
+.sp-summary-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Input & Dropdown Styling for Summary Table */
+.sp-summary-input, 
+.sp-summary-select {
+  padding: 8px 12px;
+  font-size: 12.5px;
+  background-color: #fafafa;
+}
+
+.sp-summary-input:focus, 
+.sp-summary-select:focus {
+  background-color: #ffffff;
+}
+
+/* File Upload Button inside Table */
+.sp-summary-file-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sp-table-upload-btn {
+  background-color: var(--sp-primary-light);
+  color: var(--sp-primary);
+  border: 1.5px solid #86efac;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.2s;
+}
+
+.sp-table-upload-btn:hover {
+  background-color: #dcfce7;
+}
+
+/* Zebra shading per section */
+.sp-row-property-details td {
+  background-color: var(--sp-zebra);
+}
+
+/* Section cell (merged via rowSpan) */
+.sp-section-cell {
+  text-align: center;
+  background-color: #ffffff !important;
+}
+
+.sp-section-cell-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.sp-section-name {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--sp-text-main);
+}
+
+.sp-section-badge {
+  background: #18522e;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 4px 10px rgba(21, 128, 61, 0.25);
+}
+
+.sp-section-badge span {
+  font-size: 15px;
+}
+
+.sp-section-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--sp-blue-light);
+  color: var(--sp-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* Field / type cells */
+.sp-field-cell {
+  font-weight: 700;
+  color: var(--sp-text-main);
+  white-space: nowrap;
+}
+
+.sp-required {
+  color: #18522e;
+  font-weight: 800;
+}
+
+.sp-type-cell {
+  color: var(--sp-text-muted);
+}
+
+.sp-file-list {
+  list-style: disc;
+  margin: 4px 0 0 16px;
+  padding: 0;
+}
+
+.sp-file-list li {
+  margin-bottom: 2px;
+  color: var(--sp-text-muted);
+  font-size: 11.5px;
+}
+
+/* Footer Action Button */
+.sell-property-action-footer {
+  margin-top: 36px;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.sell-property-submit-btn {
+  background: #18522e;
+  background: var(--utkal-green);
+  color: #ffffff;
+  border: none;
+  padding: 15px 36px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.3);
+  transition: opacity 0.2s, transform 0.1s;
+  gap: 10px;
+  box-shadow: 0 4px 14px rgba(18, 98, 41, 0.35);
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.sell-property-submit-btn:hover {
+  background-color: var(--utkal-green-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(18, 98, 41, 0.45);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1200px) {
+  .sell-property-container {
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sell-property-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sell-property-grid-3, 
+  .sell-property-grid-4, 
+  .sell-property-grid-price {
+    grid-template-columns: 1fr;
+  }
+
+  .sell-property-container {
+    padding: 16px 12px;
+  }
+
+  .sell-property-form-wrapper {
+    padding: 24px 18px;
+  }
+
+  .sell-property-submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sp-summary-table {
+    font-size: 12px;
+  }
+
+  .sp-summary-table thead th,
+  .sp-summary-table tbody td {
+    padding: 10px 10px;
+  }
+
+  .sp-field-cell {
+    white-space: normal;
+  }
+}

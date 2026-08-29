@@ -1,0 +1,510 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --rp-bg: #f8fafc;
+  --rp-card-bg: #ffffff;
+  --rp-primary: #18522e;
+  --rp-primary-hover: #113c21;
+  --rp-primary-light: #f0fdf4;
+  --rp-border-solid: #cbd5e1; /* Sharp dark border color */
+  --rp-border-light: #e2e8f0;
+  --rp-text-main: #0f172a;
+  --rp-text-muted: #475569;
+  --rp-radius: 12px;
+  --rp-green-border: #86efac;
+  --rp-green-border-soft: #dcfce7;
+  --rp-zebra: #f8fafc;
+  --rp-blue-indicator: #2563eb;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.rent-property-container {
+  background-color: var(--rp-bg);
+  color: var(--rp-text-main);
+  min-height: 100vh;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Banner Styling */
+.rent-property-banner {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1.5px solid var(--rp-green-border);
+  border-radius: var(--rp-radius);
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.rent-property-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.rent-property-banner-badge {
+  background: var(--rp-primary);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 4px 12px rgba(24, 82, 46, 0.25);
+}
+
+.rent-property-banner-badge span {
+  font-size: 18px;
+}
+
+.rent-property-banner-text h1 {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--rp-text-main);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.rent-property-banner-text h1 .highlight-green {
+  color: var(--rp-primary);
+}
+
+.rent-property-banner-text p {
+  font-size: 13px;
+  color: var(--rp-text-muted);
+}
+
+.rent-property-banner-illustration {
+  font-size: 48px;
+}
+
+/* Main Form Wrapper */
+.rent-property-form-wrapper {
+  background: var(--rp-card-bg);
+  border: 1.5px solid var(--rp-border-solid);
+  border-radius: var(--rp-radius);
+  padding: 32px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.rent-property-section {
+  margin-bottom: 32px;
+  padding-bottom: 28px;
+  border-bottom: 1.5px solid var(--rp-border-solid);
+}
+
+.rent-property-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.rent-property-section-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--rp-text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.rent-property-section-desc {
+  font-size: 12px;
+  color: var(--rp-text-muted);
+  margin-bottom: 16px;
+}
+
+.title-indicator {
+  width: 5px;
+  height: 20px;
+  background-color: var(--rp-blue-indicator);
+  border-radius: 3px;
+  display: inline-block;
+}
+
+/* Form Controls & Grid Layouts */
+.rent-property-form-group {
+  margin-bottom: 16px;
+}
+
+.rent-property-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rp-text-main);
+  margin-bottom: 6px;
+}
+
+.rent-property-label span {
+  color: #dc2626;
+}
+
+.rent-property-input, 
+.rent-property-select {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1.5px solid var(--rp-border-solid);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--rp-text-main);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.rent-property-input:focus, 
+.rent-property-select:focus {
+  border-color: var(--rp-primary);
+  box-shadow: 0 0 0 3px rgba(24, 82, 46, 0.15);
+}
+
+.rent-property-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* Grid Variations */
+.rent-property-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.rent-property-grid-price {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+/* Image Upload Zone */
+.rent-property-upload-zone {
+  border: 2px dashed #15803d;
+  background-color: var(--rp-primary-light);
+  border-radius: 10px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.rent-property-upload-zone:hover {
+  background-color: var(--rp-green-border-soft);
+  border-color: var(--rp-primary);
+}
+
+.upload-icon {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+.rent-property-upload-zone strong {
+  font-size: 13px;
+  color: var(--rp-text-main);
+}
+
+.rent-property-upload-zone span {
+  font-size: 11px;
+  color: var(--rp-text-muted);
+}
+
+/* Preview Grid */
+.rent-property-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.rent-property-preview-item {
+  position: relative;
+  width: 100%;
+  height: 90px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid var(--rp-border-solid);
+}
+
+.rent-property-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-img-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-img-btn:hover {
+  background: #dc2626;
+}
+
+/* ============================================================ */
+/* High Visibility & Interactive Form Summary Table            */
+/* ============================================================ */
+
+.rp-summary-table-wrapper {
+  border: 2px solid var(--rp-border-solid);
+  border-radius: 10px;
+  overflow: hidden;
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.rp-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 650px;
+}
+
+.rp-summary-table thead th {
+  background-color: #dcfce7;
+  color: var(--rp-text-main);
+  font-weight: 800;
+  font-size: 13px;
+  text-align: left;
+  padding: 14px 18px;
+  border: 1px solid var(--rp-border-solid);
+  border-bottom: 2px solid var(--rp-border-solid);
+}
+
+/* Adjusted column distribution after removing notes */
+.rp-summary-table thead th.rp-col-section {
+  width: 25%;
+}
+
+.rp-summary-table thead th.rp-col-fields {
+  width: 30%;
+}
+
+.rp-summary-table thead th.rp-col-types {
+  width: 45%;
+}
+
+.rp-summary-table tbody td {
+  padding: 10px 14px;
+  border: 1px solid var(--rp-border-solid);
+  vertical-align: middle;
+  color: var(--rp-text-main);
+}
+
+/* Summary Table Specific Input & Dropdown Styling */
+.rp-summary-input, 
+.rp-summary-select {
+  padding: 8px 12px;
+  font-size: 12.5px;
+  background-color: #fafafa;
+}
+
+.rp-summary-input:focus, 
+.rp-summary-select:focus {
+  background-color: #ffffff;
+}
+
+/* Custom File Control in Summary Table */
+.summary-file-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rp-table-upload-btn {
+  background-color: var(--rp-primary-light);
+  color: var(--rp-primary);
+  border: 1.5px solid #86efac;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.2s;
+}
+
+.rp-table-upload-btn:hover {
+  background-color: #dcfce7;
+}
+
+/* Zebra shading per section */
+.rp-row-property-details td {
+  background-color: var(--rp-zebra);
+}
+
+/* Section cell (merged via rowSpan) */
+.rp-section-cell {
+  border-right: 2px solid var(--rp-border-solid) !important;
+  text-align: center;
+  background-color: #ffffff !important;
+}
+
+.rp-section-cell-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.rp-section-name {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--rp-text-main);
+}
+
+.rp-section-badge {
+  background: var(--rp-primary);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 4px 10px rgba(24, 82, 46, 0.25);
+}
+
+.rp-section-badge span {
+  font-size: 15px;
+}
+
+.rp-section-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--rp-primary-light);
+  color: var(--rp-primary);
+  border: 1px solid var(--rp-green-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Field & type cells */
+.rp-field-cell {
+  font-weight: 700;
+  color: var(--rp-text-main);
+  white-space: nowrap;
+}
+
+.rp-required {
+  color: #dc2626;
+  font-weight: 800;
+}
+
+.rp-type-cell {
+  color: var(--rp-text-muted);
+}
+
+.rp-file-list {
+  list-style: disc;
+  margin: 4px 0 0 16px;
+  padding: 0;
+}
+
+.rp-file-list li {
+  margin-bottom: 2px;
+  color: var(--rp-text-muted);
+  font-size: 11.5px;
+}
+
+/* Footer Action Button */
+.rent-property-action-footer {
+  margin-top: 32px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.rent-property-submit-btn {
+  background: var(--rp-primary);
+  color: #ffffff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(24, 82, 46, 0.3);
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.rent-property-submit-btn:hover {
+  background-color: var(--rp-primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .rent-property-grid-3, 
+  .rent-property-grid-price {
+    grid-template-columns: 1fr;
+  }
+
+  .rent-property-container {
+    padding: 12px;
+  }
+
+  .rent-property-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .rent-property-banner-text h1 {
+    font-size: 22px;
+  }
+
+  .rp-summary-table {
+    font-size: 12px;
+  }
+
+  .rp-summary-table thead th,
+  .rp-summary-table tbody td {
+    padding: 10px 10px;
+  }
+
+  .rp-field-cell {
+    white-space: normal;
+  }
+}

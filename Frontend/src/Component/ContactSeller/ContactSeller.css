@@ -2,7 +2,7 @@
 
 .utkal-contact-section {
   width: 100%;
-  background: linear-gradient(135deg, #fffcf7 0%, #fff4e0 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f2f9f5 50%, #e8f5ed 100%);
   font-family: 'Inter', sans-serif;
   padding: 60px 20px;
   box-sizing: border-box;
@@ -30,15 +30,21 @@
 .utkal-contact-title {
   font-size: 40px;
   font-weight: 800;
-  color: #12101e;
+  color: #0f172a;
   line-height: 1.25;
   margin: 0;
   letter-spacing: -0.5px;
 }
 
+/* For Half Green Text (Wrap green words with <span className="utkal-highlight-text"> inside JSX) */
+.utkal-contact-title .utkal-highlight-text,
+.utkal-highlight-text {
+  color: #10532e;
+}
+
 .utkal-contact-desc {
   font-size: 13.5px;
-  color: #333333;
+  color: #475569;
   line-height: 1.6;
   margin: 0;
   max-width: 480px;
@@ -54,21 +60,21 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background-color: #ffa726;
+  background-color: #10532e;
   color: #ffffff;
   padding: 12px 24px;
   font-size: 14px;
   font-weight: 700;
   border-radius: 8px;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(255, 167, 38, 0.4);
+  box-shadow: 0 4px 14px rgba(16, 83, 46, 0.3);
   transition: all 0.25s ease;
 }
 
 .utkal-seller-btn:hover {
-  background-color: #fb8c00;
+  background-color: #0b3b20;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(255, 167, 38, 0.5);
+  box-shadow: 0 6px 18px rgba(16, 83, 46, 0.4);
 }
 
 /* Unified Column Container Styles */
@@ -83,7 +89,7 @@
 .utkal-sidebar-heading {
   font-size: 16px;
   font-weight: 700;
-  color: #12101e;
+  color: #0f172a;
   margin: 0;
 }
 
@@ -94,24 +100,25 @@
   background: #ffffff;
   padding: 16px;
   border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eaeaf0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
 }
 
 .utkal-mini-card {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #ffffff;
+  background: #f8faf8;
   padding: 8px;
   border-radius: 10px;
-  border: 1px solid #f0f0f5;
+  border: 1px solid #e2e8f0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .utkal-mini-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(16, 83, 46, 0.08);
+  border-color: #a7f3d0;
 }
 
 .utkal-mini-thumb {
@@ -130,7 +137,7 @@
 .utkal-mini-title {
   font-size: 13.5px;
   font-weight: 700;
-  color: #12101e;
+  color: #0f172a;
   margin: 0;
   line-height: 1.3;
 }
@@ -138,7 +145,7 @@
 .utkal-mini-price {
   font-size: 13px;
   font-weight: 700;
-  color: #f39c12;
+  color: #10532e;
 }
 
 /* Image Showcase Area with Controlled Dimensions */

@@ -8,9 +8,9 @@
   padding-bottom: 60px;
 }
 
-/* Orange Top Hero Area */
+/* Dark Green Hero Banner Area replacing Orange Gradient */
 .AboutContactSection-hero {
-  background: linear-gradient(180deg, #ffb834 0%, #f9a01b 100%);
+  background: linear-gradient(180deg, #18522e 0%, #0f3d20 100%);
   color: #ffffff;
   padding: 60px 24px 140px 24px;
   text-align: center;
@@ -21,12 +21,21 @@
   margin: 0 auto;
 }
 
+/* Main Heading Typography */
 .AboutContactSection-main-heading {
   font-size: 2.5rem;
   font-weight: 800;
   line-height: 1.25;
   margin: 0 0 16px 0;
   letter-spacing: -0.01em;
+}
+
+.AboutContactSection-heading-white {
+  color: #ffffff;
+}
+
+.AboutContactSection-heading-green {
+  color: #86efac; /* Soft vibrant green for high contrast over dark green banner */
 }
 
 .AboutContactSection-sub-heading {
@@ -61,7 +70,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 2px;
-  opacity: 0.95;
+  color: #86efac;
 }
 
 .AboutContactSection-info-text {
@@ -86,6 +95,7 @@
   font-size: 1.4rem;
   font-weight: 800;
   letter-spacing: 0.02em;
+  color: #ffffff;
 }
 
 /* Floating White Form Card */
@@ -101,7 +111,7 @@
   background: #ffffff;
   border-radius: 16px;
   padding: 40px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 12px 32px rgba(24, 82, 46, 0.08);
 }
 
 /* Form Fields */
@@ -125,7 +135,7 @@
 .AboutContactSection-label {
   font-size: 0.9rem;
   font-weight: 800;
-  color: #111827;
+  color: #0a1420;
   margin-bottom: 10px;
 }
 
@@ -135,7 +145,7 @@
   width: 100%;
   padding: 12px 16px;
   font-size: 0.9rem;
-  color: #111827;
+  color: #0a1420;
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
@@ -152,8 +162,8 @@
 .AboutContactSection-input:focus,
 .AboutContactSection-select:focus,
 .AboutContactSection-textarea:focus {
-  border-color: #f9a01b;
-  box-shadow: 0 0 0 3px rgba(249, 160, 27, 0.15);
+  border-color: #18522e;
+  box-shadow: 0 0 0 3px rgba(24, 82, 46, 0.15);
 }
 
 .AboutContactSection-select-wrapper {
@@ -164,7 +174,7 @@
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%206b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2018522e'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 16px;
@@ -175,13 +185,13 @@
   min-height: 120px;
 }
 
-/* Submit Button */
+/* Dark Green Submit Button replacing Yellow */
 .AboutContactSection-submit-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-color: #f9a01b;
+  background-color: #18522e;
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 700;
@@ -190,10 +200,11 @@
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 15px rgba(24, 82, 46, 0.25);
 }
 
 .AboutContactSection-submit-btn:hover {
-  background-color: #e58f0e;
+  background-color: #0f3d20;
 }
 
 .AboutContactSection-submit-btn:active {
@@ -216,7 +227,6 @@
 @media screen and (max-width: 900px) {
   .AboutContactSection-info-grid {
     flex-direction: column;
-    align-items: center;
     gap: 24px;
   }
 

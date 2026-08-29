@@ -20,7 +20,7 @@ const sampleNotifications = [
   { id: 3, title: 'System Maintenance at 12 AM', time: '3h ago', unread: false },
 ];
 
-const Topbar = ({ isCollapsed, setIsCollapsed, setIsMobileOpen }) => {
+const Topbar = ({ onLogout, user, toggleSidebar, isSidebarOpen }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState(sampleNotifications);
@@ -43,14 +43,6 @@ const Topbar = ({ isCollapsed, setIsCollapsed, setIsMobileOpen }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleToggle = () => {
-    if (window.innerWidth < 768) {
-      setIsMobileOpen((prev) => !prev);
-    } else {
-      setIsCollapsed((prev) => !prev);
-    }
-  };
-
   const markAllRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
   };
@@ -58,6 +50,26 @@ const Topbar = ({ isCollapsed, setIsCollapsed, setIsMobileOpen }) => {
   const handleNavigation = (path) => {
     navigate(path);
     setShowProfileMenu(false);
+  };
+
+  // Complete & Clean Logout Procedure
+  const handleLogoutClick = async () => {
+    try {
+      setShowProfileMenu(false);
+
+      // 1. Clear session storage backup immediately
+      localStorage.removeItem('utkal_user_session');
+
+      // 2. Call parent handleLogout handler (AWS Amplify signOut / state update)
+      if (typeof onLogout === 'function') {
+        await onLogout();
+      }
+    } catch (err) {
+      console.error('Logout error during execution:', err);
+    } finally {
+      // 3. Force route change directly to login page
+      navigate('/login', { replace: true });
+    }
   };
 
   const hasUnread = notifications.some((n) => n.unread);
@@ -73,8 +85,8 @@ const Topbar = ({ isCollapsed, setIsCollapsed, setIsMobileOpen }) => {
       <div className="topbar-left">
         <motion.button
           whileTap={{ scale: 0.9 }}
-          onClick={handleToggle}
-          className="topbar-toggle-btn"
+          onClick={toggleSidebar}
+          className={`topbar-toggle-btn ${!isSidebarOpen ? 'rotated' : ''}`}
         >
           <FiMenu />
         </motion.button>
@@ -178,8 +190,8 @@ const Topbar = ({ isCollapsed, setIsCollapsed, setIsMobileOpen }) => {
               className="topbar-avatar"
             />
             <div className="topbar-profile-info">
-              <h5>Alex Morgan</h5>
-              <p>Admin</p>
+              <h5>{user?.username || 'Admin User'}</h5>
+              <p>{user?.isMock ? 'Developer' : 'Admin'}</p>
             </div>
             <motion.div
               animate={{ rotate: showProfileMenu ? 180 : 0 }}
@@ -199,15 +211,15 @@ const Topbar = ({ isCollapsed, setIsCollapsed, setIsMobileOpen }) => {
                 className="topbar-popover profile-dropdown-menu"
               >
                 <div className="profile-dropdown-header">
-                  <h6>Alex Morgan</h6>
-                  <span>alex.morgan@example.com</span>
+                  <h6>{user?.username || 'Admin User'}</h6>
+                  <span>{user?.isMock ? 'utkal@internal.local' : 'admin@utkal.com'}</span>
                 </div>
 
                 <div className="profile-menu-items">
                   {/* Profile Link */}
                   <button 
                     className="menu-item"
-                    onClick={() => handleNavigation('/DashboardProfile')}
+                    onClick={() => handleNavigation('/profile')}
                   >
                     <FiUser size={16} />
                     <span>Profile</span>
@@ -227,10 +239,7 @@ const Topbar = ({ isCollapsed, setIsCollapsed, setIsMobileOpen }) => {
                   {/* Logout Action */}
                   <button 
                     className="menu-item logout"
-                    onClick={() => {
-                      setShowProfileMenu(false);
-                      // Add your logout logic / navigation here (e.g., navigate('/login'))
-                    }}
+                    onClick={handleLogoutClick}
                   >
                     <FiLogOut size={16} />
                     <span>Logout</span>

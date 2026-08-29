@@ -1,219 +1,759 @@
-import React, { useState } from 'react';
-import './GridBreadcrum.css';
+import React, { useEffect, useState } from "react";
+
+import "./GridBreadcrum.css";
+
+import API from "../../api/axios";
 
 // React Icons
 import {
   FiSearch,
   FiSliders,
   FiChevronDown,
-  FiCheck
-} from 'react-icons/fi';
+  FiCheck,
+} from "react-icons/fi";
+
 import {
   BiBed,
   BiBath,
-  BiArea
-} from 'react-icons/bi';
-import { HiOutlineMapPin } from 'react-icons/hi2';
+  BiArea,
+} from "react-icons/bi";
+
+import { HiOutlineMapPin } from "react-icons/hi2";
 
 // Local Asset Image Import
-import heroBg from '../../assets/bg1.jpg';
+import heroBg from "../../assets/bg1.jpg";
 
-const GridBreadcrum = () => {
-  // Toggle Rent / Buy Tabs
-  const [activeTab, setActiveTab] = useState('Rent');
+const GridBreadcrum = ({ onSearch }) => {
+  // =====================================================
+  // PARENT CATEGORY
+  // Residential / Commercial / Rent
+  // =====================================================
 
-  // Toggle Extended Filter Panel (2nd Reference Image)
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("");
 
-  // Form Field States
-  const [keyword, setKeyword] = useState('');
-  const [propertyType, setPropertyType] = useState('');
-  const [location, setLocation] = useState('');
-  const [baths, setBaths] = useState('');
-  const [beds, setBeds] = useState('');
+  // =====================================================
+  // FILTER PANEL
+  // =====================================================
 
-  // Extended Filter Checkboxes State
-  const [amenities, setAmenities] = useState({
-    swimmingPool: false,
-    garage: false,
-    alarmSystem: false,
-    balcony: false,
-    outdoorArea: false,
-    broadband: false,
-    ensuite: false,
-    builtInRobes: false,
-    gym: false,
-    tennisCourt: false,
-    study: false,
-    outdoorSpa: false
-  });
+  const [isFilterOpen, setIsFilterOpen] =
+    useState(false);
 
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setAmenities((prev) => ({
-      ...prev,
-      [name]: checked
-    }));
+  // =====================================================
+  // FILTER STATES
+  // =====================================================
+
+  const [keyword, setKeyword] = useState("");
+
+  const [propertyType, setPropertyType] =
+    useState("");
+
+  const [location, setLocation] =
+    useState("");
+
+  const [baths, setBaths] =
+    useState("");
+
+  const [beds, setBeds] =
+    useState("");
+
+  // =====================================================
+  // CATEGORY DATA
+  // =====================================================
+
+  const [categories, setCategories] =
+    useState([]);
+
+  const [
+    parentCategories,
+    setParentCategories,
+  ] = useState([]);
+
+  const [
+    loadingParents,
+    setLoadingParents,
+  ] = useState(false);
+
+  // =====================================================
+  // AMENITIES
+  // =====================================================
+
+  const [
+    amenitiesList,
+    setAmenitiesList,
+  ] = useState([]);
+
+  // IMPORTANT:
+  // Store selected amenity names directly.
+  //
+  // Example:
+  // [
+  //   "Swimming Pool",
+  //   "Gym",
+  //   "CCTV"
+  // ]
+
+  const [
+    selectedAmenities,
+    setSelectedAmenities,
+  ] = useState([]);
+
+  const [
+    loadingAmenities,
+    setLoadingAmenities,
+  ] = useState(false);
+
+  // =====================================================
+  // FETCH CATEGORIES
+  // =====================================================
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoadingParents(true);
+
+        const response =
+          await API.get("/categories");
+
+        console.log(
+          "CATEGORY RESPONSE:",
+          response.data
+        );
+
+        const categoryData =
+          response.data?.categories ||
+          response.data?.data ||
+          response.data ||
+          [];
+
+        if (!Array.isArray(categoryData)) {
+          setCategories([]);
+          setParentCategories([]);
+
+          return;
+        }
+
+        // =============================================
+        // ONLY ACTIVE CATEGORIES
+        // =============================================
+
+        const activeCategories =
+          categoryData.filter(
+            (category) =>
+              !category.status ||
+              category.status === "Active"
+          );
+
+        console.log(
+          "ACTIVE CATEGORIES:",
+          activeCategories
+        );
+
+        setCategories(activeCategories);
+
+        // =============================================
+        // UNIQUE PARENTS
+        // =============================================
+
+        const parents = [
+          ...new Set(
+            activeCategories
+              .map(
+                (category) =>
+                  category.parent
+              )
+              .filter(
+                (parent) =>
+                  parent &&
+                  parent.trim() !== "" &&
+                  parent !== "None"
+              )
+          ),
+        ];
+
+        console.log(
+          "CATEGORY PARENTS:",
+          parents
+        );
+
+        setParentCategories(parents);
+
+        // =============================================
+        // DEFAULT FIRST PARENT
+        // =============================================
+
+        if (
+          parents.length > 0 &&
+          !activeTab
+        ) {
+          setActiveTab(parents[0]);
+        }
+      } catch (error) {
+        console.error(
+          "CATEGORY FETCH ERROR:",
+          error.response?.data ||
+            error
+        );
+
+        setCategories([]);
+        setParentCategories([]);
+      } finally {
+        setLoadingParents(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // =====================================================
+  // FETCH AMENITIES
+  // =====================================================
+
+  useEffect(() => {
+    const fetchAmenities = async () => {
+      try {
+        setLoadingAmenities(true);
+
+        const response =
+          await API.get("/amenities");
+
+        console.log(
+          "AMENITIES RESPONSE:",
+          response.data
+        );
+
+        const amenityData =
+          response.data?.amenities ||
+          response.data?.data ||
+          response.data ||
+          [];
+
+        if (!Array.isArray(amenityData)) {
+          setAmenitiesList([]);
+
+          return;
+        }
+
+        // =============================================
+        // ONLY ACTIVE AMENITIES
+        // =============================================
+
+        const activeAmenities =
+          amenityData.filter(
+            (amenity) =>
+              !amenity.status ||
+              amenity.status === "Active"
+          );
+
+        console.log(
+          "ACTIVE AMENITIES:",
+          activeAmenities
+        );
+
+        setAmenitiesList(
+          activeAmenities
+        );
+      } catch (error) {
+        console.error(
+          "AMENITIES FETCH ERROR:",
+          error.response?.data ||
+            error
+        );
+
+        setAmenitiesList([]);
+      } finally {
+        setLoadingAmenities(false);
+      }
+    };
+
+    fetchAmenities();
+  }, []);
+
+  // =====================================================
+  // CHILD CATEGORIES ACCORDING TO PARENT
+  // =====================================================
+
+  const filteredCategories =
+    categories.filter(
+      (category) =>
+        category.parent === activeTab
+    );
+
+  console.log(
+    "SELECTED PARENT:",
+    activeTab
+  );
+
+  console.log(
+    "FILTERED CATEGORIES:",
+    filteredCategories
+  );
+
+  // =====================================================
+  // AMENITY CHECKBOX
+  // =====================================================
+
+  const handleCheckboxChange = (
+    amenityName
+  ) => {
+    setSelectedAmenities(
+      (previous) => {
+        // Already selected
+        if (
+          previous.includes(
+            amenityName
+          )
+        ) {
+          return previous.filter(
+            (item) =>
+              item !== amenityName
+          );
+        }
+
+        // Add new amenity
+        return [
+          ...previous,
+          amenityName,
+        ];
+      }
+    );
   };
 
-  // Fallback background image if src/assets/hero-bg.jpg is not found
+  // =====================================================
+  // PARENT CHANGE
+  // =====================================================
+
+  const handleParentChange = (
+    parent
+  ) => {
+    console.log(
+      "PARENT SELECTED:",
+      parent
+    );
+
+    setActiveTab(parent);
+
+    // Reset child property category
+    setPropertyType("");
+
+    // Run filter immediately
+    onSearch?.({
+      search: keyword.trim(),
+
+      type: "",
+
+      location,
+
+      bedrooms: beds,
+
+      bathrooms: baths,
+
+      parent,
+
+      amenities:
+        selectedAmenities,
+    });
+  };
+
+  // =====================================================
+  // SEARCH
+  // =====================================================
+
+  const handleSearch = () => {
+    const filters = {
+      search:
+        keyword.trim(),
+
+      type:
+        propertyType,
+
+      location:
+        location,
+
+      bedrooms:
+        beds,
+
+      bathrooms:
+        baths,
+
+      parent:
+        activeTab,
+
+      amenities:
+        selectedAmenities,
+    };
+
+    console.log(
+      "SEARCH FILTERS:",
+      filters
+    );
+
+    onSearch?.(filters);
+  };
+
+  // =====================================================
+  // BACKGROUND
+  // =====================================================
+
   const bgStyle = {
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url(${heroBg || 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600'})`
+    backgroundImage: `linear-gradient(
+      rgba(11, 59, 36, 0.45),
+      rgba(0, 0, 0, 0.65)
+    ), url(${heroBg})`,
   };
+
+  // =====================================================
+  // UI
+  // =====================================================
 
   return (
     <div className="GridBreadcrum">
-      
-      {/* Top Search & Filter Bar Bar Area */}
+
+      {/* ============================================== */}
+      {/* FILTER SECTION */}
+      {/* ============================================== */}
+
       <div className="GridBreadcrum-filter-section">
+
         <div className="GridBreadcrum-container">
-          
-          {/* Rent / Buy Toggle Tabs */}
+
+          {/* ========================================== */}
+          {/* PARENT CATEGORY TABS */}
+          {/* ========================================== */}
+
           <div className="GridBreadcrum-tab-wrapper">
-            <button
-              className={`GridBreadcrum-tab-btn ${activeTab === 'Rent' ? 'active' : ''}`}
-              onClick={() => setActiveTab('Rent')}
-            >
-              {activeTab === 'Rent' && <FiCheck className="GridBreadcrum-check-icon" />}
-              Rent
-            </button>
-            <button
-              className={`GridBreadcrum-tab-btn ${activeTab === 'Buy' ? 'active' : ''}`}
-              onClick={() => setActiveTab('Buy')}
-            >
-              {activeTab === 'Buy' && <FiCheck className="GridBreadcrum-check-icon" />}
-              Buy
-            </button>
+
+            {loadingParents ? (
+              <button
+                type="button"
+                className="GridBreadcrum-tab-btn"
+                disabled
+              >
+                Loading...
+              </button>
+            ) : (
+              parentCategories.map(
+                (parent) => (
+                  <button
+                    key={parent}
+                    type="button"
+                    className={`GridBreadcrum-tab-btn ${
+                      activeTab === parent
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleParentChange(
+                        parent
+                      )
+                    }
+                  >
+                    {activeTab ===
+                      parent && (
+                      <FiCheck className="GridBreadcrum-check-icon" />
+                    )}
+
+                    {parent}
+                  </button>
+                )
+              )
+            )}
+
           </div>
 
-          {/* Main Search Filter Inputs Row */}
+          {/* ========================================== */}
+          {/* MAIN SEARCH BAR */}
+          {/* ========================================== */}
+
           <div className="GridBreadcrum-search-bar">
-            
-            {/* Keyword Input */}
+
+            {/* KEYWORD */}
+
             <div className="GridBreadcrum-input-box">
+
               <FiSearch className="GridBreadcrum-input-icon" />
+
               <input
                 type="text"
                 placeholder="Type keyword"
                 value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
+                onChange={(e) =>
+                  setKeyword(
+                    e.target.value
+                  )
+                }
                 className="GridBreadcrum-input"
               />
+
             </div>
 
-            {/* Property Type Dropdown */}
+            {/* ======================================== */}
+            {/* PROPERTY TYPE */}
+            {/* CHILD CATEGORY ACCORDING TO PARENT */}
+            {/* ======================================== */}
+
             <div className="GridBreadcrum-select-box">
+
               <select
                 value={propertyType}
-                onChange={(e) => setPropertyType(e.target.value)}
+                onChange={(e) =>
+                  setPropertyType(
+                    e.target.value
+                  )
+                }
                 className="GridBreadcrum-select"
               >
-                <option value="">Property type</option>
-                <option value="apartment">Apartment</option>
-                <option value="house">House</option>
-                <option value="villa">Villa</option>
-                <option value="commercial">Commercial</option>
+
+                <option value="">
+                  Property type
+                </option>
+
+                {filteredCategories.map(
+                  (category) => (
+                    <option
+                      key={
+                        category._id ||
+                        category.name
+                      }
+                      value={
+                        category.name
+                      }
+                    >
+                      {category.name}
+                    </option>
+                  )
+                )}
+
               </select>
+
               <FiChevronDown className="GridBreadcrum-select-icon" />
+
             </div>
 
-            {/* Location Dropdown */}
+            {/* ======================================== */}
+            {/* LOCATION */}
+            {/* ======================================== */}
+
             <div className="GridBreadcrum-select-box">
-              <select
+
+              <input
+                type="text"
+                placeholder="Location"
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={(e) =>
+                  setLocation(
+                    e.target.value
+                  )
+                }
                 className="GridBreadcrum-select"
-              >
-                <option value="">Location</option>
-                <option value="san-jose">San Jose</option>
-                <option value="billesley">Billesley</option>
-                <option value="london">London</option>
-                <option value="new-york">New York</option>
-              </select>
-              <FiChevronDown className="GridBreadcrum-select-icon" />
+              />
+
             </div>
 
-            {/* Baths Dropdown */}
+            {/* ======================================== */}
+            {/* BATHS */}
+            {/* ======================================== */}
+
             <div className="GridBreadcrum-select-box">
+
               <select
                 value={baths}
-                onChange={(e) => setBaths(e.target.value)}
+                onChange={(e) =>
+                  setBaths(
+                    e.target.value
+                  )
+                }
                 className="GridBreadcrum-select"
               >
-                <option value="">Baths</option>
-                <option value="1">1 Bath</option>
-                <option value="2">2 Baths</option>
-                <option value="3">3+ Baths</option>
+
+                <option value="">
+                  Baths
+                </option>
+
+                <option value="1">
+                  1 Bath
+                </option>
+
+                <option value="2">
+                  2 Baths
+                </option>
+
+                <option value="3">
+                  3+ Baths
+                </option>
+
               </select>
+
               <FiChevronDown className="GridBreadcrum-select-icon" />
+
             </div>
 
-            {/* Beds Dropdown */}
+            {/* ======================================== */}
+            {/* BEDS */}
+            {/* ======================================== */}
+
             <div className="GridBreadcrum-select-box">
+
               <select
                 value={beds}
-                onChange={(e) => setBeds(e.target.value)}
+                onChange={(e) =>
+                  setBeds(
+                    e.target.value
+                  )
+                }
                 className="GridBreadcrum-select"
               >
-                <option value="">Beds</option>
-                <option value="1">1 Bed</option>
-                <option value="2">2 Beds</option>
-                <option value="3">3 Beds</option>
-                <option value="4">4 Beds</option>
+
+                <option value="">
+                  Beds
+                </option>
+
+                <option value="1">
+                  1 Bed
+                </option>
+
+                <option value="2">
+                  2 Beds
+                </option>
+
+                <option value="3">
+                  3 Beds
+                </option>
+
+                <option value="4">
+                  4 Beds
+                </option>
+
               </select>
+
               <FiChevronDown className="GridBreadcrum-select-icon" />
+
             </div>
 
-            {/* Filters Toggle Button */}
+            {/* ======================================== */}
+            {/* FILTER TOGGLE */}
+            {/* ======================================== */}
+
             <button
-              className={`GridBreadcrum-filters-toggle-btn ${isFilterOpen ? 'active' : ''}`}
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className={`GridBreadcrum-filters-toggle-btn ${
+                isFilterOpen
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() =>
+                setIsFilterOpen(
+                  !isFilterOpen
+                )
+              }
             >
-              <span>Filters</span>
+
+              <span>
+                Filters
+              </span>
+
               <FiSliders className="GridBreadcrum-sliders-icon" />
+
             </button>
 
-            {/* Search Button */}
-            <button className="GridBreadcrum-search-btn">
-              <span>Search Now</span>
+            {/* ======================================== */}
+            {/* SEARCH */}
+            {/* ======================================== */}
+
+            <button
+              className="GridBreadcrum-search-btn"
+              onClick={
+                handleSearch
+              }
+            >
+
+              <span>
+                Search Now
+              </span>
+
               <FiSearch className="GridBreadcrum-btn-search-icon" />
+
             </button>
 
           </div>
 
-          {/* Extended Filters Drawer (Shown in 2nd Reference Image) */}
+          {/* ========================================== */}
+          {/* EXTENDED FILTER */}
+          {/* ========================================== */}
+
           {isFilterOpen && (
             <div className="GridBreadcrum-extended-panel">
-              
-              {/* Top Selects & Sliders Row */}
+
+              {/* ====================================== */}
+              {/* TOP ROW */}
+              {/* ====================================== */}
+
               <div className="GridBreadcrum-extended-header-row">
-                
+
                 <div className="GridBreadcrum-extended-select-box">
+
                   <select
                     value={baths}
-                    onChange={(e) => setBaths(e.target.value)}
+                    onChange={(e) =>
+                      setBaths(
+                        e.target.value
+                      )
+                    }
                     className="GridBreadcrum-select"
                   >
-                    <option value="">Baths: Any</option>
-                    <option value="1">1 Bath</option>
-                    <option value="2">2 Baths</option>
-                    <option value="3">3 Baths</option>
+
+                    <option value="">
+                      Baths: Any
+                    </option>
+
+                    <option value="1">
+                      1 Bath
+                    </option>
+
+                    <option value="2">
+                      2 Baths
+                    </option>
+
+                    <option value="3">
+                      3 Baths
+                    </option>
+
                   </select>
+
                   <FiChevronDown className="GridBreadcrum-select-icon" />
+
                 </div>
 
                 <div className="GridBreadcrum-extended-select-box">
+
                   <select
                     value={beds}
-                    onChange={(e) => setBeds(e.target.value)}
+                    onChange={(e) =>
+                      setBeds(
+                        e.target.value
+                      )
+                    }
                     className="GridBreadcrum-select"
                   >
-                    <option value="">Beds: Any</option>
-                    <option value="1">1 Bed</option>
-                    <option value="2">2 Beds</option>
-                    <option value="3">3 Beds</option>
+
+                    <option value="">
+                      Beds: Any
+                    </option>
+
+                    <option value="1">
+                      1 Bed
+                    </option>
+
+                    <option value="2">
+                      2 Beds
+                    </option>
+
+                    <option value="3">
+                      3 Beds
+                    </option>
+
                   </select>
+
                   <FiChevronDown className="GridBreadcrum-select-icon" />
+
                 </div>
 
                 <div className="GridBreadcrum-filter-range-label">
@@ -228,128 +768,74 @@ const GridBreadcrum = () => {
 
               <div className="GridBreadcrum-divider"></div>
 
-              {/* Amenities Checkboxes Grid */}
+              {/* ====================================== */}
+              {/* AMENITIES */}
+              {/* SAME EXISTING CLASS */}
+              {/* ====================================== */}
+
               <div className="GridBreadcrum-checkboxes-grid">
-                
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="swimmingPool"
-                    checked={amenities.swimmingPool}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Swimming pool</span>
-                </label>
 
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="balcony"
-                    checked={amenities.balcony}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Balcony</span>
-                </label>
+                {loadingAmenities ? (
+                  <span>
+                    Loading amenities...
+                  </span>
+                ) : amenitiesList.length ===
+                  0 ? (
+                  <span>
+                    No amenities found
+                  </span>
+                ) : (
+                  amenitiesList.map(
+                    (amenity) => {
+                      const amenityName =
+                        amenity.name ||
+                        amenity.title ||
+                        "";
 
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="ensuite"
-                    checked={amenities.ensuite}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Ensuite</span>
-                </label>
+                      if (
+                        !amenityName
+                      ) {
+                        return null;
+                      }
 
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="tennisCourt"
-                    checked={amenities.tennisCourt}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Tennis court</span>
-                </label>
+                      const checked =
+                        selectedAmenities.includes(
+                          amenityName
+                        );
 
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="garage"
-                    checked={amenities.garage}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Garage</span>
-                </label>
+                      return (
+                        <label
+                          key={
+                            amenity._id ||
+                            amenityName
+                          }
+                          className="GridBreadcrum-checkbox-label"
+                        >
 
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="outdoorArea"
-                    checked={amenities.outdoorArea}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Outdoor area</span>
-                </label>
+                          <input
+                            type="checkbox"
+                            name={
+                              amenityName
+                            }
+                            checked={
+                              checked
+                            }
+                            onChange={() =>
+                              handleCheckboxChange(
+                                amenityName
+                              )
+                            }
+                          />
 
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="builtInRobes"
-                    checked={amenities.builtInRobes}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Built in robes</span>
-                </label>
+                          <span>
+                            {amenityName}
+                          </span>
 
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="study"
-                    checked={amenities.study}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Study</span>
-                </label>
-
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="alarmSystem"
-                    checked={amenities.alarmSystem}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Alarm system</span>
-                </label>
-
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="broadband"
-                    checked={amenities.broadband}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Broadband</span>
-                </label>
-
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="gym"
-                    checked={amenities.gym}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Gym</span>
-                </label>
-
-                <label className="GridBreadcrum-checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="outdoorSpa"
-                    checked={amenities.outdoorSpa}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Outdoor spa</span>
-                </label>
+                        </label>
+                      );
+                    }
+                  )
+                )}
 
               </div>
 
@@ -357,43 +843,12 @@ const GridBreadcrum = () => {
           )}
 
         </div>
-      </div>
 
-      {/* Hero Banner Section with House Background */}
-      <div className="GridBreadcrum-hero-banner" style={bgStyle}>
-        <div className="GridBreadcrum-hero-container">
-          
-          <h1 className="GridBreadcrum-hero-title">
-            Gorgeous Apartment Building
-          </h1>
-
-          <div className="GridBreadcrum-hero-meta">
-            <span className="GridBreadcrum-meta-item">
-              <BiBed className="GridBreadcrum-meta-icon" />
-              Beds: <strong>4</strong>
-            </span>
-
-            <span className="GridBreadcrum-meta-item">
-              <BiBath className="GridBreadcrum-meta-icon" />
-              Baths: <strong>2</strong>
-            </span>
-
-            <span className="GridBreadcrum-meta-item">
-              <BiArea className="GridBreadcrum-meta-icon" />
-              Sqft: <strong>1150</strong>
-            </span>
-
-            <span className="GridBreadcrum-meta-item">
-              <HiOutlineMapPin className="GridBreadcrum-meta-icon" />
-              58 Hullbrook Road, Billesley, B13 0LA
-            </span>
-          </div>
-
-        </div>
       </div>
 
     </div>
   );
 };
+
 
 export default GridBreadcrum;

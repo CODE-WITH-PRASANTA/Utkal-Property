@@ -1,9 +1,20 @@
-/* Base Container Styles */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --utkal-green: #0a682c;
+  --utkal-green-hover: #074e20;
+  --utkal-navy: #0c1b33;
+  --utkal-green-light: #eef7f2;
+  --utkal-green-border: #cde4d6;
+  --utkal-gray-subtle: #5a6b82;
+  --utkal-gold: #d97706;
+}
+
 .HomeFeaturedproperties {
   width: 100%;
-  padding: 60px 20px;
-  background-color: #fcfcfc;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 40px 24px;
+  background: radial-gradient(circle at 50% 0%, #ffffff 0%, #f2f9f5 65%, #e5f4ec 100%);
+  font-family: 'Plus Jakarta Sans', sans-serif;
   box-sizing: border-box;
   position: relative;
 }
@@ -16,52 +27,84 @@
 /* Header */
 .HomeFeaturedproperties-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.HomeFeaturedproperties-badgeTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 18px;
+  background-color: var(--utkal-green-light);
+  border: 1px solid var(--utkal-green-border);
+  color: var(--utkal-green);
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 30px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(10, 104, 44, 0.06);
+}
+
+.HomeFeaturedproperties-badgeTag .tag-icon {
+  font-size: 12px;
 }
 
 .HomeFeaturedproperties-main-heading {
-  font-size: 36px;
+  font-size: 42px;
   font-weight: 800;
-  color: #121026;
-  margin-bottom: 10px;
+  color: var(--utkal-navy);
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.HomeFeaturedproperties-main-heading .highlight-green {
+  color: var(--utkal-green);
 }
 
 .HomeFeaturedproperties-subheading {
-  font-size: 14px;
-  color: #71717a;
+  font-size: 15px;
+  color: var(--utkal-gray-subtle);
   margin: 0;
+  line-height: 1.65;
 }
 
-/* Tabs */
+/* Category Tabs */
 .HomeFeaturedproperties-tabs {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
 }
 
 .HomeFeaturedproperties-tab-btn {
   background: #ffffff;
-  border: 1px solid #f0f0f0;
-  padding: 10px 20px;
-  border-radius: 6px;
+  border: 1px solid var(--utkal-green-border);
+  padding: 11px 24px;
+  border-radius: 30px;
   font-size: 14px;
-  font-weight: 500;
-  color: #27272a;
+  font-weight: 700;
+  color: var(--utkal-navy);
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(10, 104, 44, 0.04);
 }
 
 .HomeFeaturedproperties-tab-btn:hover {
-  background-color: #fbfbfb;
+  background-color: var(--utkal-green-light);
+  color: var(--utkal-green);
 }
 
 .HomeFeaturedproperties-tab-btn.active {
-  color: #f5a623;
-  border-color: transparent;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: var(--utkal-green);
+  color: #ffffff;
+  border-color: var(--utkal-green);
+  box-shadow: 0 6px 18px rgba(10, 104, 44, 0.25);
 }
 
 /* Property Grid */
@@ -71,29 +114,31 @@
   gap: 24px;
 }
 
-/* Card Outer Wrapper */
+/* Card Styling */
 .HomeFeaturedproperties-card {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--utkal-green-border);
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(12, 27, 51, 0.06);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   display: flex;
   flex-direction: column;
 }
 
 .HomeFeaturedproperties-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-8px);
+  border-color: var(--utkal-green);
+  box-shadow: 0 20px 40px rgba(10, 104, 44, 0.14);
 }
 
-/* Card Image & Hover Overlay */
+/* Image & Overlay */
 .HomeFeaturedproperties-card-img-wrapper {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
-  background-color: #f4f4f5;
+  background-color: var(--utkal-green-light);
 }
 
 .HomeFeaturedproperties-card-img {
@@ -101,6 +146,10 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
+}
+
+.HomeFeaturedproperties-card:hover .HomeFeaturedproperties-card-img {
+  transform: scale(1.05);
 }
 
 /* Badges */
@@ -115,55 +164,74 @@
 }
 
 .HomeFeaturedproperties-badge-featured {
-  background-color: #f5a623;
+  background-color: var(--utkal-green);
   color: #ffffff;
   font-size: 11px;
   font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-.HomeFeaturedproperties-badge-forsale {
-  background-color: #635bff;
-  color: #ffffff;
+.HomeFeaturedproperties-badge-type {
   font-size: 11px;
   font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: #ffffff;
 }
 
-/* Bookmark Ribbon Button */
+.HomeFeaturedproperties-badge-type.sale {
+  background-color: var(--utkal-navy);
+}
+
+.HomeFeaturedproperties-badge-type.rent {
+  background-color: var(--utkal-gold);
+}
+
+/* Bookmark Ribbon */
 .HomeFeaturedproperties-bookmark-btn {
   position: absolute;
-  top: 0;
+  top: 12px;
   right: 12px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
   border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   z-index: 3;
-  padding: 4px;
-  outline: none;
+  transition: all 0.2s ease;
 }
 
-.HomeFeaturedproperties-bookmark-outline {
-  color: #f5a623;
-  font-size: 22px;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+.HomeFeaturedproperties-bookmark-btn:hover {
+  background: #ffffff;
+  transform: scale(1.1);
 }
 
-.HomeFeaturedproperties-bookmark-filled {
-  color: #f5a623;
-  font-size: 22px;
+.HomeFeaturedproperties-bookmark-btn svg.outline {
+  color: var(--utkal-navy);
+  font-size: 14px;
 }
 
-/* Hover Dark Overlay */
+.HomeFeaturedproperties-bookmark-btn svg.filled {
+  color: var(--utkal-green);
+  font-size: 14px;
+}
+
+/* Hover Overlay */
 .HomeFeaturedproperties-hover-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(12, 27, 51, 0.45);
+  backdrop-filter: blur(2px);
   opacity: 0;
   transition: opacity 0.3s ease;
   display: flex;
@@ -179,7 +247,7 @@
 
 .HomeFeaturedproperties-crosshair-icon {
   color: #ffffff;
-  font-size: 40px;
+  font-size: 42px;
   font-weight: 200;
   margin-bottom: 20px;
   user-select: none;
@@ -199,7 +267,7 @@
   background: transparent;
   border: none;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 18px;
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
   opacity: 0.85;
@@ -207,7 +275,7 @@
 
 .HomeFeaturedproperties-arrow-btn:hover {
   opacity: 1;
-  transform: scale(1.2);
+  transform: scale(1.25);
 }
 
 /* Card Content Area */
@@ -218,57 +286,76 @@
   flex-grow: 1;
 }
 
+.HomeFeaturedproperties-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
 .HomeFeaturedproperties-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
-  color: #121026;
-  margin: 0 0 8px 0;
+  color: var(--utkal-navy);
+  margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.HomeFeaturedproperties-verified {
+  color: var(--utkal-green);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .HomeFeaturedproperties-address {
   font-size: 13px;
-  color: #64748b;
+  color: var(--utkal-gray-subtle);
   margin: 0 0 16px 0;
   display: flex;
   align-items: center;
   gap: 6px;
+  font-weight: 500;
 }
 
 .HomeFeaturedproperties-address-icon {
-  font-size: 12px;
-  color: #94a3b8;
+  font-size: 13px;
+  color: var(--utkal-green);
   flex-shrink: 0;
 }
 
 .HomeFeaturedproperties-price {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
-  color: #f5a623;
+  color: var(--utkal-green);
   margin-bottom: 16px;
+  letter-spacing: -0.5px;
 }
 
 .HomeFeaturedproperties-specs {
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-size: 13px;
-  color: #334155;
+  gap: 14px;
+  font-size: 12.5px;
+  color: var(--utkal-navy);
   padding-bottom: 16px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--utkal-green-border);
   margin-bottom: 16px;
 }
 
 .HomeFeaturedproperties-spec-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  font-weight: 500;
 }
 
 .HomeFeaturedproperties-spec-item svg {
-  color: #94a3b8;
+  color: var(--utkal-green);
 }
 
 /* Card Footer */
@@ -282,19 +369,24 @@
 .HomeFeaturedproperties-compare-btn {
   background: transparent;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  color: #121026;
+  color: var(--utkal-navy);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   padding: 0;
+  transition: color 0.2s ease;
+}
+
+.HomeFeaturedproperties-compare-btn:hover {
+  color: var(--utkal-green);
 }
 
 .HomeFeaturedproperties-plus-icon {
-  font-size: 11px;
-  color: #f5a623;
+  font-size: 10px;
+  color: var(--utkal-green);
 }
 
 .HomeFeaturedproperties-user-info {
@@ -308,11 +400,13 @@
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
+  border: 1px solid var(--utkal-green-border);
 }
 
 .HomeFeaturedproperties-time {
   font-size: 12px;
-  color: #64748b;
+  color: var(--utkal-gray-subtle);
+  font-weight: 500;
 }
 
 /* Pagination Controls */
@@ -321,16 +415,18 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 40px;
+  margin-top: 52px;
 }
 
 .HomeFeaturedproperties-page-btn,
 .HomeFeaturedproperties-page-num {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  padding: 8px 14px;
-  border-radius: 6px;
+  border: 1px solid var(--utkal-green-border);
+  padding: 9px 18px;
+  border-radius: 8px;
   font-size: 14px;
+  font-weight: 700;
+  color: var(--utkal-navy);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -341,39 +437,42 @@
 }
 
 .HomeFeaturedproperties-page-num.active {
-  background-color: #f5a623;
+  background-color: var(--utkal-green);
   color: #ffffff;
-  border-color: #f5a623;
+  border-color: var(--utkal-green);
+  box-shadow: 0 4px 12px rgba(10, 104, 44, 0.2);
 }
 
 .HomeFeaturedproperties-page-btn:hover:not(:disabled),
 .HomeFeaturedproperties-page-num:hover:not(.active) {
-  background-color: #f8fafc;
+  background-color: var(--utkal-green-light);
+  color: var(--utkal-green);
 }
 
-/* Floating Scroll to Top */
+/* Scroll to Top */
 .HomeFeaturedproperties-scroll-top-btn {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  background-color: #f5a623;
+  background-color: var(--utkal-green);
   color: #ffffff;
   border: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);
-  transition: transform 0.2s ease;
+  box-shadow: 0 6px 20px rgba(10, 104, 44, 0.35);
+  transition: all 0.25s ease;
   z-index: 100;
 }
 
 .HomeFeaturedproperties-scroll-top-btn:hover {
-  transform: translateY(-3px);
+  background-color: var(--utkal-green-hover);
+  transform: translateY(-4px);
 }
 
 /* Responsive Media Queries */
@@ -399,11 +498,11 @@
   }
 
   .HomeFeaturedproperties-tab-btn {
-    padding: 8px 14px;
+    padding: 8px 16px;
     font-size: 13px;
   }
 
   .HomeFeaturedproperties-main-heading {
-    font-size: 28px;
+    font-size: 25px;
   }
 }

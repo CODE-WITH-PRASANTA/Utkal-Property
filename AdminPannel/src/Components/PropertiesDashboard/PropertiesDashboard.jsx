@@ -1,353 +1,400 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { 
-  FiSearch, FiFilter, FiRefreshCw, FiEye, FiEdit3, FiMoreVertical, 
-  FiChevronLeft, FiChevronRight, FiPlus, FiHome, FiCheckCircle, 
-  FiClock, FiTag, FiEye as FiView, FiMessageSquare, FiMapPin, FiCalendar 
-} from 'react-icons/fi';
-import './PropertiesDashboard.css';
+import { useNavigate } from "react-router-dom";
+import {
+  FiSearch,
+  FiFilter,
+  FiRefreshCw,
+  FiEye,
+  FiEdit3,
+  FiMoreVertical,
+  FiChevronLeft,
+  FiChevronRight,
+  FiPlus,
+  FiHome,
+  FiCheckCircle,
+  FiClock,
+  FiTag,
+  FiEye as FiView,
+  FiMessageSquare,
+  FiMapPin,
+  FiCalendar,
+  FiX,
+  FiDollarSign,
+  FiTrash2,
+} from "react-icons/fi";
+import "./PropertiesDashboard.css";
+import React, { useState, useEffect } from "react";
+import API, { BASE_URL } from "../../api/axios";
 
-export default function PropertiesDashboard() {
+const PropertiesDashboard = () => {
   const navigate = useNavigate();
-
-  // Master pool of dummy data categorized by page
-  const propertyPagesData = {
-    1: [
-      {
-        id: 1,
-        name: "Rudransh South Kingdom",
-        featured: true,
-        location: "6PM9+7GX, Infosys Rd, Chandiheta...",
-        rera: "RERA: PS/19/2026/01475",
-        type: "Luxury Villa",
-        subType: "G+2",
-        category: "Villa",
-        price: "₹ 1.86 Cr - ₹ 1.99 Cr",
-        pricePerSqft: "₹ 6,350 / Sqft",
-        status: "Active",
-        statusType: "For Sale",
-        addedDate: "20 May 2025",
-        addedTime: "10:30 AM",
-        image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=300&q=80",
-        showDetails: false,
-        menuOpen: false
-      },
-      {
-        id: 2,
-        name: "Modern White Villa",
-        featured: false,
-        location: "58 Hullbrook Road, Billesley, B13 OLA",
-        rera: "RERA: PS/18/2026/01412",
-        type: "Villa",
-        subType: "G+1",
-        category: "Villa",
-        price: "₹ 75.00 Lac",
-        pricePerSqft: "₹ 4,500 / Sqft",
-        status: "Active",
-        statusType: "For Sale",
-        addedDate: "18 May 2025",
-        addedTime: "04:15 PM",
-        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80",
-        showDetails: false,
-        menuOpen: false
-      },
-      {
-        id: 3,
-        name: "Suburban Stone House",
-        featured: false,
-        location: "24 Green Avenue, Oxford, OX1 2JD",
-        rera: "RERA: PS/17/2026/01398",
-        type: "Independent House",
-        subType: "G+1",
-        category: "Independent House",
-        price: "₹ 82.00 Lac",
-        pricePerSqft: "₹ 5,000 / Sqft",
-        status: "Under Construction",
-        statusType: "For Sale",
-        addedDate: "17 May 2025",
-        addedTime: "11:20 AM",
-        image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=300&q=80",
-        showDetails: false,
-        menuOpen: false
-      },
-      {
-        id: 4,
-        name: "Minimalist Cubical Home",
-        featured: false,
-        location: "102 Sunset Boulevard, Bristol, BS1 5TY",
-        rera: "RERA: PS/17/2026/01375",
-        type: "Villa",
-        subType: "G+1",
-        category: "Villa",
-        price: "₹ 68.00 Lac",
-        pricePerSqft: "₹ 6,100 / Sqft",
-        status: "Active",
-        statusType: "For Sale",
-        addedDate: "15 May 2025",
-        addedTime: "02:45 PM",
-        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=300&q=80",
-        showDetails: false,
-        menuOpen: false
-      },
-      {
-        id: 5,
-        name: "Tropical Coastal Estate",
-        featured: false,
-        location: "15 Ocean View Road, Brighton, BN1 3PA",
-        rera: "RERA: PS/16/2026/01322",
-        type: "Villa",
-        subType: "G+2",
-        category: "Villa",
-        price: "₹ 94.00 Lac",
-        pricePerSqft: "₹ 5,875 / Sqft",
-        status: "Sold",
-        statusType: "Sold Out",
-        addedDate: "10 May 2025",
-        addedTime: "09:30 AM",
-        image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=300&q=80",
-        showDetails: false,
-        menuOpen: false
-      }
-    ],
-    2: [
-      {
-        id: 6,
-        name: "Emerald Skyline Penthouse",
-        featured: true,
-        location: "44 Grand Avenue, Downtown, London",
-        rera: "RERA: PS/20/2026/02111",
-        type: "Penthouse",
-        subType: "G+3",
-        category: "Apartment",
-        price: "₹ 3.50 Cr",
-        pricePerSqft: "₹ 9,200 / Sqft",
-        status: "Active",
-        statusType: "For Sale",
-        addedDate: "22 May 2025",
-        addedTime: "01:00 PM",
-        image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=300&q=80",
-        showDetails: false,
-        menuOpen: false
-      },
-      {
-        id: 7,
-        name: "Azure Riverside Retreat",
-        featured: false,
-        location: "12 Riverbank Lane, Cambridge",
-        rera: "RERA: PS/21/2026/03421",
-        type: "Independent House",
-        subType: "G+1",
-        category: "Independent House",
-        price: "₹ 1.25 Cr",
-        pricePerSqft: "₹ 5,400 / Sqft",
-        status: "Under Construction",
-        statusType: "For Sale",
-        addedDate: "21 May 2025",
-        addedTime: "11:00 AM",
-        image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=300&q=80",
-        showDetails: false,
-        menuOpen: false
-      }
-    ],
-    3: [
-      {
-        id: 8,
-        name: "Maple Wood Cottage",
-        featured: false,
-        location: "98 Forest Trail, Edinburgh",
-        rera: "RERA: PS/22/2026/04512",
-        type: "Villa",
-        subType: "G+1",
-        category: "Villa",
-        price: "₹ 95.00 Lac",
-        pricePerSqft: "₹ 4,800 / Sqft",
-        status: "Active",
-        statusType: "For Sale",
-        addedDate: "19 May 2025",
-        addedTime: "09:00 AM",
-        image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=300&q=80",
-        showDetails: false,
-        menuOpen: false
-      }
-    ]
-  };
 
   // State Management
   const [currentPage, setCurrentPage] = useState(1);
-  const [properties, setProperties] = useState(propertyPagesData[1]);
+
+  // Modal State
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Filter State Management
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('All');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedType, setSelectedType] = useState('All');
-  const [selectedLocation, setSelectedLocation] = useState('All');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedType, setSelectedType] = useState("All");
+  const [selectedLocation, setSelectedLocation] = useState("All");
 
-  // Handle Page Change and Swap Dataset
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    // Load new dummy data for that page if available, otherwise fallback to empty or page 1 data
-    const newData = propertyPagesData[pageNumber] || [];
-    setProperties(newData);
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [dashboard, setDashboard] = useState({
+    totalProperties: 0,
+    activeProperties: 0,
+    underConstruction: 0,
+    soldProperties: 0,
+    totalViews: 0,
+    totalEnquiries: 0,
+  });
+
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [topLocations, setTopLocations] = useState([]);
+  const [propertyTypes, setPropertyTypes] = useState([]);
+  const [priceRanges, setPriceRanges] = useState([]);
+  const fetchAnalytics = async () => {
+    try {
+      const [locationsRes, typesRes, priceRes] = await Promise.all([
+        API.get("/properties/top-locations"),
+        API.get("/properties/property-types"),
+        API.get("/properties/price-range"),
+      ]);
+
+      console.log("TOP LOCATIONS:", locationsRes.data);
+
+      console.log("PROPERTY TYPES:", typesRes.data);
+
+      console.log("PRICE RANGES:", priceRes.data);
+
+      setTopLocations(
+        locationsRes.data.locations || locationsRes.data.data || [],
+      );
+
+      setPropertyTypes(typesRes.data.types || typesRes.data.data || []);
+
+      setPriceRanges(priceRes.data.priceRanges || priceRes.data.data || []);
+    } catch (error) {
+      console.error("ANALYTICS ERROR:", error.response?.data || error);
+    }
   };
 
-  const toggleViewDetails = (id) => {
-    setProperties(properties.map(prop => {
-      if (prop.id === id) {
-        return { ...prop, showDetails: !prop.showDetails };
-      }
-      return prop;
-    }));
+  useEffect(() => {
+    fetchAnalytics();
+  }, []);
+
+  // const totalPages = 1;
+
+  const fetchProperties = async () => {
+    try {
+      setLoading(true);
+
+      const { data } = await API.get("/properties", {
+        params: {
+          page: currentPage,
+          search: searchTerm,
+          status: selectedStatus,
+          category: selectedCategory,
+          type: selectedType,
+          location: selectedLocation,
+        },
+      });
+
+      setProperties(data.properties);
+      setTotalPages(data.totalPages);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+
+      setLoading(false);
+    }
   };
 
+  const fetchDashboard = async () => {
+    try {
+      const { data } = await API.get("/properties/dashboard/stats");
+
+      setDashboard(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProperties();
+  }, [
+    currentPage,
+    searchTerm,
+    selectedStatus,
+    selectedCategory,
+    selectedType,
+    selectedLocation,
+  ]);
+
+  useEffect(() => {
+    fetchDashboard();
+  }, []);
+
+  const deleteProperty = async (id) => {
+    try {
+      if (!window.confirm("Are you sure you want to delete this property?"))
+        return;
+
+      await API.delete(`/properties/${id}`);
+
+      fetchProperties();
+      fetchDashboard();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // Page switcher
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleOpenDetails = (prop) => {
+    setSelectedProperty(prop);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProperty(null);
+  };
+
+  // Toggle dropdown menu for a specific row
   const toggleMenu = (id) => {
-    setProperties(properties.map(prop => {
-      if (prop.id === id) {
-        return { ...prop, menuOpen: !prop.menuOpen };
-      }
-      return { ...prop, menuOpen: false };
-    }));
+    setProperties(
+      properties.map((prop) => {
+        if (prop._id === id) {
+          return { ...prop, menuOpen: !prop.menuOpen };
+        }
+        return { ...prop, menuOpen: false };
+      }),
+    );
   };
 
-  const updateStatus = (id, newStatus, newStatusType) => {
-    setProperties(properties.map(prop => {
-      if (prop.id === id) {
-        return { ...prop, status: newStatus, statusType: newStatusType, menuOpen: false };
-      }
-      return prop;
-    }));
+  // Update property status directly from 3-dot menu
+  const updateStatus = async (id, status, statusType) => {
+    try {
+      await API.put(`/properties/${id}/status`, {
+        status,
+        statusType,
+      });
+
+      fetchProperties();
+      fetchDashboard();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleEdit = (name) => {
-    alert(`Edit property: ${name}`);
+  const handleEdit = (id) => {
+    navigate(`/properties/edit/${id}`);
   };
-
-  // Reset Filters Handler
   const handleReset = () => {
-    setSearchTerm('');
-    setSelectedStatus('All');
-    setSelectedCategory('All');
-    setSelectedType('All');
-    setSelectedLocation('All');
+    setSearchTerm("");
+    setSelectedStatus("All");
+    setSelectedCategory("All");
+    setSelectedType("All");
+    setSelectedLocation("All");
   };
 
   // Filter Logic Implementation
-  const filteredProperties = properties.filter(prop => {
-    const matchesSearch = prop.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          prop.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === 'All' || prop.status === selectedStatus;
-    const matchesCategory = selectedCategory === 'All' || prop.category === selectedCategory;
-    const matchesType = selectedType === 'All' || prop.type === selectedType;
-    const matchesLocation = selectedLocation === 'All' || prop.location.includes(selectedLocation);
+  // const properties = properties.filter((prop) => {
+  //   const matchesSearch =
+  //     prop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     prop.location.toLowerCase().includes(searchTerm.toLowerCase());
+  //   const matchesStatus =
+  //     selectedStatus === "All" || prop.status === selectedStatus;
+  //   const matchesCategory =
+  //     selectedCategory === "All" || prop.category === selectedCategory;
+  //   const matchesType = selectedType === "All" || prop.type === selectedType;
+  //   const matchesLocation =
+  //     selectedLocation === "All" || prop.location.includes(selectedLocation);
 
-    return matchesSearch && matchesStatus && matchesCategory && matchesType && matchesLocation;
-  });
+  //   return (
+  //     matchesSearch &&
+  //     matchesStatus &&
+  //     matchesCategory &&
+  //     matchesType &&
+  //     matchesLocation
+  //   );
+  // });
+
+  const getImageUrl = (image) => {
+    if (!image) {
+      return "/no-image.png";
+    }
+
+    // Already complete URL
+    if (image.startsWith("http://") || image.startsWith("https://")) {
+      return image;
+    }
+
+    // Ensure leading /
+    const cleanPath = image.startsWith("/") ? image : `/${image}`;
+
+    return `${BASE_URL}${cleanPath}`;
+  };
 
   return (
-    <div className="properties-dashboard">
+    <div className="all-property-dashboard full-screen-dashboard">
       {/* Top Header */}
-      <header className="dashboard-header">
-        <div className="header-title-area">
+      <header className="all-property-dashboard-header">
+        <div className="all-property-header-title-area">
           <h1>Properties</h1>
-          <div className="breadcrumb">
-            Dashboard <span>&gt;</span> Properties <span>&gt;</span> All Properties
+          <div className="all-property-breadcrumb">
+            Dashboard <span>&gt;</span> Properties <span>&gt;</span> All
+            Properties
           </div>
         </div>
-        <button className="add-property-btn" onClick={() => navigate('/NewProperties')}>
+        <button
+          className="all-property-add-btn"
+          onClick={() => navigate("/properties/add")}
+        >
           <FiPlus /> Add New Property
         </button>
       </header>
 
-      {/* Metrics Cards - 2 rows of 3 columns */}
-      <section className="metrics-grid">
-        <div className="metric-card">
-          <div className="metric-icon orange"><FiHome /></div>
-          <div className="metric-content">
-            <span className="metric-label">Total Properties</span>
-            <h2 className="metric-value">156</h2>
-            <span className="metric-sub">All Listed Properties</span>
+      {/* Metrics Cards Grid (3 per row) */}
+      <section className="all-property-metrics-grid">
+        <div className="all-property-metric-card">
+          <div className="all-property-metric-icon orange">
+            <FiHome />
+          </div>
+          <div className="all-property-metric-content">
+            <span className="all-property-metric-label">Total Properties</span>
+            <h2 className="all-property-metric-value">
+              {dashboard.totalProperties}
+            </h2>
+            <span className="all-property-metric-sub">
+              All Listed Properties
+            </span>
           </div>
         </div>
 
-        <div className="metric-card">
-          <div className="metric-icon green"><FiCheckCircle /></div>
-          <div className="metric-content">
-            <span className="metric-label">Active Properties</span>
-            <h2 className="metric-value">142</h2>
-            <span className="metric-sub">Currently Active</span>
+        <div className="all-property-metric-card">
+          <div className="all-property-metric-icon green">
+            <FiCheckCircle />
+          </div>
+          <div className="all-property-metric-content">
+            <span className="all-property-metric-label">Active Properties</span>
+            <h2 className="all-property-metric-value">
+              {dashboard.activeProperties}
+            </h2>
+            <span className="all-property-metric-sub">Currently Active</span>
           </div>
         </div>
 
-        <div className="metric-card">
-          <div className="metric-icon blue"><FiClock /></div>
-          <div className="metric-content">
-            <span className="metric-label">Under Construction</span>
-            <h2 className="metric-value">14</h2>
-            <span className="metric-sub">In Progress</span>
+        <div className="all-property-metric-card">
+          <div className="all-property-metric-icon blue">
+            <FiClock />
+          </div>
+          <div className="all-property-metric-content">
+            <span className="all-property-metric-label">
+              Under Construction
+            </span>
+            <h2 className="all-property-metric-value">
+              {dashboard.underConstruction}
+            </h2>
+            <span className="all-property-metric-sub">In Progress</span>
           </div>
         </div>
 
-        <div className="metric-card">
-          <div className="metric-icon red"><FiTag /></div>
-          <div className="metric-content">
-            <span className="metric-label">Sold / Booked</span>
-            <h2 className="metric-value">26</h2>
-            <span className="metric-sub">Successfully Sold</span>
+        <div className="all-property-metric-card">
+          <div className="all-property-metric-icon red">
+            <FiTag />
+          </div>
+          <div className="all-property-metric-content">
+            <span className="all-property-metric-label">Sold / Booked</span>
+            <h2 className="all-property-metric-value">
+              {dashboard.soldProperties}
+            </h2>
+            <span className="all-property-metric-sub">Successfully Sold</span>
           </div>
         </div>
 
-        <div className="metric-card">
-          <div className="metric-icon light-blue"><FiView /></div>
-          <div className="metric-content">
-            <span className="metric-label">Total Views</span>
-            <h2 className="metric-value">12,458</h2>
-            <span className="metric-sub">All Properties</span>
+        <div className="all-property-metric-card">
+          <div className="all-property-metric-icon light-blue">
+            <FiView />
+          </div>
+          <div className="all-property-metric-content">
+            <span className="all-property-metric-label">Total Views</span>
+            <h2 className="all-property-metric-value">
+              {dashboard.totalViews}
+            </h2>
+            <span className="all-property-metric-sub">All Properties</span>
           </div>
         </div>
 
-        <div className="metric-card">
-          <div className="metric-icon purple"><FiMessageSquare /></div>
-          <div className="metric-content">
-            <span className="metric-label">Enquiries</span>
-            <h2 className="metric-value">1,245</h2>
-            <span className="metric-sub">Total Enquiries</span>
+        <div className="all-property-metric-card">
+          <div className="all-property-metric-icon purple">
+            <FiMessageSquare />
+          </div>
+          <div className="all-property-metric-content">
+            <span className="all-property-metric-label">Enquiries</span>
+            <h2 className="all-property-metric-value">
+              {dashboard.totalEnquiries}
+            </h2>
+            <span className="all-property-metric-sub">Total Enquiries</span>
           </div>
         </div>
       </section>
 
       {/* Filters Bar */}
-      <section className="filters-bar">
-        <div className="search-box">
-          <FiSearch className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search by property name, location..." 
+      <section className="all-property-filters-bar">
+        <div className="all-property-search-box">
+          <FiSearch className="all-property-search-icon" />
+          <input
+            type="text"
+            placeholder="Search by property name, location..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="filter-dropdowns">
-          <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}>
+        <div className="all-property-filter-dropdowns">
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+          >
             <option value="All">All Status</option>
             <option value="Active">Active</option>
             <option value="Under Construction">Under Construction</option>
             <option value="Sold">Sold</option>
           </select>
 
-          <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
             <option value="All">All Categories</option>
             <option value="Villa">Villa</option>
             <option value="Independent House">Independent House</option>
           </select>
 
-          <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+          >
             <option value="All">All Types</option>
             <option value="Luxury Villa">Luxury Villa</option>
             <option value="Villa">Villa</option>
             <option value="Independent House">Independent House</option>
           </select>
 
-          <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)}>
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+          >
             <option value="All">All Locations</option>
             <option value="Infosys Rd">Infosys Rd</option>
             <option value="Billesley">Billesley</option>
@@ -356,130 +403,221 @@ export default function PropertiesDashboard() {
             <option value="Brighton">Brighton</option>
           </select>
 
-          <button className="filter-btn"><FiFilter /> More Filters</button>
-          <button className="reset-btn" onClick={handleReset}><FiRefreshCw /> Reset</button>
+          <button className="all-property-filter-btn">
+            <FiFilter /> More Filters
+          </button>
+          <button className="all-property-reset-btn" onClick={handleReset}>
+            <FiRefreshCw /> Reset
+          </button>
         </div>
       </section>
 
       {/* Properties Table */}
-      <section className="properties-table-container">
-        <table className="properties-table">
-          <thead>
-            <tr>
-              <th>Property</th>
-              <th>Location</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Added On</th>
-              <th className="actions-header">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProperties.length > 0 ? (
-              filteredProperties.map((prop) => (
-                <React.Fragment key={prop.id}>
-                  <tr className="property-row">
-                    <td className="property-cell">
-                      <img src={prop.image} alt={prop.name} className="property-thumb" />
-                      <div className="property-info">
-                        <div className="title-line">
-                          <strong>{prop.name}</strong>
-                          {prop.featured && <span className="badge-featured">Featured</span>}
-                        </div>
-                        <span className="prop-address"><FiMapPin size={12}/> {prop.location}</span>
-                        <span className="prop-rera">{prop.rera}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="location-cell">
-                        <strong>{prop.type}</strong>
-                        <span>{prop.subType}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="price-cell">
-                        <strong>{prop.price}</strong>
-                        <span>{prop.pricePerSqft}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="status-cell">
-                        <span className={`status-badge ${prop.status.toLowerCase().replace(' ', '-')}`}>
-                          {prop.status}
-                        </span>
-                        <span className="status-sub">{prop.statusType}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="date-cell">
-                        <span><FiCalendar size={12}/> {prop.addedDate}</span>
-                        <span className="time-sub">{prop.addedTime}</span>
-                      </div>
-                    </td>
-                    <td className="actions-cell">
-                      <button className="action-icon-btn" title="View Details" onClick={() => toggleViewDetails(prop.id)}>
-                        <FiEye />
-                      </button>
-                      <button className="action-icon-btn" title="Edit" onClick={() => handleEdit(prop.name)}>
-                        <FiEdit3 />
-                      </button>
-                      <div className="dropdown-wrapper">
-                        <button className="action-icon-btn" title="Options" onClick={() => toggleMenu(prop.id)}>
-                          <FiMoreVertical />
-                        </button>
-                        {prop.menuOpen && (
-                          <div className="status-popup-menu">
-                            <button onClick={() => updateStatus(prop.id, 'Active', 'For Sale')}>Active</button>
-                            <button onClick={() => updateStatus(prop.id, 'Under Construction', 'For Sale')}>Under Construction</button>
-                            <button onClick={() => updateStatus(prop.id, 'Sold', 'Sold Out')}>Sold</button>
+      <section className="all-property-table-container">
+        <div className="all-property-table-wrapper">
+          <table className="all-property-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Added On</th>
+                <th className="all-property-actions-header">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {properties.length > 0 ? (
+                properties.map((prop) => (
+                  <React.Fragment key={prop._id}>
+                    <tr className="all-property-row">
+                      <td className="all-property-cell-info">
+                        <img
+                          src={
+                            prop.image
+                              ? `${BASE_URL}${prop.image}`
+                              : "/no-image.png"
+                          }
+                          alt={prop.name}
+                          className="all-property-thumb"
+                        />
+                        <div className="all-property-details">
+                          <div className="all-property-title-line">
+                            <strong>{prop.name}</strong>
+                            {prop.featured && (
+                              <span className="all-property-badge-featured">
+                                Featured
+                              </span>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                  {prop.showDetails && (
-                    <tr className="details-drawer">
-                      <td colSpan="6">
-                        <div className="drawer-content">
-                          <h4>Property Quick Overview</h4>
-                          <p><strong>Name:</strong> {prop.name}</p>
-                          <p><strong>Full Address:</strong> {prop.location}</p>
-                          <p><strong>RERA ID:</strong> {prop.rera}</p>
-                          <p><strong>Pricing:</strong> {prop.price} ({prop.pricePerSqft})</p>
+                          <span className="all-property-address">
+                            <FiMapPin size={12} /> {prop.location}
+                          </span>
+                          {prop.rera && (
+                            <span className="all-property-rera">
+                              {prop.rera}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="all-property-cell-meta">
+                          <strong>{prop.type}</strong>
+                          <span>{prop.subType}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="all-property-cell-price">
+                          <strong>
+                            ₹ {Number(prop.price).toLocaleString("en-IN")}
+                          </strong>
+                          <span>{prop.pricePerSqft}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="all-property-cell-status">
+                          <span
+                            className={`all-property-status-badge ${prop.status.toLowerCase().replace(/\s+/g, "-")}`}
+                          >
+                            <span className="status-dot"></span>
+                            {prop.status}
+                          </span>
+                          <span className="all-property-status-sub">
+                            {prop.statusType}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="all-property-cell-date">
+                          <span>
+                            <FiCalendar size={12} />
+                            {new Date(prop.createdAt).toLocaleDateString()}
+                          </span>
+                          <span className="all-property-time-sub">
+                            {new Date(prop.createdAt).toLocaleTimeString()}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="all-property-actions-cell">
+                        <button
+                          className="all-property-action-btn"
+                          title="View Details"
+                          onClick={() => handleOpenDetails(prop)}
+                        >
+                          <FiEye />
+                        </button>
+                        <button
+                          className="all-property-action-btn"
+                          title="Edit"
+                          onClick={() => handleEdit(prop._id)}
+                        >
+                          <FiEdit3 />
+                        </button>
+
+                        <button
+                          className="all-property-action-btn delete-btn"
+                          title="Delete"
+                          onClick={() => deleteProperty(prop._id)}
+                        >
+                          <FiTrash2 />
+                        </button>
+
+                        {/* 3-Dot Status Selection Menu */}
+                        <div className="all-property-dropdown-wrapper">
+                          <button
+                            className={`all-property-action-btn ${prop.menuOpen ? "active" : ""}`}
+                            title="Status Options"
+                            onClick={() => toggleMenu(prop._id)}
+                          >
+                            <FiMoreVertical />
+                          </button>
+                          {prop.menuOpen && (
+                            <div className="all-property-status-popup-menu">
+                              <div className="popup-menu-title">
+                                Set Property Status
+                              </div>
+                              <button
+                                className={`popup-option ${prop.status === "Active" ? "selected" : ""}`}
+                                onClick={() =>
+                                  updateStatus(prop._id, "Active", "For Sale")
+                                }
+                              >
+                                <span className="option-dot green-dot"></span>{" "}
+                                Active
+                              </button>
+                              <button
+                                className={`popup-option ${prop.status === "Under Construction" ? "selected" : ""}`}
+                                onClick={() =>
+                                  updateStatus(
+                                    prop._id,
+                                    "Under Construction",
+                                    "For Sale",
+                                  )
+                                }
+                              >
+                                <span className="option-dot orange-dot"></span>{" "}
+                                Under Construction
+                              </button>
+                              <button
+                                className={`popup-option ${prop.status === "Sold" ? "selected" : ""}`}
+                                onClick={() =>
+                                  updateStatus(prop._id, "Sold", "Sold Out")
+                                }
+                              >
+                                <span className="option-dot red-dot"></span>{" "}
+                                Sold
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
-                  )}
-                </React.Fragment>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" style={{ textAlign: 'center', padding: '24px', color: '#718096' }}>
-                  No properties found matching your criteria.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                  </React.Fragment>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="all-property-empty">
+                    No properties found matching your criteria.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {/* Pagination */}
-        <div className="pagination-container">
-          <span className="pagination-info">Showing page {currentPage} of 16 entries</span>
-          <div className="pagination-controls">
-            <button 
-              className="page-btn" 
+        <div className="all-property-pagination">
+          <span className="all-property-pagination-info">
+            Showing page {currentPage} of {totalPages}
+          </span>
+          <div className="all-property-pagination-controls">
+            <button
+              className="all-property-page-btn"
               onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+              disabled={currentPage === 1}
             >
               <FiChevronLeft />
             </button>
-            <button className={`page-btn ${currentPage === 1 ? 'active' : ''}`} onClick={() => handlePageChange(1)}>1</button>
-            <button className={`page-btn ${currentPage === 2 ? 'active' : ''}`} onClick={() => handlePageChange(2)}>2</button>
-            <button className={`page-btn ${currentPage === 3 ? 'active' : ''}`} onClick={() => handlePageChange(3)}>3</button>
-            <span className="page-dots">...</span>
-            <button className={`page-btn ${currentPage === 16 ? 'active' : ''}`} onClick={() => handlePageChange(16)}>16</button>
-            <button 
-              className="page-btn" 
+            {[1, 2, 3].map((page) => (
+              <button
+                key={page}
+                className={`all-property-page-btn ${currentPage === page ? "active" : ""}`}
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </button>
+            ))}
+            <span className="all-property-page-dots">...</span>
+            <button
+              className={`all-property-page-btn ${currentPage === 16 ? "active" : ""}`}
+              onClick={() => handlePageChange(16)}
+            >
+              16
+            </button>
+            <button
+              className="all-property-page-btn"
               onClick={() => handlePageChange(Math.min(currentPage + 1, 16))}
+              disabled={currentPage === 16}
             >
               <FiChevronRight />
             </button>
@@ -487,85 +625,265 @@ export default function PropertiesDashboard() {
         </div>
       </section>
 
-      {/* Bottom Analytics Section */}
-      <section className="analytics-grid">
-        <div className="analytics-card">
-          <h3>Top Locations</h3>
-          <div className="location-item">
-            <div className="loc-info"><span>Infosys Road</span><span>45 Properties</span></div>
-            <div className="progress-bar"><div className="fill" style={{width: '85%'}}></div></div>
-          </div>
-          <div className="location-item">
-            <div className="loc-info"><span>Chandaka</span><span>38 Properties</span></div>
-            <div className="progress-bar"><div className="fill" style={{width: '70%'}}></div></div>
-          </div>
-          <div className="location-item">
-            <div className="loc-info"><span>Patia</span><span>28 Properties</span></div>
-            <div className="progress-bar"><div className="fill" style={{width: '50%'}}></div></div>
+      {/* View Details Modal */}
+      {isModalOpen && selectedProperty && (
+        <div className="all-property-modal-overlay" onClick={handleCloseModal}>
+          <div
+            className="all-property-modal-card"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="all-property-modal-close"
+              onClick={handleCloseModal}
+            >
+              <FiX />
+            </button>
+            <div className="all-property-modal-header">
+              <img
+                src={`${BASE_URL}${selectedProperty.image}`}
+                alt={selectedProperty.name}
+                className="all-property-modal-hero"
+              />
+              <div className="all-property-modal-header-badge">
+                <span
+                  className={`all-property-status-badge ${selectedProperty.status?.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  <span className="status-dot"></span>
+                  {selectedProperty.status}
+                </span>
+              </div>
+            </div>
+            <div className="all-property-modal-body">
+              <div className="all-property-modal-title-row">
+                <h2>{selectedProperty.name}</h2>
+                <span className="all-property-modal-price">
+                  {selectedProperty.price}
+                </span>
+              </div>
+
+              <p className="all-property-modal-location">
+                <FiMapPin /> {selectedProperty.location}
+              </p>
+
+              <div className="all-property-modal-grid">
+                <div className="all-property-modal-item">
+                  <FiHome className="modal-icon" />
+                  <div>
+                    <label>Property Type</label>
+                    <p>
+                      {selectedProperty.type} ({selectedProperty.subType})
+                    </p>
+                  </div>
+                </div>
+                <div className="all-property-modal-item">
+                  <FiDollarSign className="modal-icon" />
+                  <div>
+                    <label>Rate / Sq.Ft</label>
+                    <p>{selectedProperty.pricePerSqft || "N/A"}</p>
+                  </div>
+                </div>
+                <div className="all-property-modal-item">
+                  <FiTag className="modal-icon" />
+                  <div>
+                    <label>RERA Number</label>
+                    <p>{selectedProperty.rera || "Not Applicable"}</p>
+                  </div>
+                </div>
+                <div className="all-property-modal-item">
+                  <FiCheckCircle className="modal-icon" />
+                  <div>
+                    <label>Availability</label>
+                    <p>{selectedProperty.statusType || "Standard"}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="all-property-modal-footer">
+                <span className="all-property-modal-date">
+                  Added on{" "}
+                  {new Date(selectedProperty.createdAt).toLocaleDateString()}
+                  at {new Date(selectedProperty.createdAt).toLocaleTimeString()}
+                </span>
+                <button
+                  className="all-property-btn-secondary"
+                  onClick={handleCloseModal}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+      )}
 
-        <div className="analytics-card">
+      {/* Analytics Section */}
+      <section className="all-property-analytics-grid">
+        <div className="all-property-analytics-card">
+          <h3>Top Locations</h3>
+
+          {topLocations.length > 0 ? (
+            topLocations.map((item, index) => {
+              const maxCount = Math.max(
+                ...topLocations.map((location) => Number(location.count) || 0),
+                1,
+              );
+
+              const percentage = ((Number(item.count) || 0) / maxCount) * 100;
+
+              return (
+                <div
+                  className="all-property-location-item"
+                  key={item.location || item._id || index}
+                >
+                  <div className="all-property-loc-info">
+                    <span>{item.location || item._id || "Unknown"}</span>
+
+                    <span>{item.count || 0} Properties</span>
+                  </div>
+
+                  <div className="all-property-progress-bar">
+                    <div
+                      className="fill"
+                      style={{
+                        width: `${percentage}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p>No location data available.</p>
+          )}
+        </div>
+
+        <div className="all-property-analytics-card">
           <h3>Property Types</h3>
-          <div className="pie-chart-container">
-            <div className="fake-donut-chart"></div>
-            <div className="chart-legend">
-              <div><span className="dot villa"></span> Villas <strong>78 (50%)</strong></div>
-              <div><span className="dot ind"></span> Independent House <strong>46 (29%)</strong></div>
-              <div><span className="dot apt"></span> Apartment <strong>22 (14%)</strong></div>
-              <div><span className="dot plot"></span> Plots <strong>10 (7%)</strong></div>
+
+          <div className="all-property-pie-chart-container">
+            <div className="all-property-fake-donut-chart">
+              <div className="all-property-donut-center">
+                <strong>
+                  {propertyTypes.reduce(
+                    (total, item) => total + (Number(item.count) || 0),
+                    0,
+                  )}
+                </strong>
+
+                <span>Properties</span>
+              </div>
+            </div>
+
+            <div className="all-property-chart-legend">
+              {propertyTypes.length > 0 ? (
+                propertyTypes.map((item, index) => {
+                  const total = propertyTypes.reduce(
+                    (sum, type) => sum + (Number(type.count) || 0),
+                    0,
+                  );
+
+                  const count = Number(item.count) || 0;
+
+                  const percentage =
+                    total > 0 ? Math.round((count / total) * 100) : 0;
+
+                  return (
+                    <div key={item.type || item._id || index}>
+                      <span className={`dot type-${index}`} />
+                      {item.type || item._id || "Unknown"}{" "}
+                      <strong>
+                        {count} ({percentage}%)
+                      </strong>
+                    </div>
+                  );
+                })
+              ) : (
+                <p>No property type data.</p>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="analytics-card">
+        <div className="all-property-analytics-card">
           <h3>Price Range</h3>
-          <div className="price-range-item">
-            <div className="loc-info"><span>Below ₹ 50 Lac</span><span>28 Properties</span></div>
-            <div className="progress-bar orange"><div className="fill" style={{width: '40%'}}></div></div>
-          </div>
-          <div className="price-range-item">
-            <div className="loc-info"><span>₹ 50 Lac - ₹ 1 Cr</span><span>65 Properties</span></div>
-            <div className="progress-bar orange"><div className="fill" style={{width: '90%'}}></div></div>
-          </div>
-          <div className="price-range-item">
-            <div className="loc-info"><span>₹ 1 Cr - ₹ 2 Cr</span><span>42 Properties</span></div>
-            <div className="progress-bar orange"><div className="fill" style={{width: '60%'}}></div></div>
-          </div>
-          <div className="price-range-item">
-            <div className="loc-info"><span>Above ₹ 2 Cr</span><span>21 Properties</span></div>
-            <div className="progress-bar orange"><div className="fill" style={{width: '30%'}}></div></div>
-          </div>
+
+          {priceRanges.length > 0 ? (
+            priceRanges.map((item, index) => {
+              const maxCount = Math.max(
+                ...priceRanges.map((range) => Number(range.count) || 0),
+                1,
+              );
+
+              const count = Number(item.count) || 0;
+
+              const percentage = (count / maxCount) * 100;
+
+              return (
+                <div
+                  className="all-property-price-range-item"
+                  key={item.range || item._id || index}
+                >
+                  <div className="all-property-loc-info">
+                    <span>{item.range || item._id || "Unknown"}</span>
+
+                    <span>{count} Properties</span>
+                  </div>
+
+                  <div className="all-property-progress-bar orange">
+                    <div
+                      className="fill"
+                      style={{
+                        width: `${percentage}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p>No price range data available.</p>
+          )}
         </div>
 
-        <div className="analytics-card">
+        <div className="all-property-analytics-card">
           <h3>Recent Enquiries</h3>
-          <div className="enquiry-item">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Ravi" />
-            <div className="enquiry-details">
+          <div className="all-property-enquiry-item">
+            <img
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+              alt="Ravi"
+            />
+            <div className="all-property-enquiry-details">
               <strong>Ravi Sharma</strong>
               <p>Interested in Modern White Villa</p>
             </div>
-            <span className="time-ago">2 min ago</span>
+            <span className="all-property-time-ago">2 min ago</span>
           </div>
-          <div className="enquiry-item">
-            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" alt="Sneha" />
-            <div className="enquiry-details">
+          <div className="all-property-enquiry-item">
+            <img
+              src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80"
+              alt="Sneha"
+            />
+            <div className="all-property-enquiry-details">
               <strong>Sneha Priya</strong>
               <p>Interested in Rudransh South Kingdom</p>
             </div>
-            <span className="time-ago">15 min ago</span>
+            <span className="all-property-time-ago">15 min ago</span>
           </div>
-          <div className="enquiry-item">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Amit" />
-            <div className="enquiry-details">
+          <div className="all-property-enquiry-item">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"
+              alt="Amit"
+            />
+            <div className="all-property-enquiry-details">
               <strong>Amit Kumar</strong>
               <p>Interested in Suburban Stone House</p>
             </div>
-            <span className="time-ago">1 hour ago</span>
+            <span className="all-property-time-ago">1 hour ago</span>
           </div>
         </div>
       </section>
     </div>
   );
-}
+};
+
+export default PropertiesDashboard;
