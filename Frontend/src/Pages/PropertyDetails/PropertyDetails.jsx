@@ -9,33 +9,42 @@ import {
 
 import API from "../../api/axios";
 
-import PropertyDetailsCard from "../../Component/PropertyDetailsCard/PropertyDetailsCard";
+import PropertyDetailsCard
+  from "../../Component/PropertyDetailsCard/PropertyDetailsCard";
 
-import PropertyDetailsProjectOverview from "../../Component/PropertyDetailsProjectOverview/PropertyDetailsProjectOverview";
+import PropertyDetailsProjectOverview
+  from "../../Component/PropertyDetailsProjectOverview/PropertyDetailsProjectOverview";
 
-import PropertyDetailsAmenities from "../../Component/PropertyDetailsAmenities/PropertyDetailsAmenities";
+import PropertyDetailsAmenities
+  from "../../Component/PropertyDetailsAmenities/PropertyDetailsAmenities";
 
-import PropertyDetailsMap from "../../Component/PropertyDetailsMap/PropertyDetailsMap";
+import PropertyDetailsMap
+  from "../../Component/PropertyDetailsMap/PropertyDetailsMap";
 
-import PropertyDetailsSimilarProjects from "../../Component/PropertyDetailsSimilarProjects/PropertyDetailsSimilarProjects";
+import PropertyDetailsSimilarProjects
+  from "../../Component/PropertyDetailsSimilarProjects/PropertyDetailsSimilarProjects";
 
-import PropertyDetailsPeopleSay from "../../Component/PropertyDetailsPeopleSay/PropertyDetailsPeopleSay";
+import PropertyDetailsPeopleSay
+  from "../../Component/PropertyDetailsPeopleSay/PropertyDetailsPeopleSay";
 
-import PropertyDetailsFaq from "../../Component/PropertyDetailsFaq/PropertyDetailsFaq";
+import PropertyDetailsFaq
+  from "../../Component/PropertyDetailsFaq/PropertyDetailsFaq";
 
 
 const PropertyDetails = () => {
 
-  // =====================================================
-  // GET PROPERTY ID FROM URL
-  // =====================================================
+  /* =========================================================
+     GET ID FROM URL
+  ========================================================= */
 
-  const { id } = useParams();
+  const {
+    id,
+  } = useParams();
 
 
-  // =====================================================
-  // STATE
-  // =====================================================
+  /* =========================================================
+     STATE
+  ========================================================= */
 
   const [
     property,
@@ -53,218 +62,160 @@ const PropertyDetails = () => {
   ] = useState("");
 
 
-  // =====================================================
-  // FETCH PROPERTY BY ID
-  // =====================================================
+  /* =========================================================
+     FETCH PROPERTY
+  ========================================================= */
 
   useEffect(() => {
 
-    const fetchPropertyById = async () => {
+    const fetchPropertyById =
+      async () => {
 
-      try {
+        try {
 
-        setLoading(true);
+          setLoading(true);
 
-        setError("");
-
-
-        // =================================================
-        // CHECK PROPERTY ID
-        // =================================================
-
-        if (!id) {
-
-          setError(
-            "Property ID not found."
-          );
+          setError("");
 
           setProperty(null);
 
-          return;
-        }
+
+          /* ===============================================
+             CHECK ID
+          =============================================== */
+
+          if (!id) {
+
+            setError(
+              "Property ID not found."
+            );
+
+            return;
+
+          }
 
 
-        // =================================================
-        // DEBUG
-        // =================================================
-
-        console.log(
-          "================================"
-        );
-
-        console.log(
-          "FETCH PROPERTY DETAILS"
-        );
-
-        console.log(
-          "PROPERTY ID:",
-          id
-        );
-
-        console.log(
-          "API URL:",
-          `/properties/${id}`
-        );
-
-        console.log(
-          "================================"
-        );
-
-
-        // =================================================
-        // API REQUEST
-        // =================================================
-
-        const response =
-          await API.get(
-            `/properties/${id}`
+          console.log(
+            "FETCH PROPERTY DETAILS:",
+            id
           );
 
 
-        // =================================================
-        // RESPONSE
-        // =================================================
+          /* ===============================================
+             API
+          =============================================== */
 
-        console.log(
-          "PROPERTY DETAILS RESPONSE:",
-          response.data
-        );
-
-
-        // =================================================
-        // GET PROPERTY DATA
-        // =================================================
-
-        const propertyData =
-          response.data?.property ||
-          response.data?.data ||
-          response.data;
+          const response =
+            await API.get(
+              `/properties/${id}`
+            );
 
 
-        console.log(
-          "PROPERTY DATA:",
-          propertyData
-        );
+          console.log(
+            "PROPERTY DETAILS RESPONSE:",
+            response.data
+          );
 
 
-        // =================================================
-        // VALIDATE PROPERTY
-        // =================================================
+          /* ===============================================
+             SUPPORT DIFFERENT RESPONSE FORMATS
+          =============================================== */
 
-        if (
-          !propertyData ||
-          typeof propertyData !==
+          const propertyData =
+            response.data?.property ||
+            response.data?.data ||
+            response.data;
+
+
+          /* ===============================================
+             VALIDATE
+          =============================================== */
+
+          if (
+            !propertyData ||
+            typeof propertyData !==
             "object"
-        ) {
+          ) {
 
-          throw new Error(
-            "Property data not found."
+            throw new Error(
+              "Property data not found."
+            );
+
+          }
+
+
+          /* ===============================================
+             PROPERTY ID
+          =============================================== */
+
+          const propertyId =
+            propertyData?._id ||
+            propertyData?.id ||
+            id;
+
+
+          /* ===============================================
+             SAVE PROPERTY
+          =============================================== */
+
+          setProperty({
+
+            ...propertyData,
+
+            _id:
+              propertyId,
+
+            id:
+              propertyId,
+
+          });
+
+
+        } catch (requestError) {
+
+          console.error(
+            "FETCH PROPERTY DETAILS ERROR:",
+            requestError.response?.data ||
+            requestError
           );
+
+
+          setProperty(null);
+
+
+          setError(
+            requestError.response?.data
+              ?.message ||
+            requestError.message ||
+            "Failed to load property details."
+          );
+
+
+        } finally {
+
+          setLoading(false);
+
         }
 
+      };
 
-        // =================================================
-        // MAKE SURE PROPERTY ID EXISTS
-        // =================================================
-
-        const propertyId =
-          propertyData?._id ||
-          propertyData?.id ||
-          id;
-
-
-        // =================================================
-        // SAVE PROPERTY
-        // =================================================
-
-        setProperty({
-          ...propertyData,
-
-          // Preserve MongoDB property ID
-          _id: propertyId,
-
-          // Also keep id for compatibility
-          id: propertyId,
-        });
-
-
-        console.log(
-          "================================"
-        );
-
-        console.log(
-          "PROPERTY SAVED"
-        );
-
-        console.log(
-          "PROPERTY ID:",
-          propertyId
-        );
-
-        console.log(
-          "================================"
-        );
-
-      } catch (error) {
-
-        console.error(
-          "================================"
-        );
-
-        console.error(
-          "FETCH PROPERTY DETAILS ERROR"
-        );
-
-        console.error(
-          error.response?.data ||
-            error
-        );
-
-        console.error(
-          "================================"
-        );
-
-
-        setProperty(null);
-
-
-        setError(
-          error.response?.data
-            ?.message ||
-            error.message ||
-            "Failed to load property details."
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
-
-
-    // =====================================================
-    // CALL API
-    // =====================================================
 
     fetchPropertyById();
 
   }, [id]);
 
 
-  // =====================================================
-  // LOADING
-  // =====================================================
+  /* =========================================================
+     LOADING
+  ========================================================= */
 
   if (loading) {
 
     return (
 
-      <div>
+      <div className="property-details-loading">
 
-        Loading property
-        details...
+        Loading property details...
 
       </div>
 
@@ -273,15 +224,15 @@ const PropertyDetails = () => {
   }
 
 
-  // =====================================================
-  // ERROR
-  // =====================================================
+  /* =========================================================
+     ERROR
+  ========================================================= */
 
   if (error) {
 
     return (
 
-      <div>
+      <div className="property-details-error">
 
         {error}
 
@@ -292,15 +243,15 @@ const PropertyDetails = () => {
   }
 
 
-  // =====================================================
-  // PROPERTY NOT FOUND
-  // =====================================================
+  /* =========================================================
+     NOT FOUND
+  ========================================================= */
 
   if (!property) {
 
     return (
 
-      <div>
+      <div className="property-details-error">
 
         Property not found.
 
@@ -311,9 +262,9 @@ const PropertyDetails = () => {
   }
 
 
-  // =====================================================
-  // PROPERTY ID
-  // =====================================================
+  /* =========================================================
+     PROPERTY ID
+  ========================================================= */
 
   const propertyId =
     property?._id ||
@@ -321,20 +272,23 @@ const PropertyDetails = () => {
     id;
 
 
-  // =====================================================
-  // PROPERTY DETAILS PAGE
-  // =====================================================
+  /* =========================================================
+     DETAILS PAGE
+  ========================================================= */
 
   return (
 
     <div>
+
 
       {/* ===============================================
           PROPERTY CARD
       =============================================== */}
 
       <PropertyDetailsCard
-        property={property}
+        property={
+          property
+        }
       />
 
 
@@ -343,18 +297,23 @@ const PropertyDetails = () => {
       =============================================== */}
 
       <PropertyDetailsProjectOverview
-        property={property}
+        property={
+          property
+        }
       />
 
 
       {/* ===============================================
           AMENITIES
-          PROPERTY ID IS EXPLICITLY PASSED
       =============================================== */}
 
       <PropertyDetailsAmenities
-        property={property}
-        propertyId={propertyId}
+        property={
+          property
+        }
+        propertyId={
+          propertyId
+        }
       />
 
 
@@ -363,7 +322,9 @@ const PropertyDetails = () => {
       =============================================== */}
 
       <PropertyDetailsMap
-        property={property}
+        property={
+          property
+        }
       />
 
 
@@ -372,7 +333,9 @@ const PropertyDetails = () => {
       =============================================== */}
 
       <PropertyDetailsSimilarProjects
-        property={property}
+        property={
+          property
+        }
       />
 
 
@@ -381,7 +344,9 @@ const PropertyDetails = () => {
       =============================================== */}
 
       <PropertyDetailsFaq
-        property={property}
+        property={
+          property
+        }
       />
 
 
@@ -390,7 +355,9 @@ const PropertyDetails = () => {
       =============================================== */}
 
       <PropertyDetailsPeopleSay
-        property={property}
+        property={
+          property
+        }
       />
 
     </div>

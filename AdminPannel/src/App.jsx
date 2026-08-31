@@ -51,6 +51,7 @@ import Setting from "./Pages/Setting/Setting";
 import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
+import PropertyListing from "./Components/PropertyListing/PropertyListing";
 // import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
 // import Amenities from "./Components/Amenities/Amenities";
 // import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
@@ -217,6 +218,7 @@ function App() {
           <Route path="/testimonial" element={<Testimonial />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/team" element={<OurTeam />} />
+          <Route path="/PropertyListing" element={<PropertyListing />} />
 
           {/* Catch-all 404 Route */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

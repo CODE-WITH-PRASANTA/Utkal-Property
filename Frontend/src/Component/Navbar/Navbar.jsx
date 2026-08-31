@@ -50,7 +50,7 @@ const Navbar = () => {
                 </svg>
               </div>
               <span className="navbar-sell-btn-divider"></span>
-              <span>Sell Property</span>
+              <span>Sell & Rent Property</span>
             </a>
           </div>
         </ul>
@@ -65,7 +65,7 @@ const Navbar = () => {
               </svg>
             </div>
             <span className="navbar-sell-btn-divider"></span>
-            <span>Sell Property</span>
+            <span>Sell & Rent Property</span>
           </a>
         </div>
 

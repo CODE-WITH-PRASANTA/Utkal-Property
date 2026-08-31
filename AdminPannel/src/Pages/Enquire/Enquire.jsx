@@ -1,994 +1,1330 @@
-import React, { useState, useRef, useEffect } from "react";
+
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import {
+  Search,
+  RefreshCw,
+  Eye,
+  Pencil,
+  Trash2,
+  X,
+  Phone,
+  Mail,
+  MapPin,
+  Home,
+  Building2,
+  Wallet,
+  UserRound,
+  CalendarDays,
+  CircleCheck,
+  Clock3,
+  AlertCircle,
+} from "lucide-react";
+
+import API from "../../api/axios";
+
 import "./Enquire.css";
-import API from "../../api/Axios";
 
-// =====================================================
-// ENQUIRE COMPONENT
-// =====================================================
+/* =========================================================
+   CONSTANTS
+========================================================= */
 
-const Enquire = () => {
-  // ===================================================
-  // ENQUIRIES
-  // ===================================================
+const STATUS_OPTIONS = [
+  "All Status",
+  "New",
+  "Follow Up",
+  "Site Visit",
+  "Converted",
+  "Lost Lead",
+];
 
-  const [enquiries, setEnquiries] = useState([]);
+const PRIORITY_OPTIONS = [
+  "Low",
+  "Medium",
+  "High",
+];
 
-  // ===================================================
-  // SEARCH
-  // ===================================================
+/* =========================================================
+   HELPERS
+========================================================= */
 
-  const [searchTerm, setSearchTerm] = useState("");
+const formatDate = (date) => {
+  if (!date) {
+    return "-";
+  }
 
-  // ===================================================
-  // FILTERS
-  // ===================================================
+  const parsedDate =
+    new Date(date);
 
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [propertyFilter, setPropertyFilter] = useState("All");
+  if (
+    Number.isNaN(
+      parsedDate.getTime()
+    )
+  ) {
+    return "-";
+  }
 
-  // ===================================================
-  // PAGINATION
-  // ===================================================
+  return parsedDate.toLocaleDateString(
+    "en-IN",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }
+  );
+};
 
-  const [currentPage, setCurrentPage] = useState(1);
+const getInitials = (name) => {
+  if (!name) {
+    return "PE";
+  }
 
-  const itemsPerPage = 5;
+  return String(name)
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(
+      (word) =>
+        word
+          .charAt(0)
+          .toUpperCase()
+    )
+    .join("");
+};
 
-  // ===================================================
-  // MODALS
-  // ===================================================
+/* =========================================================
+   STATUS BADGE
+========================================================= */
 
-  const [isFormModalOpen, setIsFormModalOpen] =
+const StatusBadge = ({
+  status,
+}) => {
+  const normalized =
+    status || "New";
+
+  const className =
+    normalized
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
+  return (
+    <span
+      className={`Enquiry-status Enquiry-status--${className}`}
+    >
+      {normalized}
+    </span>
+  );
+};
+
+/* =========================================================
+   PRIORITY BADGE
+========================================================= */
+
+const PriorityBadge = ({
+  priority,
+}) => {
+  const normalized =
+    priority || "Medium";
+
+  return (
+    <span
+      className={`Enquiry-priority Enquiry-priority--${normalized.toLowerCase()}`}
+    >
+      {normalized}
+    </span>
+  );
+};
+
+/* =========================================================
+   DETAIL ITEM
+========================================================= */
+
+const DetailItem = ({
+  icon,
+  label,
+  value,
+  fullWidth = false,
+}) => {
+  return (
+    <div
+      className={`Enquiry-detail-item ${
+        fullWidth
+          ? "Enquiry-detail-item--full"
+          : ""
+      }`}
+    >
+      <div className="Enquiry-detail-icon">
+        {icon}
+      </div>
+
+      <div className="Enquiry-detail-content">
+        <span className="Enquiry-detail-label">
+          {label}
+        </span>
+
+        <strong className="Enquiry-detail-value">
+          {value || "-"}
+        </strong>
+      </div>
+    </div>
+  );
+};
+
+/* =========================================================
+   EDIT FIELD
+========================================================= */
+
+const EditField = ({
+  label,
+  value,
+  onChange,
+  type = "text",
+  options = [],
+  placeholder = "",
+}) => {
+  return (
+    <div className="Enquiry-edit-field">
+
+      <label>
+        {label}
+      </label>
+
+      {options.length > 0 ? (
+        <select
+          value={value || ""}
+          onChange={onChange}
+        >
+          <option value="">
+            Select {label}
+          </option>
+
+          {options.map(
+            (option) => (
+              <option
+                key={option}
+                value={option}
+              >
+                {option}
+              </option>
+            )
+          )}
+        </select>
+      ) : (
+        <input
+          type={type}
+          value={value || ""}
+          onChange={onChange}
+          placeholder={placeholder}
+        />
+      )}
+
+    </div>
+  );
+};
+
+/* =========================================================
+   MAIN COMPONENT
+========================================================= */
+
+const Enquiry = () => {
+
+  /* =======================================================
+     DATA
+  ======================================================= */
+
+  const [enquiries, setEnquiries] =
+    useState([]);
+
+  const [loading, setLoading] =
     useState(false);
 
-  const [editingId, setEditingId] = useState(null);
+  const [refreshing, setRefreshing] =
+    useState(false);
+
+  /* =======================================================
+     SEARCH / FILTER
+  ======================================================= */
+
+  const [search, setSearch] =
+    useState("");
+
+  const [statusFilter, setStatusFilter] =
+    useState("All Status");
+
+  /* =======================================================
+     PAGINATION
+  ======================================================= */
+
+  const [currentPage, setCurrentPage] =
+    useState(1);
+
+  const [totalPages, setTotalPages] =
+    useState(1);
+
+  const [total, setTotal] =
+    useState(0);
+
+  /* =======================================================
+     MODALS
+  ======================================================= */
 
   const [selectedEnquiry, setSelectedEnquiry] =
     useState(null);
 
-  // ===================================================
-  // FORM
-  // ===================================================
+  const [viewOpen, setViewOpen] =
+    useState(false);
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    status: "New",
-  });
+  const [editOpen, setEditOpen] =
+    useState(false);
 
-  // ===================================================
-  // LOADING
-  // ===================================================
+  const [deleteOpen, setDeleteOpen] =
+    useState(false);
 
-  const [loading, setLoading] = useState(false);
+  /* =======================================================
+     EDIT DATA
+  ======================================================= */
 
-  const [saving, setSaving] = useState(false);
+  const [editData, setEditData] =
+    useState({});
 
-  const [deletingId, setDeletingId] = useState(null);
+  const [saving, setSaving] =
+    useState(false);
 
-  const filterRefs = useRef({});
+  const [deleting, setDeleting] =
+    useState(false);
 
-  // ===================================================
-  // FORMAT DATE
-  // ===================================================
+  /* =======================================================
+     MESSAGE
+  ======================================================= */
 
-  const formatDate = (dateValue) => {
-    if (!dateValue) {
-      return "N/A";
+  const [message, setMessage] =
+    useState("");
+
+  const [messageType, setMessageType] =
+    useState("");
+
+  /* =========================================================
+     FETCH ENQUIRIES
+  ========================================================= */
+
+  const fetchEnquiries = useCallback(
+    async ({
+      showLoader = true,
+    } = {}) => {
+
+      try {
+
+        if (showLoader) {
+          setLoading(true);
+        } else {
+          setRefreshing(true);
+        }
+
+        const response =
+          await API.get(
+            "/leads",
+            {
+              params: {
+                page:
+                  currentPage,
+
+                limit:
+                  100,
+
+                search:
+                  search.trim(),
+
+                status:
+                  statusFilter ===
+                  "All Status"
+                    ? ""
+                    : statusFilter,
+              },
+            }
+          );
+
+        console.log(
+          "ENQUIRIES RESPONSE:",
+          response.data
+        );
+
+        const leads =
+          response.data?.leads ||
+          [];
+
+        setEnquiries(
+          leads
+        );
+
+        setTotal(
+          Number(
+            response.data?.total
+          ) || leads.length
+        );
+
+        setTotalPages(
+          Number(
+            response.data
+              ?.totalPages
+          ) || 1
+        );
+
+      } catch (error) {
+
+        console.error(
+          "FETCH ENQUIRIES ERROR:",
+          error.response?.data ||
+            error
+        );
+
+        setEnquiries([]);
+
+        setMessage(
+          error.response?.data
+            ?.message ||
+            "Unable to fetch enquiries."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+      } finally {
+
+        setLoading(false);
+        setRefreshing(false);
+
+      }
+    },
+    [
+      currentPage,
+      search,
+      statusFilter,
+    ]
+  );
+
+  /* =========================================================
+     INITIAL FETCH
+  ========================================================= */
+
+  useEffect(() => {
+
+    fetchEnquiries();
+
+  }, [
+    fetchEnquiries,
+  ]);
+
+  /* =========================================================
+     AUTO CLEAR MESSAGE
+  ========================================================= */
+
+  useEffect(() => {
+
+    if (!message) {
+      return;
     }
 
-    try {
-      const date = new Date(dateValue);
+    const timer =
+      setTimeout(() => {
 
-      if (Number.isNaN(date.getTime())) {
-        return "N/A";
+        setMessage("");
+        setMessageType("");
+
+      }, 4000);
+
+    return () =>
+      clearTimeout(timer);
+
+  }, [message]);
+
+  /* =========================================================
+     FILTERED DATA
+  ========================================================= */
+
+  const displayedEnquiries =
+    useMemo(() => {
+
+      /*
+       * Backend already handles
+       * search and status.
+       *
+       * This local filter is only
+       * an additional safety layer.
+       */
+
+      let result =
+        [...enquiries];
+
+      if (
+        search.trim()
+      ) {
+
+        const query =
+          search
+            .trim()
+            .toLowerCase();
+
+        result =
+          result.filter(
+            (item) => {
+
+              const values = [
+                item.fullName,
+                item.mobile,
+                item.email,
+                item.lookingFor,
+                item.interestedIn,
+                item.location,
+                item.preferredArea,
+                item.budgetRange,
+                item.propertyName,
+                item.source,
+                item.agent,
+              ];
+
+              return values.some(
+                (value) =>
+                  String(
+                    value || ""
+                  )
+                    .toLowerCase()
+                    .includes(
+                      query
+                    )
+              );
+            }
+          );
       }
 
-      return date.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
-    } catch (error) {
-      return "N/A";
-    }
-  };
+      return result;
 
-  // ===================================================
-  // GET PROPERTY NAME
-  // ===================================================
+    }, [
+      enquiries,
+      search,
+    ]);
 
-  const getPropertyName = (item) => {
-    if (!item?.propertyId) {
-      return "N/A";
-    }
+  /* =========================================================
+     VIEW ENQUIRY
+  ========================================================= */
 
-    if (typeof item.propertyId === "string") {
-      return item.propertyId;
-    }
+  const handleView = async (
+    enquiry
+  ) => {
 
-    return (
-      item.propertyId.name ||
-      item.propertyId.title ||
-      "N/A"
-    );
-  };
-
-  // ===================================================
-  // MAP BACKEND DATA
-  // ===================================================
-
-  const mapBackendEnquiry = (item) => {
-    return {
-      id: item._id,
-      _id: item._id,
-
-      name: item.name || "N/A",
-
-      email: item.email || "N/A",
-
-      phone: item.mobile || "N/A",
-
-      status: item.status || "New",
-
-      date: formatDate(item.createdAt),
-
-      property: getPropertyName(item),
-
-      propertyId:
-        typeof item.propertyId === "object"
-          ? item.propertyId?._id
-          : item.propertyId,
-    };
-  };
-
-  // ===================================================
-  // FETCH ENQUIRIES
-  // ===================================================
-
-  const fetchEnquiries = async () => {
     try {
+
       setLoading(true);
 
       const response =
-        await API.get("/property-contacts");
+        await API.get(
+          `/leads/${enquiry._id}`
+        );
 
-      console.log(
-        "PROPERTY CONTACTS RESPONSE:",
-        response.data
+      const lead =
+        response.data?.lead ||
+        enquiry;
+
+      setSelectedEnquiry(
+        lead
       );
 
-      const backendData =
-        response.data?.data || [];
+      setViewOpen(true);
 
-      if (Array.isArray(backendData)) {
-        const mappedData =
-          backendData.map(
-            mapBackendEnquiry
-          );
-
-        setEnquiries(mappedData);
-      } else {
-        setEnquiries([]);
-      }
     } catch (error) {
+
       console.error(
-        "FETCH ENQUIRIES ERROR:",
-        error.response?.data || error
+        "VIEW ENQUIRY ERROR:",
+        error.response?.data ||
+          error
       );
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to load enquiries."
+      /*
+       * Fallback to existing
+       * table object.
+       */
+
+      setSelectedEnquiry(
+        enquiry
       );
+
+      setViewOpen(true);
+
     } finally {
+
       setLoading(false);
+
     }
   };
 
-  // ===================================================
-  // LOAD DATA
-  // ===================================================
+  /* =========================================================
+     EDIT ENQUIRY
+  ========================================================= */
 
-  useEffect(() => {
-    fetchEnquiries();
-  }, []);
+  const handleEdit = (
+    enquiry
+  ) => {
 
-  // ===================================================
-  // PROPERTY OPTIONS
-  // ===================================================
-
-  const propertyOptions = Array.from(
-    new Set(
-      enquiries.map(
-        (item) => item.property
-      )
-    )
-  ).filter(Boolean);
-
-  // ===================================================
-  // FILTER
-  // ===================================================
-
-  const filteredEnquiries =
-    enquiries.filter((item) => {
-      const search =
-        searchTerm.toLowerCase();
-
-      const matchesSearch =
-        String(item.name || "")
-          .toLowerCase()
-          .includes(search) ||
-        String(item.email || "")
-          .toLowerCase()
-          .includes(search) ||
-        String(item.property || "")
-          .toLowerCase()
-          .includes(search) ||
-        String(item.phone || "")
-          .toLowerCase()
-          .includes(search);
-
-      const matchesStatus =
-        statusFilter === "All" ||
-        item.status === statusFilter;
-
-      const matchesProperty =
-        propertyFilter === "All" ||
-        item.property === propertyFilter;
-
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesProperty
-      );
-    });
-
-  // ===================================================
-  // PAGINATION
-  // ===================================================
-
-  const totalPages =
-    Math.ceil(
-      filteredEnquiries.length /
-        itemsPerPage
-    ) || 1;
-
-  const startIndex =
-    (currentPage - 1) *
-    itemsPerPage;
-
-  const currentEnquiries =
-    filteredEnquiries.slice(
-      startIndex,
-      startIndex + itemsPerPage
+    setSelectedEnquiry(
+      enquiry
     );
 
-  // ===================================================
-  // RESET PAGE
-  // ===================================================
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [
-    searchTerm,
-    statusFilter,
-    propertyFilter,
-  ]);
-
-  // ===================================================
-  // PAGE CHANGE
-  // ===================================================
-
-  const handlePageChange = (page) => {
-    if (
-      page >= 1 &&
-      page <= totalPages
-    ) {
-      setCurrentPage(page);
-    }
-  };
-
-  // ===================================================
-  // INPUT CHANGE
-  // ===================================================
-
-  const handleInputChange = (e) => {
-    const {
-      name,
-      value,
-    } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  // ===================================================
-  // RESET FORM
-  // ===================================================
-
-  const resetForm = () => {
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      status: "New",
-    });
-
-    setEditingId(null);
-  };
-
-  // ===================================================
-  // OPEN EDIT
-  // ===================================================
-
-  const handleOpenEditModal = (item) => {
-    setEditingId(
-      item._id || item.id
-    );
-
-    setFormData({
-      fullName: item.name || "",
-
-      email: item.email || "",
-
-      phone: item.phone || "",
-
-      status:
-        item.status || "New",
-    });
-
-    setIsFormModalOpen(true);
-  };
-
-  // ===================================================
-  // UPDATE ENQUIRY
-  // ===================================================
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!editingId) {
-      alert(
-        "Customer enquiries are submitted from the property details page."
-      );
-
-      return;
-    }
-
-    // ================================================
-    // VALIDATION
-    // ================================================
-
-    if (!formData.fullName.trim()) {
-      alert("Name is required.");
-      return;
-    }
-
-    if (!formData.email.trim()) {
-      alert("Email is required.");
-      return;
-    }
-
-    if (!formData.phone.trim()) {
-      alert("Mobile number is required.");
-      return;
-    }
-
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (
-      !emailRegex.test(
-        formData.email.trim()
-      )
-    ) {
-      alert(
-        "Please enter a valid email address."
-      );
-
-      return;
-    }
-
-    // ================================================
-    // BACKEND PAYLOAD
-    // ================================================
-
-    const payload = {
-      name:
-        formData.fullName.trim(),
-
-      email:
-        formData.email
-          .trim()
-          .toLowerCase(),
+    setEditData({
+      fullName:
+        enquiry.fullName ||
+        "Property Enquiry",
 
       mobile:
-        formData.phone.trim(),
+        enquiry.mobile ||
+        "",
+
+      email:
+        enquiry.email ||
+        "",
+
+      lookingFor:
+        enquiry.lookingFor ||
+        "Buy",
+
+      interestedIn:
+        enquiry.interestedIn ||
+        "",
+
+      location:
+        enquiry.location ||
+        "",
+
+      preferredArea:
+        enquiry.preferredArea ||
+        "",
+
+      budgetRange:
+        enquiry.budgetRange ||
+        "",
+
+      propertyName:
+        enquiry.propertyName ||
+        "",
+
+      project:
+        enquiry.project ||
+        "",
+
+      source:
+        enquiry.source ||
+        "Website",
+
+      agent:
+        enquiry.agent ||
+        "",
 
       status:
-        formData.status,
+        enquiry.status ||
+        "New",
+
+      priority:
+        enquiry.priority ||
+        "Medium",
+
+      followUpDate:
+        enquiry.followUpDate ||
+        "",
+
+      score:
+        enquiry.score ||
+        0,
+
+      notes:
+        enquiry.notes ||
+        "",
+    });
+
+    setEditOpen(true);
+
+  };
+
+  /* =========================================================
+     EDIT FIELD CHANGE
+  ========================================================= */
+
+  const handleEditChange = (
+    field,
+    value
+  ) => {
+
+    setEditData(
+      (previous) => ({
+        ...previous,
+        [field]: value,
+      })
+    );
+
+  };
+
+  /* =========================================================
+     SAVE EDIT
+  ========================================================= */
+
+  const handleSaveEdit =
+    async () => {
+
+      if (
+        !selectedEnquiry?._id
+      ) {
+        return;
+      }
+
+      try {
+
+        setSaving(true);
+
+        const response =
+          await API.put(
+            `/leads/${selectedEnquiry._id}`,
+            editData
+          );
+
+        console.log(
+          "UPDATED ENQUIRY:",
+          response.data
+        );
+
+        setMessage(
+          response.data?.message ||
+            "Enquiry updated successfully."
+        );
+
+        setMessageType(
+          "success"
+        );
+
+        setEditOpen(false);
+
+        setSelectedEnquiry(null);
+
+        await fetchEnquiries({
+          showLoader: false,
+        });
+
+      } catch (error) {
+
+        console.error(
+          "UPDATE ENQUIRY ERROR:",
+          error.response?.data ||
+            error
+        );
+
+        setMessage(
+          error.response?.data
+            ?.message ||
+            "Unable to update enquiry."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+      } finally {
+
+        setSaving(false);
+
+      }
     };
 
-    try {
-      setSaving(true);
+  /* =========================================================
+     DELETE CONFIRM
+  ========================================================= */
 
-      console.log(
-        "UPDATE CONTACT PAYLOAD:",
-        payload
-      );
+  const handleDeleteConfirm =
+    async () => {
 
-      const response =
-        await API.put(
-          `/property-contacts/${editingId}`,
-          payload
+      if (
+        !selectedEnquiry?._id
+      ) {
+        return;
+      }
+
+      try {
+
+        setDeleting(true);
+
+        const response =
+          await API.delete(
+            `/leads/${selectedEnquiry._id}`
+          );
+
+        console.log(
+          "DELETE RESPONSE:",
+          response.data
         );
 
-      console.log(
-        "UPDATE CONTACT RESPONSE:",
-        response.data
-      );
-
-      alert(
-        response.data?.message ||
-          "Enquiry updated successfully."
-      );
-
-      await fetchEnquiries();
-
-      setIsFormModalOpen(false);
-
-      resetForm();
-    } catch (error) {
-      console.error(
-        "UPDATE ENQUIRY ERROR:",
-        error.response?.data ||
-          error
-      );
-
-      alert(
-        error.response?.data?.message ||
-          "Failed to update enquiry."
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // ===================================================
-  // DELETE
-  // ===================================================
-
-  const handleDelete = async (id) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this enquiry?"
-      )
-    ) {
-      return;
-    }
-
-    try {
-      setDeletingId(id);
-
-      const response =
-        await API.delete(
-          `/property-contacts/${id}`
+        setMessage(
+          response.data?.message ||
+            "Enquiry deleted successfully."
         );
 
-      alert(
-        response.data?.message ||
-          "Enquiry deleted successfully."
-      );
+        setMessageType(
+          "success"
+        );
 
-      await fetchEnquiries();
-    } catch (error) {
-      console.error(
-        "DELETE ENQUIRY ERROR:",
-        error.response?.data ||
-          error
-      );
+        setDeleteOpen(false);
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to delete enquiry."
-      );
-    } finally {
-      setDeletingId(null);
-    }
+        setSelectedEnquiry(null);
+
+        await fetchEnquiries({
+          showLoader: false,
+        });
+
+      } catch (error) {
+
+        console.error(
+          "DELETE ENQUIRY ERROR:",
+          error.response?.data ||
+            error
+        );
+
+        setMessage(
+          error.response?.data
+            ?.message ||
+            "Unable to delete enquiry."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+      } finally {
+
+        setDeleting(false);
+
+      }
+    };
+
+  /* =========================================================
+     REFRESH
+  ========================================================= */
+
+  const handleRefresh = () => {
+
+    fetchEnquiries({
+      showLoader: false,
+    });
+
   };
 
-  // ===================================================
-  // RESET FILTERS
-  // ===================================================
+  /* =========================================================
+     SEARCH CHANGE
+  ========================================================= */
 
-  const handleResetFilters = () => {
-    setSearchTerm("");
-    setStatusFilter("All");
-    setPropertyFilter("All");
+  const handleSearchChange = (
+    e
+  ) => {
+
+    setSearch(
+      e.target.value
+    );
+
     setCurrentPage(1);
+
   };
 
-  // ===================================================
-  // STATUS COUNT
-  // ===================================================
+  /* =========================================================
+     STATUS CHANGE
+  ========================================================= */
 
-  const getStatusCount = (status) => {
-    return enquiries.filter(
-      (item) =>
-        item.status === status
-    ).length;
+  const handleStatusChange = (
+    e
+  ) => {
+
+    setStatusFilter(
+      e.target.value
+    );
+
+    setCurrentPage(1);
+
   };
 
-  // ===================================================
-  // RETURN
-  // ===================================================
+  /* =========================================================
+     CLOSE MODALS
+  ========================================================= */
+
+  const closeAllModals = () => {
+
+    setViewOpen(false);
+    setEditOpen(false);
+    setDeleteOpen(false);
+
+    setSelectedEnquiry(null);
+
+  };
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
-    <div className="enquiry-container">
+    <div className="Enquiry-page">
 
-      {/* HEADER */}
+      {/* ===================================================
+          HEADER
+      =================================================== */}
 
-      <div className="enquiry-header">
+      <div className="Enquiry-header">
 
-        <div className="enquiry-header__text">
-
-          <h1 className="enquiry-header__title">
-            Enquiry
+        <div>
+          <h1 className="Enquiry-title">
+            Enquiries
           </h1>
 
-          <p className="enquiry-header__subtitle">
-            View and manage all property enquiries.
+          <p className="Enquiry-subtitle">
+            Manage property enquiries submitted
+            from your website.
           </p>
+        </div>
 
+        <button
+          type="button"
+          className="Enquiry-refresh-btn"
+          onClick={
+            handleRefresh
+          }
+          disabled={
+            refreshing
+          }
+        >
+          <RefreshCw
+            size={16}
+            className={
+              refreshing
+                ? "Enquiry-spin"
+                : ""
+            }
+          />
+
+          Refresh
+        </button>
+
+      </div>
+
+      {/* ===================================================
+          MESSAGE
+      =================================================== */}
+
+      {message && (
+        <div
+          className={`Enquiry-message ${
+            messageType ===
+            "success"
+              ? "Enquiry-message--success"
+              : "Enquiry-message--error"
+          }`}
+        >
+          {messageType ===
+          "success" ? (
+            <CircleCheck
+              size={17}
+            />
+          ) : (
+            <AlertCircle
+              size={17}
+            />
+          )}
+
+          <span>
+            {message}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => {
+              setMessage("");
+              setMessageType("");
+            }}
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
+      {/* ===================================================
+          FILTER BAR
+      =================================================== */}
+
+      <div className="Enquiry-toolbar">
+
+        <div className="Enquiry-search">
+
+          <Search
+            size={17}
+          />
+
+          <input
+            type="text"
+            value={search}
+            onChange={
+              handleSearchChange
+            }
+            placeholder="Search name, mobile, location, area, property..."
+          />
+
+          {search && (
+            <button
+              type="button"
+              className="Enquiry-search-clear"
+              onClick={() => {
+                setSearch("");
+                setCurrentPage(1);
+              }}
+            >
+              <X size={14} />
+            </button>
+          )}
+
+        </div>
+
+        <select
+          className="Enquiry-filter"
+          value={
+            statusFilter
+          }
+          onChange={
+            handleStatusChange
+          }
+        >
+
+          {STATUS_OPTIONS.map(
+            (status) => (
+              <option
+                key={status}
+                value={status}
+              >
+                {status}
+              </option>
+            )
+          )}
+
+        </select>
+
+        <div className="Enquiry-total">
+          {total} Enquiries
         </div>
 
       </div>
 
-      {/* MAIN CARD */}
+      {/* ===================================================
+          TABLE
+      =================================================== */}
 
-      <div className="enquiry-card">
+      <div className="Enquiry-table-card">
 
-        {/* CONTROLS */}
-
-        <div className="enquiry-controls">
-
-          <div className="enquiry-controls__search">
-
-            <svg
-              className="search-icon"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#9CA3AF"
-              strokeWidth="2"
-            >
-              <circle
-                cx="11"
-                cy="11"
-                r="8"
-              />
-
-              <line
-                x1="21"
-                y1="21"
-                x2="16.65"
-                y2="16.65"
-              />
-            </svg>
-
-            <input
-              type="text"
-              placeholder="Search enquiries..."
-              value={searchTerm}
-              onChange={(e) =>
-                setSearchTerm(
-                  e.target.value
-                )
-              }
+        {loading ? (
+          <div className="Enquiry-loading">
+            <RefreshCw
+              size={25}
+              className="Enquiry-spin"
             />
 
+            <span>
+              Loading enquiries...
+            </span>
           </div>
+        ) : displayedEnquiries.length ===
+          0 ? (
 
-          <div className="enquiry-controls__filters">
+          <div className="Enquiry-empty">
 
-            {/* STATUS */}
-
-            <div className="filter-group">
-
-              <select
-                className="filter-select"
-                value={statusFilter}
-                onChange={(e) =>
-                  setStatusFilter(
-                    e.target.value
-                  )
-                }
-              >
-
-                <option value="All">
-                  All Status ({enquiries.length})
-                </option>
-
-                <option value="New">
-                  New ({getStatusCount("New")})
-                </option>
-
-                <option value="Contacted">
-                  Contacted (
-                  {getStatusCount(
-                    "Contacted"
-                  )}
-                  )
-                </option>
-
-                <option value="Closed">
-                  Closed (
-                  {getStatusCount(
-                    "Closed"
-                  )}
-                  )
-                </option>
-
-              </select>
-
+            <div className="Enquiry-empty-icon">
+              <MessageEmptyIcon />
             </div>
 
-            {/* PROPERTY */}
+            <h3>
+              No enquiries found
+            </h3>
 
-            <div className="filter-group">
-
-              <select
-                className="filter-select"
-                value={propertyFilter}
-                onChange={(e) =>
-                  setPropertyFilter(
-                    e.target.value
-                  )
-                }
-              >
-
-                <option value="All">
-                  All Properties
-                </option>
-
-                {propertyOptions.map(
-                  (prop, idx) => (
-                    <option
-                      key={idx}
-                      value={prop}
-                    >
-                      {prop}
-                    </option>
-                  )
-                )}
-
-              </select>
-
-            </div>
-
-            {/* RESET */}
-
-            <button
-              className="filter-btn"
-              onClick={
-                handleResetFilters
-              }
-              title="Reset Filters"
-            >
-
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-
-              </svg>
-
-              Reset
-
-            </button>
+            <p>
+              New website enquiries will
+              appear here.
+            </p>
 
           </div>
 
-        </div>
+        ) : (
 
-        {/* ACTIVE FILTERS */}
+          <div className="Enquiry-table-wrapper">
 
-        {(statusFilter !== "All" ||
-          propertyFilter !== "All" ||
-          searchTerm) && (
+            <table className="Enquiry-table">
 
-          <div className="enquiry-filter-status">
-
-            <span className="filter-status-label">
-              Active Filters:
-            </span>
-
-            {searchTerm && (
-              <span className="filter-tag">
-
-                Search: "{searchTerm}"
-
-                <button
-                  className="filter-tag-remove"
-                  onClick={() =>
-                    setSearchTerm("")
-                  }
-                >
-                  ×
-                </button>
-
-              </span>
-            )}
-
-            {statusFilter !== "All" && (
-              <span className="filter-tag">
-
-                Status: {statusFilter}
-
-                <button
-                  className="filter-tag-remove"
-                  onClick={() =>
-                    setStatusFilter(
-                      "All"
-                    )
-                  }
-                >
-                  ×
-                </button>
-
-              </span>
-            )}
-
-            {propertyFilter !== "All" && (
-              <span className="filter-tag">
-
-                Property: {propertyFilter}
-
-                <button
-                  className="filter-tag-remove"
-                  onClick={() =>
-                    setPropertyFilter(
-                      "All"
-                    )
-                  }
-                >
-                  ×
-                </button>
-
-              </span>
-            )}
-
-            <span className="filter-results-count">
-
-              {filteredEnquiries.length}{" "}
-              result
-              {filteredEnquiries.length !== 1
-                ? "s"
-                : ""}
-
-            </span>
-
-          </div>
-        )}
-
-        {/* TABLE */}
-
-        <div className="enquiry-table-wrapper">
-
-          <table className="enquiry-table">
-
-            <thead>
-
-              <tr>
-
-                <th>Name</th>
-
-                <th>Property</th>
-
-                <th>Contact</th>
-
-                <th>Status</th>
-
-                <th>Date</th>
-
-                <th className="text-right">
-                  Action
-                </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              {loading ? (
-
+              <thead>
                 <tr>
 
-                  <td
-                    colSpan="6"
-                    className="no-data"
-                  >
+                  <th>
+                    Customer
+                  </th>
 
-                    <div className="no-data-content">
+                  <th>
+                    Looking For
+                  </th>
 
-                      <p>
-                        Loading enquiries...
-                      </p>
+                  <th>
+                    Property Type
+                  </th>
 
-                    </div>
+                  <th>
+                    Location
+                  </th>
 
-                  </td>
+                  <th>
+                    Preferred Area
+                  </th>
+
+                  <th>
+                    Budget
+                  </th>
+
+                  <th>
+                    Status
+                  </th>
+
+                  <th>
+                    Date
+                  </th>
+
+                  <th>
+                    Actions
+                  </th>
 
                 </tr>
+              </thead>
 
-              ) : currentEnquiries.length > 0 ? (
+              <tbody>
 
-                currentEnquiries.map(
-                  (item) => (
+                {displayedEnquiries.map(
+                  (enquiry) => (
 
                     <tr
                       key={
-                        item._id ||
-                        item.id
+                        enquiry._id
                       }
                     >
 
-                      <td className="font-semibold">
-                        {item.name}
-                      </td>
-
-                      <td className="text-secondary">
-                        {item.property}
-                      </td>
+                      {/* CUSTOMER */}
 
                       <td>
 
-                        <div className="contact-cell">
+                        <div className="Enquiry-customer">
 
-                          <span className="contact-email">
-                            {item.email}
-                          </span>
+                          <div className="Enquiry-avatar">
+                            {getInitials(
+                              enquiry.fullName
+                            )}
+                          </div>
 
-                          <span className="contact-phone">
-                            {item.phone}
+                          <div className="Enquiry-customer-info">
+
+                            <strong>
+                              {
+                                enquiry.fullName ||
+                                "Property Enquiry"
+                              }
+                            </strong>
+
+                            <span>
+                              <Phone
+                                size={11}
+                              />
+
+                              {
+                                enquiry.mobile ||
+                                "-"
+                              }
+                            </span>
+
+                          </div>
+
+                        </div>
+
+                      </td>
+
+                      {/* LOOKING FOR */}
+
+                      <td>
+                        <span
+                          className={`Enquiry-looking Enquiry-looking--${String(
+                            enquiry.lookingFor ||
+                              "Buy"
+                          ).toLowerCase()}`}
+                        >
+                          {
+                            enquiry.lookingFor ||
+                            "-"
+                          }
+                        </span>
+                      </td>
+
+                      {/* PROPERTY TYPE */}
+
+                      <td>
+
+                        <div className="Enquiry-property-type">
+
+                          <Building2
+                            size={14}
+                          />
+
+                          <span>
+                            {
+                              enquiry.interestedIn ||
+                              "-"
+                            }
                           </span>
 
                         </div>
 
                       </td>
 
+                      {/* LOCATION */}
+
                       <td>
 
-                        <span
-                          className={`status-badge status-badge--${item.status
-                            .toLowerCase()
-                            .replace(
-                              /\s+/g,
+                        <div className="Enquiry-location">
+
+                          <MapPin
+                            size={14}
+                          />
+
+                          <span>
+                            {
+                              enquiry.location ||
                               "-"
-                            )}`}
-                        >
-                          {item.status}
+                            }
+                          </span>
+
+                        </div>
+
+                      </td>
+
+                      {/* AREA */}
+
+                      <td>
+
+                        <span className="Enquiry-area">
+                          {
+                            enquiry.preferredArea ||
+                            "-"
+                          }
                         </span>
 
                       </td>
 
-                      <td className="text-secondary">
-                        {item.date}
+                      {/* BUDGET */}
+
+                      <td>
+
+                        <div className="Enquiry-budget">
+
+                          <Wallet
+                            size={14}
+                          />
+
+                          <span>
+                            {
+                              enquiry.budgetRange ||
+                              "-"
+                            }
+                          </span>
+
+                        </div>
+
                       </td>
 
-                      <td className="text-right">
+                      {/* STATUS */}
 
-                        <div className="action-buttons">
+                      <td>
+                        <StatusBadge
+                          status={
+                            enquiry.status
+                          }
+                        />
+                      </td>
 
-                          {/* VIEW */}
+                      {/* DATE */}
+
+                      <td>
+
+                        <div className="Enquiry-date">
+
+                          <CalendarDays
+                            size={13}
+                          />
+
+                          {formatDate(
+                            enquiry.createdAt
+                          )}
+
+                        </div>
+
+                      </td>
+
+                      {/* ACTIONS */}
+
+                      <td>
+
+                        <div className="Enquiry-actions">
 
                           <button
-                            className="action-btn action-btn--view"
-                            title="View Details"
+                            type="button"
+                            title="View"
+                            className="Enquiry-action Enquiry-action--view"
                             onClick={() =>
-                              setSelectedEnquiry(
-                                item
+                              handleView(
+                                enquiry
                               )
                             }
                           >
-
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-
-                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-
-                              <circle
-                                cx="12"
-                                cy="12"
-                                r="3"
-                              />
-
-                            </svg>
-
+                            <Eye
+                              size={15}
+                            />
                           </button>
 
-                          {/* EDIT */}
-
                           <button
-                            className="action-btn action-btn--edit"
-                            title="Edit Enquiry"
+                            type="button"
+                            title="Edit"
+                            className="Enquiry-action Enquiry-action--edit"
                             onClick={() =>
-                              handleOpenEditModal(
-                                item
+                              handleEdit(
+                                enquiry
                               )
                             }
                           >
-
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-
-                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-
-                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-
-                            </svg>
-
+                            <Pencil
+                              size={15}
+                            />
                           </button>
 
-                          {/* DELETE */}
-
                           <button
-                            className="action-btn action-btn--delete"
+                            type="button"
                             title="Delete"
-                            disabled={
-                              deletingId ===
-                              (
-                                item._id ||
-                                item.id
-                              )
-                            }
-                            onClick={() =>
-                              handleDelete(
-                                item._id ||
-                                item.id
-                              )
-                            }
+                            className="Enquiry-action Enquiry-action--delete"
+                            onClick={() => {
+
+                              setSelectedEnquiry(
+                                enquiry
+                              );
+
+                              setDeleteOpen(
+                                true
+                              );
+
+                            }}
                           >
-
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-
-                              <polyline points="3 6 5 6 21 6" />
-
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-
-                            </svg>
-
+                            <Trash2
+                              size={15}
+                            />
                           </button>
 
                         </div>
@@ -998,575 +1334,953 @@ const Enquire = () => {
                     </tr>
 
                   )
-                )
+                )}
 
-              ) : (
+              </tbody>
 
-                <tr>
-
-                  <td
-                    colSpan="6"
-                    className="no-data"
-                  >
-
-                    <div className="no-data-content">
-
-                      <svg
-                        width="48"
-                        height="48"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#94a3b8"
-                        strokeWidth="1.5"
-                      >
-
-                        <circle
-                          cx="11"
-                          cy="11"
-                          r="8"
-                        />
-
-                        <line
-                          x1="21"
-                          y1="21"
-                          x2="16.65"
-                          y2="16.65"
-                        />
-
-                      </svg>
-
-                      <p>
-                        No enquiries found
-                      </p>
-
-                      <span>
-                        Try adjusting your search or filter criteria
-                      </span>
-
-                    </div>
-
-                  </td>
-
-                </tr>
-
-              )}
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-        {/* FOOTER */}
-
-        <div className="enquiry-footer">
-
-          <span className="enquiry-footer__info">
-
-            Showing{" "}
-
-            <strong>
-              {filteredEnquiries.length === 0
-                ? 0
-                : startIndex + 1}
-            </strong>{" "}
-
-            to{" "}
-
-            <strong>
-              {Math.min(
-                startIndex +
-                  itemsPerPage,
-                filteredEnquiries.length
-              )}
-            </strong>{" "}
-
-            of{" "}
-
-            <strong>
-              {filteredEnquiries.length}
-            </strong>{" "}
-
-            enquiries
-
-          </span>
-
-          <div className="pagination">
-
-            <button
-              className="pagination__arrow"
-              disabled={
-                currentPage === 1
-              }
-              onClick={() =>
-                handlePageChange(
-                  currentPage - 1
-                )
-              }
-            >
-              &#8249;
-            </button>
-
-            {Array.from(
-              {
-                length: Math.min(
-                  totalPages,
-                  5
-                ),
-              },
-              (_, i) => {
-
-                let pageNum;
-
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (
-                  currentPage <= 3
-                ) {
-                  pageNum = i + 1;
-                } else if (
-                  currentPage >=
-                  totalPages - 2
-                ) {
-                  pageNum =
-                    totalPages -
-                    4 +
-                    i;
-                } else {
-                  pageNum =
-                    currentPage -
-                    2 +
-                    i;
-                }
-
-                return (
-                  <button
-                    key={pageNum}
-                    className={`pagination__page ${
-                      currentPage ===
-                      pageNum
-                        ? "pagination__page--active"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      handlePageChange(
-                        pageNum
-                      )
-                    }
-                  >
-                    {pageNum}
-                  </button>
-                );
-              }
-            )}
-
-            {totalPages > 5 &&
-              currentPage <
-                totalPages - 2 && (
-                <>
-                  <span className="pagination__ellipsis">
-                    …
-                  </span>
-
-                  <button
-                    className="pagination__page"
-                    onClick={() =>
-                      handlePageChange(
-                        totalPages
-                      )
-                    }
-                  >
-                    {totalPages}
-                  </button>
-                </>
-              )}
-
-            <button
-              className="pagination__arrow"
-              disabled={
-                currentPage ===
-                totalPages
-              }
-              onClick={() =>
-                handlePageChange(
-                  currentPage + 1
-                )
-              }
-            >
-              &#8250;
-            </button>
+            </table>
 
           </div>
 
-        </div>
+        )}
 
       </div>
 
-      {/* =================================================
-          EDIT ENQUIRY FORM
-      ================================================= */}
+      {/* ===================================================
+          PAGINATION
+      =================================================== */}
 
-      {isFormModalOpen && (
+      {totalPages > 1 && (
+        <div className="Enquiry-pagination">
 
-        <div
-          className="modal-backdrop"
-          onClick={(e) => {
-            if (
-              e.target ===
-              e.currentTarget
-            ) {
-              setIsFormModalOpen(false);
-              resetForm();
+          <button
+            type="button"
+            disabled={
+              currentPage <= 1
             }
-          }}
-        >
+            onClick={() =>
+              setCurrentPage(
+                (page) =>
+                  Math.max(
+                    page - 1,
+                    1
+                  )
+              )
+            }
+          >
+            Previous
+          </button>
 
-          <div className="modal-container">
+          <span>
+            Page{" "}
+            <strong>
+              {currentPage}
+            </strong>{" "}
+            of{" "}
+            <strong>
+              {totalPages}
+            </strong>
+          </span>
 
-            <div className="modal-header">
+          <button
+            type="button"
+            disabled={
+              currentPage >=
+              totalPages
+            }
+            onClick={() =>
+              setCurrentPage(
+                (page) =>
+                  Math.min(
+                    page + 1,
+                    totalPages
+                  )
+              )
+            }
+          >
+            Next
+          </button>
 
-              <h2>
-                Edit Enquiry
-              </h2>
+        </div>
+      )}
 
-              <button
-                className="modal-close"
-                onClick={() => {
-                  setIsFormModalOpen(
-                    false
-                  );
-                  resetForm();
-                }}
-              >
-                &times;
-              </button>
+      {/* ===================================================
+          VIEW MODAL
+      =================================================== */}
 
-            </div>
+      {viewOpen &&
+        selectedEnquiry && (
+          <div
+            className="Enquiry-modal-overlay"
+            onMouseDown={(e) => {
 
-            <form
-              onSubmit={
-                handleFormSubmit
+              if (
+                e.target ===
+                e.currentTarget
+              ) {
+                setViewOpen(
+                  false
+                );
               }
-            >
 
-              <div className="modal-body">
+            }}
+          >
 
-                <div className="form-grid">
+            <div className="Enquiry-modal Enquiry-view-modal">
 
-                  {/* NAME */}
+              <div className="Enquiry-modal-header">
 
-                  <div className="form-group">
+                <div>
+                  <h2>
+                    Enquiry Details
+                  </h2>
 
-                    <label>
-                      Full Name *
-                    </label>
+                  <p>
+                    Complete information submitted
+                    by the customer.
+                  </p>
+                </div>
 
-                    <input
-                      type="text"
-                      name="fullName"
-                      placeholder="Enter full name"
+                <button
+                  type="button"
+                  onClick={() =>
+                    setViewOpen(
+                      false
+                    )
+                  }
+                >
+                  <X size={18} />
+                </button>
+
+              </div>
+
+              <div className="Enquiry-modal-body">
+
+                {/* CUSTOMER */}
+
+                <div className="Enquiry-section">
+
+                  <h3>
+                    Customer Information
+                  </h3>
+
+                  <div className="Enquiry-details-grid">
+
+                    <DetailItem
+                      icon={
+                        <UserRound
+                          size={16}
+                        />
+                      }
+                      label="Name"
                       value={
-                        formData.fullName
+                        selectedEnquiry.fullName
                       }
-                      onChange={
-                        handleInputChange
+                    />
+
+                    <DetailItem
+                      icon={
+                        <Phone
+                          size={16}
+                        />
                       }
-                      required
+                      label="Mobile"
+                      value={
+                        selectedEnquiry.mobile
+                      }
+                    />
+
+                    <DetailItem
+                      icon={
+                        <Mail
+                          size={16}
+                        />
+                      }
+                      label="Email"
+                      value={
+                        selectedEnquiry.email
+                      }
                     />
 
                   </div>
 
-                  {/* EMAIL */}
+                </div>
 
-                  <div className="form-group">
+                {/* ENQUIRY */}
 
-                    <label>
-                      Email Address *
-                    </label>
+                <div className="Enquiry-section">
 
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Enter email address"
+                  <h3>
+                    Property Requirement
+                  </h3>
+
+                  <div className="Enquiry-details-grid">
+
+                    <DetailItem
+                      icon={
+                        <Home
+                          size={16}
+                        />
+                      }
+                      label="Looking For"
                       value={
-                        formData.email
+                        selectedEnquiry.lookingFor
                       }
-                      onChange={
-                        handleInputChange
+                    />
+
+                    <DetailItem
+                      icon={
+                        <Building2
+                          size={16}
+                        />
                       }
-                      required
+                      label="Property Type"
+                      value={
+                        selectedEnquiry.interestedIn
+                      }
+                    />
+
+                    <DetailItem
+                      icon={
+                        <MapPin
+                          size={16}
+                        />
+                      }
+                      label="Preferred Location"
+                      value={
+                        selectedEnquiry.location
+                      }
+                    />
+
+                    <DetailItem
+                      icon={
+                        <MapPin
+                          size={16}
+                        />
+                      }
+                      label="Preferred Area"
+                      value={
+                        selectedEnquiry.preferredArea
+                      }
+                    />
+
+                    <DetailItem
+                      icon={
+                        <Wallet
+                          size={16}
+                        />
+                      }
+                      label="Budget Range"
+                      value={
+                        selectedEnquiry.budgetRange
+                      }
                     />
 
                   </div>
 
-                  {/* MOBILE */}
+                </div>
 
-                  <div className="form-group">
+                {/* PROPERTY */}
 
-                    <label>
-                      Phone Number *
-                    </label>
+                <div className="Enquiry-section">
 
-                    <input
-                      type="text"
-                      name="phone"
-                      placeholder="Enter phone number"
+                  <h3>
+                    Property Information
+                  </h3>
+
+                  <div className="Enquiry-details-grid">
+
+                    <DetailItem
+                      icon={
+                        <Home
+                          size={16}
+                        />
+                      }
+                      label="Property"
                       value={
-                        formData.phone
+                        selectedEnquiry.propertyName
                       }
-                      onChange={
-                        handleInputChange
+                    />
+
+                    <DetailItem
+                      icon={
+                        <Building2
+                          size={16}
+                        />
                       }
-                      required
+                      label="Project"
+                      value={
+                        selectedEnquiry.project
+                      }
                     />
 
                   </div>
 
-                  {/* STATUS */}
+                </div>
 
-                  <div className="form-group">
+                {/* CRM */}
 
-                    <label>
-                      Status
-                    </label>
+                <div className="Enquiry-section">
 
-                    <select
-                      name="status"
+                  <h3>
+                    CRM Information
+                  </h3>
+
+                  <div className="Enquiry-details-grid">
+
+                    <DetailItem
+                      icon={
+                        <CircleCheck
+                          size={16}
+                        />
+                      }
+                      label="Status"
                       value={
-                        formData.status
+                        selectedEnquiry.status
                       }
-                      onChange={
-                        handleInputChange
+                    />
+
+                    <DetailItem
+                      icon={
+                        <AlertCircle
+                          size={16}
+                        />
                       }
-                    >
+                      label="Priority"
+                      value={
+                        selectedEnquiry.priority
+                      }
+                    />
 
-                      <option value="New">
-                        New
-                      </option>
+                    <DetailItem
+                      icon={
+                        <UserRound
+                          size={16}
+                        />
+                      }
+                      label="Agent"
+                      value={
+                        selectedEnquiry.agent
+                      }
+                    />
 
-                      <option value="Contacted">
-                        Contacted
-                      </option>
+                    <DetailItem
+                      icon={
+                        <Clock3
+                          size={16}
+                        />
+                      }
+                      label="Follow-up Date"
+                      value={
+                        selectedEnquiry.followUpDate
+                      }
+                    />
 
-                      <option value="Closed">
-                        Closed
-                      </option>
+                    <DetailItem
+                      icon={
+                        <CircleCheck
+                          size={16}
+                        />
+                      }
+                      label="Lead Score"
+                      value={
+                        selectedEnquiry.score
+                      }
+                    />
 
-                    </select>
+                    <DetailItem
+                      icon={
+                        <CalendarDays
+                          size={16}
+                        />
+                      }
+                      label="Created"
+                      value={
+                        formatDate(
+                          selectedEnquiry.createdAt
+                        )
+                      }
+                    />
 
+                    <DetailItem
+                      icon={
+                        <Home
+                          size={16}
+                        />
+                      }
+                      label="Source"
+                      value={
+                        selectedEnquiry.source
+                      }
+                    />
+
+                  </div>
+
+                </div>
+
+                {/* NOTES */}
+
+                <div className="Enquiry-section">
+
+                  <h3>
+                    Notes
+                  </h3>
+
+                  <div className="Enquiry-notes">
+                    {
+                      selectedEnquiry.notes ||
+                      "No notes available."
+                    }
                   </div>
 
                 </div>
 
               </div>
 
-              <div className="modal-footer">
+              <div className="Enquiry-modal-footer">
 
                 <button
                   type="button"
-                  className="btn btn--cancel"
+                  className="Enquiry-secondary-btn"
+                  onClick={() =>
+                    setViewOpen(
+                      false
+                    )
+                  }
+                >
+                  Close
+                </button>
+
+                <button
+                  type="button"
+                  className="Enquiry-primary-btn"
                   onClick={() => {
-                    setIsFormModalOpen(
+
+                    setViewOpen(
                       false
                     );
 
-                    resetForm();
+                    handleEdit(
+                      selectedEnquiry
+                    );
+
                   }}
+                >
+                  <Pencil
+                    size={15}
+                  />
+
+                  Edit Enquiry
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+      {/* ===================================================
+          EDIT MODAL
+      =================================================== */}
+
+      {editOpen &&
+        selectedEnquiry && (
+          <div
+            className="Enquiry-modal-overlay"
+            onMouseDown={(e) => {
+
+              if (
+                e.target ===
+                e.currentTarget
+              ) {
+                setEditOpen(
+                  false
+                );
+              }
+
+            }}
+          >
+
+            <div className="Enquiry-modal Enquiry-edit-modal">
+
+              <div className="Enquiry-modal-header">
+
+                <div>
+                  <h2>
+                    Edit Enquiry
+                  </h2>
+
+                  <p>
+                    Update the enquiry details.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setEditOpen(
+                      false
+                    )
+                  }
+                >
+                  <X size={18} />
+                </button>
+
+              </div>
+
+              <div className="Enquiry-modal-body">
+
+                <div className="Enquiry-edit-grid">
+
+                  <EditField
+                    label="Name"
+                    value={
+                      editData.fullName
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "fullName",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Mobile"
+                    value={
+                      editData.mobile
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "mobile",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Email"
+                    value={
+                      editData.email
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "email",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Looking For"
+                    value={
+                      editData.lookingFor
+                    }
+                    options={[
+                      "Buy",
+                      "Sell",
+                      "Rent",
+                    ]}
+                    onChange={(e) =>
+                      handleEditChange(
+                        "lookingFor",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Property Type"
+                    value={
+                      editData.interestedIn
+                    }
+                    options={[
+                      "Apartment",
+                      "Villa",
+                      "Independent House",
+                      "Plot",
+                      "Commercial Property",
+                    ]}
+                    onChange={(e) =>
+                      handleEditChange(
+                        "interestedIn",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Preferred Location"
+                    value={
+                      editData.location
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "location",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Preferred Area"
+                    value={
+                      editData.preferredArea
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "preferredArea",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Budget Range"
+                    value={
+                      editData.budgetRange
+                    }
+                    options={[
+                      "Starting - ₹60 Lakhs",
+                      "₹60 Lakhs - ₹1.2 Crore",
+                      "₹1.2 Crore - ₹2.5 Crore",
+                      "Above ₹2.5 Crore",
+                    ]}
+                    onChange={(e) =>
+                      handleEditChange(
+                        "budgetRange",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Property"
+                    value={
+                      editData.propertyName
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "propertyName",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Project"
+                    value={
+                      editData.project
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "project",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Agent"
+                    value={
+                      editData.agent
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "agent",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Status"
+                    value={
+                      editData.status
+                    }
+                    options={
+                      STATUS_OPTIONS.filter(
+                        (item) =>
+                          item !==
+                          "All Status"
+                      )
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "status",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Priority"
+                    value={
+                      editData.priority
+                    }
+                    options={
+                      PRIORITY_OPTIONS
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "priority",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Follow-up Date"
+                    value={
+                      editData.followUpDate
+                    }
+                    type="date"
+                    onChange={(e) =>
+                      handleEditChange(
+                        "followUpDate",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <EditField
+                    label="Lead Score"
+                    value={
+                      editData.score
+                    }
+                    type="number"
+                    onChange={(e) =>
+                      handleEditChange(
+                        "score",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                </div>
+
+                <div className="Enquiry-edit-field Enquiry-edit-field--full">
+
+                  <label>
+                    Notes
+                  </label>
+
+                  <textarea
+                    value={
+                      editData.notes ||
+                      ""
+                    }
+                    onChange={(e) =>
+                      handleEditChange(
+                        "notes",
+                        e.target.value
+                      )
+                    }
+                    rows={5}
+                    placeholder="Enter notes..."
+                  />
+
+                </div>
+
+              </div>
+
+              <div className="Enquiry-modal-footer">
+
+                <button
+                  type="button"
+                  className="Enquiry-secondary-btn"
+                  onClick={() =>
+                    setEditOpen(
+                      false
+                    )
+                  }
+                  disabled={
+                    saving
+                  }
                 >
                   Cancel
                 </button>
 
                 <button
-                  type="submit"
-                  className="btn btn--submit"
-                  disabled={saving}
+                  type="button"
+                  className="Enquiry-primary-btn"
+                  onClick={
+                    handleSaveEdit
+                  }
+                  disabled={
+                    saving
+                  }
                 >
-                  {saving
-                    ? "Saving..."
-                    : "Save Changes"}
+
+                  {saving ? (
+                    <>
+                      <RefreshCw
+                        size={15}
+                        className="Enquiry-spin"
+                      />
+
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <CircleCheck
+                        size={15}
+                      />
+
+                      Save Changes
+                    </>
+                  )}
+
                 </button>
 
               </div>
 
-            </form>
+            </div>
 
           </div>
+        )}
 
-        </div>
+      {/* ===================================================
+          DELETE MODAL
+      =================================================== */}
 
-      )}
+      {deleteOpen &&
+        selectedEnquiry && (
+          <div
+            className="Enquiry-modal-overlay"
+            onMouseDown={(e) => {
 
-      {/* =================================================
-          VIEW DETAILS
-      ================================================= */}
+              if (
+                e.target ===
+                e.currentTarget
+              ) {
+                setDeleteOpen(
+                  false
+                );
+              }
 
-      {selectedEnquiry && (
+            }}
+          >
 
-        <div
-          className="modal-backdrop"
-          onClick={(e) => {
-            if (
-              e.target ===
-              e.currentTarget
-            ) {
-              setSelectedEnquiry(
-                null
-              );
-            }
-          }}
-        >
+            <div className="Enquiry-delete-modal">
 
-          <div className="modal-container modal-container--sm">
-
-            <div className="modal-header">
+              <div className="Enquiry-delete-icon">
+                <Trash2
+                  size={22}
+                />
+              </div>
 
               <h2>
-                Enquiry Details
+                Delete Enquiry?
               </h2>
 
-              <button
-                className="modal-close"
-                onClick={() =>
-                  setSelectedEnquiry(
-                    null
-                  )
-                }
-              >
-                &times;
-              </button>
+              <p>
+                Are you sure you want to delete
+                this enquiry? This action cannot
+                be undone.
+              </p>
 
-            </div>
+              <div className="Enquiry-delete-info">
 
-            <div className="modal-body detail-view">
-
-              {/* NAME */}
-
-              <div className="detail-row">
-
-                <span className="detail-label">
-                  Name
-                </span>
-
-                <span className="detail-value">
+                <strong>
                   {
-                    selectedEnquiry.name
+                    selectedEnquiry.fullName ||
+                    "Property Enquiry"
+                  }
+                </strong>
+
+                <span>
+                  {
+                    selectedEnquiry.mobile ||
+                    "-"
                   }
                 </span>
 
               </div>
 
-              {/* PROPERTY */}
+              <div className="Enquiry-delete-actions">
 
-              <div className="detail-row">
-
-                <span className="detail-label">
-                  Property
-                </span>
-
-                <span className="detail-value">
-                  {
-                    selectedEnquiry.property
+                <button
+                  type="button"
+                  className="Enquiry-secondary-btn"
+                  onClick={() =>
+                    setDeleteOpen(
+                      false
+                    )
                   }
-                </span>
-
-              </div>
-
-              {/* EMAIL */}
-
-              <div className="detail-row">
-
-                <span className="detail-label">
-                  Email
-                </span>
-
-                <span className="detail-value">
-                  {
-                    selectedEnquiry.email
+                  disabled={
+                    deleting
                   }
-                </span>
-
-              </div>
-
-              {/* MOBILE */}
-
-              <div className="detail-row">
-
-                <span className="detail-label">
-                  Phone
-                </span>
-
-                <span className="detail-value">
-                  {
-                    selectedEnquiry.phone
-                  }
-                </span>
-
-              </div>
-
-              {/* STATUS */}
-
-              <div className="detail-row">
-
-                <span className="detail-label">
-                  Status
-                </span>
-
-                <span
-                  className={`status-badge status-badge--${selectedEnquiry.status
-                    .toLowerCase()
-                    .replace(
-                      /\s+/g,
-                      "-"
-                    )}`}
                 >
-                  {
-                    selectedEnquiry.status
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  className="Enquiry-delete-confirm-btn"
+                  onClick={
+                    handleDeleteConfirm
                   }
-                </span>
+                  disabled={
+                    deleting
+                  }
+                >
+
+                  {deleting ? (
+                    <>
+                      <RefreshCw
+                        size={15}
+                        className="Enquiry-spin"
+                      />
+
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2
+                        size={15}
+                      />
+
+                      Delete
+                    </>
+                  )}
+
+                </button>
 
               </div>
-
-              {/* DATE */}
-
-              <div className="detail-row">
-
-                <span className="detail-label">
-                  Date
-                </span>
-
-                <span className="detail-value">
-                  {
-                    selectedEnquiry.date
-                  }
-                </span>
-
-              </div>
-
-            </div>
-
-            <div className="modal-footer">
-
-              <button
-                className="btn btn--cancel"
-                onClick={() =>
-                  setSelectedEnquiry(
-                    null
-                  )
-                }
-              >
-                Close
-              </button>
 
             </div>
 
           </div>
-
-        </div>
-
-      )}
+        )}
 
     </div>
   );
 };
 
-export default Enquire;
+/* =========================================================
+   EMPTY ICON
+========================================================= */
+
+const MessageEmptyIcon = () => {
+  return (
+    <svg
+      width="25"
+      height="25"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+      <path d="M8 9h8" />
+      <path d="M8 13h5" />
+    </svg>
+  );
+};
+
+export default Enquiry;
+
