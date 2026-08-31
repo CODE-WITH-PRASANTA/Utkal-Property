@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-// 1. IMPORT YOUR LOGO HERE (Update the file path & extension as needed)
 import logo from '../../assets/Utkal Property Outro (2).webp'; 
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen((prev) => !prev);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   const navLinks = [
@@ -23,59 +27,82 @@ const Navbar = () => {
 
   return (
     <header className="navbar-header">
-      <nav className="navbar-container">
-        
+      <nav className="navbar-container" aria-label="Main Navigation">
+
         {/* Logo Section */}
-        <a href="/" className="navbar-brand">
-          <img src={logo} alt="Dream Home Logo" className="navbar-logo-img" />
-        </a>
+        <Link to="/" className="navbar-brand" aria-label="Utkal Property Home">
+          <img 
+            src={logo} 
+            alt="Utkal Property Logo - Top Real Estate Agency in Bhubaneswar" 
+            className="navbar-logo-img"
+            width="170"
+            height="70"
+            loading="eager"
+            decoding="async"
+          />
+        </Link>
 
         {/* Navigation Links */}
         <ul className={`navbar-links ${isMobileMenuOpen ? 'active' : ''}`}>
           {navLinks.map((link) => (
             <li key={link.path} className="navbar-item">
-              <a href={link.path} className="navbar-link">
+              <Link 
+                to={link.path} 
+                className="navbar-link" 
+                onClick={closeMobileMenu}
+              >
                 {link.title}
-              </a>
+              </Link>
             </li>
           ))}
 
           {/* Mobile Actions Menu */}
           <div className="navbar-mobile-actions">
-            <a href="/sell-property" className="navbar-sell-btn">
-              <div className="navbar-sell-btn-icon">
+            <Link 
+              to="/sell-property" 
+              className="navbar-sell-btn"
+              onClick={closeMobileMenu}
+              aria-label="Sell Property with Utkal Property"
+            >
+              <div className="navbar-sell-btn-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                  <text x="12" y="16.5" fontSize="9" fontWeight="800" textAnchor="middle" fill="currentColor" stroke="none">$</text>
+                  <text x="12" y="16.5" fontSize="9" fontWeight="800" textAnchor="middle" fill="currentColor" stroke="none">₹</text>
                 </svg>
               </div>
-              <span className="navbar-sell-btn-divider"></span>
+              <span className="navbar-sell-btn-divider" aria-hidden="true"></span>
               <span>Sell Property</span>
-            </a>
+            </Link>
           </div>
         </ul>
 
         {/* Desktop Actions Section */}
         <div className="navbar-desktop-actions">
-          <a href="/sell-property" className="navbar-sell-btn">
-            <div className="navbar-sell-btn-icon">
+          <Link 
+            to="/sell-property" 
+            className="navbar-sell-btn"
+            aria-label="Sell Property with Utkal Property"
+          >
+            <div className="navbar-sell-btn-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <text x="12" y="16.5" fontSize="9" fontWeight="800" textAnchor="middle" fill="currentColor" stroke="none">$</text>
+                <text x="12" y="16.5" fontSize="9" fontWeight="800" textAnchor="middle" fill="currentColor" stroke="none">₹</text>
               </svg>
             </div>
-            <span className="navbar-sell-btn-divider"></span>
+            <span className="navbar-sell-btn-divider" aria-hidden="true"></span>
             <span>Sell Property</span>
-          </a>
+          </Link>
         </div>
 
         {/* Mobile Toggle Button */}
         <button 
+          type="button"
           className="navbar-toggle-btn" 
           onClick={toggleMobileMenu}
-          aria-label="Toggle navigation"
+          aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMobileMenuOpen}
         >
-          <span className={`navbar-toggle-icon ${isMobileMenuOpen ? 'open' : ''}`}></span>
+          <span className={`navbar-toggle-icon ${isMobileMenuOpen ? 'open' : ''}`} aria-hidden="true"></span>
         </button>
 
       </nav>

@@ -38,13 +38,13 @@
   font-weight: 700;
   border: none;
   background-color: #eef7f2;
-  color: #091b12; /* 50% Black & 50% Dark Green */
+  color: #091b12;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .GridBreadcrum-tab-btn.active {
-  background-color: #0b3b24; /* Dark Green replaces Yellow */
+  background-color: #0b3b24;
   color: #ffffff;
 }
 
@@ -83,15 +83,15 @@
   border: 1px solid #d1e2d7;
   border-radius: 8px;
   font-size: 13.5px;
-  color: #091b12; /* 50/50 blend */
+  color: #091b12;
   outline: none;
   box-sizing: border-box;
   background-color: #ffffff;
 }
 
 .GridBreadcrum-input::placeholder {
-  color: #091b12;
-  opacity: 0.75;
+  color: #4b5563; /* High contrast placeholder for WCAG compliance */
+  opacity: 1;
 }
 
 .GridBreadcrum-input:focus {
@@ -113,12 +113,17 @@
   border: 1px solid #d1e2d7;
   border-radius: 8px;
   font-size: 13.5px;
-  color: #091b12; /* 50/50 blend */
+  color: #091b12;
   outline: none;
   background-color: #ffffff;
   appearance: none;
   cursor: pointer;
   box-sizing: border-box;
+}
+
+.GridBreadcrum-select::placeholder {
+  color: #4b5563;
+  opacity: 1;
 }
 
 .GridBreadcrum-select:focus {
@@ -144,7 +149,7 @@
   border: 1px solid #d1e2d7;
   font-size: 13.5px;
   font-weight: 700;
-  color: #091b12; /* 50/50 blend */
+  color: #091b12;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -167,7 +172,7 @@
   gap: 8px;
   padding: 12px 22px;
   border-radius: 8px;
-  background-color: #0b3b24; /* Primary Dark Green replacing Yellow */
+  background-color: #0b3b24;
   border: none;
   font-size: 13.5px;
   font-weight: 700;
@@ -209,7 +214,7 @@
 .GridBreadcrum-filter-range-label {
   font-size: 14px;
   font-weight: 700;
-  color: #091b12; /* 50/50 blend */
+  color: #091b12;
 }
 
 .GridBreadcrum-divider {
@@ -230,7 +235,7 @@
   align-items: center;
   gap: 10px;
   font-size: 13.5px;
-  color: #091b12; /* 50/50 blend */
+  color: #091b12;
   cursor: pointer;
   user-select: none;
 }
@@ -238,7 +243,7 @@
 .GridBreadcrum-checkbox-label input[type='checkbox'] {
   width: 18px;
   height: 18px;
-  accent-color: #0b3b24; /* Accent color updated to Dark Green */
+  accent-color: #0b3b24;
   cursor: pointer;
   border-radius: 4px;
 }
@@ -290,7 +295,7 @@
 
 .GridBreadcrum-meta-icon {
   font-size: 18px;
-  color: #86efac; /* Soft green highlight icon */
+  color: #86efac;
 }
 
 /* Responsive Media Queries */
@@ -317,11 +322,11 @@
   .GridBreadcrum-hero-title {
     font-size: 30px;
   }
+  
   .highlight-black { 
     color: #091b12;
     position: relative;
     display: inline-block;
-
   }
 
   .GridBreadcrum-hero-banner {
