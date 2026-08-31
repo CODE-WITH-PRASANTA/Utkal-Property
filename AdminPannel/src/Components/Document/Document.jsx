@@ -1,9 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 
 import {
   IoDocumentTextOutline,
   IoCloudUploadOutline,
-  IoClose,
   IoPencil,
   IoSquareOutline,
   IoText,
@@ -21,79 +20,76 @@ const Document = ({
   floorPlans,
   setFloorPlans,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // =====================================================
+  // FILE REFS
+  // =====================================================
 
-  // Floor plan image input
   const fileInputRef = useRef(null);
-
-  // Property PDF/DOC/DOCX input
   const documentInputRef = useRef(null);
 
-  // ==========================================
-  // FLOOR PLAN FORM DATA
-  // ==========================================
+  // =====================================================
+  // FORM DATA
+  // =====================================================
 
   const [formData, setFormData] = useState({
-    planTitle: "Fourth Floor Plan",
-    planType: "Apartment",
-
-    beds: 3,
-    baths: 2,
-    balconies: 1,
-
+    planTitle: "",
+    planType: "",
+    beds: 0,
+    baths: 0,
+    balconies: 0,
     pujaRoom: 0,
-    servantRoom: 1,
+    servantRoom: 0,
     storeRoom: 0,
-
-    sbaSqft: 3140,
-    plotSqft: 1500,
-
+    sbaSqft: 0,
+    plotSqft: 0,
     floorPlanSketch: null,
   });
 
-  // ==========================================
-  // FLOOR PLAN IMAGE PREVIEW
-  // ==========================================
+  // =====================================================
+  // IMAGE PREVIEW
+  // =====================================================
 
-  const [uploadedImage, setUploadedImage] =
-    useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [imageFileName, setImageFileName] = useState("");
 
-  const [imageFileName, setImageFileName] =
-    useState("");
-
-  // ==========================================
-  // HANDLE FLOOR PLAN INPUT
-  // ==========================================
+  // =====================================================
+  // INPUT CHANGE
+  // =====================================================
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((previous) => ({
+      ...previous,
       [name]: value,
     }));
   };
 
-  // ==========================================
-  // FLOOR PLAN IMAGE UPLOAD
-  // ==========================================
+  // =====================================================
+  // FLOOR PLAN UPLOAD CLICK
+  // =====================================================
 
   const handleUploadClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    fileInputRef.current?.click();
   };
 
+  // =====================================================
+  // FLOOR PLAN FILE CHANGE
+  // =====================================================
+
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
 
     if (file) {
       processFile(file);
     }
   };
 
+  // =====================================================
+  // PROCESS FLOOR PLAN IMAGE
+  // =====================================================
+
   const processFile = (file) => {
-    // Image validation
     if (!file.type.match("image.*")) {
       alert(
         "Please select a valid image file (JPG, PNG, WebP)"
@@ -101,50 +97,54 @@ const Document = ({
       return;
     }
 
-    // 5 MB
     if (file.size > 5 * 1024 * 1024) {
       alert("File size exceeds 5MB limit.");
       return;
     }
 
-    setImageFileName(file.name);
+    if (uploadedImage) {
+      URL.revokeObjectURL(uploadedImage);
+    }
 
-    const previewUrl =
-      URL.createObjectURL(file);
+    const previewUrl = URL.createObjectURL(file);
+
+    setImageFileName(file.name);
 
     setUploadedImage(previewUrl);
 
-    // Store actual File
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((previous) => ({
+      ...previous,
       floorPlanSketch: file,
     }));
   };
 
-  // ==========================================
-  // DRAG FLOOR PLAN IMAGE
-  // ==========================================
+  // =====================================================
+  // DRAG OVER
+  // =====================================================
 
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
+  // =====================================================
+  // DROP
+  // =====================================================
+
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const file =
-      e.dataTransfer.files[0];
+    const file = e.dataTransfer.files?.[0];
 
     if (file) {
       processFile(file);
     }
   };
 
-  // ==========================================
-  // REMOVE FLOOR PLAN IMAGE
-  // ==========================================
+  // =====================================================
+  // REMOVE IMAGE
+  // =====================================================
 
   const handleRemoveImage = (e) => {
     if (e) {
@@ -159,8 +159,8 @@ const Document = ({
 
     setImageFileName("");
 
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((previous) => ({
+      ...previous,
       floorPlanSketch: null,
     }));
 
@@ -169,16 +169,17 @@ const Document = ({
     }
   };
 
-  // ==========================================
-  // PROPERTY DOCUMENT UPLOAD
-  // PDF / DOC / DOCX
-  // ==========================================
+  // =====================================================
+  // DOCUMENT UPLOAD CLICK
+  // =====================================================
 
   const handleDocumentUploadClick = () => {
-    if (documentInputRef.current) {
-      documentInputRef.current.click();
-    }
+    documentInputRef.current?.click();
   };
+
+  // =====================================================
+  // DOCUMENT CHANGE
+  // =====================================================
 
   const handleDocumentChange = (e) => {
     const selectedFiles = Array.from(
@@ -191,30 +192,24 @@ const Document = ({
 
     const allowedTypes = [
       "application/pdf",
-
       "application/msword",
-
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
 
     const validFiles = [];
 
     selectedFiles.forEach((file) => {
-      // Type validation
       if (!allowedTypes.includes(file.type)) {
         alert(
           `${file.name} is not a valid PDF, DOC or DOCX file.`
         );
-
         return;
       }
 
-      // 10MB validation
       if (file.size > 10 * 1024 * 1024) {
         alert(
           `${file.name} exceeds the 10MB limit.`
         );
-
         return;
       }
 
@@ -230,29 +225,16 @@ const Document = ({
       ...validFiles,
     ]);
 
-    console.log(
-      "Documents selected:",
-      validFiles
-    );
-
-    // Reset so same file can be selected again
     if (documentInputRef.current) {
       documentInputRef.current.value = "";
     }
   };
 
-  // ==========================================
-  // REMOVE PROPERTY DOCUMENT
-  // ==========================================
+  // =====================================================
+  // REMOVE DOCUMENT
+  // =====================================================
 
-  const handleRemoveDocument = (
-    index,
-    event
-  ) => {
-    if (event) {
-      event.stopPropagation();
-    }
-
+  const handleRemoveDocument = (index) => {
     setDocuments((previous) =>
       previous.filter(
         (_, documentIndex) =>
@@ -261,14 +243,17 @@ const Document = ({
     );
   };
 
-  // ==========================================
-  // SAVE FLOOR PLAN
-  // ==========================================
+  // =====================================================
+  // SUBMIT FLOOR PLAN
+  // =====================================================
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validation
+    // ===================================================
+    // VALIDATION
+    // ===================================================
+
     if (!formData.planTitle.trim()) {
       alert("Plan title is required.");
       return;
@@ -280,26 +265,22 @@ const Document = ({
     }
 
     if (!formData.floorPlanSketch) {
-      alert(
-        "Please upload floor plan image."
-      );
-
+      alert("Please upload floor plan image.");
       return;
     }
 
-    // Create floor plan object
+    // ===================================================
+    // CREATE FLOOR PLAN OBJECT
+    // ===================================================
+
     const newFloorPlan = {
-      planTitle:
-        formData.planTitle.trim(),
+      planTitle: formData.planTitle.trim(),
 
-      planType:
-        formData.planType,
+      planType: formData.planType,
 
-      beds:
-        Number(formData.beds) || 0,
+      beds: Number(formData.beds) || 0,
 
-      baths:
-        Number(formData.baths) || 0,
+      baths: Number(formData.baths) || 0,
 
       balconies:
         Number(formData.balconies) || 0,
@@ -319,46 +300,109 @@ const Document = ({
       plotSqft:
         Number(formData.plotSqft) || 0,
 
-      // Actual browser File
+      // =================================================
+      // IMPORTANT
+      // KEEP THE ACTUAL FILE OBJECT
+      // =================================================
+
       floorPlanSketch:
         formData.floorPlanSketch,
 
-      // Frontend preview
+      // =================================================
+      // FRONTEND PREVIEW ONLY
+      // =================================================
+
       preview:
         uploadedImage || "",
+
+      // =================================================
+      // MARK AS NEW
+      // =================================================
+
+      isNew: true,
     };
 
-    // Send floor plan to parent
-    setFloorPlans((previous) => [
-      ...(previous || []),
-      newFloorPlan,
-    ]);
+    // ===================================================
+    // SAVE INTO PARENT STATE
+    // ===================================================
 
-    console.log(
-      "Floor Plan Added:",
-      newFloorPlan
-    );
+    setFloorPlans((previous) => {
+      const updatedFloorPlans = [
+        ...(previous || []),
+        newFloorPlan,
+      ];
+
+      console.log(
+        "FLOOR PLANS AFTER ADD:",
+        updatedFloorPlans
+      );
+
+      return updatedFloorPlans;
+    });
+
+    // ===================================================
+    // MESSAGE
+    // ===================================================
 
     alert(
-      "Floor plan added successfully!"
+      "Floor plan added successfully. Click Publish / Update Property to save it."
     );
 
-    // Reset form
+    // ===================================================
+    // RESET FORM
+    // ===================================================
+
     setFormData({
       planTitle: "",
       planType: "",
-
       beds: 0,
       baths: 0,
       balconies: 0,
-
       pujaRoom: 0,
       servantRoom: 0,
       storeRoom: 0,
-
       sbaSqft: 0,
       plotSqft: 0,
+      floorPlanSketch: null,
+    });
 
+    // ===================================================
+    // RESET PREVIEW
+    // ===================================================
+
+    if (uploadedImage) {
+      URL.revokeObjectURL(uploadedImage);
+    }
+
+    setUploadedImage(null);
+
+    setImageFileName("");
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // =====================================================
+  // CANCEL / RESET
+  // =====================================================
+
+  const handleCancel = () => {
+    if (uploadedImage) {
+      URL.revokeObjectURL(uploadedImage);
+    }
+
+    setFormData({
+      planTitle: "",
+      planType: "",
+      beds: 0,
+      baths: 0,
+      balconies: 0,
+      pujaRoom: 0,
+      servantRoom: 0,
+      storeRoom: 0,
+      sbaSqft: 0,
+      plotSqft: 0,
       floorPlanSketch: null,
     });
 
@@ -369,38 +413,18 @@ const Document = ({
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-
-    closeModal();
   };
 
-  // ==========================================
-  // OPEN MODAL
-  // ==========================================
-
-  const openModal = () => {
-    setIsModalOpen(true);
-
-    document.body.style.overflow =
-      "hidden";
-  };
-
-  // ==========================================
-  // CLOSE MODAL
-  // ==========================================
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-
-    document.body.style.overflow =
-      "unset";
-  };
+  // =====================================================
+  // UI
+  // =====================================================
 
   return (
     <div className="document-page-container">
 
-      {/* =====================================
-          HEADER
-      ===================================== */}
+      {/* =====================================================
+          PAGE HEADER
+      ===================================================== */}
 
       <div className="document-top-action-bar">
 
@@ -410,626 +434,688 @@ const Document = ({
             className="document-icon-purple"
           />
 
-          <h2 className="document-title">
-            Documents
-          </h2>
-
-        </div>
-
-        <button
-          type="button"
-          className="btn-add-document"
-          onClick={openModal}
-        >
-          <IoAdd className="add-icon" />
-
-          Add Document
-        </button>
-
-      </div>
-
-      {/* =====================================
-          PROPERTY DOCUMENT INPUT
-      ===================================== */}
-
-      <input
-        type="file"
-        ref={documentInputRef}
-        multiple
-        accept=".pdf,.doc,.docx"
-        style={{
-          display: "none",
-        }}
-        onChange={handleDocumentChange}
-      />
-
-      {/* =====================================
-          PROPERTY DOCUMENT UPLOAD
-      ===================================== */}
-
-      <div
-        className="document-card"
-        onClick={
-          handleDocumentUploadClick
-        }
-      >
-
-        <div className="upload-zone">
-
-          <IoCloudUploadOutline
-            className="upload-icon-purple"
-          />
-
-          <p className="upload-text">
-
-            <strong>
-              Drag & drop files here
-            </strong>{" "}
-
-            or click to browse
-
-          </p>
-
-          <p className="upload-subtext">
-            PDF, DOC, DOCX (Max 10MB)
-          </p>
-
-        </div>
-
-      </div>
-
-      {/* =====================================
-          SELECTED DOCUMENTS
-      ===================================== */}
-
-      {documents &&
-        documents.length > 0 && (
-
           <div>
 
-            {documents.map(
-              (document, index) => (
+            <h2 className="document-title">
+              Add Document
+            </h2>
 
-                <div
-                  key={`${document.name}-${index}`}
-                  className="document-card"
+            <p className="document-header-subtitle">
+              Add floor plan and supporting documents
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      {/* =====================================================
+          MAIN FORM
+      ===================================================== */}
+
+      <form
+        className="document-normal-form"
+        onSubmit={handleSubmit}
+      >
+
+        {/* =====================================================
+            BASIC INFORMATION
+        ===================================================== */}
+
+        <div className="document-form-section">
+
+          <div className="document-section-header">
+
+            <div className="section-number">
+              01
+            </div>
+
+            <div>
+
+              <h3>
+                Basic Information
+              </h3>
+
+              <p>
+                Enter the basic floor plan details
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="document-form-table">
+
+            <div className="document-form-row">
+
+              <div className="document-form-label">
+
+                <label>
+                  Plan Title
+
+                  <span className="required">
+                    *
+                  </span>
+                </label>
+
+              </div>
+
+
+              <div className="document-form-field">
+
+                <input
+                  type="text"
+                  name="planTitle"
+                  value={formData.planTitle}
+                  onChange={handleInputChange}
+                  placeholder="e.g. Fourth Floor Plan"
+                  required
+                />
+
+              </div>
+
+            </div>
+
+
+            <div className="document-form-row">
+
+              <div className="document-form-label">
+
+                <label>
+                  Plan Type
+
+                  <span className="required">
+                    *
+                  </span>
+                </label>
+
+              </div>
+
+
+              <div className="document-form-field">
+
+                <select
+                  name="planType"
+                  value={formData.planType}
+                  onChange={handleInputChange}
+                  required
                 >
 
-                  <div className="upload-zone">
+                  <option value="">
+                    Select plan type
+                  </option>
 
-                    <IoDocumentTextOutline
-                      className="document-icon-purple"
-                    />
+                  <option value="Apartment">
+                    Apartment
+                  </option>
 
-                    <p className="upload-text">
+                  <option value="Duplex">
+                    Duplex
+                  </option>
 
-                      <strong>
-                        {document.name}
-                      </strong>
+                  <option value="Penthouse">
+                    Penthouse
+                  </option>
 
-                    </p>
+                </select>
 
-                    <p className="upload-subtext">
+              </div>
 
-                      {(
-                        document.size /
-                        1024 /
-                        1024
-                      ).toFixed(2)}{" "}
-                      MB
+            </div>
 
-                    </p>
+          </div>
 
-                    <button
-                      type="button"
-                      className="btn-remove-image"
-                      onClick={(e) =>
-                        handleRemoveDocument(
-                          index,
-                          e
-                        )
-                      }
-                    >
-                      Remove
-                    </button>
+        </div>
 
-                  </div>
+
+        {/* =====================================================
+            ROOM DETAILS
+        ===================================================== */}
+
+        <div className="document-form-section">
+
+          <div className="document-section-header">
+
+            <div className="section-number">
+              02
+            </div>
+
+            <div>
+
+              <h3>
+                Room Details
+              </h3>
+
+              <p>
+                Enter room and facility information
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="room-form-table">
+
+            <div className="room-form-header">
+
+              <span>
+                Room / Facility
+              </span>
+
+              <span>
+                Quantity
+              </span>
+
+            </div>
+
+
+            {[
+              ["beds", "Beds"],
+              ["baths", "Baths"],
+              ["balconies", "Balconies"],
+              ["pujaRoom", "Puja Room"],
+              ["servantRoom", "Servant Room"],
+              ["storeRoom", "Store Room"],
+            ].map(([field, label]) => (
+
+              <div
+                className="room-form-row"
+                key={field}
+              >
+
+                <span>
+                  {label}
+                </span>
+
+                <input
+                  type="number"
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleInputChange}
+                  min="0"
+                />
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+
+
+        {/* =====================================================
+            AREA DETAILS
+        ===================================================== */}
+
+        <div className="document-form-section">
+
+          <div className="document-section-header">
+
+            <div className="section-number">
+              03
+            </div>
+
+            <div>
+
+              <h3>
+                Area Details
+              </h3>
+
+              <p>
+                Enter property measurement
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="area-form-table">
+
+            <div className="area-form-item">
+
+              <label>
+                SBA (sqft)
+              </label>
+
+              <input
+                type="number"
+                name="sbaSqft"
+                value={formData.sbaSqft}
+                onChange={handleInputChange}
+                placeholder="e.g. 3140"
+                min="0"
+              />
+
+            </div>
+
+
+            <div className="area-form-item">
+
+              <label>
+                Plot (sqft)
+              </label>
+
+              <input
+                type="number"
+                name="plotSqft"
+                value={formData.plotSqft}
+                onChange={handleInputChange}
+                placeholder="e.g. 1500"
+                min="0"
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        {/* =====================================================
+            FLOOR PLAN IMAGE
+        ===================================================== */}
+
+        <div className="document-form-section">
+
+          <div className="document-section-header">
+
+            <div className="section-number">
+              04
+            </div>
+
+            <div>
+
+              <h3>
+                Floor Plan Image
+              </h3>
+
+              <p>
+                Upload the floor plan image
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="image/png,image/jpeg,image/webp"
+            style={{
+              display: "none",
+            }}
+          />
+
+
+          <div
+            className="normal-upload-zone"
+            onClick={handleUploadClick}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          >
+
+            {uploadedImage ? (
+
+              <div className="normal-image-preview">
+
+                <img
+                  src={uploadedImage}
+                  alt="Floor Plan"
+                />
+
+
+                <div className="normal-image-info">
+
+                  <strong>
+                    {imageFileName}
+                  </strong>
+
+                  <span>
+                    Floor plan image uploaded
+                  </span>
+
+
+                  <button
+                    type="button"
+                    className="remove-image-btn"
+                    onClick={handleRemoveImage}
+                  >
+                    <IoTrashOutline />
+
+                    Remove Image
+                  </button>
 
                 </div>
 
-              )
+              </div>
+
+            ) : (
+
+              <>
+
+                <IoCloudUploadOutline />
+
+                <strong>
+                  Click to upload floor plan
+                </strong>
+
+                <span>
+                  or drag & drop
+                </span>
+
+                <small>
+                  JPG, PNG, WebP · Maximum 5MB
+                </small>
+
+              </>
+
             )}
 
           </div>
-        )}
 
-      {/* =====================================
-          FLOOR PLAN MODAL
-      ===================================== */}
+        </div>
 
-      {isModalOpen && (
 
-        <div className="modal-overlay fade-in">
+        {/* =====================================================
+            PREVIEW
+        ===================================================== */}
 
-          <div className="modal-content">
+        <div className="document-form-section">
 
-            {/* HEADER */}
+          <div className="document-section-header">
 
-            <div className="modal-header">
+            <div className="section-number">
+              05
+            </div>
 
-              <h2 className="modal-title">
-                Add New Floor Plan
-              </h2>
+            <div>
+
+              <h3>
+                Floor Plan Preview
+              </h3>
+
+              <p>
+                Preview your uploaded floor plan
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="normal-preview-box">
+
+            <div className="normal-preview-toolbar">
 
               <button
-                className="close-button"
-                onClick={closeModal}
                 type="button"
+                className="preview-tool active"
               >
-                <IoClose />
+                <IoPencil />
+              </button>
+
+
+              <button
+                type="button"
+                className="preview-tool"
+              >
+                <IoSquareOutline />
+              </button>
+
+
+              <button
+                type="button"
+                className="preview-tool"
+              >
+                <IoText />
+              </button>
+
+
+              <span className="preview-divider" />
+
+
+              <button
+                type="button"
+                className="preview-tool"
+              >
+                <IoArrowUndo />
+              </button>
+
+
+              <button
+                type="button"
+                className="preview-tool danger"
+                onClick={handleRemoveImage}
+              >
+                <IoTrashOutline />
               </button>
 
             </div>
 
-            {/* FORM */}
 
-            <form
-              className="modal-form"
-              onSubmit={handleSubmit}
-            >
+            <div className="normal-preview-canvas">
 
-              <div className="form-grid">
+              {uploadedImage ? (
 
-                {/* =================================
-                    LEFT COLUMN
-                ================================= */}
+                <img
+                  src={uploadedImage}
+                  alt="Floor Plan Preview"
+                />
 
-                <div className="form-column left-column">
+              ) : (
 
-                  {/* PLAN TITLE */}
+                <div className="empty-preview">
 
-                  <div className="form-group">
+                  <IoDocumentTextOutline />
 
-                    <label htmlFor="planTitle">
+                  <span>
+                    No floor plan uploaded
+                  </span>
 
-                      Plan Title{" "}
-
-                      <span className="required">
-                        *
-                      </span>
-
-                    </label>
-
-                    <input
-                      type="text"
-                      id="planTitle"
-                      name="planTitle"
-                      value={
-                        formData.planTitle
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      placeholder="e.g. Fourth Floor Plan"
-                      required
-                    />
-
-                  </div>
-
-                  {/* PLAN TYPE */}
-
-                  <div className="form-group">
-
-                    <label htmlFor="planType">
-
-                      Select Plan Type{" "}
-
-                      <span className="required">
-                        *
-                      </span>
-
-                    </label>
-
-                    <select
-                      id="planType"
-                      name="planType"
-                      value={
-                        formData.planType
-                      }
-                      onChange={
-                        handleInputChange
-                      }
-                      required
-                    >
-
-                      <option
-                        value=""
-                        disabled
-                      >
-                        Select plan type
-                      </option>
-
-                      <option value="Apartment">
-                        Apartment
-                      </option>
-
-                      <option value="Duplex">
-                        Duplex
-                      </option>
-
-                      <option value="Penthouse">
-                        Penthouse
-                      </option>
-
-                    </select>
-
-                  </div>
-
-                  {/* ROOM DETAILS */}
-
-                  <div className="room-details-grid">
-
-                    {[
-                      "beds",
-                      "baths",
-                      "balconies",
-                      "pujaRoom",
-                      "servantRoom",
-                      "storeRoom",
-                    ].map((field) => (
-
-                      <div
-                        className="form-group"
-                        key={field}
-                      >
-
-                        <label htmlFor={field}>
-
-                          {field
-                            .charAt(0)
-                            .toUpperCase() +
-                            field
-                              .slice(1)
-                              .replace(
-                                "Room",
-                                " Room"
-                              )}
-
-                        </label>
-
-                        <input
-                          type="number"
-                          id={field}
-                          name={field}
-                          value={
-                            formData[field]
-                          }
-                          onChange={
-                            handleInputChange
-                          }
-                          min="0"
-                        />
-
-                      </div>
-
-                    ))}
-
-                  </div>
-
-                  {/* SIZE */}
-
-                  <div className="size-inputs-row">
-
-                    <div className="form-group">
-
-                      <label htmlFor="sbaSqft">
-                        SBA (sqft)
-                      </label>
-
-                      <input
-                        type="number"
-                        id="sbaSqft"
-                        name="sbaSqft"
-                        value={
-                          formData.sbaSqft
-                        }
-                        onChange={
-                          handleInputChange
-                        }
-                        placeholder="e.g. 3140"
-                      />
-
-                    </div>
-
-                    <div className="form-group">
-
-                      <label htmlFor="plotSqft">
-                        Plot (sqft)
-                      </label>
-
-                      <input
-                        type="number"
-                        id="plotSqft"
-                        name="plotSqft"
-                        value={
-                          formData.plotSqft
-                        }
-                        onChange={
-                          handleInputChange
-                        }
-                        placeholder="e.g. 1500"
-                      />
-
-                    </div>
-
-                  </div>
+                  <small>
+                    Upload an image above
+                  </small>
 
                 </div>
 
-                {/* =================================
-                    RIGHT COLUMN
-                ================================= */}
+              )}
 
-                <div className="form-column right-column">
+            </div>
 
-                  {/* FLOOR PLAN IMAGE */}
 
-                  <div className="form-group upload-container">
+            <div className="normal-preview-footer">
 
-                    <label>
+              <button
+                type="button"
+                className="preview-clear"
+                onClick={handleRemoveImage}
+              >
+                <IoTrashOutline />
 
-                      Upload Floor Plan Image{" "}
+                Clear
+              </button>
 
-                      <span className="required">
-                        *
-                      </span>
 
-                    </label>
+              <button
+                type="button"
+                className="preview-button"
+              >
+                <IoEyeOutline />
 
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={
-                        handleFileChange
-                      }
-                      accept="image/png, image/jpeg, image/webp"
-                      style={{
-                        display: "none",
-                      }}
-                    />
+                Preview
+              </button>
 
-                    <div
-                      className="upload-zone modal-upload-zone"
-                      onClick={
-                        handleUploadClick
-                      }
-                      onDragOver={
-                        handleDragOver
-                      }
-                      onDrop={handleDrop}
-                    >
-
-                      {uploadedImage ? (
-
-                        <div className="uploaded-preview-container">
-
-                          <img
-                            src={
-                              uploadedImage
-                            }
-                            alt="Floor Plan Preview"
-                            className="mini-preview-img"
-                          />
-
-                          <p className="upload-text">
-
-                            <strong>
-                              {
-                                imageFileName
-                              }
-                            </strong>
-
-                          </p>
-
-                          <button
-                            type="button"
-                            className="btn-remove-image"
-                            onClick={
-                              handleRemoveImage
-                            }
-                          >
-                            Remove Image
-                          </button>
-
-                        </div>
-
-                      ) : (
-
-                        <>
-
-                          <IoCloudUploadOutline
-                            className="upload-icon-purple"
-                          />
-
-                          <p className="upload-text">
-
-                            <strong>
-                              Click to upload
-                            </strong>{" "}
-
-                            or drag & drop
-
-                          </p>
-
-                          <p className="upload-subtext">
-                            JPG, PNG, WebP
-                            (Max. 5MB)
-                          </p>
-
-                        </>
-
-                      )}
-
-                    </div>
-
-                  </div>
-
-                  <div className="divider-or">
-                    OR
-                  </div>
-
-                  {/* =================================
-                      PREVIEW / SKETCH
-                  ================================= */}
-
-                  <div className="form-group sketch-container">
-
-                    <label>
-                      Upload Preview Image
-                    </label>
-
-                    <div className="sketch-box">
-
-                      {/* TOOLBAR */}
-
-                      <div className="sketch-toolbar">
-
-                        <button
-                          type="button"
-                          className="tool-btn active"
-                        >
-                          <IoPencil />
-                        </button>
-
-                        <button
-                          type="button"
-                          className="tool-btn"
-                        >
-                          <IoSquareOutline />
-                        </button>
-
-                        <button
-                          type="button"
-                          className="tool-btn"
-                        >
-                          <IoText />
-                        </button>
-
-                        <div className="tool-divider"></div>
-
-                        <button
-                          type="button"
-                          className="tool-btn"
-                        >
-                          <IoArrowUndo />
-                        </button>
-
-                        <button
-                          type="button"
-                          className="tool-btn text-danger"
-                          onClick={
-                            handleRemoveImage
-                          }
-                        >
-                          <IoTrashOutline />
-                        </button>
-
-                      </div>
-
-                      {/* CANVAS */}
-
-                      <div className="sketch-canvas">
-
-                        {uploadedImage ? (
-
-                          <div className="canvas-image-wrapper">
-
-                            <img
-                              src={
-                                uploadedImage
-                              }
-                              alt="Canvas Preview"
-                              className="canvas-synced-image"
-                            />
-
-                          </div>
-
-                        ) : (
-
-                          <div className="sketch-placeholder-text">
-                            Canvas Drawing Area
-                            Ready
-                          </div>
-
-                        )}
-
-                      </div>
-
-                      {/* FOOTER */}
-
-                      <div className="sketch-footer">
-
-                        <button
-                          type="button"
-                          className="footer-btn btn-outline-danger"
-                          onClick={
-                            handleRemoveImage
-                          }
-                        >
-                          <IoTrashOutline />
-
-                          Clear
-                        </button>
-
-                        <button
-                          type="button"
-                          className="footer-btn btn-outline-primary"
-                        >
-                          <IoEyeOutline />
-
-                          Preview
-                        </button>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              {/* =================================
-                  MODAL BUTTONS
-              ================================= */}
-
-              <div className="modal-actions">
-
-                <button
-                  type="button"
-                  className="btn-cancel"
-                  onClick={closeModal}
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className="btn-save"
-                >
-                  Save Plan
-                </button>
-
-              </div>
-
-            </form>
+            </div>
 
           </div>
 
         </div>
 
-      )}
+
+        {/* =====================================================
+            SUPPORTING DOCUMENTS
+        ===================================================== */}
+
+        <div className="document-form-section">
+
+          <div className="document-section-header">
+
+            <div className="section-number">
+              06
+            </div>
+
+            <div>
+
+              <h3>
+                Supporting Documents
+              </h3>
+
+              <p>
+                Upload PDF, DOC or DOCX files
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <input
+            type="file"
+            ref={documentInputRef}
+            multiple
+            accept=".pdf,.doc,.docx"
+            style={{
+              display: "none",
+            }}
+            onChange={handleDocumentChange}
+          />
+
+
+          <div
+            className="support-document-upload"
+            onClick={handleDocumentUploadClick}
+          >
+
+            <IoCloudUploadOutline />
+
+            <strong>
+              Upload Documents
+            </strong>
+
+            <span>
+              PDF, DOC, DOCX
+            </span>
+
+            <small>
+              Maximum 10MB per file
+            </small>
+
+          </div>
+
+
+          {documents &&
+            documents.length > 0 && (
+
+              <div className="normal-document-list">
+
+                <div className="normal-document-list-title">
+                  Selected Documents
+                </div>
+
+
+                {documents.map(
+                  (document, index) => (
+
+                    <div
+                      className="normal-document-row"
+                      key={`${document.name}-${index}`}
+                    >
+
+                      <div className="normal-document-name">
+
+                        <IoDocumentTextOutline />
+
+                        <span>
+                          {document.name}
+                        </span>
+
+                      </div>
+
+
+                      <span className="normal-document-size">
+
+                        {(
+                          document.size /
+                          1024 /
+                          1024
+                        ).toFixed(2)}{" "}
+                        MB
+
+                      </span>
+
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleRemoveDocument(index)
+                        }
+                      >
+
+                        <IoTrashOutline />
+
+                        Remove
+
+                      </button>
+
+                    </div>
+
+                  )
+                )}
+
+              </div>
+
+            )}
+
+        </div>
+
+
+        {/* =====================================================
+            FORM ACTIONS
+        ===================================================== */}
+
+        <div className="normal-form-actions">
+
+          <button
+            type="button"
+            className="normal-cancel-btn"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+
+
+          <button
+            type="submit"
+            className="normal-save-btn"
+          >
+
+            <IoAdd />
+
+            Save Floor Plan
+
+          </button>
+
+        </div>
+
+      </form>
 
     </div>
   );

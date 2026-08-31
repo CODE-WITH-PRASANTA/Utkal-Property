@@ -13,7 +13,7 @@ import AllProperty from "../../Components/AllProperty/AllProperty";
 
 
 
-import API from "../../api/Axios";
+import API from "../../api/axios";
 import FetchAmenities from "../../Components/fetchAmenities/FetchAmenities";
 
 const AddNewProperty = () => {

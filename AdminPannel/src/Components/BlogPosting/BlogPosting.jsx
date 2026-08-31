@@ -1,13 +1,38 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import './BlogPosting.css';
 import API, { IMG_URL } from '../../api/axios';
 
+// --- Date Helpers ---
+const getTodayDate = () => new Date().toISOString().split('T')[0];
+const getCurrentTime = () => new Date().toTimeString().slice(0, 5);
+
+// --- Category Theme Helper ---
+const getCategoryTheme = (catName) => {
+  switch (catName) {
+    case 'Housing': return { bg: '#fef3c7', text: '#92400e' };
+    case 'Business': return { bg: '#e0e7ff', text: '#3730a3' };
+    case 'Apartments': return { bg: '#f3e8ff', text: '#6b21a8' };
+    case 'Luxury Villa': return { bg: '#dcfce7', text: '#166534' };
+    case 'Duplex House': return { bg: '#ffedd5', text: '#9a3412' };
+    case 'Investment': return { bg: '#fee2e2', text: '#991b1b' };
+    default: return { bg: '#e0f2fe', text: '#075985' };
+  }
+};
+
+// --- Image URL Resolver Helper ---
+const getImageUrl = (imgObj) => {
+  if (!imgObj) return 'https://via.placeholder.com/800x400?text=No+Cover+Image';
+  if (typeof imgObj === 'string' && (imgObj.startsWith('http') || imgObj.startsWith('data:'))) {
+    return imgObj;
+  }
+  return `${IMG_URL}${imgObj.startsWith('/') ? '' : '/'}${imgObj}`;
+};
 
 const BlogPosting = () => {
-  
   const navigate = useNavigate();
-const { id } = useParams();
+  const { id } = useParams();
+
   // --- Form & Edit State ---
   const [editingId, setEditingId] = useState(null);
   const [blogImage, setBlogImage] = useState('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80');
@@ -19,8 +44,8 @@ const { id } = useParams();
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [author, setAuthor] = useState('Admin User');
-  const [publishDate, setPublishDate] = useState('2026-07-31');
-  const [publishTime, setPublishTime] = useState('10:30');
+  const [publishDate, setPublishDate] = useState(getTodayDate());
+  const [publishTime, setPublishTime] = useState(getCurrentTime());
   const [shortDesc, setShortDesc] = useState('');
   const [content, setContent] = useState('');
 
@@ -35,7 +60,6 @@ const { id } = useParams();
   // Modal & Loading States
   const [viewingBlog, setViewingBlog] = useState(null);
   const [loading, setLoading] = useState(false);
-  
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,57 +70,67 @@ const { id } = useParams();
 
   // Database State
   const [blogs, setBlogs] = useState([]);
-  const fetchBlogById = async () => {
-  if (!id) return;
 
-  try {
-    setLoading(true);
-
-    const res = await API.get(`/blogs/${id}`);
-
-    if (res.data.success) {
-      const blog = res.data.data;
-
-      setEditingId(blog._id);
-
-      setBlogImage(getImageUrl(blog.blogImage));
-      setSelectedFile(null);
-
-      setTitle(blog.title || "");
-      setSlug(blog.slug || "");
-      setCategory(blog.category || "Housing");
-
-      setTags(Array.isArray(blog.tags) ? blog.tags : []);
-
-      setAuthor(blog.author || "Admin User");
-      setPublishDate(blog.publishDate || "");
-      setPublishTime(blog.publishTime || "");
-
-      setShortDesc(blog.shortDesc || "");
-      setContent(blog.content || "");
-
-      setMetaTitle(blog.metaTitle || "");
-      setMetaDescription(blog.metaDesc || "");
-      setMetaKeywords(blog.metaKeywords || "");
-
-      setFeaturedPost(Boolean(blog.featuredPost));
-      setShowOnHomepage(Boolean(blog.showOnHomepage));
-      setAllowComments(Boolean(blog.allowComments));
+  // --- Safe Tags Parser Helper ---
+  const parseTags = (tagData) => {
+    if (Array.isArray(tagData)) return tagData;
+    if (typeof tagData === 'string') {
+      try { return JSON.parse(tagData); } catch { return []; }
     }
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
+    return [];
+  };
 
-  // --- Fetch Blogs from Backend API ---
-  const fetchBlogs = async () => {
+  // --- Populate Form helper ---
+  const populateForm = (blog) => {
+    setEditingId(blog._id || blog.id);
+    setBlogImage(getImageUrl(blog.blogImage));
+    setSelectedFile(null);
+    setTitle(blog.title || '');
+    setSlug(blog.slug || '');
+    setCategory(blog.category || 'Housing');
+    setTags(parseTags(blog.tags));
+    setAuthor(blog.author || 'Admin User');
+    setPublishDate(blog.publishDate || getTodayDate());
+    setPublishTime(blog.publishTime || getCurrentTime());
+    setShortDesc(blog.shortDesc || '');
+    setContent(blog.content || '');
+    setMetaTitle(blog.metaTitle || '');
+    setMetaDescription(blog.metaDesc || '');
+    setMetaKeywords(blog.metaKeywords || '');
+    setFeaturedPost(Boolean(blog.featuredPost));
+    setShowOnHomepage(Boolean(blog.showOnHomepage));
+    setAllowComments(blog.allowComments !== undefined ? Boolean(blog.allowComments) : true);
+  };
+
+  // --- Reset Form ---
+  const handleReset = () => {
+    setEditingId(null);
+    setTitle('');
+    setSlug('');
+    setCategory('Housing');
+    setTags([]);
+    setAuthor('Admin User');
+    setPublishDate(getTodayDate());
+    setPublishTime(getCurrentTime());
+    setShortDesc('');
+    setContent('');
+    setMetaTitle('');
+    setMetaDescription('');
+    setMetaKeywords('');
+    setFeaturedPost(false);
+    setShowOnHomepage(false);
+    setAllowComments(true);
+    setBlogImage('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80');
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // --- Fetch Blogs List ---
+  const fetchBlogs = useCallback(async () => {
     try {
       setLoading(true);
-      // Hits http://localhost:5000/api/blogs
       const res = await API.get('/blogs');
-      if (res && res.data && res.data.success) {
+      if (res?.data?.success) {
         setBlogs(res.data.data);
       }
     } catch (err) {
@@ -104,34 +138,29 @@ const { id } = useParams();
     } finally {
       setLoading(false);
     }
-  };
-useEffect(() => {
-  fetchBlogs();
+  }, []);
 
-  if (id) {
-    fetchBlogById();
-  }
-}, [id]);
-
-  // Category Theme Helper
-  const getCategoryTheme = (catName) => {
-    switch (catName) {
-      case 'Housing': return { bg: '#fef3c7', text: '#92400e' };
-      case 'Business': return { bg: '#e0e7ff', text: '#3730a3' };
-      case 'Apartments': return { bg: '#f3e8ff', text: '#6b21a8' };
-      case 'Luxury Villa': return { bg: '#dcfce7', text: '#166534' };
-      case 'Duplex House': return { bg: '#ffedd5', text: '#9a3412' };
-      case 'Investment': return { bg: '#fee2e2', text: '#991b1b' };
-      default: return { bg: '#e0f2fe', text: '#075985' };
+  // --- Fetch Single Blog ---
+  const fetchBlogById = useCallback(async (blogId) => {
+    try {
+      setLoading(true);
+      const res = await API.get(`/blogs/${blogId}`);
+      if (res?.data?.success) {
+        populateForm(res.data.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch blog by ID:', err);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  // Image URL Resolver
-  const getImageUrl = (imgObj) => {
-    if (!imgObj) return 'https://via.placeholder.com/800x400?text=No+Cover+Image';
-    if (imgObj.startsWith('http') || imgObj.startsWith('data:')) return imgObj;
-    return `${IMG_URL}${imgObj.startsWith('/') ? '' : '/'}${imgObj}`;
-  };
+  useEffect(() => {
+    fetchBlogs();
+    if (id) {
+      fetchBlogById(id);
+    }
+  }, [id, fetchBlogs, fetchBlogById]);
 
   // --- Image Handlers ---
   const handleImageChange = (e) => {
@@ -167,15 +196,16 @@ useEffect(() => {
   const handleAddTag = (e) => {
     if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
-      if (!tags.includes(tagInput.trim())) {
-        setTags([...tags, tagInput.trim()]);
+      const trimmed = tagInput.trim();
+      if (!tags.includes(trimmed)) {
+        setTags((prev) => [...prev, trimmed]);
       }
       setTagInput('');
     }
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setTags(tags.filter((t) => t !== tagToRemove));
+    setTags((prev) => prev.filter((t) => t !== tagToRemove));
   };
 
   // --- Rich Text Format Helper ---
@@ -188,29 +218,6 @@ useEffect(() => {
     const formatted = `${wrapper}${selected}${wrapper}`;
     const newContent = content.substring(0, start) + formatted + content.substring(end);
     setContent(newContent);
-  };
-
-  // --- Reset Form ---
-  const handleReset = () => {
-    setEditingId(null);
-    setTitle('');
-    setSlug('');
-    setCategory('Housing');
-    setTags([]);
-    setAuthor('Admin User');
-    setPublishDate('2026-07-31');
-    setPublishTime('10:30');
-    setShortDesc('');
-    setContent('');
-    setMetaTitle('');
-    setMetaDescription('');
-    setMetaKeywords('');
-    setFeaturedPost(false);
-    setShowOnHomepage(false);
-    setAllowComments(true);
-    setBlogImage('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80');
-    setSelectedFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   // --- Save / Update Post via API ---
@@ -243,8 +250,8 @@ useEffect(() => {
       formData.append('category', category);
       formData.append('tags', JSON.stringify(tags));
       formData.append('author', author || 'Admin User');
-      formData.append('publishDate', publishDate || '2026-07-31');
-      formData.append('publishTime', publishTime || '10:30');
+      formData.append('publishDate', publishDate || getTodayDate());
+      formData.append('publishTime', publishTime || getCurrentTime());
       formData.append('shortDesc', shortDesc);
       formData.append('content', content);
       formData.append('metaTitle', metaTitle);
@@ -266,13 +273,10 @@ useEffect(() => {
         });
       }
 
-      if (res.data.success) {
-    alert(editingId ? "Blog updated successfully!" : "Blog created successfully!");
-
-    navigate("/blogmanagement", {
-        replace: true
-    });
-}
+      if (res?.data?.success) {
+        alert(editingId ? "Blog updated successfully!" : "Blog created successfully!");
+        navigate("/blogmanagement", { replace: true });
+      }
     } catch (err) {
       console.error('Error publishing blog:', err);
       alert(err.response?.data?.message || 'Failed to save blog post to server.');
@@ -283,37 +287,19 @@ useEffect(() => {
 
   // --- Table Actions ---
   const handleEdit = (blog) => {
-    setEditingId(blog._id || blog.id);
-    setBlogImage(getImageUrl(blog.blogImage));
-    setSelectedFile(null);
-    setTitle(blog.title || '');
-    setSlug(blog.slug || '');
-    setCategory(blog.category || 'Housing');
-    setTags(Array.isArray(blog.tags) ? blog.tags : []);
-    setAuthor(blog.author || 'Admin User');
-    setPublishDate(blog.publishDate || '2026-07-31');
-    setPublishTime(blog.publishTime || '10:30');
-    setShortDesc(blog.shortDesc || '');
-    setContent(blog.content || '');
-    setMetaTitle(blog.metaTitle || '');
-    setMetaDescription(blog.metaDesc || '');
-    setMetaKeywords(blog.metaKeywords || '');
-    setFeaturedPost(Boolean(blog.featuredPost));
-    setShowOnHomepage(Boolean(blog.showOnHomepage));
-    setAllowComments(blog.allowComments !== undefined ? Boolean(blog.allowComments) : true);
-
+    populateForm(blog);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (deleteId) => {
     if (window.confirm('Are you sure you want to delete this blog post?')) {
       try {
         setLoading(true);
-        const res = await API.delete(`/blogs/${id}`);
-        if (res.data.success) {
+        const res = await API.delete(`/blogs/${deleteId}`);
+        if (res?.data?.success) {
           alert('Blog post deleted successfully!');
           await fetchBlogs();
-          if (editingId === id) handleReset();
+          if (editingId === deleteId) handleReset();
         }
       } catch (err) {
         console.error('Delete error:', err);
@@ -336,7 +322,7 @@ useEffect(() => {
   return (
     <div className="bm-container">
       <div className="bm-wrapper">
-        {/* ================= LEFT SIDE: FORM (50%) ================= */}
+        {/* ================= LEFT SIDE: FORM ================= */}
         <div className="bm-form-card">
           <div className="bm-card-header">
             <h3>{editingId ? '✏️ Edit Blog Post' : '📝 Create New Blog Post'}</h3>
@@ -633,7 +619,7 @@ useEffect(() => {
           </div>
         </div>
 
-        {/* ================= RIGHT SIDE: TABLE (50%) ================= */}
+        {/* ================= RIGHT SIDE: TABLE ================= */}
         <div className="bm-table-card">
           <div className="bm-card-header">
             <h3>📚 Managed Blog Posts ({blogs.length})</h3>

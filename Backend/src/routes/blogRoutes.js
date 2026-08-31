@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const { upload, convertToWebp } = require("../middleware/multer");
+const { upload, processBlogImage } = require("../middleware/multer");
 
 const {
-    getAllBlogs,
-    getBlogById,
-    createBlog,
-    updateBlog,
-    deleteBlog,
+  getAllBlogs,
+  getBlogById,
+  createBlog,
+  updateBlog,
+  deleteBlog,
 } = require("../controllers/blogController");
 
 // GET ALL BLOGS
@@ -19,18 +19,18 @@ router.get("/:id", getBlogById);
 
 // CREATE BLOG
 router.post(
-    "/",
-    upload.single("blogImage"),
-    convertToWebp,
-    createBlog
+  "/",
+  upload.single("blogImage"),
+  processBlogImage,
+  createBlog
 );
 
 // UPDATE BLOG
 router.put(
-    "/:id",
-    upload.single("blogImage"),
-    convertToWebp,
-    updateBlog
+  "/:id",
+  upload.single("blogImage"),
+  processBlogImage,
+  updateBlog
 );
 
 // DELETE BLOG

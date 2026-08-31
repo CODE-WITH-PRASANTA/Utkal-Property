@@ -4,16 +4,13 @@
     radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.08), transparent 42%),
     radial-gradient(circle at 92% 15%, rgba(255, 255, 255, 0.06), transparent 40%),
     radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.12), transparent 50%),
-    /* Updated gradient based on the image's deep green */
     linear-gradient(160deg, #1c7a3d 0%, #166432 55%, #0e4020 100%);
   color: rgba(255, 255, 255, 0.82);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  /* Reduced bottom padding */
   padding: 0 80px 20px 80px; 
   position: relative;
   box-sizing: border-box;
   border-top: 3px solid transparent;
-  /* Updated border accent */
   border-image: linear-gradient(90deg, #0e4020, #4fd18b, #ffffff, #4fd18b, #0e4020) 1;
   overflow: hidden;
 }
@@ -31,7 +28,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* Reduced padding and margin to save height */
   padding: 20px 0 16px 0; 
   border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   margin-bottom: 24px; 
@@ -45,34 +41,24 @@
 
 .footer-brand-logo {
   position: relative;
-  /* Slightly smaller logo to match compact feel */
-  width: 44px; 
-  height: 44px;
+  width: 48px; 
+  height: 48px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18), inset 0 0 14px rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
   flex-shrink: 0;
+  overflow: hidden;
 }
 
-.footer-brand-logo span {
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 700;
-  font-family: Georgia, serif;
-}
-
-.footer-brand-ring {
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-top-color: #ffffff;
-  animation: brandRingSpin 3.2s linear infinite;
+.footer-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
 }
 
 .footer-brand-text h2 {
@@ -119,14 +105,8 @@
 
 .footer-social-icon:hover {
   background: #ffffff;
-  /* Updated to new green */
   color: #166432; 
   transform: translateY(-2px);
-}
-
-@keyframes brandRingSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 /* ==========================================
@@ -136,7 +116,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  /* Reduced bottom margin */
   margin-bottom: 32px; 
 }
 
@@ -145,7 +124,6 @@
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 16px;
-  /* Reduced padding */
   padding: 20px 24px 16px 24px; 
   display: flex;
   flex-direction: column;
@@ -199,7 +177,6 @@
 
 .footer-card-icon-box {
   flex-shrink: 0;
-  /* Smaller icons */
   width: 54px; 
   height: 54px;
   border-radius: 14px;
@@ -221,7 +198,6 @@
 
 .footer-card-text {
   flex: 1;
-  /* Reduced right padding */
   padding-right: 80px; 
   position: relative;
   z-index: 1;
@@ -251,10 +227,8 @@
 
 .footer-card-btn {
   background: #ffffff;
-  /* Updated to new green */
   color: #166432; 
   border: none;
-  /* Smaller button */
   padding: 10px 20px; 
   border-radius: 8px;
   font-size: 14px;
@@ -286,7 +260,6 @@
   gap: 30px;
   align-items: start;
   border-top: 1px solid rgba(255, 255, 255, 0.16);
-  /* Reduced padding */
   padding-top: 28px; 
 }
 
@@ -389,7 +362,6 @@
 .agent-action-btn {
   background: #ffffff;
   border: none;
-  /* Updated to new green */
   color: #166432; 
   width: 28px;
   height: 28px;
@@ -511,7 +483,6 @@
 .newsletter-submit-btn {
   width: 100%;
   background: #ffffff;
-  /* Updated to new green */
   color: #166432; 
   border: none;
   border-radius: 8px;
@@ -562,7 +533,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* Reduced top margin and padding */
   margin-top: 32px; 
   padding-top: 16px; 
   border-top: 1px solid rgba(255, 255, 255, 0.16);
@@ -593,34 +563,7 @@
 }
 
 /* ==========================================
-   4. Scroll-To-Top Button
-========================================== */
-.scroll-to-top-btn {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #ffffff;
-  /* Updated to new green */
-  color: #166432; 
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-top-left-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: -4px -4px 12px rgba(0, 0, 0, 0.15);
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.scroll-to-top-btn:hover {
-  background: #d7f7e4;
-  transform: translateY(-2px);
-}
-
-/* ==========================================
-   5. Responsiveness
+   4. Responsiveness
 ========================================== */
 @media (max-width: 1200px) {
   .footer-container {

@@ -1,43 +1,71 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './HomeBlog.css';
-
-// React Icons
+import API, { IMG_URL } from "../../api/axios";
 import { FiFolder, FiArrowRight } from 'react-icons/fi';
 
-// Localized Utkal Property Blog Posts Data
-const BLOG_POSTS = [
-  {
-    id: 1,
-    title: 'Top Prime Locations to Invest in Smart City Bhubaneswar',
-    date: 'April 2026',
-    category: 'Market Insights',
-    image: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800',
-    link: '#blog-1'
-  },
-  {
-    id: 2,
-    title: 'Understanding Home Loan Interest Rates & Taxes in India',
-    date: 'March 2026',
-    category: 'Buyers Guide',
-    image: 'https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&cs=tinysrgb&w=800',
-    link: '#blog-2'
-  },
-  {
-    id: 3,
-    title: 'Commercial vs Residential Properties: Where Should You Invest?',
-    date: 'March 2026',
-    category: 'Real Estate',
-    image: 'https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800',
-    link: '#blog-3'
-  }
-];
-
 const HomeBlog = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const DEFAULT_IMG = 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800';
+
+  const getImageUrl = (post) => {
+    const imgObj = post.blogImage; 
+    if (!imgObj) return DEFAULT_IMG;
+
+    let path = typeof imgObj === 'object' ? (imgObj.url || imgObj.path || imgObj.secure_url || '') : imgObj;
+    if (!path || typeof path !== 'string') return DEFAULT_IMG;
+
+    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
+      return path;
+    }
+
+    const baseUrl = (IMG_URL || '').replace(/\/+$/, '');
+    const cleanPath = path.replace(/^\/+/, '');
+    return baseUrl ? `${baseUrl}/${cleanPath}` : `/${cleanPath}`;
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Recent';
+    const parsedDate = new Date(dateString);
+    if (isNaN(parsedDate.getTime())) return dateString;
+    return parsedDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  };
+
+  useEffect(() => {
+    const fetchHomeBlogs = async () => {
+      try {
+        setLoading(true);
+        const res = await API.get('/blogs');
+
+        if (res?.data?.success) {
+          const allBlogs = res.data.data || [];
+          let filtered = allBlogs.filter((b) => (b.status ? b.status.toLowerCase() === 'published' : true) && b.showOnHomepage);
+
+          if (filtered.length === 0) {
+            filtered = allBlogs.filter((b) => (b.status ? b.status.toLowerCase() === 'published' : true)).slice(0, 3);
+          } else {
+            filtered = filtered.slice(0, 3);
+          }
+
+          setBlogs(filtered);
+        }
+      } catch (err) {
+        console.error('Failed to fetch home blogs:', err);
+        setError('Failed to load blog posts.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHomeBlogs();
+  }, []);
+
   return (
     <section className="HomeBlog">
       <div className="HomeBlog-container">
-        
-        {/* Section Header */}
         <div className="HomeBlog-header">
           <span className="HomeBlog-tag">Utkal Property Insights</span>
           <h1 className="HomeBlog-main-title">
@@ -48,43 +76,60 @@ const HomeBlog = () => {
           </p>
         </div>
 
-        {/* 3-Card Blog Grid */}
-        <div className="HomeBlog-grid">
-          {BLOG_POSTS.map((post) => (
-            <article key={post.id} className="HomeBlog-card">
-              
-              {/* Image Container with Badge Overlay */}
-              <div className="HomeBlog-img-wrapper">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="HomeBlog-img"
-                />
-                
-                {/* Floating Bottom Badge */}
-                <div className="HomeBlog-badge">
-                  <span className="HomeBlog-badge-date">{post.date}</span>
-                  <span className="HomeBlog-badge-divider"></span>
-                  <span className="HomeBlog-badge-category">
-                    <FiFolder className="HomeBlog-folder-icon" />
-                    {post.category}
-                  </span>
-                </div>
+        {loading && <div style={{ textAlign: 'center', padding: '40px 0' }}>Loading latest blogs...</div>}
+        {error && !loading && <div style={{ textAlign: 'center', padding: '40px 0', color: '#ef4444' }}>{error}</div>}
+
+        {!loading && !error && (
+          <div className="HomeBlog-grid">
+            {blogs.length > 0 ? (
+              blogs.map((post) => {
+                const targetId = post._id || post.id;
+                return (
+                  <article key={targetId} className="HomeBlog-card">
+                    <div className="HomeBlog-img-wrapper">
+                      <img
+                        src={getImageUrl(post)}
+                        alt={post.title || 'Blog Post'}
+                        className="HomeBlog-img"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = DEFAULT_IMG;
+                        }}
+                      />
+                      
+                      <div className="HomeBlog-badge">
+                        <span className="HomeBlog-badge-date">{formatDate(post.publishDate)}</span>
+                        <span className="HomeBlog-badge-divider"></span>
+                        <span className="HomeBlog-badge-category">
+                          <FiFolder className="HomeBlog-folder-icon" />
+                          {post.category || 'Real Estate'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="HomeBlog-card-body">
+                      <h3 className="HomeBlog-card-title">{post.title}</h3>
+                      {post.shortDesc && (
+                        <p className="HomeBlog-card-desc" style={{ color: '#64748b', fontSize: '0.9rem', margin: '8px 0 14px' }}>
+                          {post.shortDesc.length > 90 ? `${post.shortDesc.slice(0, 90)}...` : post.shortDesc}
+                        </p>
+                      )}
+                      
+                      {/* FIXED: Link points directly to /blog/:id */}
+                      <Link to={`/blog/${targetId}`} className="HomeBlog-read-more">
+                        Read More <FiArrowRight className="HomeBlog-arrow-icon" />
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })
+            ) : (
+              <div style={{ textAlign: 'center', gridColumn: '1 / -1', padding: '30px 0' }}>
+                No published articles available right now.
               </div>
-
-              {/* Card Body */}
-              <div className="HomeBlog-card-body">
-                <h3 className="HomeBlog-card-title">{post.title}</h3>
-                
-                <a href={post.link} className="HomeBlog-read-more">
-                  Read More <FiArrowRight className="HomeBlog-arrow-icon" />
-                </a>
-              </div>
-
-            </article>
-          ))}
-        </div>
-
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

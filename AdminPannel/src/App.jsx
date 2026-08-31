@@ -2,16 +2,24 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { signOut, getCurrentUser } from "aws-amplify/auth";
 
-// Layout
+// =====================================================
+// LAYOUT
+// =====================================================
 import MainLayout from "./Layout/MainLayout/MainLayout";
 
-// Authentication
+// =====================================================
+// AUTHENTICATION
+// =====================================================
 import LogIn from "./Pages/login/LogIn";
 
-// Dashboard
+// =====================================================
+// DASHBOARD
+// =====================================================
 import DashboardMain from "./Components/DashboardMain/DashboardMain";
 
-// Properties
+// =====================================================
+// PROPERTIES
+// =====================================================
 import PropertiesDashboard from "./Components/PropertiesDashboard/PropertiesDashboard";
 import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
 import Categories from "./Components/Categories/Categories";
@@ -20,16 +28,22 @@ import NearbyPlaces from "./Components/NearbyPlaces/NearbyPlaces";
 import Amenities from "./Components/Amenities/Amenities";
 import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
 
-// Blogs
+// =====================================================
+// BLOGS
+// =====================================================
 import BlogPosting from "./Components/BlogPosting/BlogPosting";
 import BlogManagement from "./Components/BlogManagement/BlogManagement";
 
-// Other Components
+// =====================================================
+// OTHER COMPONENTS
+// =====================================================
 import Bookings from "./Components/Bookings/Bookings";
 import LeadManagement from "./Components/LeadManagement/LeadManagement";
 import ProfileSetting from "./Components/ProfileSetting/ProfileSetting";
 
-// Pages
+// =====================================================
+// PAGES
+// =====================================================
 import Enquire from "./Pages/Enquire/Enquire";
 import User from "./Pages/User/User";
 import Report from "./Pages/Dashboard/Report/Report";
@@ -37,11 +51,29 @@ import Setting from "./Pages/Setting/Setting";
 import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
+// import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
+// import Amenities from "./Components/Amenities/Amenities";
+// import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
 
-// Protected Route Guard
+// =====================================================
+// PROTECTED ROUTE GUARD
+// =====================================================
 function ProtectedRoute({ isAuthenticated, isCheckingAuth, children }) {
   if (isCheckingAuth) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "18px",
+          fontWeight: "600",
+        }}
+      >
+        Loading...
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
@@ -51,14 +83,19 @@ function ProtectedRoute({ isAuthenticated, isCheckingAuth, children }) {
   return children;
 }
 
+// =====================================================
+// APP COMPONENT
+// =====================================================
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [user, setUser] = useState(null);
 
+  // Check Authentication State on Mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        // Check local session first
         const storedUser = localStorage.getItem("utkal_user_session");
 
         if (storedUser) {
@@ -68,6 +105,7 @@ function App() {
           return;
         }
 
+        // Check AWS Amplify authentication
         const currentUser = await getCurrentUser();
 
         if (currentUser) {
@@ -76,17 +114,15 @@ function App() {
             userId: currentUser.userId,
             isMock: false,
           };
-
           setUser(sessionUser);
           setIsAuthenticated(true);
-
           localStorage.setItem(
             "utkal_user_session",
             JSON.stringify(sessionUser)
           );
         }
       } catch (error) {
-        console.error("Auth check failed:", error);
+        console.error("Authentication check failed:", error);
         setUser(null);
         setIsAuthenticated(false);
         localStorage.removeItem("utkal_user_session");
@@ -98,12 +134,14 @@ function App() {
     checkAuth();
   }, []);
 
+  // Handle Login Success
   const handleLoginSuccess = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
     localStorage.setItem("utkal_user_session", JSON.stringify(userData));
   };
 
+  // Handle Logout
   const handleLogout = async () => {
     try {
       if (user && !user.isMock) {
@@ -121,7 +159,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public / Authentication Route */}
+        {/* Public Login Route */}
         <Route
           path="/login"
           element={
@@ -133,7 +171,7 @@ function App() {
           }
         />
 
-        {/* Protected Routes Wrapper */}
+        {/* Protected Routes Layout Wrapper */}
         <Route
           element={
             <ProtectedRoute
@@ -144,18 +182,20 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Main Dashboard */}
+          {/* Default Route */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          {/* Dashboard */}
           <Route path="/dashboard" element={<DashboardMain />} />
 
           {/* Properties Management */}
           <Route path="/properties/all" element={<PropertiesDashboard />} />
           <Route path="/properties/add" element={<AddNewProperty />} />
           <Route path="/properties/edit/:id" element={<AddNewProperty />} />
-          <Route path="/properties/amenities" element={<Amenities />} />
           <Route path="/properties/categories" element={<Categories />} />
           <Route path="/properties/locations" element={<Locations />} />
           <Route path="/properties/nearby" element={<NearbyPlaces />} />
+          <Route path="/properties/amenities" element={<Amenities />} />
           <Route path="/properties/review" element={<AdminPropertyReviews />} />
 
           {/* Blogs */}
@@ -173,12 +213,12 @@ function App() {
           <Route path="/settings" element={<Setting />} />
           <Route path="/profile" element={<ProfileSetting />} />
 
-          {/* CMS / Content */}
+          {/* Content & Marketing Pages */}
           <Route path="/testimonial" element={<Testimonial />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/team" element={<OurTeam />} />
 
-          {/* Fallback 404 Route */}
+          {/* Catch-all 404 Route */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Routes>

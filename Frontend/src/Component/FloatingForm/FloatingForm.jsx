@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
 import {
   Home,
   X,
@@ -11,16 +15,25 @@ import {
   MessageSquareText,
 } from "lucide-react";
 
+import API from "../../api/axios";
+
 import "./FloatingForm.css";
 
 /* =========================================================
    HEADER SECTION
 ========================================================= */
-const FloatingFormHeader = ({ onClose }) => {
+
+const FloatingFormHeader = ({
+  onClose,
+}) => {
   return (
     <div className="FloatingForm-header">
+
       <div className="FloatingForm-home-icon-box">
-        <Home size={20} strokeWidth={2} />
+        <Home
+          size={20}
+          strokeWidth={2}
+        />
       </div>
 
       <button
@@ -33,46 +46,84 @@ const FloatingFormHeader = ({ onClose }) => {
       </button>
 
       <div className="FloatingForm-header-content">
-        <h2 className="FloatingForm-header-title">Enquire Now</h2>
+
+        <h2 className="FloatingForm-header-title">
+          Enquire Now
+        </h2>
+
         <p className="FloatingForm-header-subtitle">
           Fill in your details and our property expert
           <br />
-          will <span className="FloatingForm-header-highlight">contact you soon.</span>
+          will{" "}
+          <span className="FloatingForm-header-highlight">
+            contact you soon.
+          </span>
         </p>
+
         <div className="FloatingForm-header-divider"></div>
+
       </div>
     </div>
   );
 };
 
 /* =========================================================
-   LOOKING FOR (RADIO) SECTION
+   LOOKING FOR
 ========================================================= */
-const LookingFor = ({ value, onChange }) => {
+
+const LookingFor = ({
+  value,
+  onChange,
+}) => {
   return (
     <div className="FloatingForm-field FloatingForm-field--looking">
+
       <div className="FloatingForm-field-icon">
         <Home size={15} />
       </div>
 
       <div className="FloatingForm-field-body">
-        <label className="FloatingForm-field-label">Looking For</label>
+
+        <label className="FloatingForm-field-label">
+          Looking For
+        </label>
 
         <div className="FloatingForm-radio-group">
-          {["Rent", "Buy", "Sell"].map((option) => (
-            <label className="FloatingForm-radio-option" key={option}>
+
+          {[
+            "Rent",
+            "Buy",
+            "Sell",
+          ].map((option) => (
+            <label
+              className="FloatingForm-radio-option"
+              key={option}
+            >
+
               <input
                 type="radio"
                 name="lookingFor"
                 value={option}
-                checked={value === option}
-                onChange={(e) => onChange(e.target.value)}
+                checked={
+                  value === option
+                }
+                onChange={(e) =>
+                  onChange(
+                    e.target.value
+                  )
+                }
                 className="FloatingForm-radio-input"
               />
+
               <span className="FloatingForm-radio-custom"></span>
-              <span className="FloatingForm-radio-text">{option}</span>
+
+              <span className="FloatingForm-radio-text">
+                {option}
+              </span>
+
             </label>
           ))}
+
         </div>
       </div>
     </div>
@@ -82,6 +133,7 @@ const LookingFor = ({ value, onChange }) => {
 /* =========================================================
    SELECT FIELD
 ========================================================= */
+
 const SelectField = ({
   icon,
   label,
@@ -92,10 +144,16 @@ const SelectField = ({
 }) => {
   return (
     <div className="FloatingForm-field FloatingForm-field--select">
-      <div className="FloatingForm-field-icon">{icon}</div>
+
+      <div className="FloatingForm-field-icon">
+        {icon}
+      </div>
 
       <div className="FloatingForm-field-body">
-        <label className="FloatingForm-field-label">{label}</label>
+
+        <label className="FloatingForm-field-label">
+          {label}
+        </label>
 
         <select
           value={value}
@@ -103,35 +161,58 @@ const SelectField = ({
           className="FloatingForm-select-element"
           required
         >
-          <option value="" disabled>
+
+          <option
+            value=""
+            disabled
+          >
             {placeholder}
           </option>
 
-          {options.map((option) => (
-            <option value={option} key={option}>
-              {option}
-            </option>
-          ))}
+          {options.map(
+            (option) => (
+              <option
+                value={option}
+                key={option}
+              >
+                {option}
+              </option>
+            )
+          )}
+
         </select>
       </div>
 
-      <ChevronDown className="FloatingForm-select-arrow" size={15} />
+      <ChevronDown
+        className="FloatingForm-select-arrow"
+        size={15}
+      />
+
     </div>
   );
 };
 
 /* =========================================================
-   MOBILE NUMBER FIELD
+   MOBILE NUMBER
 ========================================================= */
-const MobileNumber = ({ value, onChange }) => {
+
+const MobileNumber = ({
+  value,
+  onChange,
+}) => {
   return (
     <div className="FloatingForm-field FloatingForm-field--mobile">
+
       <div className="FloatingForm-field-icon">
         <Phone size={15} />
       </div>
 
       <div className="FloatingForm-field-body">
-        <label htmlFor="FloatingFormMobile" className="FloatingForm-field-label">
+
+        <label
+          htmlFor="FloatingFormMobile"
+          className="FloatingForm-field-label"
+        >
           Mobile Number
         </label>
 
@@ -144,6 +225,7 @@ const MobileNumber = ({ value, onChange }) => {
           maxLength={10}
           className="FloatingForm-input-element"
         />
+
       </div>
     </div>
   );
@@ -152,139 +234,792 @@ const MobileNumber = ({ value, onChange }) => {
 /* =========================================================
    SUBMIT BUTTON
 ========================================================= */
-const SubmitButton = ({ onClick }) => {
+
+const SubmitButton = ({
+  onClick,
+  loading,
+}) => {
   return (
     <button
       type="button"
       className="FloatingForm-submit-btn"
       onClick={onClick}
+      disabled={loading}
     >
-      <span className="FloatingForm-submit-text">Get Property Options</span>
+
+      <span className="FloatingForm-submit-text">
+        {loading
+          ? "Submitting..."
+          : "Get Property Options"}
+      </span>
+
       <span className="FloatingForm-submit-icon">
         <CircleCheck size={14} />
       </span>
+
     </button>
   );
 };
 
 /* =========================================================
-   FOOTER SECTION
+   FOOTER
 ========================================================= */
+
 const FloatingFormFooter = () => {
   return (
     <div className="FloatingForm-footer">
-      <ShieldCheck size={12} className="FloatingForm-footer-icon" />
-      <span className="FloatingForm-footer-text">Free Consultation • No obligation</span>
+
+      <ShieldCheck
+        size={12}
+        className="FloatingForm-footer-icon"
+      />
+
+      <span className="FloatingForm-footer-text">
+        Free Consultation • No obligation
+      </span>
+
     </div>
   );
 };
 
 /* =========================================================
+   LOCATION NORMALIZER
+========================================================= */
+
+const normalizeLocations = (
+  responseData
+) => {
+  const raw =
+    responseData?.locations ||
+    responseData?.data ||
+    responseData?.results ||
+    responseData;
+
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  const values = raw
+    .map((item) => {
+      if (
+        typeof item ===
+        "string"
+      ) {
+        return item;
+      }
+
+      return (
+        item?.name ||
+        item?.location ||
+        item?.city ||
+        item?.title ||
+        item?.area ||
+        item?.locality ||
+        item?.locationName ||
+        ""
+      );
+    })
+    .filter(Boolean)
+    .map((item) =>
+      String(item).trim()
+    );
+
+  return [
+    ...new Set(values),
+  ];
+};
+
+/* =========================================================
    MAIN FLOATING FORM
 ========================================================= */
-const FloatingForm = () => {
-  const [isOpen, setIsOpen] = useState(true);
 
-  const [lookingFor, setLookingFor] = useState("Rent");
-  const [propertyType, setPropertyType] = useState("");
-  const [location, setLocation] = useState("");
-  const [budget, setBudget] = useState("");
-  const [mobile, setMobile] = useState("");
+const FloatingForm = ({
+  propertyId = "",
+  propertyName = "",
+}) => {
 
-  const handleSubmit = () => {
-    const formData = {
-      lookingFor,
-      propertyType,
-      location,
-      budget,
-      mobile,
+  const [isOpen, setIsOpen] =
+    useState(true);
+
+  const [lookingFor, setLookingFor] =
+    useState("Rent");
+
+  const [propertyType, setPropertyType] =
+    useState("");
+
+  const [location, setLocation] =
+    useState("");
+
+  const [budget, setBudget] =
+    useState("");
+
+  const [mobile, setMobile] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [locationLoading, setLocationLoading] =
+    useState(false);
+
+  const [locations, setLocations] =
+    useState([]);
+
+  const [message, setMessage] =
+    useState("");
+
+  const [messageType, setMessageType] =
+    useState("");
+
+  /* =========================================================
+     PROPERTY TYPES
+     
+     UI stays exactly the same.
+  ========================================================= */
+
+  const propertyTypes = [
+    "Apartment",
+    "Villa",
+    "Independent House",
+    "Plot",
+    "Commercial Property",
+  ];
+
+  /* =========================================================
+     BUDGET OPTIONS
+  ========================================================= */
+
+  const budgetOptions = [
+    "Under ₹20 Lakhs",
+    "₹20 - ₹40 Lakhs",
+    "₹40 - ₹60 Lakhs",
+    "₹60 Lakhs - ₹1 Crore",
+    "Above ₹1 Crore",
+  ];
+
+  /* =========================================================
+     FETCH LOCATIONS
+  ========================================================= */
+
+  const fetchLocations = async () => {
+    try {
+      setLocationLoading(true);
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "FETCHING LOCATIONS"
+      );
+
+      const response =
+        await API.get(
+          "/locations"
+        );
+
+      console.log(
+        "LOCATION API RESPONSE:",
+        response.data
+      );
+
+      const locationList =
+        normalizeLocations(
+          response.data
+        );
+
+      console.log(
+        "NORMALIZED LOCATIONS:",
+        locationList
+      );
+
+      setLocations(
+        locationList
+      );
+    } catch (error) {
+      console.error(
+        "FETCH LOCATIONS ERROR:",
+        error.response?.data ||
+          error
+      );
+
+      /*
+       * Fallback only if API fails.
+       * This does not change your UI.
+       */
+      setLocations([
+        "Bhubaneswar",
+        "Cuttack",
+        "Puri",
+        "Khurda",
+        "Kendrapara",
+      ]);
+    } finally {
+      setLocationLoading(false);
+    }
+  };
+
+  /* =========================================================
+     FETCH LOCATIONS ON FORM LOAD
+  ========================================================= */
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  /* =========================================================
+     RESET MESSAGE
+  ========================================================= */
+
+  const clearMessage = () => {
+    setMessage("");
+    setMessageType("");
+  };
+
+  /* =========================================================
+     MOBILE CHANGE
+  ========================================================= */
+
+  const handleMobileChange = (
+    e
+  ) => {
+    const onlyNumbers =
+      e.target.value.replace(
+        /\D/g,
+        ""
+      );
+
+    setMobile(
+      onlyNumbers.slice(0, 10)
+    );
+
+    clearMessage();
+  };
+
+  /* =========================================================
+     PROPERTY TYPE CHANGE
+  ========================================================= */
+
+  const handlePropertyTypeChange =
+    (e) => {
+      setPropertyType(
+        e.target.value
+      );
+
+      clearMessage();
     };
 
-    console.log("Property Enquiry Submitted:", formData);
+  /* =========================================================
+     LOCATION CHANGE
+  ========================================================= */
+
+  const handleLocationChange =
+    (e) => {
+      setLocation(
+        e.target.value
+      );
+
+      clearMessage();
+    };
+
+  /* =========================================================
+     BUDGET CHANGE
+  ========================================================= */
+
+  const handleBudgetChange =
+    (e) => {
+      setBudget(
+        e.target.value
+      );
+
+      clearMessage();
+    };
+
+  /* =========================================================
+     SUBMIT LEAD
+  ========================================================= */
+
+  const handleSubmit = async () => {
+    try {
+      clearMessage();
+
+      /* =================================================
+         VALIDATION
+      ================================================= */
+
+      if (!lookingFor) {
+        setMessage(
+          "Please select what you are looking for."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+        return;
+      }
+
+      if (!propertyType) {
+        setMessage(
+          "Please select a property type."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+        return;
+      }
+
+      if (!location) {
+        setMessage(
+          "Please select your preferred location."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+        return;
+      }
+
+      if (!budget) {
+        setMessage(
+          "Please select your budget range."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+        return;
+      }
+
+      if (!mobile) {
+        setMessage(
+          "Please enter your mobile number."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+        return;
+      }
+
+      if (
+        mobile.length !== 10
+      ) {
+        setMessage(
+          "Please enter a valid 10-digit mobile number."
+        );
+
+        setMessageType(
+          "error"
+        );
+
+        return;
+      }
+
+      /* =================================================
+         START LOADING
+      ================================================= */
+
+      setLoading(true);
+
+      /* =================================================
+         LEAD PAYLOAD
+         
+         IMPORTANT:
+         These names match the backend schema.
+      ================================================= */
+
+      const leadData = {
+        /*
+         * Since your current UI does not have
+         * a customer name field, backend will
+         * use "Property Enquiry".
+         */
+        fullName:
+          "Property Enquiry",
+
+        mobile:
+          mobile,
+
+        email: "",
+
+        source:
+          "Website Floating Enquiry Form",
+
+        /*
+         * Keep lookingFor in backend
+         * as a separate field.
+         */
+        lookingFor:
+          lookingFor,
+
+        /*
+         * Property type
+         */
+        interestedIn:
+          propertyType,
+
+        /*
+         * Selected location
+         */
+        location:
+          location,
+
+        /*
+         * Budget
+         */
+        budgetRange:
+          budget,
+
+        /*
+         * If form is opened from
+         * PropertyDetails, save
+         * the particular property.
+         */
+        propertyId:
+          propertyId || null,
+
+        propertyName:
+          propertyName || "",
+
+        /*
+         * Default CRM values
+         */
+        agent: "",
+
+        status: "New",
+
+        priority: "Medium",
+
+        followUpDate: "",
+
+        score: 0,
+
+        /*
+         * Save all enquiry information
+         * in notes as well.
+         */
+        notes:
+          `Looking For: ${lookingFor}. ` +
+          `Property Type: ${propertyType}. ` +
+          `Location: ${location}. ` +
+          `Budget: ${budget}.` +
+          (propertyName
+            ? ` Property: ${propertyName}.`
+            : ""),
+      };
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "SUBMITTING PROPERTY LEAD"
+      );
+
+      console.log(
+        "LEAD DATA:",
+        leadData
+      );
+
+      console.log(
+        "PROPERTY ID:",
+        propertyId
+      );
+
+      console.log(
+        "PROPERTY NAME:",
+        propertyName
+      );
+
+      console.log(
+        "===================================="
+      );
+
+      /* =================================================
+         POST API
+      ================================================= */
+
+      const response =
+        await API.post(
+          "/leads",
+          leadData
+        );
+
+      console.log(
+        "LEAD CREATED:",
+        response.data
+      );
+
+      /* =================================================
+         SUCCESS
+      ================================================= */
+
+      setMessage(
+        response.data?.message ||
+          "Thank you! Our property expert will contact you soon."
+      );
+
+      setMessageType(
+        "success"
+      );
+
+      /* =================================================
+         RESET FORM
+      ================================================= */
+
+      setLookingFor(
+        "Rent"
+      );
+
+      setPropertyType("");
+
+      setLocation("");
+
+      setBudget("");
+
+      setMobile("");
+
+    } catch (error) {
+      console.error(
+        "===================================="
+      );
+
+      console.error(
+        "LEAD SUBMISSION ERROR:",
+        error.response?.data ||
+          error
+      );
+
+      console.error(
+        "===================================="
+      );
+
+      setMessage(
+        error.response?.data
+          ?.message ||
+          "Unable to submit your enquiry. Please try again."
+      );
+
+      setMessageType(
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
     <div className="FloatingForm-wrapper">
-      {/* Floating Toggle Button (Appears when form is minimized) */}
+
+      {/* =================================================
+          FLOATING TOGGLE
+      ================================================= */}
+
       <button
         type="button"
-        className={`FloatingForm-trigger-btn ${!isOpen ? "FloatingForm-trigger-btn--visible" : ""}`}
-        onClick={() => setIsOpen(true)}
+        className={`FloatingForm-trigger-btn ${
+          !isOpen
+            ? "FloatingForm-trigger-btn--visible"
+            : ""
+        }`}
+        onClick={() =>
+          setIsOpen(true)
+        }
         aria-label="Open property enquiry form"
       >
-        <MessageSquareText size={20} />
-        <span className="FloatingForm-trigger-text">Enquire Now</span>
+        <MessageSquareText
+          size={20}
+        />
+
+        <span className="FloatingForm-trigger-text">
+          Enquire Now
+        </span>
       </button>
 
-      {/* Main Form Popup Card */}
-      <div className={`FloatingForm-card ${isOpen ? "FloatingForm-card--open" : "FloatingForm-card--closed"}`}>
-        {/* Header */}
-        <FloatingFormHeader onClose={() => setIsOpen(false)} />
+      {/* =================================================
+          FORM CARD
+      ================================================= */}
 
-        {/* Form Body */}
+      <div
+        className={`FloatingForm-card ${
+          isOpen
+            ? "FloatingForm-card--open"
+            : "FloatingForm-card--closed"
+        }`}
+      >
+
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
+        <FloatingFormHeader
+          onClose={() => {
+            setIsOpen(false);
+
+            clearMessage();
+          }}
+        />
+
+        {/* =================================================
+            BODY
+        ================================================= */}
+
         <div className="FloatingForm-body">
-          {/* Looking For */}
-          <LookingFor value={lookingFor} onChange={setLookingFor} />
 
-          {/* Property Type */}
+          {/* =================================================
+              STATUS MESSAGE
+          ================================================= */}
+
+          {message && (
+            <div
+              className={`FloatingForm-message ${
+                messageType ===
+                "success"
+                  ? "FloatingForm-message--success"
+                  : "FloatingForm-message--error"
+              }`}
+            >
+              {message}
+            </div>
+          )}
+
+          {/* =================================================
+              LOOKING FOR
+          ================================================= */}
+
+          <LookingFor
+            value={
+              lookingFor
+            }
+            onChange={(
+              value
+            ) => {
+              setLookingFor(
+                value
+              );
+
+              clearMessage();
+            }}
+          />
+
+          {/* =================================================
+              PROPERTY TYPE
+          ================================================= */}
+
           <SelectField
-            icon={<Building2 size={15} />}
+            icon={
+              <Building2
+                size={15}
+              />
+            }
             label="Property Type"
             placeholder="Select property type"
-            value={propertyType}
-            onChange={(e) => setPropertyType(e.target.value)}
-            options={[
-              "Apartment",
-              "Villa",
-              "Independent House",
-              "Plot",
-              "Commercial Property",
-            ]}
+            value={
+              propertyType
+            }
+            onChange={
+              handlePropertyTypeChange
+            }
+            options={
+              propertyTypes
+            }
           />
 
-          {/* Preferred Location */}
+          {/* =================================================
+              LOCATION
+              
+              NOW COMES FROM:
+              GET /api/locations
+          ================================================= */}
+
           <SelectField
-            icon={<MapPin size={15} />}
+            icon={
+              <MapPin
+                size={15}
+              />
+            }
             label="Preferred Location"
-            placeholder="Select location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            options={[
-              "Bhubaneswar",
-              "Cuttack",
-              "Puri",
-              "Khurda",
-              "Kendrapara",
-            ]}
+            placeholder={
+              locationLoading
+                ? "Loading locations..."
+                : "Select location"
+            }
+            value={
+              location
+            }
+            onChange={
+              handleLocationChange
+            }
+            options={
+              locations
+            }
           />
 
-          {/* Budget Range */}
+          {/* =================================================
+              BUDGET
+          ================================================= */}
+
           <SelectField
-            icon={<ShieldCheck size={15} />}
+            icon={
+              <ShieldCheck
+                size={15}
+              />
+            }
             label="Budget Range"
             placeholder="Select budget range"
-            value={budget}
-            onChange={(e) => setBudget(e.target.value)}
-            options={[
-              "Under ₹20 Lakhs",
-              "₹20 - ₹40 Lakhs",
-              "₹40 - ₹60 Lakhs",
-              "₹60 Lakhs - ₹1 Crore",
-              "Above ₹1 Crore",
-            ]}
+            value={
+              budget
+            }
+            onChange={
+              handleBudgetChange
+            }
+            options={
+              budgetOptions
+            }
           />
 
-          {/* Mobile Number */}
+          {/* =================================================
+              MOBILE
+          ================================================= */}
+
           <MobileNumber
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value.replace(/\D/g, ""))}
+            value={
+              mobile
+            }
+            onChange={
+              handleMobileChange
+            }
           />
 
-          {/* Submit Action */}
-          <SubmitButton onClick={handleSubmit} />
+          {/* =================================================
+              SUBMIT
+          ================================================= */}
 
-          {/* Security / Assurance Footer */}
+          <SubmitButton
+            onClick={
+              handleSubmit
+            }
+            loading={
+              loading
+            }
+          />
+
+          {/* =================================================
+              FOOTER
+          ================================================= */}
+
           <FloatingFormFooter />
+
         </div>
       </div>
     </div>

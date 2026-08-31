@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import FaqBreadcrume from '../../Component/FaqBreadcrume/FaqBreadcrume';
 import FrequentlyAskedQuestions from '../../Component/FrequentlyAskedQuestions/FrequentlyAskedQuestions';
 import AboutFindDreamHome from '../../Component/AboutFindDreamHome/AboutFindDreamHome';
 import './Faq.css';
@@ -103,6 +104,8 @@ const Faq = () => {
           {JSON.stringify(structuredData)}
         </script>
       </Helmet>
+
+      <FaqBreadcrume />
 
       <main className="faq-page">
         {/* SEO Hero Header */}

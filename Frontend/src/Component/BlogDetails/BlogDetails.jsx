@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import './BlogDetails.css';
 import API, { IMG_URL } from '../../api/axios';
@@ -17,6 +17,7 @@ const BlogDetails = () => {
   const [sidebarError, setSidebarError] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Helper function to resolve image URL
   const getImageUrl = (imgPath) => {
     if (!imgPath) {
       return 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80';
@@ -29,7 +30,8 @@ const BlogDetails = () => {
     return `${baseUrl}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
   };
 
-  const fetchBlogById = async () => {
+  // Fetch current blog details by ID
+  const fetchBlogById = useCallback(async () => {
     if (!id) return;
     try {
       setLoading(true);
@@ -54,9 +56,10 @@ const BlogDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  const fetchSidebarData = async () => {
+  // Fetch all blogs for the sidebar
+  const fetchSidebarData = useCallback(async () => {
     try {
       setSidebarLoading(true);
       setSidebarError(false);
@@ -74,14 +77,15 @@ const BlogDetails = () => {
     } finally {
       setSidebarLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchBlogById();
     fetchSidebarData();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [id]);
+  }, [id, fetchBlogById, fetchSidebarData]);
 
+  // Compute category counts
   const categories = useMemo(() => {
     const counts = {};
     allBlogs.forEach((b) => {
@@ -93,6 +97,7 @@ const BlogDetails = () => {
       .slice(0, 6);
   }, [allBlogs]);
 
+  // Compute featured listings (excluding current blog)
   const featuredListings = useMemo(() => {
     return allBlogs
       .filter((b) => String(b._id || b.id) !== String(id))
@@ -147,29 +152,28 @@ const BlogDetails = () => {
   return (
     <article className="BlogDetails-section">
       <div className="BlogDetails-container">
-        
         {/* Main Article Body */}
         <main className="BlogDetails-main-content">
           <header className="BlogDetails-header">
             <h1 className="BlogDetails-title">{blog.title}</h1>
-            
+
             <div className="BlogDetails-meta-row">
               <span className="BlogDetails-meta-item">
-                <i className="far fa-user BlogDetails-meta-icon"></i> 
+                <i className="far fa-user BlogDetails-meta-icon"></i>
                 <span>{blog.author || 'Utkal Property Consultant'}</span>
               </span>
               <span className="BlogDetails-meta-item">
-                <i className="far fa-folder BlogDetails-meta-icon"></i> 
+                <i className="far fa-folder BlogDetails-meta-icon"></i>
                 <span>{blog.category || 'Housing'}</span>
               </span>
               {Array.isArray(blog.tags) && blog.tags.length > 0 && (
                 <span className="BlogDetails-meta-item">
-                  <i className="far fa-tags BlogDetails-meta-icon"></i> 
+                  <i className="far fa-tags BlogDetails-meta-icon"></i>
                   <span>{blog.tags.join(', ')}</span>
                 </span>
               )}
               <span className="BlogDetails-meta-item">
-                <i className="far fa-calendar BlogDetails-meta-icon"></i> 
+                <i className="far fa-calendar BlogDetails-meta-icon"></i>
                 <span>{formatDate(blog.publishDate)}</span>
               </span>
             </div>
@@ -181,10 +185,10 @@ const BlogDetails = () => {
             )}
 
             <div className="BlogDetails-image-container">
-              <img 
-                src={getImageUrl(blog.blogImage)} 
-                alt={blog.title} 
-                className="BlogDetails-featured-image" 
+              <img
+                src={getImageUrl(blog.blogImage)}
+                alt={blog.title}
+                className="BlogDetails-featured-image"
               />
             </div>
 
@@ -198,7 +202,6 @@ const BlogDetails = () => {
 
         {/* Sidebar */}
         <aside className="BlogDetails-sidebar">
-          
           {/* Search Widget */}
           <div className="BlogDetails-widget BlogDetails-search-widget">
             <h3 className="BlogDetails-widget-title">Search</h3>
@@ -291,7 +294,6 @@ const BlogDetails = () => {
             <div className="BlogDetails-rating-pill">★ 4.4 (47 Google Reviews)</div>
           </div>
         </aside>
-
       </div>
     </article>
   );

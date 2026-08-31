@@ -1,5 +1,8 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async'; // Use 'react-helmet' if you don't use react-helmet-async
+import { Helmet } from 'react-helmet-async';
+
+// Page Components
+import AboutBreadcrume from '../../Component/AboutBreadcrume/AboutBreadcrume';
 import AboutBetterLives from '../../Component/AboutBetterLives/AboutBetterLives';
 import AboutServicesWeOffer from '../../Component/AboutServicesWeOffer/AboutServicesWeOffer';
 import TrustedBrands from '../../Component/TrustedBrands/TrustedBrands';
@@ -40,7 +43,7 @@ const AboutUs = () => {
           content="Discover Utkal Property, the top real estate company in Bhubaneswar, Odisha. Meet our expert real estate agents and property consultants helping you find premium flats, apartments, and luxury homes."
         />
 
-        {/* Targeted Keyword Matrix */}
+        {/* Targeted Keywords */}
         <meta
           name="keywords"
           content="Top Real Estate Company in Bhubaneswar Odisha, Best real estate company in Bhubaneswar, Best real estate company in Odisha, Top Real estate agent in Bhubaneswar, Best Property dealers in Bhubaneswar, Best Property Consultant in Bhubaneswar, best real estate agency in Bhubaneswar, top real estate brokers in Bhubaneswar, Premium Apartments and Flats Dealer in Bhubaneswar, best real estate developer in Bhubaneswar"
@@ -70,13 +73,14 @@ const AboutUs = () => {
         />
         <meta name="twitter:image" content="https://utkalproperty.com/og-about-image.jpg" />
 
-        {/* Page-Specific JSON-LD Structured Data */}
+        {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>
       </Helmet>
 
       <main className="about-page">
+        <AboutBreadcrume />
         <AboutBetterLives />
         <AboutServicesWeOffer />
         <TrustedBrands />
