@@ -1,6 +1,8 @@
 /* Container Layout */
 .GridPropertyListing {
   width: 100%;
+  min-height: 850px; /* Reserves vertical viewport space to prevent CLS */
+  contain: layout;   /* Isolates internal loading reflows from shifting external elements */
   padding: 50px 20px;
   background-color: #ffffff;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -20,6 +22,7 @@
   margin-bottom: 30px;
   flex-wrap: wrap;
   gap: 16px;
+  min-height: 42px; /* Keeps header steady before properties count loads */
 }
 
 .GridPropertyListing-header-left {
@@ -29,20 +32,20 @@
   flex-wrap: wrap;
 }
 
-/* Section Title Styled as Reference Image 1 */
 .GridPropertyListing-main-title {
   font-size: 32px;
   font-weight: 800;
   margin: 0;
   letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .GridPropertyListing-title-green {
-  color: #18522e; /* Rich dark green */
+  color: #18522e;
 }
 
 .GridPropertyListing-title-dark {
-  color: #0a1420; /* Dark navy / black */
+  color: #0a1420;
 }
 
 .GridPropertyListing-count-text {
@@ -111,12 +114,29 @@
   font-size: 12px;
 }
 
-/* 4 Items Per Line Grid Layout */
+/* Status States */
+.GridPropertyListing-status {
+  min-height: 480px; /* Reserves listing space while API request is fetching */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #8c8c9a;
+}
+
+.GridPropertyListing-status.error {
+  color: #d32f2f;
+}
+
+/* Grid Layout */
 .GridPropertyListing-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 40px;
+  min-height: 480px; /* Prevents container collapsing between page changes */
 }
 
 .GridPropertyListing-grid.list {
@@ -132,6 +152,7 @@
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .GridPropertyListing-card:hover {
@@ -139,11 +160,12 @@
   box-shadow: 0 10px 25px rgba(24, 82, 46, 0.12);
 }
 
-/* Image Wrapper */
+/* Image Container */
 .GridPropertyListing-image-container {
   position: relative;
   width: 100%;
   height: 190px;
+  aspect-ratio: 16 / 9; /* Enforces strict ratio to stop image reflow */
   overflow: hidden;
   background-color: #f0f0f3;
 }
@@ -155,7 +177,7 @@
   display: block;
 }
 
-/* Ribbon Badges */
+/* Badges */
 .GridPropertyListing-badges {
   position: absolute;
   top: 12px;
@@ -167,7 +189,7 @@
 }
 
 .GridPropertyListing-badge-featured {
-  background-color: #18522e; /* Dark green replacing yellow */
+  background-color: #18522e;
   color: #ffffff;
   font-size: 10px;
   font-weight: 700;
@@ -192,7 +214,7 @@
   right: 12px;
   background: transparent;
   border: none;
-  color: #18522e; /* Dark green replacing yellow */
+  color: #18522e;
   font-size: 16px;
   cursor: pointer;
   z-index: 2;
@@ -203,7 +225,7 @@
   transform: scale(1.15);
 }
 
-/* Hover Dark Overlay & Arrows */
+/* Overlay & Controls */
 .GridPropertyListing-overlay {
   position: absolute;
   top: 0;
@@ -254,7 +276,7 @@
   transform: scale(1.25);
 }
 
-/* Card Body */
+/* Card Details */
 .GridPropertyListing-card-content {
   padding: 16px;
   display: flex;
@@ -293,7 +315,7 @@
 .GridPropertyListing-card-price {
   font-size: 17px;
   font-weight: 800;
-  color: #18522e; /* Dark green price tag replacing yellow */
+  color: #18522e;
   margin-bottom: 12px;
 }
 
@@ -341,7 +363,7 @@
 }
 
 .GridPropertyListing-compare-icon {
-  color: #18522e; /* Dark green replacing yellow */
+  color: #18522e;
   font-size: 16px;
 }
 
@@ -356,6 +378,7 @@
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
+  aspect-ratio: 1 / 1;
 }
 
 .GridPropertyListing-time-posted {
@@ -363,12 +386,13 @@
   color: #8c8c9a;
 }
 
-/* Pagination Bar */
+/* Pagination */
 .GridPropertyListing-pagination {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-height: 40px; /* Reserves pagination bar height */
 }
 
 .GridPropertyListing-page-btn,
@@ -391,7 +415,7 @@
 .GridPropertyListing-page-btn.active,
 .GridPropertyListing-page-btn:hover:not(:disabled),
 .GridPropertyListing-page-nav:hover:not(:disabled) {
-  background-color: #18522e; /* Dark green active state replacing yellow */
+  background-color: #18522e;
   color: #ffffff;
   border-color: #18522e;
 }
@@ -401,7 +425,7 @@
   cursor: not-allowed;
 }
 
-/* Responsiveness */
+/* Breakpoints */
 @media (max-width: 1200px) {
   .GridPropertyListing-grid {
     grid-template-columns: repeat(3, 1fr);

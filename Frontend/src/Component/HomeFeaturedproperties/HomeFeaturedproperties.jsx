@@ -2,6 +2,16 @@ import { useEffect, useState } from 'react';
 import './HomeFeaturedproperties.css';
 import API, { BASE_URL } from '../../api/axios';
 
+// Local AVIF Image Imports
+import prop1 from '../../assets/property1.avif';
+import prop2 from '../../assets/property2.avif';
+import prop3 from '../../assets/property3.avif';
+import prop4 from '../../assets/property4.avif';
+import prop5 from '../../assets/property5.avif';
+import prop6 from '../../assets/property6.avif';
+import prop7 from '../../assets/property7.avif';
+import prop8 from '../../assets/property8.avif';
+
 // React Icons
 import {
   FaBed,
@@ -32,7 +42,10 @@ const formatIndianCurrency = (amount, isRent = false) => {
   return `₹${amount.toLocaleString('en-IN')}`;
 };
 
-// Mock Property Data with numeric prices for dynamic Indian Currency formatting
+// Fallback image using local asset
+const FALLBACK_IMAGE = prop1;
+
+// Mock Property Data referencing local AVIF images
 const PROPERTIES_DATA = {
   Houses: [
     {
@@ -49,11 +62,7 @@ const PROPERTIES_DATA = {
       verified: true,
       timeAgo: '2 days ago',
       avatar: 'https://i.pravatar.cc/150?img=11',
-      images: [
-        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80'
-      ]
+      images: [prop1, prop2, prop3]
     },
     {
       id: 2,
@@ -69,11 +78,7 @@ const PROPERTIES_DATA = {
       verified: true,
       timeAgo: '1 week ago',
       avatar: 'https://i.pravatar.cc/150?img=20',
-      images: [
-        'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80'
-      ]
+      images: [prop2, prop3, prop4]
     },
     {
       id: 3,
@@ -89,11 +94,7 @@ const PROPERTIES_DATA = {
       verified: true,
       timeAgo: '3 days ago',
       avatar: 'https://i.pravatar.cc/150?img=33',
-      images: [
-        'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-160058515526-990dced4db0d?auto=format&fit=crop&w=800&q=80'
-      ]
+      images: [prop3, prop4, prop5]
     },
     {
       id: 4,
@@ -109,11 +110,7 @@ const PROPERTIES_DATA = {
       verified: true,
       timeAgo: 'Just now',
       avatar: 'https://i.pravatar.cc/150?img=60',
-      images: [
-        'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80'
-      ]
+      images: [prop4, prop5, prop6]
     },
     {
       id: 5,
@@ -129,10 +126,7 @@ const PROPERTIES_DATA = {
       verified: false,
       timeAgo: '5 days ago',
       avatar: 'https://i.pravatar.cc/150?img=12',
-      images: [
-        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80'
-      ]
+      images: [prop5, prop6, prop7]
     },
     {
       id: 6,
@@ -148,10 +142,7 @@ const PROPERTIES_DATA = {
       verified: true,
       timeAgo: '2 weeks ago',
       avatar: 'https://i.pravatar.cc/150?img=15',
-      images: [
-        'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=800&q=80'
-      ]
+      images: [prop6, prop7, prop8]
     },
     {
       id: 7,
@@ -167,10 +158,7 @@ const PROPERTIES_DATA = {
       verified: true,
       timeAgo: '1 month ago',
       avatar: 'https://i.pravatar.cc/150?img=32',
-      images: [
-        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80'
-      ]
+      images: [prop7, prop8, prop1]
     },
     {
       id: 8,
@@ -186,10 +174,7 @@ const PROPERTIES_DATA = {
       verified: true,
       timeAgo: '4 days ago',
       avatar: 'https://i.pravatar.cc/150?img=47',
-      images: [
-        'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80'
-      ]
+      images: [prop8, prop1, prop2]
     }
   ]
 };
@@ -198,13 +183,11 @@ const PROPERTIES_DATA = {
 CATEGORIES.slice(1).forEach((cat) => {
   PROPERTIES_DATA[cat] = PROPERTIES_DATA['Houses'].map((item, idx) => ({
     ...item,
-    id: idx + 100,
+    id: `${cat}-${item.id}-${idx}`,
     title: `Utkal ${cat} Spot ${idx + 1}`,
     rawPrice: item.rawPrice + idx * 500000
   }));
 });
-
-const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80';
 
 const formatTimeAgo = (createdAt) => {
   if (!createdAt) return 'Recently added';
@@ -225,20 +208,20 @@ const normalizeProperty = (property) => {
 
   return {
     ...property,
-    id: property._id,
-    title: property.name,
+    id: property._id || property.id,
+    title: property.name || property.title,
     address: [property.location, property.city, property.state]
       .filter(Boolean)
-      .join(', '),
-    rawPrice: Number(property.price) || 0,
-    isRent: property.statusType?.toLowerCase().includes('rent'),
-    beds: property.bedrooms || 0,
-    baths: property.bathrooms || 0,
-    sqft: property.totalArea || property.plotSize || 0,
-    featured: property.featured,
-    forSale: property.statusType?.toLowerCase().includes('sale'),
+      .join(', ') || property.address,
+    rawPrice: Number(property.price) || property.rawPrice || 0,
+    isRent: property.statusType?.toLowerCase().includes('rent') ?? property.isRent,
+    beds: property.bedrooms || property.beds || 0,
+    baths: property.bathrooms || property.baths || 0,
+    sqft: property.totalArea || property.plotSize || property.sqft || 0,
+    featured: property.featured ?? false,
+    forSale: property.statusType?.toLowerCase().includes('sale') ?? property.forSale,
     verified: property.publishStatus !== false && property.status === 'Active',
-    timeAgo: formatTimeAgo(property.createdAt),
+    timeAgo: formatTimeAgo(property.createdAt) || property.timeAgo,
     avatar: image,
     images: [image],
   };
@@ -255,7 +238,7 @@ const categoryMatches = (property, category) => {
     Bungalow: ['bungalow'],
   };
 
-  return categoryAliases[category].some((alias) => value.includes(alias));
+  return categoryAliases[category]?.some((alias) => value.includes(alias)) ?? false;
 };
 
 // Single Property Card Component
@@ -290,6 +273,9 @@ const PropertyCard = ({ property }) => {
           alt={property.title}
           className="HomeFeaturedproperties-card-img"
           loading="lazy"
+          decoding="async"
+          width="400"
+          height="220"
         />
 
         {/* Badges */}
@@ -304,31 +290,34 @@ const PropertyCard = ({ property }) => {
 
         {/* Bookmark Ribbon Button */}
         <button
+          type="button"
           className="HomeFeaturedproperties-bookmark-btn"
           onClick={toggleBookmark}
-          aria-label="Bookmark property"
+          aria-label={`Bookmark ${property.title}`}
         >
-          <FaBookmark className={isBookmarked ? 'filled' : 'outline'} />
+          <FaBookmark className={isBookmarked ? 'filled' : 'outline'} aria-hidden="true" />
         </button>
 
         {/* Hover Overlay */}
         <div className="HomeFeaturedproperties-hover-overlay">
-          <div className="HomeFeaturedproperties-crosshair-icon">+</div>
+          <div className="HomeFeaturedproperties-crosshair-icon" aria-hidden="true">+</div>
           {property.images.length > 1 && (
             <div className="HomeFeaturedproperties-nav-arrows">
               <button
+                type="button"
                 className="HomeFeaturedproperties-arrow-btn"
                 onClick={handlePrevImage}
-                aria-label="Previous image"
+                aria-label="Previous property image"
               >
-                <FaArrowLeft />
+                <FaArrowLeft aria-hidden="true" />
               </button>
               <button
+                type="button"
                 className="HomeFeaturedproperties-arrow-btn"
                 onClick={handleNextImage}
-                aria-label="Next image"
+                aria-label="Next property image"
               >
-                <FaArrowRight />
+                <FaArrowRight aria-hidden="true" />
               </button>
             </div>
           )}
@@ -340,14 +329,14 @@ const PropertyCard = ({ property }) => {
         <div className="HomeFeaturedproperties-card-header-row">
           <h2 className="HomeFeaturedproperties-title">{property.title}</h2>
           {property.verified && (
-            <span className="HomeFeaturedproperties-verified" title="Verified by Utkal Property">
-              <FaCheckCircle />
+            <span className="HomeFeaturedproperties-verified" title="Verified by Utkal Property" aria-label="Verified listing">
+              <FaCheckCircle aria-hidden="true" />
             </span>
           )}
         </div>
         
         <p className="HomeFeaturedproperties-address">
-          <FaMapMarkerAlt className="HomeFeaturedproperties-address-icon" />
+          <FaMapMarkerAlt className="HomeFeaturedproperties-address-icon" aria-hidden="true" />
           {property.address}
         </p>
 
@@ -358,19 +347,19 @@ const PropertyCard = ({ property }) => {
 
         <div className="HomeFeaturedproperties-specs">
           <span className="HomeFeaturedproperties-spec-item">
-            <FaBed /> <strong>{property.beds}</strong> Beds
+            <FaBed aria-hidden="true" /> <strong>{property.beds}</strong> Beds
           </span>
           <span className="HomeFeaturedproperties-spec-item">
-            <FaBath /> <strong>{property.baths}</strong> Baths
+            <FaBath aria-hidden="true" /> <strong>{property.baths}</strong> Baths
           </span>
           <span className="HomeFeaturedproperties-spec-item">
-            <FaRulerCombined /> <strong>{property.sqft}</strong> sqft
+            <FaRulerCombined aria-hidden="true" /> <strong>{property.sqft}</strong> sqft
           </span>
         </div>
 
         <div className="HomeFeaturedproperties-card-footer">
-          <button className="HomeFeaturedproperties-compare-btn">
-            <FaPlus className="HomeFeaturedproperties-plus-icon" /> Compare
+          <button type="button" className="HomeFeaturedproperties-compare-btn" aria-label={`Compare ${property.title}`}>
+            <FaPlus className="HomeFeaturedproperties-plus-icon" aria-hidden="true" /> Compare
           </button>
           
           <div className="HomeFeaturedproperties-user-info">
@@ -378,6 +367,9 @@ const PropertyCard = ({ property }) => {
               src={property.avatar}
               alt="Agent Avatar"
               className="HomeFeaturedproperties-avatar"
+              loading="lazy"
+              width="28"
+              height="28"
             />
             <span className="HomeFeaturedproperties-time">{property.timeAgo}</span>
           </div>
@@ -400,10 +392,11 @@ const HomeFeaturedproperties = () => {
           params: { page: 1, limit: 1000, featured: true },
         });
         const propertyData = response.data?.properties || [];
-        setProperties(propertyData.map(normalizeProperty));
+        if (Array.isArray(propertyData) && propertyData.length > 0) {
+          setProperties(propertyData.map(normalizeProperty));
+        }
       } catch (error) {
         console.error('FETCH FEATURED PROPERTIES ERROR:', error);
-        setProperties([]);
       }
     };
 
@@ -431,7 +424,7 @@ const HomeFeaturedproperties = () => {
         {/* SEO Header Section */}
         <header className="HomeFeaturedproperties-header">
           <span className="HomeFeaturedproperties-badgeTag">
-            <FaShieldAlt className="tag-icon" /> Verified Property Listings
+            <FaShieldAlt className="tag-icon" aria-hidden="true" /> Verified Property Listings
           </span>
           <h1 id="featured-properties-heading" className="HomeFeaturedproperties-main-heading">
             Best Property Dealers in Bhubaneswar — <span className="highlight-green">Featured Flats and Apartments</span>
@@ -446,8 +439,10 @@ const HomeFeaturedproperties = () => {
           {CATEGORIES.map((category) => (
             <button
               key={category}
+              type="button"
               role="tab"
               aria-selected={activeTab === category}
+              aria-label={`View ${category} properties`}
               className={`HomeFeaturedproperties-tab-btn ${
                 activeTab === category ? 'active' : ''
               }`}
@@ -467,29 +462,36 @@ const HomeFeaturedproperties = () => {
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="HomeFeaturedproperties-pagination">
+          <div className="HomeFeaturedproperties-pagination" role="navigation" aria-label="Properties pagination">
             <button
+              type="button"
               className="HomeFeaturedproperties-page-btn"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((prev) => prev - 1)}
+              aria-label="Previous page"
             >
               Prev
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
               <button
                 key={pageNum}
+                type="button"
                 className={`HomeFeaturedproperties-page-num ${
                   currentPage === pageNum ? 'active' : ''
                 }`}
                 onClick={() => setCurrentPage(pageNum)}
+                aria-label={`Go to page ${pageNum}`}
+                aria-current={currentPage === pageNum ? 'page' : undefined}
               >
                 {pageNum}
               </button>
             ))}
             <button
+              type="button"
               className="HomeFeaturedproperties-page-btn"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((prev) => prev + 1)}
+              aria-label="Next page"
             >
               Next
             </button>

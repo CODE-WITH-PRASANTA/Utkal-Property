@@ -1,4 +1,3 @@
-
 import React, {
   useEffect,
   useMemo,
@@ -21,8 +20,9 @@ import API from "../../api/axios";
 
 import "./FloatingForm.css";
 
+
 /* =========================================================
-   HEADER SECTION
+   HEADER
 ========================================================= */
 
 const FloatingFormHeader = ({
@@ -31,21 +31,16 @@ const FloatingFormHeader = ({
   return (
     <div className="FloatingForm-header">
 
-      <div className="FloatingForm-home-icon-box">
+      <div
+        className="FloatingForm-home-icon-box"
+        aria-hidden="true"
+      >
         <Home
           size={20}
           strokeWidth={2}
         />
       </div>
 
-      <button
-        type="button"
-        className="FloatingForm-close-btn"
-        onClick={onClose}
-        aria-label="Close form"
-      >
-        <X size={14} />
-      </button>
 
       <div className="FloatingForm-header-content">
 
@@ -62,9 +57,26 @@ const FloatingFormHeader = ({
           </span>
         </p>
 
-        <div className="FloatingForm-header-divider"></div>
+        <div
+          className="FloatingForm-header-divider"
+          aria-hidden="true"
+        />
 
       </div>
+
+
+      <button
+        type="button"
+        className="FloatingForm-close-btn"
+        onClick={onClose}
+        aria-label="Close enquiry form"
+      >
+        <X
+          size={14}
+          aria-hidden="true"
+        />
+      </button>
+
     </div>
   );
 };
@@ -78,27 +90,37 @@ const LookingFor = ({
   value,
   onChange,
 }) => {
-  return (
-    <div className="FloatingForm-field FloatingForm-field--looking">
+  const options = [
+    "Buy",
+    "Sell",
+    "Rent",
+  ];
 
-      <div className="FloatingForm-field-icon">
+  return (
+    <fieldset className="FloatingForm-field FloatingForm-field--looking">
+
+      <legend className="FloatingForm-sr-only">
+        Looking For
+      </legend>
+
+      <div
+        className="FloatingForm-field-icon"
+        aria-hidden="true"
+      >
         <Home size={15} />
       </div>
 
+
       <div className="FloatingForm-field-body">
 
-        <label className="FloatingForm-field-label">
+        <span className="FloatingForm-field-label">
           Looking For
-        </label>
+        </span>
+
 
         <div className="FloatingForm-radio-group">
 
-          {[
-            "Buy",
-            "Sell",
-            "Rent",
-          ].map((option) => (
-
+          {options.map((option) => (
             <label
               className="FloatingForm-radio-option"
               key={option}
@@ -119,21 +141,23 @@ const LookingFor = ({
                 className="FloatingForm-radio-input"
               />
 
-              <span className="FloatingForm-radio-custom"></span>
+              <span
+                className="FloatingForm-radio-custom"
+                aria-hidden="true"
+              />
 
               <span className="FloatingForm-radio-text">
                 {option}
               </span>
 
             </label>
-
           ))}
 
         </div>
 
       </div>
 
-    </div>
+    </fieldset>
   );
 };
 
@@ -143,6 +167,8 @@ const LookingFor = ({
 ========================================================= */
 
 const SelectField = ({
+  id,
+  name,
   icon,
   label,
   placeholder,
@@ -151,7 +177,6 @@ const SelectField = ({
   onChange,
   disabled = false,
 }) => {
-
   return (
     <div
       className={`FloatingForm-field FloatingForm-field--select ${
@@ -161,17 +186,28 @@ const SelectField = ({
       }`}
     >
 
-      <div className="FloatingForm-field-icon">
+      <div
+        className="FloatingForm-field-icon"
+        aria-hidden="true"
+      >
         {icon}
       </div>
 
+
       <div className="FloatingForm-field-body">
 
-        <label className="FloatingForm-field-label">
+        <label
+          htmlFor={id}
+          className="FloatingForm-field-label"
+        >
           {label}
         </label>
 
+
         <select
+          id={id}
+          name={name}
+          aria-label={label}
           value={value}
           onChange={onChange}
           className="FloatingForm-select-element"
@@ -186,16 +222,15 @@ const SelectField = ({
             {placeholder}
           </option>
 
+
           {options.map(
             (option) => (
-
               <option
                 value={option}
                 key={option}
               >
                 {option}
               </option>
-
             )
           )}
 
@@ -203,9 +238,11 @@ const SelectField = ({
 
       </div>
 
+
       <ChevronDown
         className="FloatingForm-select-arrow"
         size={15}
+        aria-hidden="true"
       />
 
     </div>
@@ -221,13 +258,16 @@ const MobileNumber = ({
   value,
   onChange,
 }) => {
-
   return (
     <div className="FloatingForm-field FloatingForm-field--mobile">
 
-      <div className="FloatingForm-field-icon">
+      <div
+        className="FloatingForm-field-icon"
+        aria-hidden="true"
+      >
         <Phone size={15} />
       </div>
+
 
       <div className="FloatingForm-field-body">
 
@@ -238,15 +278,19 @@ const MobileNumber = ({
           Mobile Number
         </label>
 
+
         <input
           id="FloatingFormMobile"
           type="tel"
+          name="mobile"
           value={value}
           onChange={onChange}
           placeholder="Enter mobile number"
+          aria-label="Enter 10-digit mobile number"
           maxLength={10}
           inputMode="numeric"
           autoComplete="tel"
+          required
           className="FloatingForm-input-element"
         />
 
@@ -265,33 +309,33 @@ const SubmitButton = ({
   onClick,
   loading,
 }) => {
-
   return (
     <button
       type="button"
       className="FloatingForm-submit-btn"
       onClick={onClick}
       disabled={loading}
+      aria-label="Submit property enquiry"
     >
 
       <span className="FloatingForm-submit-text">
-
         {loading
           ? "Submitting..."
           : "Get Property Options"}
-
       </span>
 
-      <span className="FloatingForm-submit-icon">
+
+      <span
+        className="FloatingForm-submit-icon"
+        aria-hidden="true"
+      >
 
         {loading ? (
           <span className="FloatingForm-loading-dot">
             ...
           </span>
         ) : (
-          <CircleCheck
-            size={14}
-          />
+          <CircleCheck size={14} />
         )}
 
       </span>
@@ -306,13 +350,13 @@ const SubmitButton = ({
 ========================================================= */
 
 const FloatingFormFooter = () => {
-
   return (
     <div className="FloatingForm-footer">
 
       <ShieldCheck
         size={12}
         className="FloatingForm-footer-icon"
+        aria-hidden="true"
       />
 
       <span className="FloatingForm-footer-text">
@@ -325,7 +369,7 @@ const FloatingFormFooter = () => {
 
 
 /* =========================================================
-   LOCATION NORMALIZER
+   NORMALIZE LOCATION RESPONSE
 ========================================================= */
 
 const normalizeLocations = (
@@ -338,51 +382,67 @@ const normalizeLocations = (
     responseData?.results ||
     responseData;
 
+
   if (!Array.isArray(raw)) {
     return [];
   }
 
+
   return raw
+    .map((item) => {
 
-    .filter(
-      (item) =>
-        item &&
-        typeof item === "object"
-    )
+      if (
+        typeof item ===
+        "string"
+      ) {
+        return {
+          id: item,
+          country: "",
+          state: "",
+          city: item,
+          area: "",
+          pincode: "",
+          status: "Active",
+        };
+      }
 
-    .map((item) => ({
 
-      id:
-        item._id ||
-        item.id ||
-        `${item.city || ""}-${item.area || ""}`,
+      return {
+        id:
+          item?._id ||
+          item?.id ||
+          `${item?.city || ""}-${item?.area || ""}`,
 
-      country:
-        item.country ||
-        "",
+        country:
+          item?.country || "",
 
-      state:
-        item.state ||
-        "",
+        state:
+          item?.state ||
+          item?.stateName ||
+          "",
 
-      city:
-        item.city ||
-        "",
+        city:
+          item?.city ||
+          item?.cityName ||
+          item?.location ||
+          "",
 
-      area:
-        item.area ||
-        "",
+        area:
+          item?.area ||
+          item?.areaName ||
+          item?.locality ||
+          "",
 
-      pincode:
-        item.pincode ||
-        "",
+        pincode:
+          item?.pincode ||
+          item?.pinCode ||
+          "",
 
-      status:
-        item.status ||
-        "Active",
-
-    }))
-
+        status:
+          item?.status ||
+          "Active",
+      };
+    })
     .filter(
       (item) =>
         item.city ||
@@ -401,59 +461,87 @@ const FloatingForm = ({
 }) => {
 
   /* =======================================================
-     FORM OPEN / CLOSE
+     FORM STATE
   ======================================================= */
 
-  const [isOpen, setIsOpen] =
-    useState(true);
+  const [
+    isOpen,
+    setIsOpen,
+  ] = useState(true);
+
+
+  const [
+    lookingFor,
+    setLookingFor,
+  ] = useState("Buy");
+
+
+  const [
+    propertyType,
+    setPropertyType,
+  ] = useState("");
+
+
+  const [
+    location,
+    setLocation,
+  ] = useState("");
+
+
+  const [
+    preferredArea,
+    setPreferredArea,
+  ] = useState("");
+
+
+  const [
+    budget,
+    setBudget,
+  ] = useState("");
+
+
+  const [
+    mobile,
+    setMobile,
+  ] = useState("");
 
 
   /* =======================================================
-     FORM VALUES
+     LOCATION STATE
   ======================================================= */
 
-  const [lookingFor, setLookingFor] =
-    useState("Buy");
+  const [
+    locationData,
+    setLocationData,
+  ] = useState([]);
 
-  const [propertyType, setPropertyType] =
-    useState("");
 
-  const [location, setLocation] =
-    useState("");
-
-  const [preferredArea, setPreferredArea] =
-    useState("");
-
-  const [budget, setBudget] =
-    useState("");
-
-  const [mobile, setMobile] =
-    useState("");
+  const [
+    locationLoading,
+    setLocationLoading,
+  ] = useState(false);
 
 
   /* =======================================================
-     LOCATION DATA
+     SUBMIT STATE
   ======================================================= */
 
-  const [locationData, setLocationData] =
-    useState([]);
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
 
-  const [locationLoading, setLocationLoading] =
-    useState(false);
+
+  const [
+    message,
+    setMessage,
+  ] = useState("");
 
 
-  /* =======================================================
-     SUBMIT STATES
-  ======================================================= */
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [message, setMessage] =
-    useState("");
-
-  const [messageType, setMessageType] =
-    useState("");
+  const [
+    messageType,
+    setMessageType,
+  ] = useState("");
 
 
   /* =========================================================
@@ -462,10 +550,10 @@ const FloatingForm = ({
 
   const propertyTypes = [
     "Apartment",
-  "Villa",
-  "Duplex / Independent House",
-  "Plot",
-  "Commercial Property",
+    "Villa",
+    "Duplex / Independent House",
+    "Plot",
+    "Commercial Property",
   ];
 
 
@@ -491,29 +579,36 @@ const FloatingForm = ({
 
       setLocationLoading(true);
 
+
       console.log(
-        "Fetching locations..."
+        "Fetching locations from:",
+        `${API.defaults.baseURL}/locations`
       );
+
 
       const response =
         await API.get(
           "/locations"
         );
 
+
       console.log(
-        "Location API response:",
+        "Location API Response:",
         response.data
       );
+
 
       const normalized =
         normalizeLocations(
           response.data
         );
 
+
       console.log(
-        "Normalized locations:",
+        "Normalized Locations:",
         normalized
       );
+
 
       setLocationData(
         normalized
@@ -523,9 +618,15 @@ const FloatingForm = ({
 
       console.error(
         "LOCATION FETCH ERROR:",
-        error.response?.data ||
+        error?.response?.data ||
           error
       );
+
+
+      /*
+        Don't break the form if the
+        backend temporarily fails.
+      */
 
       setLocationData([]);
 
@@ -538,7 +639,7 @@ const FloatingForm = ({
 
 
   /* =========================================================
-     FETCH LOCATIONS ON COMPONENT LOAD
+     LOAD LOCATIONS
   ========================================================= */
 
   useEffect(() => {
@@ -549,7 +650,7 @@ const FloatingForm = ({
 
 
   /* =========================================================
-     UNIQUE CITY / LOCATION OPTIONS
+     UNIQUE CITY OPTIONS
   ========================================================= */
 
   const locationOptions =
@@ -557,17 +658,20 @@ const FloatingForm = ({
 
       const cities =
         locationData
-
           .map(
             (item) =>
-              item.city
+              String(
+                item.city || ""
+              ).trim()
           )
-
           .filter(Boolean);
 
+
       return [
-        ...new Set(cities),
-      ];
+        ...new Set(
+          cities
+        ),
+      ].sort();
 
     }, [
       locationData,
@@ -575,8 +679,8 @@ const FloatingForm = ({
 
 
   /* =========================================================
-     PREFERRED AREA OPTIONS
-     BASED ON LOCATION
+     AREA OPTIONS
+     BASED ON SELECTED LOCATION
   ========================================================= */
 
   const preferredAreaOptions =
@@ -586,25 +690,43 @@ const FloatingForm = ({
         return [];
       }
 
+
+      const selectedCity =
+        location
+          .trim()
+          .toLowerCase();
+
+
       const areas =
         locationData
+          .filter((item) => {
 
-          .filter(
-            (item) =>
-              item.city ===
-              location
-          )
+            const city =
+              String(
+                item.city || ""
+              )
+                .trim()
+                .toLowerCase();
 
+            return (
+              city ===
+              selectedCity
+            );
+          })
           .map(
             (item) =>
-              item.area
+              String(
+                item.area || ""
+              ).trim()
           )
-
           .filter(Boolean);
 
+
       return [
-        ...new Set(areas),
-      ];
+        ...new Set(
+          areas
+        ),
+      ].sort();
 
     }, [
       location,
@@ -617,10 +739,8 @@ const FloatingForm = ({
   ========================================================= */
 
   const clearMessage = () => {
-
     setMessage("");
     setMessageType("");
-
   };
 
 
@@ -666,11 +786,6 @@ const FloatingForm = ({
 
   const openForm = () => {
 
-    /*
-     * Always make sure the form is clean
-     * when it opens again.
-     */
-
     resetForm();
 
     clearMessage();
@@ -685,14 +800,15 @@ const FloatingForm = ({
   ========================================================= */
 
   const handleMobileChange = (
-    e
+    event
   ) => {
 
     const onlyNumbers =
-      e.target.value.replace(
+      event.target.value.replace(
         /\D/g,
         ""
       );
+
 
     setMobile(
       onlyNumbers.slice(
@@ -700,6 +816,7 @@ const FloatingForm = ({
         10
       )
     );
+
 
     clearMessage();
 
@@ -710,218 +827,203 @@ const FloatingForm = ({
      PROPERTY TYPE CHANGE
   ========================================================= */
 
-  const handlePropertyTypeChange =
-    (e) => {
+  const handlePropertyTypeChange = (
+    event
+  ) => {
 
-      setPropertyType(
-        e.target.value
-      );
+    setPropertyType(
+      event.target.value
+    );
 
-      clearMessage();
+    clearMessage();
 
-    };
+  };
 
 
   /* =========================================================
      LOCATION CHANGE
   ========================================================= */
 
-  const handleLocationChange =
-    (e) => {
+  const handleLocationChange = (
+    event
+  ) => {
 
-      const selectedLocation =
-        e.target.value;
+    const selectedLocation =
+      event.target.value;
 
-      setLocation(
-        selectedLocation
-      );
 
-      /*
-       * Reset area whenever location
-       * changes so an old area cannot
-       * be submitted with a new location.
-       */
+    setLocation(
+      selectedLocation
+    );
 
-      setPreferredArea("");
 
-      clearMessage();
+    /*
+      Always clear old area when
+      changing location.
+    */
 
-    };
+    setPreferredArea("");
+
+
+    clearMessage();
+
+  };
 
 
   /* =========================================================
      AREA CHANGE
   ========================================================= */
 
-  const handlePreferredAreaChange =
-    (e) => {
+  const handlePreferredAreaChange = (
+    event
+  ) => {
 
-      setPreferredArea(
-        e.target.value
-      );
+    setPreferredArea(
+      event.target.value
+    );
 
-      clearMessage();
+    clearMessage();
 
-    };
+  };
 
 
   /* =========================================================
      BUDGET CHANGE
   ========================================================= */
 
-  const handleBudgetChange =
-    (e) => {
+  const handleBudgetChange = (
+    event
+  ) => {
 
-      setBudget(
-        e.target.value
-      );
+    setBudget(
+      event.target.value
+    );
 
-      clearMessage();
+    clearMessage();
 
-    };
+  };
 
 
   /* =========================================================
-     SUBMIT FORM
+     SUBMIT
   ========================================================= */
 
   const handleSubmit = async () => {
-
-    /*
-     * Prevent double click / duplicate
-     * enquiry submission.
-     */
 
     if (loading) {
       return;
     }
 
 
+    clearMessage();
+
+
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
+
+    if (!lookingFor) {
+
+      setMessage(
+        "Please select what you are looking for."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!propertyType) {
+
+      setMessage(
+        "Please select a property type."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!location) {
+
+      setMessage(
+        "Please select your preferred location."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!preferredArea) {
+
+      setMessage(
+        "Please select your preferred area."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!budget) {
+
+      setMessage(
+        "Please select your budget range."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!mobile) {
+
+      setMessage(
+        "Please enter your mobile number."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (
+      mobile.length !== 10
+    ) {
+
+      setMessage(
+        "Please enter a valid 10-digit mobile number."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    /* =====================================================
+       START LOADING
+    ===================================================== */
+
+    setLoading(true);
+
+
     try {
 
-      clearMessage();
-
-
       /* ===================================================
-         VALIDATION
-      =================================================== */
-
-      if (!lookingFor) {
-
-        setMessage(
-          "Please select what you are looking for."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      if (!propertyType) {
-
-        setMessage(
-          "Please select a property type."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      if (!location) {
-
-        setMessage(
-          "Please select your preferred location."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      if (!preferredArea) {
-
-        setMessage(
-          "Please select your preferred area."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      if (!budget) {
-
-        setMessage(
-          "Please select your budget range."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      if (!mobile) {
-
-        setMessage(
-          "Please enter your mobile number."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      if (
-        mobile.length !== 10
-      ) {
-
-        setMessage(
-          "Please enter a valid 10-digit mobile number."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      /* ===================================================
-         START LOADING
-      =================================================== */
-
-      setLoading(true);
-
-
-      /* ===================================================
-         COMPLETE LEAD PAYLOAD
+         COMPLETE LEAD DATA
       =================================================== */
 
       const leadData = {
 
-        /*
-         * CUSTOMER
-         */
+        /* CUSTOMER */
 
         fullName:
           "Property Enquiry",
@@ -933,9 +1035,7 @@ const FloatingForm = ({
           "",
 
 
-        /*
-         * ENQUIRY
-         */
+        /* ENQUIRY */
 
         source:
           "Website Floating Enquiry Form",
@@ -956,25 +1056,19 @@ const FloatingForm = ({
           budget,
 
 
-        /*
-         * PROPERTY
-         */
+        /* PROPERTY */
 
         propertyId:
-          propertyId ||
-          null,
+          propertyId || null,
 
         propertyName:
-          propertyName ||
-          "",
+          propertyName || "",
 
         project:
           "",
 
 
-        /*
-         * CRM
-         */
+        /* CRM */
 
         agent:
           "",
@@ -992,9 +1086,7 @@ const FloatingForm = ({
           0,
 
 
-        /*
-         * NOTES
-         */
+        /* NOTES */
 
         notes:
           `Looking For: ${lookingFor}. ` +
@@ -1019,6 +1111,11 @@ const FloatingForm = ({
       );
 
       console.log(
+        "API:",
+        `${API.defaults.baseURL}/leads`
+      );
+
+      console.log(
         "LEAD DATA:",
         leadData
       );
@@ -1029,7 +1126,7 @@ const FloatingForm = ({
 
 
       /* ===================================================
-         BACKEND REQUEST
+         CREATE LEAD
       =================================================== */
 
       const response =
@@ -1040,13 +1137,13 @@ const FloatingForm = ({
 
 
       console.log(
-        "LEAD CREATED SUCCESSFULLY:",
+        "LEAD CREATED:",
         response.data
       );
 
 
       /* ===================================================
-         SUCCESS MESSAGE
+         SUCCESS
       =================================================== */
 
       setMessage(
@@ -1059,16 +1156,19 @@ const FloatingForm = ({
       );
 
 
-      /* ===================================================
-         RESET ALL FORM FIELDS
-      =================================================== */
+      /*
+        IMPORTANT:
+        Reset all fields immediately
+        after successful submission.
+      */
 
       resetForm();
 
 
-      /* ===================================================
-         CLOSE FORM AFTER SUCCESS
-      =================================================== */
+      /*
+        Keep success message visible,
+        then close the form.
+      */
 
       setTimeout(() => {
 
@@ -1080,7 +1180,6 @@ const FloatingForm = ({
 
       }, 1800);
 
-
     } catch (error) {
 
       console.error(
@@ -1088,9 +1187,22 @@ const FloatingForm = ({
       );
 
       console.error(
-        "FLOATING FORM SUBMISSION ERROR:",
-        error.response?.data ||
-          error
+        "FLOATING FORM SUBMISSION ERROR"
+      );
+
+      console.error(
+        "STATUS:",
+        error?.response?.status
+      );
+
+      console.error(
+        "RESPONSE:",
+        error?.response?.data
+      );
+
+      console.error(
+        "MESSAGE:",
+        error?.message
       );
 
       console.error(
@@ -1098,20 +1210,14 @@ const FloatingForm = ({
       );
 
 
-      /* ===================================================
-         ERROR MESSAGE
-      =================================================== */
-
       setMessage(
-        error.response?.data
-          ?.message ||
+        error?.response?.data?.message ||
           "Unable to submit your enquiry. Please try again."
       );
 
       setMessageType(
         "error"
       );
-
 
     } finally {
 
@@ -1126,11 +1232,14 @@ const FloatingForm = ({
   ========================================================= */
 
   return (
-    <div className="FloatingForm-wrapper">
-
+    <aside
+      className="FloatingForm-wrapper"
+      role="complementary"
+      aria-label="Property enquiry widget"
+    >
 
       {/* ===================================================
-          FLOATING OPEN BUTTON
+          OPEN BUTTON
       =================================================== */}
 
       <button
@@ -1140,14 +1249,14 @@ const FloatingForm = ({
             ? "FloatingForm-trigger-btn--visible"
             : ""
         }`}
-        onClick={
-          openForm
-        }
+        onClick={openForm}
         aria-label="Open property enquiry form"
+        aria-expanded={isOpen}
       >
 
         <MessageSquareText
           size={20}
+          aria-hidden="true"
         />
 
         <span className="FloatingForm-trigger-text">
@@ -1167,33 +1276,27 @@ const FloatingForm = ({
             ? "FloatingForm-card--open"
             : "FloatingForm-card--closed"
         }`}
+        role="dialog"
+        aria-modal="false"
+        aria-label="Enquire Now Form"
       >
 
-
-        {/* =================================================
-            HEADER
-        ================================================= */}
+        {/* HEADER */}
 
         <FloatingFormHeader
-          onClose={
-            closeForm
-          }
+          onClose={closeForm}
         />
 
 
-        {/* =================================================
-            BODY
-        ================================================= */}
+        {/* BODY */}
 
         <div className="FloatingForm-body">
-
 
           {/* =================================================
               MESSAGE
           ================================================= */}
 
           {message && (
-
             <div
               className={`FloatingForm-message ${
                 messageType ===
@@ -1201,6 +1304,7 @@ const FloatingForm = ({
                   ? "FloatingForm-message--success"
                   : "FloatingForm-message--error"
               }`}
+              role="alert"
             >
 
               {messageType ===
@@ -1219,7 +1323,6 @@ const FloatingForm = ({
               </span>
 
             </div>
-
           )}
 
 
@@ -1228,12 +1331,8 @@ const FloatingForm = ({
           ================================================= */}
 
           <LookingFor
-            value={
-              lookingFor
-            }
-            onChange={(
-              value
-            ) => {
+            value={lookingFor}
+            onChange={(value) => {
 
               setLookingFor(
                 value
@@ -1250,6 +1349,8 @@ const FloatingForm = ({
           ================================================= */}
 
           <SelectField
+            id="floating-property-type"
+            name="propertyType"
             icon={
               <Building2
                 size={15}
@@ -1257,9 +1358,7 @@ const FloatingForm = ({
             }
             label="Property Type"
             placeholder="Select property type"
-            value={
-              propertyType
-            }
+            value={propertyType}
             onChange={
               handlePropertyTypeChange
             }
@@ -1270,10 +1369,12 @@ const FloatingForm = ({
 
 
           {/* =================================================
-              PREFERRED LOCATION
+              LOCATION
           ================================================= */}
 
           <SelectField
+            id="floating-location"
+            name="location"
             icon={
               <MapPin
                 size={15}
@@ -1287,9 +1388,7 @@ const FloatingForm = ({
                 ? "Select location"
                 : "No locations available"
             }
-            value={
-              location
-            }
+            value={location}
             onChange={
               handleLocationChange
             }
@@ -1298,7 +1397,8 @@ const FloatingForm = ({
             }
             disabled={
               locationLoading ||
-              locationOptions.length === 0
+              locationOptions.length ===
+                0
             }
           />
 
@@ -1308,6 +1408,8 @@ const FloatingForm = ({
           ================================================= */}
 
           <SelectField
+            id="floating-preferred-area"
+            name="preferredArea"
             icon={
               <MapPin
                 size={15}
@@ -1343,6 +1445,8 @@ const FloatingForm = ({
           ================================================= */}
 
           <SelectField
+            id="floating-budget"
+            name="budgetRange"
             icon={
               <ShieldCheck
                 size={15}
@@ -1350,9 +1454,7 @@ const FloatingForm = ({
             }
             label="Budget Range"
             placeholder="Select budget range"
-            value={
-              budget
-            }
+            value={budget}
             onChange={
               handleBudgetChange
             }
@@ -1367,9 +1469,7 @@ const FloatingForm = ({
           ================================================= */}
 
           <MobileNumber
-            value={
-              mobile
-            }
+            value={mobile}
             onChange={
               handleMobileChange
             }
@@ -1400,10 +1500,9 @@ const FloatingForm = ({
 
       </div>
 
-    </div>
+    </aside>
   );
 };
 
 
 export default FloatingForm;
-

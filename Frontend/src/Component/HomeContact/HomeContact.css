@@ -2,7 +2,7 @@
   --utkal-green: #126229;
   --utkal-green-hover: #0e4c20;
   --utkal-navy: #0c1d2e;
-  --utkal-text-muted: #64748b;
+  --utkal-text-muted: #475569; /* WCAG AA 4.5:1 compliant slate */
   --utkal-bg-light: #f8fafc;
   --utkal-card-border: #e2e8f0;
 }
@@ -180,15 +180,6 @@
   gap: 20px;
 }
 
-.HomeContact-form-row {
-  display: flex;
-  gap: 16px;
-}
-
-.HomeContact-form-row .HomeContact-form-group {
-  flex: 1;
-}
-
 .HomeContact-form-group {
   display: flex;
   flex-direction: column;
@@ -199,6 +190,7 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--utkal-navy);
+  cursor: pointer;
 }
 
 /* Input Fields & Icons */
@@ -230,7 +222,7 @@
 }
 
 .HomeContact-input::placeholder {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .HomeContact-input:focus {
@@ -290,7 +282,7 @@
 }
 
 .HomeContact-textarea::placeholder {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .HomeContact-textarea:focus {
@@ -358,11 +350,6 @@
 
   .HomeContact-form-card {
     padding: 24px;
-  }
-
-  .HomeContact-form-row {
-    flex-direction: column;
-    gap: 20px;
   }
 
   .HomeContact-submit-btn {

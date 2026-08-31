@@ -61,7 +61,7 @@ const RealEstate = () => {
               </div>
               <div className="real-estate-details">
                 <span className="real-estate-label">Phone</span>
-                <a href="tel:+919861566735" className="real-estate-phone" itemProp="telephone">
+                <a href="tel:+919861566735" className="real-estate-phone" itemProp="telephone" aria-label="Call Utkal Property">
                   +91 98615 66735
                 </a>
               </div>
@@ -77,7 +77,7 @@ const RealEstate = () => {
               </div>
               <div className="real-estate-details">
                 <span className="real-estate-label">Email Us</span>
-                <a href="mailto:support@utkalproperty.com" className="real-estate-email" itemProp="email">
+                <a href="mailto:support@utkalproperty.com" className="real-estate-email" itemProp="email" aria-label="Email Utkal Property support">
                   support@utkalproperty.com
                 </a>
               </div>
@@ -94,7 +94,8 @@ const RealEstate = () => {
               alt="Utkal Property - Best Property Consultant and Real Estate Agent in Bhubaneswar" 
               className="real-estate-agent-img"
               itemProp="image"
-              loading="lazy"
+              loading="eager"
+              fetchPriority="high"
               width="500"
               height="600"
             />

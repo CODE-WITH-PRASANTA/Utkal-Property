@@ -1,16 +1,16 @@
 import React, {
-  useState,
   useEffect,
-  useRef,
   useMemo,
+  useRef,
+  useState,
 } from "react";
 
 import {
-  FiSearch,
-  FiChevronDown,
-  FiSliders,
   FiArrowUpRight,
+  FiChevronDown,
   FiMapPin,
+  FiSearch,
+  FiSliders,
 } from "react-icons/fi";
 
 import { useNavigate } from "react-router-dom";
@@ -19,27 +19,21 @@ import API from "../../api/axios";
 
 import "./HomeBreadcrum.css";
 
-import heroImg from "../../assets/slider-1.png";
+import heroImg from "../../assets/slider-1.webp";
 
 
 const HomeBreadcrum = () => {
-
   const navigate = useNavigate();
 
-  /* =========================================================
-     ACTIVE TAB
-  ========================================================= */
-
-  const [activeTab, setActiveTab] =
-    useState("Buy");
-
+  const dropdownRef = useRef(null);
 
   /* =========================================================
-     SEARCH VALUES
+     BASIC SEARCH
   ========================================================= */
 
-  const [keyword, setKeyword] =
-    useState("");
+  const [activeTab, setActiveTab] = useState("Buy");
+
+  const [keyword, setKeyword] = useState("");
 
   const [propertyType, setPropertyType] =
     useState("Property type");
@@ -52,13 +46,26 @@ const HomeBreadcrum = () => {
 
 
   /* =========================================================
-     SELECTED PROPERTY
+     BACKEND DATA
   ========================================================= */
 
-  const [
-    selectedProperty,
-    setSelectedProperty,
-  ] = useState(null);
+  const [properties, setProperties] =
+    useState([]);
+
+  const [locations, setLocations] =
+    useState([]);
+
+  const [propertiesError, setPropertiesError] =
+    useState("");
+
+  const [locationsError, setLocationsError] =
+    useState("");
+
+  const [loadingProperties, setLoadingProperties] =
+    useState(false);
+
+  const [loadingLocations, setLoadingLocations] =
+    useState(false);
 
 
   /* =========================================================
@@ -102,62 +109,22 @@ const HomeBreadcrum = () => {
   ] = useState([]);
 
 
-  /* =========================================================
-     BACKEND DATA
-  ========================================================= */
-
-  const [properties, setProperties] =
-    useState([]);
-
-  const [locations, setLocations] =
-    useState([]);
-
-  const [
-    loadingProperties,
-    setLoadingProperties,
-  ] = useState(false);
-
-  const [
-    loadingLocations,
-    setLoadingLocations,
-  ] = useState(false);
-
-  const [
-    searchLoading,
-    setSearchLoading,
-  ] = useState(false);
+  const [searchLoading, setSearchLoading] =
+    useState(false);
 
 
   /* =========================================================
-     REF
+     OPTIONS
   ========================================================= */
 
-  const dropdownRef =
-    useRef(null);
+  const propertyTypeOptions = [
+    "Apartment",
+    "Villa",
+    "Duplex / Independent House",
+    "Plot",
+    "Commercial Property",
+  ];
 
-
-  /* =========================================================
-     STATS
-  ========================================================= */
-
-  const statsData = {
-
-    Buy: {
-      properties: "3,200+",
-      customers: "1,400+",
-    },
-
-    Rent: {
-      properties: "1,500+",
-      customers: "700+",
-    },
-
-  };
-
-
-  /* =========================================================
-     AMENITIES
-  ========================================================= */
 
   const amenitiesList = [
     "Swimming pool",
@@ -175,17 +142,172 @@ const HomeBreadcrum = () => {
   ];
 
 
+  const statsData = {
+    Buy: {
+      properties: "3,200+",
+      customers: "1,400+",
+    },
+
+    Rent: {
+      properties: "1,500+",
+      customers: "700+",
+    },
+  };
+
+
   /* =========================================================
-     PROPERTY TYPES
+     SAFE ID
   ========================================================= */
 
-const propertyTypeOptions = [
-  "Apartment",
-  "Villa",
-  "Duplex / Independent House",
-  "Plot",
-  "Commercial Property",
-];
+  const getPropertyId = (property) => {
+    return (
+      property?._id ||
+      property?.id ||
+      property?.propertyId ||
+      ""
+    );
+  };
+
+
+  /* =========================================================
+     SAFE PROPERTY NAME
+  ========================================================= */
+
+  const getPropertyName = (property) => {
+    return String(
+      property?.propertyTitle ||
+        property?.propertyName ||
+        property?.title ||
+        property?.name ||
+        ""
+    ).trim();
+  };
+
+
+  /* =========================================================
+     SAFE PROPERTY TYPE
+  ========================================================= */
+
+  const getPropertyType = (property) => {
+    return String(
+      property?.propertyType ||
+        property?.type ||
+        property?.propertyCategory ||
+        ""
+    ).trim();
+  };
+
+
+  /* =========================================================
+     SAFE PROPERTY CITY
+  ========================================================= */
+
+  const getPropertyCity = (property) => {
+    const locationValue =
+      property?.location;
+
+
+    if (
+      locationValue &&
+      typeof locationValue === "object"
+    ) {
+      return String(
+        locationValue?.city ||
+          locationValue?.name ||
+          locationValue?.locationName ||
+          ""
+      ).trim();
+    }
+
+
+    return String(
+      property?.city ||
+        property?.location ||
+        ""
+    ).trim();
+  };
+
+
+  /* =========================================================
+     SAFE PROPERTY AREA
+  ========================================================= */
+
+  const getPropertyArea = (property) => {
+    const locationValue =
+      property?.location;
+
+
+    if (
+      locationValue &&
+      typeof locationValue === "object"
+    ) {
+      return String(
+        locationValue?.area ||
+          locationValue?.areaName ||
+          locationValue?.locality ||
+          ""
+      ).trim();
+    }
+
+
+    return String(
+      property?.area ||
+        property?.areaName ||
+        property?.locality ||
+        property?.preferredArea ||
+        ""
+    ).trim();
+  };
+
+
+  /* =========================================================
+     LOCATION CITY
+  ========================================================= */
+
+  const getLocationCity = (item) => {
+    if (typeof item === "string") {
+      return item.trim();
+    }
+
+
+    if (
+      !item ||
+      typeof item !== "object"
+    ) {
+      return "";
+    }
+
+
+    return String(
+      item?.city ||
+        item?.name ||
+        item?.title ||
+        item?.locationName ||
+        ""
+    ).trim();
+  };
+
+
+  /* =========================================================
+     LOCATION AREA
+  ========================================================= */
+
+  const getLocationArea = (item) => {
+    if (
+      !item ||
+      typeof item !== "object"
+    ) {
+      return "";
+    }
+
+
+    return String(
+      item?.area ||
+        item?.areaName ||
+        item?.locality ||
+        ""
+    ).trim();
+  };
 
 
   /* =========================================================
@@ -193,50 +315,40 @@ const propertyTypeOptions = [
   ========================================================= */
 
   const fetchProperties = async () => {
-
     try {
-
       setLoadingProperties(true);
+
+      setPropertiesError("");
 
       const response =
         await API.get("/properties");
 
-      const propertyData =
-        response.data?.properties ||
-        response.data?.data ||
-        response.data?.results ||
-        response.data;
+      const data =
+        response?.data?.properties ||
+        response?.data?.data ||
+        response?.data?.results ||
+        response?.data;
 
-      if (
-        Array.isArray(propertyData)
-      ) {
-
-        setProperties(
-          propertyData
-        );
-
+      if (Array.isArray(data)) {
+        setProperties(data);
       } else {
-
         setProperties([]);
-
       }
-
     } catch (error) {
-
       console.error(
         "FETCH PROPERTIES ERROR:",
-        error.response?.data ||
-        error
+        error?.response?.data || error
       );
 
       setProperties([]);
 
+      setPropertiesError(
+        error?.response?.data?.message ||
+          "Unable to load properties."
+      );
     } finally {
-
       setLoadingProperties(false);
-
     }
-
   };
 
 
@@ -245,63 +357,50 @@ const propertyTypeOptions = [
   ========================================================= */
 
   const fetchLocations = async () => {
-
     try {
-
       setLoadingLocations(true);
+
+      setLocationsError("");
 
       const response =
         await API.get("/locations");
 
-      const locationData =
-        response.data?.locations ||
-        response.data?.data ||
-        response.data?.results ||
-        response.data;
+      const data =
+        response?.data?.locations ||
+        response?.data?.data ||
+        response?.data?.results ||
+        response?.data;
 
-      if (
-        Array.isArray(locationData)
-      ) {
-
-        setLocations(
-          locationData
-        );
-
+      if (Array.isArray(data)) {
+        setLocations(data);
       } else {
-
         setLocations([]);
-
       }
-
     } catch (error) {
-
       console.error(
         "FETCH LOCATIONS ERROR:",
-        error.response?.data ||
-        error
+        error?.response?.data || error
       );
 
       setLocations([]);
 
+      setLocationsError(
+        error?.response?.data?.message ||
+          "Unable to load locations."
+      );
     } finally {
-
       setLoadingLocations(false);
-
     }
-
   };
 
 
   /* =========================================================
-     LOAD DATA
+     INITIAL API CALL
   ========================================================= */
 
   useEffect(() => {
-
     fetchProperties();
-
     fetchLocations();
-
   }, []);
 
 
@@ -310,260 +409,85 @@ const propertyTypeOptions = [
   ========================================================= */
 
   useEffect(() => {
-
-    const handleClickOutside =
-      (event) => {
-
-        if (
-          dropdownRef.current &&
-          !dropdownRef.current.contains(
-            event.target
-          )
-        ) {
-
-          setShowPropertyDropdown(false);
-
-          setShowLocationDropdown(false);
-
-          setShowAreaDropdown(false);
-
-        }
-
-      };
+    const handleOutsideClick = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(
+          event.target
+        )
+      ) {
+        setShowPropertyDropdown(false);
+        setShowLocationDropdown(false);
+        setShowAreaDropdown(false);
+      }
+    };
 
 
     document.addEventListener(
       "mousedown",
-      handleClickOutside
+      handleOutsideClick
     );
 
 
     return () => {
-
       document.removeEventListener(
         "mousedown",
-        handleClickOutside
+        handleOutsideClick
       );
-
     };
-
   }, []);
 
 
   /* =========================================================
-     PROPERTY NAME
+     LOCATION OPTIONS
   ========================================================= */
 
-  const getPropertyName = (
-    property
-  ) => {
-
-    return String(
-      property?.name ||
-      property?.title ||
-      property?.propertyName ||
-      "Unnamed Property"
-    ).trim();
-
-  };
+  const locationOptions = useMemo(() => {
+    const uniqueLocations =
+      new Map();
 
 
-  /* =========================================================
-     PROPERTY LOCATION
-  ========================================================= */
+    locations.forEach((item) => {
+      const city =
+        getLocationCity(item);
 
-  const getPropertyLocationName = (
-    property
-  ) => {
 
-    const locationValue =
-      property?.location;
+      if (!city) {
+        return;
+      }
 
+
+      const key =
+        city.toLowerCase();
+
+
+      if (!uniqueLocations.has(key)) {
+        uniqueLocations.set(
+          key,
+          city
+        );
+      }
+    });
+
+
+    /*
+      If location API returns no usable
+      records, use property data.
+    */
 
     if (
-      typeof locationValue ===
-      "string"
+      uniqueLocations.size === 0
     ) {
-
-      return locationValue.trim();
-
-    }
-
-
-    if (
-      locationValue &&
-      typeof locationValue ===
-      "object"
-    ) {
-
-      return String(
-        locationValue?.name ||
-        locationValue?.title ||
-        locationValue?.city ||
-        locationValue?.locationName ||
-        locationValue?.area ||
-        locationValue?.address ||
-        ""
-      ).trim();
-
-    }
-
-
-    return String(
-      property?.city ||
-      property?.state ||
-      property?.address ||
-      ""
-    ).trim();
-
-  };
-
-
-  /* =========================================================
-     PROPERTY AREA
-  ========================================================= */
-
-  const getPropertyAreaName = (
-    property
-  ) => {
-
-    const locationValue =
-      property?.location;
-
-
-    if (
-      locationValue &&
-      typeof locationValue ===
-      "object"
-    ) {
-
-      return String(
-        locationValue?.area ||
-        locationValue?.areaName ||
-        ""
-      ).trim();
-
-    }
-
-
-    return String(
-      property?.area ||
-      property?.areaName ||
-      property?.preferredArea ||
-      ""
-    ).trim();
-
-  };
-
-
-  /* =========================================================
-     PROPERTY TYPE
-  ========================================================= */
-
-  const getPropertyTypeName = (
-    property
-  ) => {
-
-    return String(
-      property?.type ||
-      property?.propertyType ||
-      property?.category ||
-      ""
-    ).trim();
-
-  };
-
-
-  /* =========================================================
-     LOCATION CITY
-  ========================================================= */
-
-  const getLocationCity = (
-    locationItem
-  ) => {
-
-    if (
-      typeof locationItem ===
-      "string"
-    ) {
-
-      return locationItem.trim();
-
-    }
-
-
-    if (
-      !locationItem ||
-      typeof locationItem !==
-      "object"
-    ) {
-
-      return "";
-
-    }
-
-
-    return String(
-      locationItem?.city ||
-      locationItem?.name ||
-      locationItem?.title ||
-      locationItem?.locationName ||
-      ""
-    ).trim();
-
-  };
-
-
-  /* =========================================================
-     LOCATION AREA
-  ========================================================= */
-
-  const getLocationArea = (
-    locationItem
-  ) => {
-
-    if (
-      !locationItem ||
-      typeof locationItem !==
-      "object"
-    ) {
-
-      return "";
-
-    }
-
-
-    return String(
-      locationItem?.area ||
-      locationItem?.areaName ||
-      ""
-    ).trim();
-
-  };
-
-
-  /* =========================================================
-     UNIQUE LOCATION OPTIONS
-  ========================================================= */
-
-  const locationOptions =
-    useMemo(() => {
-
-      const map =
-        new Map();
-
-
-      locations.forEach(
-        (item) => {
-
+      properties.forEach(
+        (property) => {
           const city =
-            getLocationCity(item);
+            getPropertyCity(
+              property
+            );
 
 
           if (!city) {
-
             return;
-
           }
 
 
@@ -572,116 +496,147 @@ const propertyTypeOptions = [
 
 
           if (
-            !map.has(key)
+            !uniqueLocations.has(
+              key
+            )
           ) {
-
-            map.set(
+            uniqueLocations.set(
               key,
               city
             );
-
           }
-
         }
       );
+    }
 
 
-      return Array.from(
-        map.values()
-      );
-
-    }, [locations]);
+    return Array.from(
+      uniqueLocations.values()
+    ).sort();
+  }, [
+    locations,
+    properties,
+  ]);
 
 
   /* =========================================================
      AREA OPTIONS
   ========================================================= */
 
-  const areaOptions =
-    useMemo(() => {
+  const areaOptions = useMemo(() => {
+    if (
+      !location ||
+      location === "Location"
+    ) {
+      return [];
+    }
+
+
+    const uniqueAreas =
+      new Map();
+
+
+    /*
+      First use location API.
+    */
+
+    locations.forEach((item) => {
+      const city =
+        getLocationCity(item);
+
+      const itemArea =
+        getLocationArea(item);
+
 
       if (
-        !location ||
-        location === "Location"
+        city &&
+        itemArea &&
+        city.toLowerCase() ===
+          location.toLowerCase()
       ) {
+        const key =
+          itemArea.toLowerCase();
 
-        return [];
 
+        if (
+          !uniqueAreas.has(key)
+        ) {
+          uniqueAreas.set(
+            key,
+            itemArea
+          );
+        }
       }
+    });
 
 
-      const map =
-        new Map();
+    /*
+      Fallback to properties.
+    */
 
-
-      locations.forEach(
-        (item) => {
-
+    if (
+      uniqueAreas.size === 0
+    ) {
+      properties.forEach(
+        (property) => {
           const city =
-            getLocationCity(item);
+            getPropertyCity(
+              property
+            );
 
           const itemArea =
-            getLocationArea(item);
+            getPropertyArea(
+              property
+            );
 
 
           if (
             city &&
             itemArea &&
-            city.toLowerCase() ===
-            location.toLowerCase()
+            city
+              .toLowerCase()
+              .includes(
+                location.toLowerCase()
+              )
           ) {
-
             const key =
               itemArea.toLowerCase();
 
 
             if (
-              !map.has(key)
+              !uniqueAreas.has(
+                key
+              )
             ) {
-
-              map.set(
+              uniqueAreas.set(
                 key,
                 itemArea
               );
-
             }
-
           }
-
         }
       );
+    }
 
 
-      return Array.from(
-        map.values()
-      );
-
-    }, [
-      locations,
-      location,
-    ]);
+    return Array.from(
+      uniqueAreas.values()
+    ).sort();
+  }, [
+    locations,
+    properties,
+    location,
+  ]);
 
 
   /* =========================================================
-     CLEAR PROPERTY
+     RESET SELECTED PROPERTY
   ========================================================= */
 
   const clearSelectedProperty = () => {
-
-    setSelectedProperty(null);
-
     setPropertyType(
       "Property type"
     );
-
-    setLocation(
-      "Location"
-    );
-
-    setArea(
-      "Area"
-    );
-
   };
 
 
@@ -692,13 +647,60 @@ const propertyTypeOptions = [
   const handlePropertyTypeSelect = (
     type
   ) => {
-
     setPropertyType(type);
 
-    setSelectedProperty(null);
+    setKeyword("");
 
     setShowPropertyDropdown(false);
+  };
 
+
+  /* =========================================================
+     SELECT PROPERTY
+  ========================================================= */
+
+  const handlePropertySelect = (
+    property
+  ) => {
+    const id =
+      getPropertyId(property);
+
+
+    if (!id) {
+      alert(
+        "Property ID not found."
+      );
+
+      return;
+    }
+
+
+    setKeyword(
+      getPropertyName(property)
+    );
+
+
+    setPropertyType(
+      getPropertyType(property) ||
+        "Property type"
+    );
+
+
+    setLocation(
+      getPropertyCity(property) ||
+        "Location"
+    );
+
+
+    setArea(
+      getPropertyArea(property) ||
+        "Area"
+    );
+
+
+    setShowPropertyDropdown(false);
+    setShowLocationDropdown(false);
+    setShowAreaDropdown(false);
   };
 
 
@@ -707,31 +709,32 @@ const propertyTypeOptions = [
   ========================================================= */
 
   const handleLocationSelect = (
-    loc
+    item
   ) => {
+    const city =
+      getLocationCity(item);
 
-    const locationName =
-      getLocationCity(loc);
+
+    if (!city) {
+      return;
+    }
 
 
-    setLocation(
-      locationName
-    );
+    setLocation(city);
+
+    /*
+      Important:
+      Area is reset whenever a new
+      location is selected.
+    */
 
     setArea("Area");
-
-    setSelectedProperty(null);
-
-    setPropertyType(
-      "Property type"
-    );
 
     setShowLocationDropdown(false);
 
     setShowAreaDropdown(false);
 
     setShowPropertyDropdown(false);
-
   };
 
 
@@ -742,15 +745,9 @@ const propertyTypeOptions = [
   const handleAreaSelect = (
     selectedArea
   ) => {
-
-    setArea(
-      selectedArea
-    );
-
-    setSelectedProperty(null);
+    setArea(selectedArea);
 
     setShowAreaDropdown(false);
-
   };
 
 
@@ -761,75 +758,56 @@ const propertyTypeOptions = [
   const handleAmenityChange = (
     amenity
   ) => {
-
     setSelectedAmenities(
       (previous) => {
-
         if (
           previous.includes(
             amenity
           )
         ) {
-
           return previous.filter(
             (item) =>
               item !== amenity
           );
-
         }
+
 
         return [
           ...previous,
           amenity,
         ];
-
       }
     );
-
   };
 
 
   /* =========================================================
      FIND EXACT PROPERTY
-     
-     If user types an exact property
-     name/title, open details directly.
   ========================================================= */
 
   const findExactProperty = (
-    searchText
+    value
   ) => {
-
-    const query =
-      String(searchText || "")
+    const searchValue =
+      String(value || "")
         .trim()
         .toLowerCase();
 
 
-    if (!query) {
-
+    if (!searchValue) {
       return null;
-
     }
 
 
     return (
       properties.find(
-        (property) => {
-
-          const name =
-            getPropertyName(
-              property
-            ).toLowerCase();
-
-          return (
-            name === query
-          );
-
-        }
+        (property) =>
+          getPropertyName(
+            property
+          ).toLowerCase() ===
+          searchValue
       ) || null
     );
-
   };
 
 
@@ -837,70 +815,21 @@ const propertyTypeOptions = [
      SEARCH
   ========================================================= */
 
-  const handleSearch = () => {
-
+  const handleSearch = async () => {
     try {
-
       setSearchLoading(true);
 
 
-      /* =====================================================
-         CLOSE DROPDOWNS
-      ===================================================== */
-
       setShowPropertyDropdown(false);
-
       setShowLocationDropdown(false);
-
       setShowAreaDropdown(false);
 
-      setShowAdvancedFilters(false);
 
-
-      /* =====================================================
-         1. SELECTED PROPERTY
-         
-         DIRECT DETAILS PAGE
-      ===================================================== */
-
-      if (
-        selectedProperty
-      ) {
-
-        const propertyId =
-          selectedProperty?._id ||
-          selectedProperty?.id ||
-          selectedProperty?.propertyId;
-
-
-        if (!propertyId) {
-
-          alert(
-            "Property ID not found."
-          );
-
-          return;
-
-        }
-
-
-        navigate(
-          `/property-details/${propertyId}`
-        );
-
-        return;
-
-      }
-
-
-      /* =====================================================
-         2. EXACT PROPERTY NAME FROM KEYWORD
-         
-         Example:
-         "Green Valley Residency"
-         
-         → property details
-      ===================================================== */
+      /*
+        -------------------------------------------------------
+        DIRECT PROPERTY DETAILS
+        -------------------------------------------------------
+      */
 
       const exactProperty =
         findExactProperty(
@@ -908,205 +837,157 @@ const propertyTypeOptions = [
         );
 
 
-      if (
-        exactProperty
-      ) {
-
-        const propertyId =
-          exactProperty?._id ||
-          exactProperty?.id ||
-          exactProperty?.propertyId;
+      if (exactProperty) {
+        const id =
+          getPropertyId(
+            exactProperty
+          );
 
 
-        if (propertyId) {
-
+        if (id) {
           navigate(
-            `/property-details/${propertyId}`
+            `/property-details/${id}`
           );
 
           return;
-
         }
-
       }
 
 
-      /* =====================================================
-         3. NORMAL PROPERTY LISTING SEARCH
-      ===================================================== */
+      /*
+        -------------------------------------------------------
+        NORMAL PROPERTY SEARCH
+        -------------------------------------------------------
+      */
 
       const params =
         new URLSearchParams();
 
 
-      /* -----------------------------------------------------
-         BUY / RENT
-      ----------------------------------------------------- */
-
-      if (
-        activeTab
-      ) {
-
+      if (activeTab) {
         params.set(
-          "tab",
-          activeTab.toLowerCase()
+          "lookingFor",
+          activeTab
         );
-
       }
 
-
-      /* -----------------------------------------------------
-         KEYWORD
-      ----------------------------------------------------- */
 
       if (
         keyword.trim()
       ) {
-
         params.set(
           "keyword",
           keyword.trim()
         );
-
       }
 
-
-      /* -----------------------------------------------------
-         PROPERTY TYPE
-      ----------------------------------------------------- */
 
       if (
         propertyType &&
         propertyType !==
-        "Property type"
+          "Property type"
       ) {
-
         params.set(
           "propertyType",
           propertyType
         );
-
       }
 
 
-      /* -----------------------------------------------------
-         LOCATION
-      ----------------------------------------------------- */
-
       if (
         location &&
-        location !==
-        "Location"
+        location !== "Location"
       ) {
-
         params.set(
           "location",
           location
         );
-
       }
 
 
-      /* -----------------------------------------------------
-         AREA
-      ----------------------------------------------------- */
-
       if (
         area &&
-        area !==
-        "Area"
+        area !== "Area"
       ) {
-
         params.set(
           "area",
           area
         );
-
       }
 
-
-      /* -----------------------------------------------------
-         BEDS
-      ----------------------------------------------------- */
 
       if (
         beds &&
         beds !== "Any"
       ) {
-
         params.set(
           "beds",
           beds
         );
-
       }
 
-
-      /* -----------------------------------------------------
-         BATHS
-      ----------------------------------------------------- */
 
       if (
         baths &&
         baths !== "Any"
       ) {
-
         params.set(
           "baths",
           baths
         );
-
       }
 
-
-      /* -----------------------------------------------------
-         AMENITIES
-      ----------------------------------------------------- */
 
       if (
         selectedAmenities.length
       ) {
-
         params.set(
           "amenities",
-          selectedAmenities.join(",")
+          selectedAmenities.join(
+            ","
+          )
         );
-
       }
 
 
-      /* =====================================================
-         NAVIGATE TO PROPERTY GRID
-      ===================================================== */
-
-      const queryString =
+      const query =
         params.toString();
 
 
       navigate(
-        queryString
-          ? `/properties?${queryString}`
+        query
+          ? `/properties?${query}`
           : "/properties"
       );
-
-
     } catch (error) {
-
       console.error(
-        "PROPERTY SEARCH ERROR:",
+        "SEARCH ERROR:",
         error
       );
 
       alert(
         "Unable to search properties."
       );
-
     } finally {
-
       setSearchLoading(false);
-
     }
+  };
 
+
+  /* =========================================================
+     ENTER KEY
+  ========================================================= */
+
+  const handleKeywordKeyDown = (
+    event
+  ) => {
+    if (
+      event.key === "Enter"
+    ) {
+      event.preventDefault();
+
+      handleSearch();
+    }
   };
 
 
@@ -1115,15 +996,15 @@ const propertyTypeOptions = [
   ========================================================= */
 
   return (
-
-    <div className="HomeBreadcrum">
-
+    <section
+      className="HomeBreadcrum"
+      ref={dropdownRef}
+    >
       <div className="HomeBreadcrum-container">
 
-
-        {/* =================================================
-            LEFT
-        ================================================= */}
+        {/* ===================================================
+            LEFT CONTENT
+        =================================================== */}
 
         <div className="HomeBreadcrum-left">
 
@@ -1133,44 +1014,35 @@ const propertyTypeOptions = [
 
 
           <h1 className="HomeBreadcrum-title">
-
             We will find a{" "}
-
             <span className="highlight-green">
               perfect home
             </span>{" "}
-
             for you
-
           </h1>
 
 
           <p className="HomeBreadcrum-subtitle">
-
-            Find a variety of premium
-            properties that suit your
-            lifestyle effortlessly. Forget
-            all difficulties in finding your
+            Find a variety of premium properties
+            that suit your lifestyle effortlessly.
+            Forget all difficulties in finding your
             dream residence.
-
           </p>
 
 
           {/* =================================================
-              SEARCH CARD
+              SEARCH BOX
           ================================================= */}
 
-          <div
-            className="HomeBreadcrum-searchCardContainer"
-            ref={dropdownRef}
-          >
+          <div className="HomeBreadcrum-searchCardContainer">
 
-
-            {/* ===============================================
-                BUY RENT
-            =============================================== */}
+            {/* =================================================
+                TABS
+            ================================================= */}
 
             <div className="HomeBreadcrum-tabs">
+
+              {/* BUY FIRST */}
 
               <button
                 type="button"
@@ -1180,16 +1052,15 @@ const propertyTypeOptions = [
                     : ""
                 }`}
                 onClick={() => {
-
                   setActiveTab("Buy");
-
                   clearSelectedProperty();
-
                 }}
               >
                 Buy
               </button>
 
+
+              {/* RENT SECOND */}
 
               <button
                 type="button"
@@ -1199,11 +1070,8 @@ const propertyTypeOptions = [
                     : ""
                 }`}
                 onClick={() => {
-
                   setActiveTab("Rent");
-
                   clearSelectedProperty();
-
                 }}
               >
                 Rent
@@ -1218,7 +1086,6 @@ const propertyTypeOptions = [
 
             <div className="HomeBreadcrum-searchCard">
 
-
               {/* =================================================
                   KEYWORD
               ================================================= */}
@@ -1227,38 +1094,21 @@ const propertyTypeOptions = [
 
                 <input
                   type="text"
-                  placeholder="Type keyword..."
                   value={keyword}
                   onChange={(event) => {
-
                     setKeyword(
                       event.target.value
                     );
 
-
-                    if (
-                      selectedProperty
-                    ) {
-
-                      setSelectedProperty(
-                        null
-                      );
-
-                    }
-
+                    setPropertyType(
+                      "Property type"
+                    );
                   }}
-                  onKeyDown={(event) => {
-
-                    if (
-                      event.key ===
-                      "Enter"
-                    ) {
-
-                      handleSearch();
-
-                    }
-
-                  }}
+                  onKeyDown={
+                    handleKeywordKeyDown
+                  }
+                  placeholder="Type keyword..."
+                  aria-label="Property keyword"
                 />
 
               </div>
@@ -1270,12 +1120,13 @@ const propertyTypeOptions = [
 
               <div className="HomeBreadcrum-field HomeBreadcrum-dropdownField">
 
-                <div
+                <button
+                  type="button"
                   className="HomeBreadcrum-dropdownHeader"
                   onClick={() => {
-
                     setShowPropertyDropdown(
-                      !showPropertyDropdown
+                      (previous) =>
+                        !previous
                     );
 
                     setShowLocationDropdown(
@@ -1285,30 +1136,19 @@ const propertyTypeOptions = [
                     setShowAreaDropdown(
                       false
                     );
-
                   }}
                 >
 
-                  <div className="HomeBreadcrum-selectedProperty">
+                  <span>
+                    {propertyType}
+                  </span>
 
-                    <span className="HomeBreadcrum-selectedPropertyName">
+                  <FiChevronDown />
 
-                      {propertyType}
-
-                    </span>
-
-                  </div>
-
-
-                  <FiChevronDown
-                    className="HomeBreadcrum-arrowIcon"
-                  />
-
-                </div>
+                </button>
 
 
                 {showPropertyDropdown && (
-
                   <div className="HomeBreadcrum-dropdownMenu">
 
                     <div className="HomeBreadcrum-dropdownTitle">
@@ -1319,14 +1159,15 @@ const propertyTypeOptions = [
                     <ul>
 
                       {propertyTypeOptions.map(
-                        (
-                          type,
-                          index
-                        ) => (
-
+                        (type) => (
                           <li
-                            key={`${type}-${index}`}
-                            className="HomeBreadcrum-propertyItem"
+                            key={type}
+                            className={
+                              propertyType ===
+                              type
+                                ? "selected"
+                                : ""
+                            }
                             onClick={() =>
                               handlePropertyTypeSelect(
                                 type
@@ -1334,32 +1175,87 @@ const propertyTypeOptions = [
                             }
                           >
 
-                            <div className="HomeBreadcrum-propertyIcon">
-                              <FiMapPin />
-                            </div>
-
-
-                            <div className="HomeBreadcrum-propertyContent">
-
-                              <strong>
-                                {type}
-                              </strong>
-
-                              <span>
-                                Property
-                              </span>
-
-                            </div>
+                            <span>
+                              {type}
+                            </span>
 
                           </li>
-
                         )
+                      )}
+
+
+                      {properties.length >
+                        0 && (
+                        <>
+                          <li className="HomeBreadcrum-dropdownSeparator">
+                            Properties
+                          </li>
+
+
+                          {properties
+                            .slice(
+                              0,
+                              10
+                            )
+                            .map(
+                              (
+                                property,
+                                index
+                              ) => (
+                                <li
+                                  key={
+                                    getPropertyId(
+                                      property
+                                    ) ||
+                                    index
+                                  }
+                                  className="HomeBreadcrum-propertyItem"
+                                  onClick={() =>
+                                    handlePropertySelect(
+                                      property
+                                    )
+                                  }
+                                >
+
+                                  <div className="HomeBreadcrum-propertyIcon">
+                                    <FiMapPin />
+                                  </div>
+
+
+                                  <div className="HomeBreadcrum-propertyContent">
+
+                                    <strong>
+                                      {
+                                        getPropertyName(
+                                          property
+                                        ) ||
+                                          "Property"
+                                      }
+                                    </strong>
+
+                                    <span>
+                                      {
+                                        getPropertyCity(
+                                          property
+                                        ) ||
+                                          getPropertyType(
+                                            property
+                                          ) ||
+                                          "Property"
+                                      }
+                                    </span>
+
+                                  </div>
+
+                                </li>
+                              )
+                            )}
+                        </>
                       )}
 
                     </ul>
 
                   </div>
-
                 )}
 
               </div>
@@ -1371,12 +1267,13 @@ const propertyTypeOptions = [
 
               <div className="HomeBreadcrum-field HomeBreadcrum-dropdownField">
 
-                <div
+                <button
+                  type="button"
                   className="HomeBreadcrum-dropdownHeader"
                   onClick={() => {
-
                     setShowLocationDropdown(
-                      !showLocationDropdown
+                      (previous) =>
+                        !previous
                     );
 
                     setShowPropertyDropdown(
@@ -1386,7 +1283,6 @@ const propertyTypeOptions = [
                     setShowAreaDropdown(
                       false
                     );
-
                   }}
                 >
 
@@ -1394,16 +1290,12 @@ const propertyTypeOptions = [
                     {location}
                   </span>
 
+                  <FiChevronDown />
 
-                  <FiChevronDown
-                    className="HomeBreadcrum-arrowIcon"
-                  />
-
-                </div>
+                </button>
 
 
                 {showLocationDropdown && (
-
                   <div className="HomeBreadcrum-dropdownMenu">
 
                     <div className="HomeBreadcrum-dropdownTitle">
@@ -1414,32 +1306,28 @@ const propertyTypeOptions = [
                     <ul>
 
                       {loadingLocations ? (
-
                         <li className="HomeBreadcrum-loadingItem">
                           Loading locations...
                         </li>
-
-                      ) : locationOptions.length > 0 ? (
-
+                      ) : locationOptions.length >
+                        0 ? (
                         locationOptions.map(
                           (
-                            locationName,
+                            city,
                             index
                           ) => (
-
                             <li
-                              key={`${locationName}-${index}`}
+                              key={`${city}-${index}`}
                               className={`HomeBreadcrum-locationItem ${
                                 location ===
-                                locationName
+                                city
                                   ? "selected"
                                   : ""
                               }`}
                               onClick={() =>
                                 handleLocationSelect(
                                   {
-                                    city:
-                                      locationName,
+                                    city,
                                   }
                                 )
                               }
@@ -1448,26 +1336,22 @@ const propertyTypeOptions = [
                               <FiMapPin />
 
                               <span>
-                                {locationName}
+                                {city}
                               </span>
 
                             </li>
-
                           )
                         )
-
                       ) : (
-
                         <li className="HomeBreadcrum-emptyItem">
-                          No locations found
+                          {locationsError ||
+                            "No locations found"}
                         </li>
-
                       )}
 
                     </ul>
 
                   </div>
-
                 )}
 
               </div>
@@ -1479,29 +1363,31 @@ const propertyTypeOptions = [
 
               <div
                 className={`HomeBreadcrum-field HomeBreadcrum-dropdownField ${
-                  location ===
-                  "Location"
+                  location === "Location"
                     ? "disabled"
                     : ""
                 }`}
               >
 
-                <div
+                <button
+                  type="button"
                   className="HomeBreadcrum-dropdownHeader"
+                  disabled={
+                    location ===
+                    "Location"
+                  }
                   onClick={() => {
-
                     if (
                       location ===
                       "Location"
                     ) {
-
                       return;
-
                     }
 
 
                     setShowAreaDropdown(
-                      !showAreaDropdown
+                      (previous) =>
+                        !previous
                     );
 
                     setShowLocationDropdown(
@@ -1511,7 +1397,6 @@ const propertyTypeOptions = [
                     setShowPropertyDropdown(
                       false
                     );
-
                   }}
                 >
 
@@ -1519,78 +1404,70 @@ const propertyTypeOptions = [
                     {area}
                   </span>
 
+                  <FiChevronDown />
 
-                  <FiChevronDown
-                    className="HomeBreadcrum-arrowIcon"
-                  />
-
-                </div>
+                </button>
 
 
-                {showAreaDropdown && (
+                {showAreaDropdown &&
+                  location !==
+                    "Location" && (
+                    <div className="HomeBreadcrum-dropdownMenu">
 
-                  <div className="HomeBreadcrum-dropdownMenu">
-
-                    <div className="HomeBreadcrum-dropdownTitle">
-                      Select Area
-                    </div>
+                      <div className="HomeBreadcrum-dropdownTitle">
+                        Select Area
+                      </div>
 
 
-                    <ul>
+                      <ul>
 
-                      {areaOptions.length > 0 ? (
+                        {areaOptions.length >
+                        0 ? (
+                          areaOptions.map(
+                            (
+                              itemArea,
+                              index
+                            ) => (
+                              <li
+                                key={`${itemArea}-${index}`}
+                                className={`HomeBreadcrum-locationItem ${
+                                  area ===
+                                  itemArea
+                                    ? "selected"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleAreaSelect(
+                                    itemArea
+                                  )
+                                }
+                              >
 
-                        areaOptions.map(
-                          (
-                            areaName,
-                            index
-                          ) => (
+                                <FiMapPin />
 
-                            <li
-                              key={`${areaName}-${index}`}
-                              className={`HomeBreadcrum-locationItem ${
-                                area ===
-                                areaName
-                                  ? "selected"
-                                  : ""
-                              }`}
-                              onClick={() =>
-                                handleAreaSelect(
-                                  areaName
-                                )
-                              }
-                            >
+                                <span>
+                                  {itemArea}
+                                </span>
 
-                              <FiMapPin />
-
-                              <span>
-                                {areaName}
-                              </span>
-
-                            </li>
-
+                              </li>
+                            )
                           )
-                        )
+                        ) : (
+                          <li className="HomeBreadcrum-emptyItem">
+                            No areas found
+                          </li>
+                        )}
 
-                      ) : (
+                      </ul>
 
-                        <li className="HomeBreadcrum-emptyItem">
-                          No areas found
-                        </li>
-
-                      )}
-
-                    </ul>
-
-                  </div>
-
-                )}
+                    </div>
+                  )}
 
               </div>
 
 
               {/* =================================================
-                  FILTER
+                  FILTER BUTTON
               ================================================= */}
 
               <button
@@ -1602,44 +1479,38 @@ const propertyTypeOptions = [
                 }`}
                 onClick={() =>
                   setShowAdvancedFilters(
-                    !showAdvancedFilters
+                    (previous) =>
+                      !previous
                   )
                 }
-                title="Toggle Filters"
+                aria-label="Advanced filters"
               >
-
                 <FiSliders />
-
               </button>
 
 
               {/* =================================================
-                  SEARCH
+                  SEARCH BUTTON
               ================================================= */}
 
               <button
                 type="button"
                 className="HomeBreadcrum-searchBtn"
-                onClick={
-                  handleSearch
-                }
                 disabled={
                   searchLoading
+                }
+                onClick={
+                  handleSearch
                 }
               >
 
                 <span>
-
                   {searchLoading
                     ? "Searching..."
                     : "Search Now"}
-
                 </span>
 
-
-                <FiSearch
-                  className="HomeBreadcrum-searchIcon"
-                />
+                <FiSearch />
 
               </button>
 
@@ -1651,109 +1522,72 @@ const propertyTypeOptions = [
             ================================================= */}
 
             {showAdvancedFilters && (
-
               <div className="HomeBreadcrum-filterPanel">
-
 
                 <div className="HomeBreadcrum-filterTop">
 
+                  <div className="HomeBreadcrum-filterSelect">
 
-                  <div className="HomeBreadcrum-filterSelectGroup">
+                    <select
+                      value={beds}
+                      onChange={(event) =>
+                        setBeds(
+                          event.target.value
+                        )
+                      }
+                    >
+                      <option value="Any">
+                        Beds: Any
+                      </option>
 
+                      <option value="1">
+                        Beds: 1+
+                      </option>
 
-                    {/* BATHS */}
+                      <option value="2">
+                        Beds: 2+
+                      </option>
 
-                    <div className="HomeBreadcrum-filterSelect">
+                      <option value="3">
+                        Beds: 3+
+                      </option>
+                    </select>
 
-                      <select
-                        value={baths}
-                        onChange={(event) =>
-                          setBaths(
-                            event.target.value
-                          )
-                        }
-                      >
-
-                        <option value="Any">
-                          Baths: Any
-                        </option>
-
-                        <option value="1">
-                          Baths: 1+
-                        </option>
-
-                        <option value="2">
-                          Baths: 2+
-                        </option>
-
-                        <option value="3">
-                          Baths: 3+
-                        </option>
-
-                      </select>
-
-
-                      <FiChevronDown
-                        className="HomeBreadcrum-selectArrow"
-                      />
-
-                    </div>
-
-
-                    {/* BEDS */}
-
-                    <div className="HomeBreadcrum-filterSelect">
-
-                      <select
-                        value={beds}
-                        onChange={(event) =>
-                          setBeds(
-                            event.target.value
-                          )
-                        }
-                      >
-
-                        <option value="Any">
-                          Beds: Any
-                        </option>
-
-                        <option value="1">
-                          Beds: 1+
-                        </option>
-
-                        <option value="2">
-                          Beds: 2+
-                        </option>
-
-                        <option value="3">
-                          Beds: 3+
-                        </option>
-
-                      </select>
-
-
-                      <FiChevronDown
-                        className="HomeBreadcrum-selectArrow"
-                      />
-
-                    </div>
+                    <FiChevronDown />
 
                   </div>
 
 
-                  <div className="HomeBreadcrum-filterHeaderLabel">
-                    <span>
-                      Form —
-                    </span>
+                  <div className="HomeBreadcrum-filterSelect">
+
+                    <select
+                      value={baths}
+                      onChange={(event) =>
+                        setBaths(
+                          event.target.value
+                        )
+                      }
+                    >
+                      <option value="Any">
+                        Baths: Any
+                      </option>
+
+                      <option value="1">
+                        Baths: 1+
+                      </option>
+
+                      <option value="2">
+                        Baths: 2+
+                      </option>
+
+                      <option value="3">
+                        Baths: 3+
+                      </option>
+                    </select>
+
+                    <FiChevronDown />
+
                   </div>
-
-
-                  <div className="HomeBreadcrum-filterHeaderLabel">
-                    <span>
-                      Size —
-                    </span>
-                  </div>
-
 
                 </div>
 
@@ -1764,23 +1598,17 @@ const propertyTypeOptions = [
                 <div className="HomeBreadcrum-amenitiesGrid">
 
                   {amenitiesList.map(
-                    (
-                      amenity,
-                      index
-                    ) => (
-
+                    (amenity) => (
                       <label
-                        key={index}
+                        key={amenity}
                         className="HomeBreadcrum-checkboxLabel"
                       >
 
                         <input
                           type="checkbox"
-                          checked={
-                            selectedAmenities.includes(
-                              amenity
-                            )
-                          }
+                          checked={selectedAmenities.includes(
+                            amenity
+                          )}
                           onChange={() =>
                             handleAmenityChange(
                               amenity
@@ -1788,21 +1616,19 @@ const propertyTypeOptions = [
                           }
                         />
 
-                        <span className="HomeBreadcrum-customCheckbox"></span>
+                        <span className="HomeBreadcrum-customCheckbox" />
 
                         <span className="HomeBreadcrum-amenityText">
                           {amenity}
                         </span>
 
                       </label>
-
                     )
                   )}
 
                 </div>
 
               </div>
-
             )}
 
           </div>
@@ -1813,7 +1639,6 @@ const propertyTypeOptions = [
           ================================================= */}
 
           <div className="HomeBreadcrum-stats">
-
 
             <div className="HomeBreadcrum-statItem">
 
@@ -1848,18 +1673,16 @@ const propertyTypeOptions = [
 
             </div>
 
-
           </div>
 
         </div>
 
 
-        {/* =================================================
-            RIGHT HERO
-        ================================================= */}
+        {/* ===================================================
+            RIGHT IMAGE
+        =================================================== */}
 
         <div className="HomeBreadcrum-right">
-
 
           <div className="HomeBreadcrum-badgeWrapper">
 
@@ -1868,23 +1691,27 @@ const propertyTypeOptions = [
               <svg
                 viewBox="0 0 100 100"
                 className="HomeBreadcrum-rotatingSvg"
+                aria-hidden="true"
               >
 
                 <path
-                  id="circlePath"
-                  d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
+                  id="HomeBreadcrum-circlePath"
+                  d="
+                    M 50,50
+                    m -37,0
+                    a 37,37 0 1,1 74,0
+                    a 37,37 0 1,1 -74,0
+                  "
                   fill="transparent"
                 />
 
                 <text className="HomeBreadcrum-svgText">
 
                   <textPath
-                    href="#circlePath"
+                    href="#HomeBreadcrum-circlePath"
                     startOffset="0%"
                   >
-
                     find your dream property here •
-
                   </textPath>
 
                 </text>
@@ -1894,10 +1721,11 @@ const propertyTypeOptions = [
             </div>
 
 
-            <div className="HomeBreadcrum-badgeArrow">
-
+            <div
+              className="HomeBreadcrum-badgeArrow"
+              aria-hidden="true"
+            >
               <FiArrowUpRight />
-
             </div>
 
           </div>
@@ -1907,21 +1735,21 @@ const propertyTypeOptions = [
 
             <img
               src={heroImg}
-              alt="Real Estate Architecture"
+              alt="Premium real estate property"
               className="HomeBreadcrum-heroImage"
+              width="500"
+              height="570"
+              fetchPriority="high"
+              decoding="async"
             />
 
           </div>
 
-
         </div>
 
       </div>
-
-    </div>
-
+    </section>
   );
-
 };
 
 
