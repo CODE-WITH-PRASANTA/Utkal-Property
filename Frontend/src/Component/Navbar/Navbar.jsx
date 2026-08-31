@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Navbar.css';
 
 // 1. IMPORT YOUR LOGO HERE (Update the file path & extension as needed)
-import logo from '../../assets/Utkal Property Outro (2).png'; 
+import logo from '../../assets/Utkal Property Outro (2).webp'; 
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

@@ -18,7 +18,7 @@ import API from "../../api/axios";
 
 import "./HomeBreadcrum.css";
 
-import heroImg from "../../assets/slider-1.png";
+import heroImg from "../../assets/slider-1.webp";
 
 const HomeBreadcrum = () => {
   // =====================================================
