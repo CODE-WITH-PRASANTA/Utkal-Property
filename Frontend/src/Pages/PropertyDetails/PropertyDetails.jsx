@@ -95,25 +95,9 @@ const PropertyDetails = () => {
           }
 
 
-<<<<<<< HEAD
-        // =================================================
-        // DEBUG
-        // =================================================
-
-
-
-        // =================================================
-        // API REQUEST
-        // =================================================
-
-        const response =
-          await API.get(
-            `/properties/${id}`
-=======
           console.log(
             "FETCH PROPERTY DETAILS:",
             id
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
           );
 
 
@@ -121,13 +105,10 @@ const PropertyDetails = () => {
              API
           =============================================== */
 
-<<<<<<< HEAD
-=======
           const response =
             await API.get(
               `/properties/${id}`
             );
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
 
           console.log(
@@ -136,8 +117,6 @@ const PropertyDetails = () => {
           );
 
 
-<<<<<<< HEAD
-=======
           /* ===============================================
              SUPPORT DIFFERENT RESPONSE FORMATS
           =============================================== */
@@ -147,7 +126,6 @@ const PropertyDetails = () => {
             response.data?.data ||
             response.data;
 
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
           /* ===============================================
              VALIDATE
@@ -221,78 +199,6 @@ const PropertyDetails = () => {
 
       };
 
-<<<<<<< HEAD
-        // =================================================
-        // MAKE SURE PROPERTY ID EXISTS
-        // =================================================
-
-        const propertyId =
-          propertyData?._id ||
-          propertyData?.id ||
-          id;
-
-
-        // =================================================
-        // SAVE PROPERTY
-        // =================================================
-
-        setProperty({
-          ...propertyData,
-
-          // Preserve MongoDB property ID
-          _id: propertyId,
-
-          // Also keep id for compatibility
-          id: propertyId,
-        });
-
-
-        
-
-      } catch (error) {
-
-        console.error(
-          "================================"
-        );
-
-        console.error(
-          "FETCH PROPERTY DETAILS ERROR"
-        );
-
-        console.error(
-          error.response?.data ||
-            error
-        );
-
-        console.error(
-          "================================"
-        );
-
-
-        setProperty(null);
-
-
-        setError(
-          error.response?.data
-            ?.message ||
-            error.message ||
-            "Failed to load property details."
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
-
-
-    // =====================================================
-    // CALL API
-    // =====================================================
-=======
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
     fetchPropertyById();
 
