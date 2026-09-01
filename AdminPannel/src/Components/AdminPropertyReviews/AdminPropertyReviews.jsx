@@ -84,10 +84,7 @@ const AdminPropertyReviews = () => {
           "/property-reviews/admin/all"
         );
 
-      console.log(
-        "ADMIN REVIEWS:",
-        response.data
-      );
+    
 
       const responseReviews =
         response.data?.reviews ||
@@ -258,10 +255,7 @@ const AdminPropertyReviews = () => {
           }
         );
 
-      console.log(
-        "STATUS UPDATE:",
-        response.data
-      );
+     
 
       setReviews((previous) =>
         previous.map((review) =>
@@ -368,10 +362,7 @@ const AdminPropertyReviews = () => {
           `/property-reviews/admin/${review._id}`
         );
 
-      console.log(
-        "DELETE REVIEW:",
-        response.data
-      );
+      
 
       setReviews((previous) =>
         previous.filter(
@@ -437,10 +428,7 @@ const AdminPropertyReviews = () => {
           }
         );
 
-      console.log(
-        "REPLY RESPONSE:",
-        response.data
-      );
+      
 
       const updatedReview =
         response.data?.review;

@@ -88,27 +88,6 @@ const PropertyDetails = () => {
         // DEBUG
         // =================================================
 
-        console.log(
-          "================================"
-        );
-
-        console.log(
-          "FETCH PROPERTY DETAILS"
-        );
-
-        console.log(
-          "PROPERTY ID:",
-          id
-        );
-
-        console.log(
-          "API URL:",
-          `/properties/${id}`
-        );
-
-        console.log(
-          "================================"
-        );
 
 
         // =================================================
@@ -125,10 +104,6 @@ const PropertyDetails = () => {
         // RESPONSE
         // =================================================
 
-        console.log(
-          "PROPERTY DETAILS RESPONSE:",
-          response.data
-        );
 
 
         // =================================================
@@ -140,11 +115,6 @@ const PropertyDetails = () => {
           response.data?.data ||
           response.data;
 
-
-        console.log(
-          "PROPERTY DATA:",
-          propertyData
-        );
 
 
         // =================================================
@@ -188,22 +158,7 @@ const PropertyDetails = () => {
         });
 
 
-        console.log(
-          "================================"
-        );
-
-        console.log(
-          "PROPERTY SAVED"
-        );
-
-        console.log(
-          "PROPERTY ID:",
-          propertyId
-        );
-
-        console.log(
-          "================================"
-        );
+        
 
       } catch (error) {
 

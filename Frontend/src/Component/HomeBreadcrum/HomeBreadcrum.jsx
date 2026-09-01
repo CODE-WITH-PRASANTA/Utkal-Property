@@ -167,14 +167,7 @@ const HomeBreadcrum = () => {
       const response =
         await API.get("/properties");
 
-      console.log(
-        "===================================="
-      );
-
-      console.log(
-        "PROPERTIES RESPONSE:",
-        response.data
-      );
+     
 
       const propertyData =
         response.data?.properties ||
@@ -185,10 +178,7 @@ const HomeBreadcrum = () => {
       if (Array.isArray(propertyData)) {
         setProperties(propertyData);
 
-        console.log(
-          "PROPERTIES LOADED:",
-          propertyData
-        );
+        
       } else {
         setProperties([]);
       }
@@ -216,10 +206,7 @@ const HomeBreadcrum = () => {
       const response =
         await API.get("/locations");
 
-      console.log(
-        "LOCATIONS RESPONSE:",
-        response.data
-      );
+     
 
       const locationData =
         response.data?.locations ||
@@ -449,37 +436,10 @@ const HomeBreadcrum = () => {
         property
       );
 
-    console.log(
-      "===================================="
-    );
+    
 
-    console.log(
-      "PROPERTY SELECTED"
-    );
+   
 
-    console.log(
-      "PROPERTY ID:",
-      propertyId
-    );
-
-    console.log(
-      "PROPERTY NAME:",
-      propertyName
-    );
-
-    console.log(
-      "PROPERTY LOCATION:",
-      propertyLocation
-    );
-
-    console.log(
-      "PROPERTY:",
-      property
-    );
-
-    console.log(
-      "===================================="
-    );
 
     setSelectedProperty(
       property
@@ -566,41 +526,9 @@ const HomeBreadcrum = () => {
             selectedProperty
           );
 
-        console.log(
-          "===================================="
-        );
+    
 
-        console.log(
-          "DIRECT PROPERTY SEARCH"
-        );
-
-        console.log(
-          "PROPERTY:",
-          selectedProperty
-        );
-
-        console.log(
-          "PROPERTY NAME:",
-          getPropertyName(
-            selectedProperty
-          )
-        );
-
-        console.log(
-          "PROPERTY LOCATION:",
-          getPropertyLocationName(
-            selectedProperty
-          )
-        );
-
-        console.log(
-          "PROPERTY ID:",
-          propertyId
-        );
-
-        console.log(
-          "===================================="
-        );
+       
 
         if (!propertyId) {
           alert(
@@ -653,52 +581,7 @@ const HomeBreadcrum = () => {
               .toLowerCase()
           : "";
 
-      console.log(
-        "===================================="
-      );
-
-      console.log(
-        "PROPERTY SEARCH"
-      );
-
-      console.log(
-        "Active Tab:",
-        activeTab
-      );
-
-      console.log(
-        "Keyword:",
-        searchKeyword
-      );
-
-      console.log(
-        "Property Name:",
-        selectedPropertyName
-      );
-
-      console.log(
-        "Location:",
-        selectedLocation
-      );
-
-      console.log(
-        "Beds:",
-        beds
-      );
-
-      console.log(
-        "Baths:",
-        baths
-      );
-
-      console.log(
-        "Total Properties:",
-        properties.length
-      );
-
-      console.log(
-        "===================================="
-      );
+    
 
       // =================================================
       // START WITH ALL PROPERTIES
@@ -1024,28 +907,7 @@ const HomeBreadcrum = () => {
           );
       }
 
-      // =================================================
-      // FINAL RESULT
-      // =================================================
-
-      console.log(
-        "===================================="
-      );
-
-      console.log(
-        "FINAL FILTERED PROPERTIES:",
-        filteredProperties
-      );
-
-      console.log(
-        "FINAL COUNT:",
-        filteredProperties.length
-      );
-
-      console.log(
-        "===================================="
-      );
-
+     
       // =================================================
       // NO PROPERTY
       // =================================================

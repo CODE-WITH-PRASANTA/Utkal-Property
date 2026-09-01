@@ -405,33 +405,21 @@ const FloatingForm = ({
     try {
       setLocationLoading(true);
 
-      console.log(
-        "===================================="
-      );
-
-      console.log(
-        "FETCHING LOCATIONS"
-      );
+     
 
       const response =
         await API.get(
           "/locations"
         );
 
-      console.log(
-        "LOCATION API RESPONSE:",
-        response.data
-      );
+     
 
       const locationList =
         normalizeLocations(
           response.data
         );
 
-      console.log(
-        "NORMALIZED LOCATIONS:",
-        locationList
-      );
+     
 
       setLocations(
         locationList
@@ -714,32 +702,8 @@ const FloatingForm = ({
             : ""),
       };
 
-      console.log(
-        "===================================="
-      );
+    
 
-      console.log(
-        "SUBMITTING PROPERTY LEAD"
-      );
-
-      console.log(
-        "LEAD DATA:",
-        leadData
-      );
-
-      console.log(
-        "PROPERTY ID:",
-        propertyId
-      );
-
-      console.log(
-        "PROPERTY NAME:",
-        propertyName
-      );
-
-      console.log(
-        "===================================="
-      );
 
       /* =================================================
          POST API
@@ -751,10 +715,7 @@ const FloatingForm = ({
           leadData
         );
 
-      console.log(
-        "LEAD CREATED:",
-        response.data
-      );
+    
 
       /* =================================================
          SUCCESS

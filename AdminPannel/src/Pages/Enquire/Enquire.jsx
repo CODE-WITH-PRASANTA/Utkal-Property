@@ -154,10 +154,7 @@ const Enquire = () => {
       const response =
         await API.get("/property-contacts");
 
-      console.log(
-        "PROPERTY CONTACTS RESPONSE:",
-        response.data
-      );
+     
 
       const backendData =
         response.data?.data || [];
@@ -416,10 +413,7 @@ const Enquire = () => {
     try {
       setSaving(true);
 
-      console.log(
-        "UPDATE CONTACT PAYLOAD:",
-        payload
-      );
+     
 
       const response =
         await API.put(
@@ -427,10 +421,7 @@ const Enquire = () => {
           payload
         );
 
-      console.log(
-        "UPDATE CONTACT RESPONSE:",
-        response.data
-      );
+     
 
       alert(
         response.data?.message ||
