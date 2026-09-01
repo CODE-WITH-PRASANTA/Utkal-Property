@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import contactSellerImg from '../../assets/mark-contact3.png';
+import footerImage from '../../assets/footerImage.avif'; // Update the path if stored in a different folder
 import './RealNear.css';
 
 const RealNear = () => {
@@ -185,7 +186,7 @@ const RealNear = () => {
         <div className="utkal-rn-comment-item">
           <div className="utkal-rn-comment-avatar-col">
             <img 
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" 
+              src={footerImage} 
               alt="Leslie Alexander" 
               className="utkal-rn-avatar"
             />
@@ -402,7 +403,7 @@ const RealNear = () => {
         </div>
       </div>
 
-      {/* Promotional Banner Section (Added Below Related Posts using imported image) */}
+      {/* Promotional Banner Section */}
       <div className="utkal-rn-promo-banner">
         <div className="utkal-rn-promo-content">
           <h2 className="utkal-rn-promo-title">

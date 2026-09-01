@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* ==========================================================================
-   Design Tokens & Variables
-   ========================================================================== */
 :root {
   --blog-green-primary: #10532e;
   --blog-green-hover: #0c3f22;

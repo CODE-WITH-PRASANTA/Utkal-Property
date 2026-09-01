@@ -1,10 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 :root {
   --utkal-green: #126229;
   --utkal-green-hover: #0e4c20;
   --utkal-navy: #0c1d2e;
-  --utkal-text-muted: #64748b;
+  --utkal-text-muted: #475569; /* High-contrast accessible slate */
   --utkal-bg-light: #f8fafc;
   --utkal-card-border: #e2e8f0;
 }
@@ -25,6 +23,7 @@
   width: 100%;
   height: 50vh;
   z-index: 1;
+  background-color: #e2ede6;
 }
 
 .contact-map-background iframe {
@@ -32,6 +31,57 @@
   height: 100%;
   border: none;
   filter: contrast(1.05);
+}
+
+/* Deferred Map Facade (Eliminates 3rd-Party Cookie Injections) */
+.contact-map-facade {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #f0fdf4 0%, #dcfce7 100%);
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.contact-map-facade-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 460px;
+}
+
+.contact-map-pin-icon {
+  font-size: 32px;
+}
+
+.contact-map-facade-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #064e3b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.contact-load-map-btn {
+  background-color: var(--utkal-green);
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(18, 98, 41, 0.25);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.contact-load-map-btn:hover {
+  background-color: var(--utkal-green-hover);
+  transform: translateY(-1px);
 }
 
 /* Lower Background Section - 50% Height */
@@ -139,7 +189,7 @@
 }
 
 .contact-form-input::placeholder {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .contact-form-input:focus {
@@ -163,7 +213,7 @@
 }
 
 .contact-form-textarea::placeholder {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .contact-form-textarea:focus {

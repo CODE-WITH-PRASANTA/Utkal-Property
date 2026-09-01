@@ -1,3 +1,4 @@
+
 const express = require("express");
 
 const {
@@ -12,7 +13,7 @@ const router =
   express.Router();
 
 /* =====================================================
-   CREATE LEAD
+   CREATE ENQUIRY
 ===================================================== */
 
 router.post(
@@ -21,7 +22,7 @@ router.post(
 );
 
 /* =====================================================
-   GET ALL LEADS
+   GET ALL ENQUIRIES
 ===================================================== */
 
 router.get(
@@ -30,7 +31,7 @@ router.get(
 );
 
 /* =====================================================
-   GET LEAD BY ID
+   GET SINGLE ENQUIRY
 ===================================================== */
 
 router.get(
@@ -39,7 +40,7 @@ router.get(
 );
 
 /* =====================================================
-   UPDATE LEAD
+   UPDATE ENQUIRY
 ===================================================== */
 
 router.put(
@@ -48,7 +49,7 @@ router.put(
 );
 
 /* =====================================================
-   DELETE LEAD
+   DELETE ENQUIRY
 ===================================================== */
 
 router.delete(
@@ -56,5 +57,5 @@ router.delete(
   deleteLead
 );
 
-module.exports =
-  router;
+module.exports = router;
+

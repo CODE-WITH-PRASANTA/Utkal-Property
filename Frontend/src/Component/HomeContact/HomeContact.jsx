@@ -7,7 +7,6 @@ import { HiOutlineMapPin, HiOutlinePhone } from 'react-icons/hi2';
 import { BsChatDots } from 'react-icons/bs';
 
 const HomeContact = () => {
-  // Form State Management (Optimized without Email)
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -30,13 +29,13 @@ const HomeContact = () => {
   };
 
   return (
-    <section className="HomeContact">
+    <section className="HomeContact" aria-labelledby="home-contact-title">
       <div className="HomeContact-container">
         
         {/* Left Info Column */}
         <div className="HomeContact-info-section">
           <span className="HomeContact-tag">Contact Utkal Property</span>
-          <h1 className="HomeContact-title">
+          <h1 id="home-contact-title" className="HomeContact-title">
             Best Real Estate Agency in Bhubaneswar for Flats, Apartments & Plots
           </h1>
           
@@ -49,10 +48,10 @@ const HomeContact = () => {
             
             {/* Locate At Us / Address */}
             <div className="HomeContact-detail-item">
-              <div className="HomeContact-detail-icon-wrapper">
+              <div className="HomeContact-detail-icon-wrapper" aria-hidden="true">
                 <HiOutlineMapPin className="HomeContact-detail-icon" />
               </div>
-              <div className="HomeContact-detail-divider"></div>
+              <div className="HomeContact-detail-divider" aria-hidden="true"></div>
               <div className="HomeContact-detail-text">
                 <span className="HomeContact-detail-label">Locate At Us</span>
                 <p className="HomeContact-detail-value">
@@ -63,14 +62,18 @@ const HomeContact = () => {
 
             {/* Phone */}
             <div className="HomeContact-detail-item">
-              <div className="HomeContact-detail-icon-wrapper">
+              <div className="HomeContact-detail-icon-wrapper" aria-hidden="true">
                 <HiOutlinePhone className="HomeContact-detail-icon" />
               </div>
-              <div className="HomeContact-detail-divider"></div>
+              <div className="HomeContact-detail-divider" aria-hidden="true"></div>
               <div className="HomeContact-detail-text">
                 <span className="HomeContact-detail-label">Call / WhatsApp</span>
                 <p className="HomeContact-detail-value HomeContact-phone-highlight">
-                  <a href="tel:+919861566735" style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <a 
+                    href="tel:+919861566735" 
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                    aria-label="Call Utkal Property on 9861566735"
+                  >
                     +91 9861566735
                   </a>
                 </p>
@@ -89,22 +92,26 @@ const HomeContact = () => {
                 Get in touch with our Bhubaneswar property consultants today.
               </p>
             </div>
-            <div className="HomeContact-badge-icon">
+            <div className="HomeContact-badge-icon" aria-hidden="true">
               <BsChatDots />
             </div>
           </div>
 
-          <form className="HomeContact-form" onSubmit={handleSubmit}>
+          <form className="HomeContact-form" onSubmit={handleSubmit} aria-label="Home Consultation Form">
             
             {/* Full Name */}
             <div className="HomeContact-form-group">
-              <label className="HomeContact-label">Your Name</label>
+              <label htmlFor="home-contact-name" className="HomeContact-label">
+                Your Name *
+              </label>
               <div className="HomeContact-input-wrapper">
-                <FiUser className="HomeContact-field-icon" />
+                <FiUser className="HomeContact-field-icon" aria-hidden="true" />
                 <input
                   type="text"
+                  id="home-contact-name"
                   name="name"
                   placeholder="Enter full name"
+                  autoComplete="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   className="HomeContact-input"
@@ -115,13 +122,17 @@ const HomeContact = () => {
 
             {/* Phone Number */}
             <div className="HomeContact-form-group">
-              <label className="HomeContact-label">Phone Number</label>
+              <label htmlFor="home-contact-phone" className="HomeContact-label">
+                Phone Number *
+              </label>
               <div className="HomeContact-input-wrapper">
-                <FiPhone className="HomeContact-field-icon" />
+                <FiPhone className="HomeContact-field-icon" aria-hidden="true" />
                 <input
                   type="tel"
+                  id="home-contact-phone"
                   name="phone"
                   placeholder="+91 98615 66735"
+                  autoComplete="tel"
                   value={formData.phone}
                   onChange={handleInputChange}
                   className="HomeContact-input"
@@ -132,10 +143,14 @@ const HomeContact = () => {
 
             {/* Property Type Dropdown */}
             <div className="HomeContact-form-group">
-              <label className="HomeContact-label">Property Requirement</label>
+              <label htmlFor="home-contact-property-type" className="HomeContact-label">
+                Property Requirement *
+              </label>
               <div className="HomeContact-select-wrapper">
                 <select
+                  id="home-contact-property-type"
                   name="propertyType"
+                  aria-label="Select property requirement"
                   value={formData.propertyType}
                   onChange={handleInputChange}
                   className="HomeContact-select"
@@ -149,14 +164,17 @@ const HomeContact = () => {
                   <option value="commercial">Commercial Shop / Office Space</option>
                   <option value="plot">Residential / Commercial Plot</option>
                 </select>
-                <FiChevronDown className="HomeContact-select-icon" />
+                <FiChevronDown className="HomeContact-select-icon" aria-hidden="true" />
               </div>
             </div>
 
             {/* Message Area */}
             <div className="HomeContact-form-group">
-              <label className="HomeContact-label">Requirement Details</label>
+              <label htmlFor="home-contact-message" className="HomeContact-label">
+                Requirement Details
+              </label>
               <textarea
+                id="home-contact-message"
                 name="message"
                 placeholder="Tell us your preferred location, budget, or specific requirements..."
                 value={formData.message}
@@ -167,8 +185,12 @@ const HomeContact = () => {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="HomeContact-submit-btn">
-              <FiSend className="HomeContact-btn-icon" />
+            <button 
+              type="submit" 
+              className="HomeContact-submit-btn" 
+              aria-label="Submit request for free consultation"
+            >
+              <FiSend className="HomeContact-btn-icon" aria-hidden="true" />
               Get Free Consultation
             </button>
 

@@ -1,0 +1,26 @@
+/* Core Performance & Fast Font Rendering */
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+/* Fast font-rendering on critical headings */
+h1, h2, h3, .highlight-green, .real-estate-title {
+  font-display: swap;
+}
+
+/* Prevent image layout collapse across the site */
+img {
+  max-width: 100%;
+  height: auto;
+}
