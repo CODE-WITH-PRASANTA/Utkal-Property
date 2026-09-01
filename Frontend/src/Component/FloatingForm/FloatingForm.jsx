@@ -579,15 +579,12 @@ const FloatingForm = ({
 
       setLocationLoading(true);
 
-<<<<<<< HEAD
      
-=======
 
       console.log(
         "Fetching locations from:",
         `${API.defaults.baseURL}/locations`
       );
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
 
       const response =
@@ -595,15 +592,12 @@ const FloatingForm = ({
           "/locations"
         );
 
-<<<<<<< HEAD
      
-=======
 
       console.log(
         "Location API Response:",
         response.data
       );
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
 
       const normalized =
@@ -611,15 +605,12 @@ const FloatingForm = ({
           response.data
         );
 
-<<<<<<< HEAD
      
-=======
 
       console.log(
         "Normalized Locations:",
         normalized
       );
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
 
       setLocationData(
@@ -1113,10 +1104,8 @@ const FloatingForm = ({
           ),
       };
 
-<<<<<<< HEAD
     
 
-=======
 
       console.log(
         "===================================="
@@ -1139,7 +1128,6 @@ const FloatingForm = ({
       console.log(
         "===================================="
       );
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
 
       /* ===================================================
@@ -1152,15 +1140,12 @@ const FloatingForm = ({
           leadData
         );
 
-<<<<<<< HEAD
     
-=======
 
       console.log(
         "LEAD CREATED:",
         response.data
       );
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
 
       /* ===================================================
