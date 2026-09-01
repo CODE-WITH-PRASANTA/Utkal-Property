@@ -14,10 +14,7 @@ body {
   color: #0f172a;
 }
 
-/* Fast font-rendering on critical headings */
-h1, h2, h3, .highlight-green, .real-estate-title {
-  font-display: swap;
-}
+
 
 /* Prevent image layout collapse across the site */
 img {

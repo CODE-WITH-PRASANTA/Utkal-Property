@@ -31,9 +31,9 @@ const Footer = () => {
               src={logo} 
               alt="Utkal Property Logo" 
               className="footer-logo-img" 
-              width="170"
-              height="70"
-              loading="lazy"
+              width="48"
+              height="48"
+              loading="lazy" 
               decoding="async"
             />
           </div>
@@ -140,8 +140,8 @@ const Footer = () => {
                 src={footerImage}
                 alt="Darrell Steward - Utkal Property Consultant"
                 className="agent-avatar"
-                width="46"
-                height="58"
+                width="40"
+                height="40"
                 loading="lazy"
                 decoding="async"
               />

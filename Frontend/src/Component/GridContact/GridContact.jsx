@@ -4,7 +4,7 @@ import { FaWhatsapp } from 'react-icons/fa'; // Swapped to WhatsApp icon
 
 // Import images from your src/assets directory
 import bgPattern from '../../assets/bg2.jpg'; 
-import girlImage from '../../assets/jhia.png'; 
+import girlImage from '../../assets/jhia.webp';
 
 const GridContact = () => {
   const phoneNumber = '919861566735';

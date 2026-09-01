@@ -1,21 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 export default defineConfig({
   plugins: [
     react(),
-    cssInjectedByJsPlugin(),
 
     // Generate robots.txt automatically during production build
     {
       name: "generate-robots-txt",
       generateBundle() {
-        const robotsTxt = `User-agent: *
-Allow: /
-
-Sitemap: https://utkalproperty.com/sitemap.xml
-`;
+        const robotsTxt = `User-agent: *\nAllow: /\n\nSitemap: https://utkalproperty.com/sitemap.xml\n`;
         this.emitFile({
           type: "asset",
           fileName: "robots.txt",
@@ -26,25 +20,30 @@ Sitemap: https://utkalproperty.com/sitemap.xml
   ],
 
   build: {
-    sourcemap: true,
-    target: "es2020",
-    chunkSizeWarningLimit: 1000,
+    target: "esnext",
+    minify: "esbuild",
+    cssCodeSplit: true,
+    cssMinify: true,
+    sourcemap: false,
     modulePreload: {
-      polyfill: false,
+      polyfill: true,
     },
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            if (id.includes("react-icons")) {
-              return "icons";
-            }
+            // Group primary vendor code together to reduce chained roundtrips
             if (
               id.includes("react") ||
               id.includes("react-dom") ||
-              id.includes("react-router-dom")
+              id.includes("react-router") ||
+              id.includes("react-icons")
             ) {
               return "vendor";
+            }
+            // Separate secondary utilities
+            if (id.includes("axios")) {
+              return "network";
             }
           }
         },
@@ -59,4 +58,4 @@ Sitemap: https://utkalproperty.com/sitemap.xml
   preview: {
     host: "localhost",
   },
-}); 
+});

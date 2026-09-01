@@ -1,4 +1,3 @@
-
 :root {
   --utkal-primary: #111111;
   --utkal-text: #333333;
@@ -90,6 +89,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.3s ease;
 }
 
@@ -132,6 +132,7 @@
   width: 100%;
   height: 180px;
   object-fit: cover;
+  display: block;
 }
 
 .utkal-rn-featured-details {
@@ -223,11 +224,16 @@
   padding-bottom: 0;
 }
 
+.utkal-rn-comment-avatar-col {
+  flex-shrink: 0;
+}
+
 .utkal-rn-avatar {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+  display: block;
 }
 
 .utkal-rn-comment-body-col {
@@ -278,6 +284,7 @@
   object-fit: cover;
   border-radius: 6px;
   border: 1px solid var(--utkal-border);
+  display: block;
 }
 
 .utkal-rn-comment-actions {
@@ -424,6 +431,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.3s ease;
 }
 
@@ -487,7 +495,7 @@
   color: #b45309;
 }
 
-/* Promotional Banner Section Styles (Matching Reference Design) */
+/* Promotional Banner Section Styles */
 .utkal-rn-promo-banner {
   margin-top: 60px;
   background: linear-gradient(90deg, #fffcf5 0%, #fff4df 100%);

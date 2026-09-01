@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import GridBreadcrum from "../../Component/GridBreadcrum/GridBreadcrum";
 import GridPropertyListing from "../../Component/GridPropertyListing/GridPropertyListing";
 import GridContact from "../../Component/GridContact/GridContact";

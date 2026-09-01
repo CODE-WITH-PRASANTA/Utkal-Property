@@ -44,6 +44,8 @@
 
 .navbar-logo-img {
   width: 150px;
+  height: auto;           /* Automatically maintains natural proportions */
+  object-fit: contain;    /* Prevents distortion */
   display: block;
 }
 
@@ -244,6 +246,6 @@
 @media (max-width: 480px) {
   .navbar-logo-img {
     width: 135px;
-    height: 56px;
+    height: auto;          /* Change 56px to auto */
   }
 }
