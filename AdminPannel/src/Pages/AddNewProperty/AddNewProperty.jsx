@@ -205,11 +205,11 @@ const AddNewProperty = () => {
       try {
         setLoadingProperty(true);
 
-        console.log("FETCHING PROPERTY:", id);
+       
 
         const response = await API.get(`/properties/${id}`);
 
-        console.log("PROPERTY RESPONSE:", response.data);
+      
 
         const property =
           response.data?.property || response.data?.data || response.data;
@@ -383,13 +383,7 @@ const AddNewProperty = () => {
             : [],
         );
 
-        console.log("CATEGORY PARENT:", property.categoryParent);
-
-        console.log("CATEGORY:", property.category);
-
-        console.log("OLD IMAGES:", oldImages);
-
-        console.log("OLD DOCUMENTS:", property.documents);
+      
       } catch (error) {
         console.error("GET PROPERTY ERROR:", error.response?.data || error);
 
@@ -703,33 +697,15 @@ const AddNewProperty = () => {
       // DEBUG
       // ======================================
 
-      console.log("================================");
+    
 
-      console.log(isEditMode ? "UPDATE PROPERTY" : "CREATE PROPERTY");
+     
 
-      console.log("CATEGORY PARENT:", propertyData.categoryParent);
+      // for (const [key, value] of form.entries()) {
+      //   console.log(key, value);
+      // }
 
-      console.log("CATEGORY:", propertyData.category);
-
-      console.log("PROPERTY:", propertyData);
-
-      console.log("EXISTING IMAGES:", existingPropertyImages);
-
-      console.log("NEW IMAGES:", propertyImages);
-
-      console.log("EXISTING DOCUMENTS:", existingDocuments);
-
-      console.log("NEW DOCUMENTS:", documents);
-
-      console.log("FLOOR PLANS:", floorPlans);
-
-      console.log("FORM DATA:");
-
-      for (const [key, value] of form.entries()) {
-        console.log(key, value);
-      }
-
-      console.log("================================");
+   
 
       // ======================================
       // CREATE OR UPDATE API
@@ -743,7 +719,7 @@ const AddNewProperty = () => {
         response = await API.post("/properties", form);
       }
 
-      console.log("PROPERTY RESPONSE:", response.data);
+   
 
       alert(
         response.data?.message ||

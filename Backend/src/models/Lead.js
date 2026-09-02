@@ -1,152 +1,175 @@
+
 const mongoose = require("mongoose");
 
-const leadSchema =
-  new mongoose.Schema(
-    {
-      /* ================================================
-         CUSTOMER
-      ================================================= */
+const leadSchema = new mongoose.Schema(
+  {
+    /* =====================================================
+       CUSTOMER
+    ===================================================== */
 
-      fullName: {
-        type: String,
-        required: true,
-        trim: true,
-        default: "Property Enquiry",
-      },
-
-      mobile: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-
-      email: {
-        type: String,
-        trim: true,
-        lowercase: true,
-        default: "",
-      },
-
-      /* ================================================
-         ENQUIRY
-      ================================================= */
-
-      lookingFor: {
-        type: String,
-        enum: [
-          "Rent",
-          "Buy",
-          "Sell",
-        ],
-        default: "Rent",
-      },
-
-      interestedIn: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      location: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      budgetRange: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      /* ================================================
-         PROPERTY
-      ================================================= */
-
-      propertyId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Property",
-        default: null,
-      },
-
-      propertyName: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      project: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      /* ================================================
-         CRM
-      ================================================= */
-
-      source: {
-        type: String,
-        default: "Website",
-        trim: true,
-      },
-
-      agent: {
-        type: String,
-        default: "",
-        trim: true,
-      },
-
-      status: {
-        type: String,
-        enum: [
-          "New",
-          "Follow Up",
-          "Site Visit",
-          "Converted",
-          "Lost Lead",
-        ],
-        default: "New",
-      },
-
-      priority: {
-        type: String,
-        enum: [
-          "Low",
-          "Medium",
-          "High",
-        ],
-        default: "Medium",
-      },
-
-      followUpDate: {
-        type: String,
-        default: "",
-      },
-
-      score: {
-        type: Number,
-        default: 0,
-      },
-
-      notes: {
-        type: String,
-        default: "",
-      },
-
-      createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        default: null,
-      },
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+      default: "Property Enquiry",
     },
-    {
-      timestamps: true,
-    }
-  );
 
-module.exports =
-  mongoose.model(
-    "Lead",
-    leadSchema
-  );
+    mobile: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      default: "",
+    },
+
+    /* =====================================================
+       ENQUIRY
+    ===================================================== */
+
+    lookingFor: {
+      type: String,
+      enum: ["Rent", "Buy", "Sell"],
+      default: "Buy",
+    },
+
+    /*
+     * Property Type
+     * Example:
+     * Apartment
+     * Villa
+     * Independent House
+     * Plot
+     */
+    interestedIn: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    /*
+     * Preferred Location / City
+     */
+    location: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    /*
+     * Preferred Area
+     * Example:
+     * Patia
+     * Khandagiri
+     * Saheed Nagar
+     */
+    preferredArea: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    /*
+     * Budget Range
+     */
+    budgetRange: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    /* =====================================================
+       PROPERTY
+    ===================================================== */
+
+    propertyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Property",
+      default: null,
+    },
+
+    propertyName: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    project: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    /* =====================================================
+       CRM
+    ===================================================== */
+
+    source: {
+      type: String,
+      default: "Website",
+      trim: true,
+    },
+
+    agent: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    status: {
+      type: String,
+      enum: [
+        "New",
+        "Follow Up",
+        "Site Visit",
+        "Converted",
+        "Lost Lead",
+      ],
+      default: "New",
+    },
+
+    priority: {
+      type: String,
+      enum: ["Low", "Medium", "High"],
+      default: "Medium",
+    },
+
+    followUpDate: {
+      type: String,
+      default: "",
+    },
+
+    score: {
+      type: Number,
+      default: 0,
+    },
+
+    notes: {
+      type: String,
+      default: "",
+    },
+
+    /* =====================================================
+       CREATED BY
+    ===================================================== */
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = mongoose.model(
+  "Lead",
+  leadSchema
+);
+

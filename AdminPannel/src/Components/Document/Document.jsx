@@ -332,10 +332,7 @@ const Document = ({
         newFloorPlan,
       ];
 
-      console.log(
-        "FLOOR PLANS AFTER ADD:",
-        updatedFloorPlans
-      );
+     
 
       return updatedFloorPlans;
     });

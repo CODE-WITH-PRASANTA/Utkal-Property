@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import {
   Home,
   X,
@@ -10,30 +15,39 @@ import {
   CircleCheck,
   MessageSquareText,
 } from "lucide-react";
+
 import API from "../../api/axios";
+
 import "./FloatingForm.css";
 
+
 /* =========================================================
-   HEADER SECTION
+   HEADER
 ========================================================= */
-const FloatingFormHeader = ({ onClose }) => {
+
+const FloatingFormHeader = ({
+  onClose,
+}) => {
   return (
     <div className="FloatingForm-header">
-      <div className="FloatingForm-home-icon-box" aria-hidden="true">
-        <Home size={20} strokeWidth={2} />
+
+      <div
+        className="FloatingForm-home-icon-box"
+        aria-hidden="true"
+      >
+        <Home
+          size={20}
+          strokeWidth={2}
+        />
       </div>
 
-      <button
-        type="button"
-        className="FloatingForm-close-btn"
-        onClick={onClose}
-        aria-label="Close enquiry form"
-      >
-        <X size={14} aria-hidden="true" />
-      </button>
 
       <div className="FloatingForm-header-content">
-        <h2 className="FloatingForm-header-title">Enquire Now</h2>
+
+        <h2 className="FloatingForm-header-title">
+          Enquire Now
+        </h2>
+
         <p className="FloatingForm-header-subtitle">
           Fill in your details and our property expert
           <br />
@@ -42,50 +56,116 @@ const FloatingFormHeader = ({ onClose }) => {
             contact you soon.
           </span>
         </p>
-        <div className="FloatingForm-header-divider" aria-hidden="true"></div>
+
+        <div
+          className="FloatingForm-header-divider"
+          aria-hidden="true"
+        />
+
       </div>
+
+
+      <button
+        type="button"
+        className="FloatingForm-close-btn"
+        onClick={onClose}
+        aria-label="Close enquiry form"
+      >
+        <X
+          size={14}
+          aria-hidden="true"
+        />
+      </button>
+
     </div>
   );
 };
 
+
 /* =========================================================
    LOOKING FOR
 ========================================================= */
-const LookingFor = ({ value, onChange }) => {
+
+const LookingFor = ({
+  value,
+  onChange,
+}) => {
+  const options = [
+    "Buy",
+    "Sell",
+    "Rent",
+  ];
+
   return (
     <fieldset className="FloatingForm-field FloatingForm-field--looking">
-      <legend className="FloatingForm-sr-only">Looking For</legend>
-      <div className="FloatingForm-field-icon" aria-hidden="true">
+
+      <legend className="FloatingForm-sr-only">
+        Looking For
+      </legend>
+
+      <div
+        className="FloatingForm-field-icon"
+        aria-hidden="true"
+      >
         <Home size={15} />
       </div>
 
+
       <div className="FloatingForm-field-body">
-        <span className="FloatingForm-field-label">Looking For</span>
+
+        <span className="FloatingForm-field-label">
+          Looking For
+        </span>
+
+
         <div className="FloatingForm-radio-group">
-          {["Rent", "Buy", "Sell"].map((option) => (
-            <label className="FloatingForm-radio-option" key={option}>
+
+          {options.map((option) => (
+            <label
+              className="FloatingForm-radio-option"
+              key={option}
+            >
+
               <input
                 type="radio"
                 name="lookingFor"
                 value={option}
-                checked={value === option}
-                onChange={(e) => onChange(e.target.value)}
+                checked={
+                  value === option
+                }
+                onChange={(e) =>
+                  onChange(
+                    e.target.value
+                  )
+                }
                 className="FloatingForm-radio-input"
-                aria-label={`Looking to ${option}`}
               />
-              <span className="FloatingForm-radio-custom" aria-hidden="true"></span>
-              <span className="FloatingForm-radio-text">{option}</span>
+
+              <span
+                className="FloatingForm-radio-custom"
+                aria-hidden="true"
+              />
+
+              <span className="FloatingForm-radio-text">
+                {option}
+              </span>
+
             </label>
           ))}
+
         </div>
+
       </div>
+
     </fieldset>
   );
 };
 
+
 /* =========================================================
    SELECT FIELD
 ========================================================= */
+
 const SelectField = ({
   id,
   name,
@@ -95,17 +175,34 @@ const SelectField = ({
   value,
   options,
   onChange,
+  disabled = false,
 }) => {
   return (
-    <div className="FloatingForm-field FloatingForm-field--select">
-      <div className="FloatingForm-field-icon" aria-hidden="true">
+    <div
+      className={`FloatingForm-field FloatingForm-field--select ${
+        disabled
+          ? "FloatingForm-field--disabled"
+          : ""
+      }`}
+    >
+
+      <div
+        className="FloatingForm-field-icon"
+        aria-hidden="true"
+      >
         {icon}
       </div>
 
+
       <div className="FloatingForm-field-body">
-        <label htmlFor={id} className="FloatingForm-field-label">
+
+        <label
+          htmlFor={id}
+          className="FloatingForm-field-label"
+        >
           {label}
         </label>
+
 
         <select
           id={id}
@@ -115,41 +212,72 @@ const SelectField = ({
           onChange={onChange}
           className="FloatingForm-select-element"
           required
+          disabled={disabled}
         >
-          <option value="" disabled>
+
+          <option
+            value=""
+            disabled
+          >
             {placeholder}
           </option>
-          {options.map((option) => (
-            <option value={option} key={option}>
-              {option}
-            </option>
-          ))}
+
+
+          {options.map(
+            (option) => (
+              <option
+                value={option}
+                key={option}
+              >
+                {option}
+              </option>
+            )
+          )}
+
         </select>
+
       </div>
+
 
       <ChevronDown
         className="FloatingForm-select-arrow"
         size={15}
         aria-hidden="true"
       />
+
     </div>
   );
 };
 
+
 /* =========================================================
    MOBILE NUMBER
 ========================================================= */
-const MobileNumber = ({ value, onChange }) => {
+
+const MobileNumber = ({
+  value,
+  onChange,
+}) => {
   return (
     <div className="FloatingForm-field FloatingForm-field--mobile">
-      <div className="FloatingForm-field-icon" aria-hidden="true">
+
+      <div
+        className="FloatingForm-field-icon"
+        aria-hidden="true"
+      >
         <Phone size={15} />
       </div>
 
+
       <div className="FloatingForm-field-body">
-        <label htmlFor="FloatingFormMobile" className="FloatingForm-field-label">
+
+        <label
+          htmlFor="FloatingFormMobile"
+          className="FloatingForm-field-label"
+        >
           Mobile Number
         </label>
+
 
         <input
           id="FloatingFormMobile"
@@ -160,18 +288,27 @@ const MobileNumber = ({ value, onChange }) => {
           placeholder="Enter mobile number"
           aria-label="Enter 10-digit mobile number"
           maxLength={10}
+          inputMode="numeric"
+          autoComplete="tel"
           required
           className="FloatingForm-input-element"
         />
+
       </div>
+
     </div>
   );
 };
 
+
 /* =========================================================
    SUBMIT BUTTON
 ========================================================= */
-const SubmitButton = ({ onClick, loading }) => {
+
+const SubmitButton = ({
+  onClick,
+  loading,
+}) => {
   return (
     <button
       type="button"
@@ -180,226 +317,925 @@ const SubmitButton = ({ onClick, loading }) => {
       disabled={loading}
       aria-label="Submit property enquiry"
     >
+
       <span className="FloatingForm-submit-text">
-        {loading ? "Submitting..." : "Get Property Options"}
+        {loading
+          ? "Submitting..."
+          : "Get Property Options"}
       </span>
-      <span className="FloatingForm-submit-icon" aria-hidden="true">
-        <CircleCheck size={14} />
+
+
+      <span
+        className="FloatingForm-submit-icon"
+        aria-hidden="true"
+      >
+
+        {loading ? (
+          <span className="FloatingForm-loading-dot">
+            ...
+          </span>
+        ) : (
+          <CircleCheck size={14} />
+        )}
+
       </span>
+
     </button>
   );
 };
 
+
 /* =========================================================
    FOOTER
 ========================================================= */
+
 const FloatingFormFooter = () => {
   return (
     <div className="FloatingForm-footer">
-      <ShieldCheck size={12} className="FloatingForm-footer-icon" aria-hidden="true" />
+
+      <ShieldCheck
+        size={12}
+        className="FloatingForm-footer-icon"
+        aria-hidden="true"
+      />
+
       <span className="FloatingForm-footer-text">
         Free Consultation • No obligation
       </span>
+
     </div>
   );
 };
 
+
 /* =========================================================
-   LOCATION NORMALIZER
+   NORMALIZE LOCATION RESPONSE
 ========================================================= */
-const normalizeLocations = (responseData) => {
+
+const normalizeLocations = (
+  responseData
+) => {
+
   const raw =
-    responseData?.locations ||
     responseData?.data ||
+    responseData?.locations ||
     responseData?.results ||
     responseData;
 
-  if (!Array.isArray(raw)) return [];
 
-  const values = raw
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+
+  return raw
     .map((item) => {
-      if (typeof item === "string") return item;
-      return (
-        item?.name ||
-        item?.location ||
-        item?.city ||
-        item?.title ||
-        item?.area ||
-        item?.locality ||
-        item?.locationName ||
-        ""
-      );
-    })
-    .filter(Boolean)
-    .map((item) => String(item).trim());
 
-  return [...new Set(values)];
+      if (
+        typeof item ===
+        "string"
+      ) {
+        return {
+          id: item,
+          country: "",
+          state: "",
+          city: item,
+          area: "",
+          pincode: "",
+          status: "Active",
+        };
+      }
+
+
+      return {
+        id:
+          item?._id ||
+          item?.id ||
+          `${item?.city || ""}-${item?.area || ""}`,
+
+        country:
+          item?.country || "",
+
+        state:
+          item?.state ||
+          item?.stateName ||
+          "",
+
+        city:
+          item?.city ||
+          item?.cityName ||
+          item?.location ||
+          "",
+
+        area:
+          item?.area ||
+          item?.areaName ||
+          item?.locality ||
+          "",
+
+        pincode:
+          item?.pincode ||
+          item?.pinCode ||
+          "",
+
+        status:
+          item?.status ||
+          "Active",
+      };
+    })
+    .filter(
+      (item) =>
+        item.city ||
+        item.area
+    );
 };
+
 
 /* =========================================================
    MAIN FLOATING FORM
 ========================================================= */
-const FloatingForm = ({ propertyId = "", propertyName = "" }) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [lookingFor, setLookingFor] = useState("Rent");
-  const [propertyType, setPropertyType] = useState("");
-  const [location, setLocation] = useState("");
-  const [budget, setBudget] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [locationLoading, setLocationLoading] = useState(false);
-  const [locations, setLocations] = useState([]);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
+
+const FloatingForm = ({
+  propertyId = "",
+  propertyName = "",
+}) => {
+
+  /* =======================================================
+     FORM STATE
+  ======================================================= */
+
+  const [
+    isOpen,
+    setIsOpen,
+  ] = useState(true);
+
+
+  const [
+    lookingFor,
+    setLookingFor,
+  ] = useState("Buy");
+
+
+  const [
+    propertyType,
+    setPropertyType,
+  ] = useState("");
+
+
+  const [
+    location,
+    setLocation,
+  ] = useState("");
+
+
+  const [
+    preferredArea,
+    setPreferredArea,
+  ] = useState("");
+
+
+  const [
+    budget,
+    setBudget,
+  ] = useState("");
+
+
+  const [
+    mobile,
+    setMobile,
+  ] = useState("");
+
+
+  /* =======================================================
+     LOCATION STATE
+  ======================================================= */
+
+  const [
+    locationData,
+    setLocationData,
+  ] = useState([]);
+
+
+  const [
+    locationLoading,
+    setLocationLoading,
+  ] = useState(false);
+
+
+  /* =======================================================
+     SUBMIT STATE
+  ======================================================= */
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
+
+
+  const [
+    message,
+    setMessage,
+  ] = useState("");
+
+
+  const [
+    messageType,
+    setMessageType,
+  ] = useState("");
+
+
+  /* =========================================================
+     PROPERTY TYPES
+  ========================================================= */
 
   const propertyTypes = [
     "Apartment",
     "Villa",
-    "Independent House",
+    "Duplex / Independent House",
     "Plot",
     "Commercial Property",
   ];
 
+
+  /* =========================================================
+     BUDGET OPTIONS
+  ========================================================= */
+
   const budgetOptions = [
-    "Under ₹20 Lakhs",
-    "₹20 - ₹40 Lakhs",
-    "₹40 - ₹60 Lakhs",
-    "₹60 Lakhs - ₹1 Crore",
-    "Above ₹1 Crore",
+    "Starting - ₹60 Lakhs",
+    "₹60 Lakhs - ₹1.2 Crore",
+    "₹1.2 Crore - ₹2.5 Crore",
+    "Above ₹2.5 Crore",
   ];
 
+
+  /* =========================================================
+     FETCH LOCATIONS
+  ========================================================= */
+
   const fetchLocations = async () => {
+
     try {
+
       setLocationLoading(true);
-      const response = await API.get("/locations");
-      const locationList = normalizeLocations(response.data);
-      setLocations(
-        locationList.length > 0
-          ? locationList
-          : ["Bhubaneswar", "Cuttack", "Puri", "Khurda", "Kendrapara"]
+
+     
+
+      console.log(
+        "Fetching locations from:",
+        `${API.defaults.baseURL}/locations`
       );
+
+
+      const response =
+        await API.get(
+          "/locations"
+        );
+
+     
+
+      console.log(
+        "Location API Response:",
+        response.data
+      );
+
+
+      const normalized =
+        normalizeLocations(
+          response.data
+        );
+
+     
+
+      console.log(
+        "Normalized Locations:",
+        normalized
+      );
+
+
+      setLocationData(
+        normalized
+      );
+
     } catch (error) {
-      console.error("FETCH LOCATIONS ERROR:", error.response?.data || error);
-      setLocations(["Bhubaneswar", "Cuttack", "Puri", "Khurda", "Kendrapara"]);
+
+      console.error(
+        "LOCATION FETCH ERROR:",
+        error?.response?.data ||
+          error
+      );
+
+
+      /*
+        Don't break the form if the
+        backend temporarily fails.
+      */
+
+      setLocationData([]);
+
     } finally {
+
       setLocationLoading(false);
+
     }
   };
 
+
+  /* =========================================================
+     LOAD LOCATIONS
+  ========================================================= */
+
   useEffect(() => {
+
     fetchLocations();
+
   }, []);
+
+
+  /* =========================================================
+     UNIQUE CITY OPTIONS
+  ========================================================= */
+
+  const locationOptions =
+    useMemo(() => {
+
+      const cities =
+        locationData
+          .map(
+            (item) =>
+              String(
+                item.city || ""
+              ).trim()
+          )
+          .filter(Boolean);
+
+
+      return [
+        ...new Set(
+          cities
+        ),
+      ].sort();
+
+    }, [
+      locationData,
+    ]);
+
+
+  /* =========================================================
+     AREA OPTIONS
+     BASED ON SELECTED LOCATION
+  ========================================================= */
+
+  const preferredAreaOptions =
+    useMemo(() => {
+
+      if (!location) {
+        return [];
+      }
+
+
+      const selectedCity =
+        location
+          .trim()
+          .toLowerCase();
+
+
+      const areas =
+        locationData
+          .filter((item) => {
+
+            const city =
+              String(
+                item.city || ""
+              )
+                .trim()
+                .toLowerCase();
+
+            return (
+              city ===
+              selectedCity
+            );
+          })
+          .map(
+            (item) =>
+              String(
+                item.area || ""
+              ).trim()
+          )
+          .filter(Boolean);
+
+
+      return [
+        ...new Set(
+          areas
+        ),
+      ].sort();
+
+    }, [
+      location,
+      locationData,
+    ]);
+
+
+  /* =========================================================
+     CLEAR MESSAGE
+  ========================================================= */
 
   const clearMessage = () => {
     setMessage("");
     setMessageType("");
   };
 
-  const handleMobileChange = (e) => {
-    const onlyNumbers = e.target.value.replace(/\D/g, "");
-    setMobile(onlyNumbers.slice(0, 10));
-    clearMessage();
+
+  /* =========================================================
+     RESET FORM
+  ========================================================= */
+
+  const resetForm = () => {
+
+    setLookingFor("Buy");
+
+    setPropertyType("");
+
+    setLocation("");
+
+    setPreferredArea("");
+
+    setBudget("");
+
+    setMobile("");
+
   };
 
-  const handlePropertyTypeChange = (e) => {
-    setPropertyType(e.target.value);
+
+  /* =========================================================
+     CLOSE FORM
+  ========================================================= */
+
+  const closeForm = () => {
+
+    resetForm();
+
     clearMessage();
+
+    setIsOpen(false);
+
   };
 
-  const handleLocationChange = (e) => {
-    setLocation(e.target.value);
+
+  /* =========================================================
+     OPEN FORM
+  ========================================================= */
+
+  const openForm = () => {
+
+    resetForm();
+
     clearMessage();
+
+    setIsOpen(true);
+
   };
 
-  const handleBudgetChange = (e) => {
-    setBudget(e.target.value);
+
+  /* =========================================================
+     MOBILE CHANGE
+  ========================================================= */
+
+  const handleMobileChange = (
+    event
+  ) => {
+
+    const onlyNumbers =
+      event.target.value.replace(
+        /\D/g,
+        ""
+      );
+
+
+    setMobile(
+      onlyNumbers.slice(
+        0,
+        10
+      )
+    );
+
+
     clearMessage();
+
   };
+
+
+  /* =========================================================
+     PROPERTY TYPE CHANGE
+  ========================================================= */
+
+  const handlePropertyTypeChange = (
+    event
+  ) => {
+
+    setPropertyType(
+      event.target.value
+    );
+
+    clearMessage();
+
+  };
+
+
+  /* =========================================================
+     LOCATION CHANGE
+  ========================================================= */
+
+  const handleLocationChange = (
+    event
+  ) => {
+
+    const selectedLocation =
+      event.target.value;
+
+
+    setLocation(
+      selectedLocation
+    );
+
+
+    /*
+      Always clear old area when
+      changing location.
+    */
+
+    setPreferredArea("");
+
+
+    clearMessage();
+
+  };
+
+
+  /* =========================================================
+     AREA CHANGE
+  ========================================================= */
+
+  const handlePreferredAreaChange = (
+    event
+  ) => {
+
+    setPreferredArea(
+      event.target.value
+    );
+
+    clearMessage();
+
+  };
+
+
+  /* =========================================================
+     BUDGET CHANGE
+  ========================================================= */
+
+  const handleBudgetChange = (
+    event
+  ) => {
+
+    setBudget(
+      event.target.value
+    );
+
+    clearMessage();
+
+  };
+
+
+  /* =========================================================
+     SUBMIT
+  ========================================================= */
 
   const handleSubmit = async () => {
+
+    if (loading) {
+      return;
+    }
+
+
+    clearMessage();
+
+
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
+
+    if (!lookingFor) {
+
+      setMessage(
+        "Please select what you are looking for."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!propertyType) {
+
+      setMessage(
+        "Please select a property type."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!location) {
+
+      setMessage(
+        "Please select your preferred location."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!preferredArea) {
+
+      setMessage(
+        "Please select your preferred area."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!budget) {
+
+      setMessage(
+        "Please select your budget range."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (!mobile) {
+
+      setMessage(
+        "Please enter your mobile number."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    if (
+      mobile.length !== 10
+    ) {
+
+      setMessage(
+        "Please enter a valid 10-digit mobile number."
+      );
+
+      setMessageType("error");
+
+      return;
+    }
+
+
+    /* =====================================================
+       START LOADING
+    ===================================================== */
+
+    setLoading(true);
+
+
     try {
-      clearMessage();
 
-      if (!lookingFor) {
-        setMessage("Please select what you are looking for.");
-        setMessageType("error");
-        return;
-      }
-
-      if (!propertyType) {
-        setMessage("Please select a property type.");
-        setMessageType("error");
-        return;
-      }
-
-      if (!location) {
-        setMessage("Please select your preferred location.");
-        setMessageType("error");
-        return;
-      }
-
-      if (!budget) {
-        setMessage("Please select your budget range.");
-        setMessageType("error");
-        return;
-      }
-
-      if (!mobile || mobile.length !== 10) {
-        setMessage("Please enter a valid 10-digit mobile number.");
-        setMessageType("error");
-        return;
-      }
-
-      setLoading(true);
+      /* ===================================================
+         COMPLETE LEAD DATA
+      =================================================== */
 
       const leadData = {
-        fullName: "Property Enquiry",
-        mobile,
-        email: "",
-        source: "Website Floating Enquiry Form",
-        lookingFor,
-        interestedIn: propertyType,
-        location,
-        budgetRange: budget,
-        propertyId: propertyId || null,
-        propertyName: propertyName || "",
-        agent: "",
-        status: "New",
-        priority: "Medium",
-        followUpDate: "",
-        score: 0,
+
+        /* CUSTOMER */
+
+        fullName:
+          "Property Enquiry",
+
+        mobile:
+          mobile,
+
+        email:
+          "",
+
+
+        /* ENQUIRY */
+
+        source:
+          "Website Floating Enquiry Form",
+
+        lookingFor:
+          lookingFor,
+
+        interestedIn:
+          propertyType,
+
+        location:
+          location,
+
+        preferredArea:
+          preferredArea,
+
+        budgetRange:
+          budget,
+
+
+        /* PROPERTY */
+
+        propertyId:
+          propertyId || null,
+
+        propertyName:
+          propertyName || "",
+
+        project:
+          "",
+
+
+        /* CRM */
+
+        agent:
+          "",
+
+        status:
+          "New",
+
+        priority:
+          "Medium",
+
+        followUpDate:
+          "",
+
+        score:
+          0,
+
+
+        /* NOTES */
+
         notes:
           `Looking For: ${lookingFor}. ` +
           `Property Type: ${propertyType}. ` +
-          `Location: ${location}. ` +
-          `Budget: ${budget}.` +
-          (propertyName ? ` Property: ${propertyName}.` : ""),
+          `Preferred Location: ${location}. ` +
+          `Preferred Area: ${preferredArea}. ` +
+          `Budget Range: ${budget}.` +
+          (
+            propertyName
+              ? ` Property: ${propertyName}.`
+              : ""
+          ),
       };
 
-      const response = await API.post("/leads", leadData);
+    
+
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "SUBMITTING FLOATING FORM"
+      );
+
+      console.log(
+        "API:",
+        `${API.defaults.baseURL}/leads`
+      );
+
+      console.log(
+        "LEAD DATA:",
+        leadData
+      );
+
+      console.log(
+        "===================================="
+      );
+
+
+      /* ===================================================
+         CREATE LEAD
+      =================================================== */
+
+      const response =
+        await API.post(
+          "/leads",
+          leadData
+        );
+
+    
+
+      console.log(
+        "LEAD CREATED:",
+        response.data
+      );
+
+
+      /* ===================================================
+         SUCCESS
+      =================================================== */
 
       setMessage(
         response.data?.message ||
           "Thank you! Our property expert will contact you soon."
       );
-      setMessageType("success");
 
-      setLookingFor("Rent");
-      setPropertyType("");
-      setLocation("");
-      setBudget("");
-      setMobile("");
+      setMessageType(
+        "success"
+      );
+
+
+      /*
+        IMPORTANT:
+        Reset all fields immediately
+        after successful submission.
+      */
+
+      resetForm();
+
+
+      /*
+        Keep success message visible,
+        then close the form.
+      */
+
+      setTimeout(() => {
+
+        setMessage("");
+
+        setMessageType("");
+
+        setIsOpen(false);
+
+      }, 1800);
+
     } catch (error) {
-      console.error("LEAD SUBMISSION ERROR:", error.response?.data || error);
+
+      console.error(
+        "===================================="
+      );
+
+      console.error(
+        "FLOATING FORM SUBMISSION ERROR"
+      );
+
+      console.error(
+        "STATUS:",
+        error?.response?.status
+      );
+
+      console.error(
+        "RESPONSE:",
+        error?.response?.data
+      );
+
+      console.error(
+        "MESSAGE:",
+        error?.message
+      );
+
+      console.error(
+        "===================================="
+      );
+
+
       setMessage(
-        error.response?.data?.message ||
+        error?.response?.data?.message ||
           "Unable to submit your enquiry. Please try again."
       );
-      setMessageType("error");
+
+      setMessageType(
+        "error"
+      );
+
     } finally {
+
       setLoading(false);
+
     }
   };
+
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
     <aside
@@ -407,100 +1243,272 @@ const FloatingForm = ({ propertyId = "", propertyName = "" }) => {
       role="complementary"
       aria-label="Property enquiry widget"
     >
+
+      {/* ===================================================
+          OPEN BUTTON
+      =================================================== */}
+
       <button
         type="button"
         className={`FloatingForm-trigger-btn ${
-          !isOpen ? "FloatingForm-trigger-btn--visible" : ""
+          !isOpen
+            ? "FloatingForm-trigger-btn--visible"
+            : ""
         }`}
-        onClick={() => setIsOpen(true)}
+        onClick={openForm}
         aria-label="Open property enquiry form"
         aria-expanded={isOpen}
       >
-        <MessageSquareText size={20} aria-hidden="true" />
-        <span className="FloatingForm-trigger-text">Enquire Now</span>
+
+        <MessageSquareText
+          size={20}
+          aria-hidden="true"
+        />
+
+        <span className="FloatingForm-trigger-text">
+          Enquire Now
+        </span>
+
       </button>
+
+
+      {/* ===================================================
+          FORM CARD
+      =================================================== */}
 
       <div
         className={`FloatingForm-card ${
-          isOpen ? "FloatingForm-card--open" : "FloatingForm-card--closed"
+          isOpen
+            ? "FloatingForm-card--open"
+            : "FloatingForm-card--closed"
         }`}
         role="dialog"
         aria-modal="false"
         aria-label="Enquire Now Form"
       >
+
+        {/* HEADER */}
+
         <FloatingFormHeader
-          onClose={() => {
-            setIsOpen(false);
-            clearMessage();
-          }}
+          onClose={closeForm}
         />
 
+
+        {/* BODY */}
+
         <div className="FloatingForm-body">
+
+          {/* =================================================
+              MESSAGE
+          ================================================= */}
+
           {message && (
             <div
               className={`FloatingForm-message ${
-                messageType === "success"
+                messageType ===
+                "success"
                   ? "FloatingForm-message--success"
                   : "FloatingForm-message--error"
               }`}
               role="alert"
             >
-              {message}
+
+              {messageType ===
+              "success" ? (
+                <CircleCheck
+                  size={15}
+                />
+              ) : (
+                <X
+                  size={15}
+                />
+              )}
+
+              <span>
+                {message}
+              </span>
+
             </div>
           )}
 
+
+          {/* =================================================
+              LOOKING FOR
+          ================================================= */}
+
           <LookingFor
             value={lookingFor}
-            onChange={(val) => {
-              setLookingFor(val);
+            onChange={(value) => {
+
+              setLookingFor(
+                value
+              );
+
               clearMessage();
+
             }}
           />
+
+
+          {/* =================================================
+              PROPERTY TYPE
+          ================================================= */}
 
           <SelectField
             id="floating-property-type"
             name="propertyType"
-            icon={<Building2 size={15} />}
+            icon={
+              <Building2
+                size={15}
+              />
+            }
             label="Property Type"
             placeholder="Select property type"
             value={propertyType}
-            onChange={handlePropertyTypeChange}
-            options={propertyTypes}
+            onChange={
+              handlePropertyTypeChange
+            }
+            options={
+              propertyTypes
+            }
           />
+
+
+          {/* =================================================
+              LOCATION
+          ================================================= */}
 
           <SelectField
             id="floating-location"
             name="location"
-            icon={<MapPin size={15} />}
+            icon={
+              <MapPin
+                size={15}
+              />
+            }
             label="Preferred Location"
             placeholder={
-              locationLoading ? "Loading locations..." : "Select location"
+              locationLoading
+                ? "Loading locations..."
+                : locationOptions.length
+                ? "Select location"
+                : "No locations available"
             }
             value={location}
-            onChange={handleLocationChange}
-            options={locations}
+            onChange={
+              handleLocationChange
+            }
+            options={
+              locationOptions
+            }
+            disabled={
+              locationLoading ||
+              locationOptions.length ===
+                0
+            }
           />
+
+
+          {/* =================================================
+              PREFERRED AREA
+          ================================================= */}
+
+          <SelectField
+            id="floating-preferred-area"
+            name="preferredArea"
+            icon={
+              <MapPin
+                size={15}
+              />
+            }
+            label="Preferred Area"
+            placeholder={
+              !location
+                ? "Select location first"
+                : preferredAreaOptions.length
+                ? "Select preferred area"
+                : "No areas available"
+            }
+            value={
+              preferredArea
+            }
+            onChange={
+              handlePreferredAreaChange
+            }
+            options={
+              preferredAreaOptions
+            }
+            disabled={
+              !location ||
+              preferredAreaOptions.length ===
+                0
+            }
+          />
+
+
+          {/* =================================================
+              BUDGET
+          ================================================= */}
 
           <SelectField
             id="floating-budget"
-            name="budget"
-            icon={<ShieldCheck size={15} />}
+            name="budgetRange"
+            icon={
+              <ShieldCheck
+                size={15}
+              />
+            }
             label="Budget Range"
             placeholder="Select budget range"
             value={budget}
-            onChange={handleBudgetChange}
-            options={budgetOptions}
+            onChange={
+              handleBudgetChange
+            }
+            options={
+              budgetOptions
+            }
           />
 
-          <MobileNumber value={mobile} onChange={handleMobileChange} />
 
-          <SubmitButton onClick={handleSubmit} loading={loading} />
+          {/* =================================================
+              MOBILE
+          ================================================= */}
+
+          <MobileNumber
+            value={mobile}
+            onChange={
+              handleMobileChange
+            }
+          />
+
+
+          {/* =================================================
+              SUBMIT
+          ================================================= */}
+
+          <SubmitButton
+            onClick={
+              handleSubmit
+            }
+            loading={
+              loading
+            }
+          />
+
+
+          {/* =================================================
+              FOOTER
+          ================================================= */}
 
           <FloatingFormFooter />
+
         </div>
+
       </div>
+
     </aside>
   );
 };
+
 
 export default FloatingForm;

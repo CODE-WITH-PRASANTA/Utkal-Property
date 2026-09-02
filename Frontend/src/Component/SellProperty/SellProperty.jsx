@@ -98,25 +98,61 @@ const FIELD_CONFIG_MAP = {
     label: 'Property Age',
     required: false,
     type: 'select',
-    options: ['Select Age', 'Under Construction', '0-1 Years', '1-5 Years', '5+ Years']
+    options: ['Select Age', 'Under Construction', '1-5 Years', '5-10 Years', 'Above 10 Year']
   },
   parking: {
     label: 'Parking',
     required: false,
     type: 'select',
-    options: ['Select', 'None', 'Bike', 'Car', 'Both']
+    options: ['Select', 'Open', 'Cover', 'None']
   },
   state: {
     label: 'State',
     required: true,
     type: 'select',
-    options: ['Select State', 'Odisha', 'Karnataka', 'Maharashtra', 'Delhi']
+    options: [ 'Odisha']
   },
   city: {
     label: 'City',
     required: true,
     type: 'select',
-    options: ['Select City', 'Bhubaneswar', 'Cuttack', 'Puri', 'Sambalpur', 'Bangalore', 'Mumbai', 'New Delhi']
+    options: [
+  "Select City",
+  "Angul",
+  "Balangir",
+  "Bhubhaneswar",
+  "Balasore",
+  "Bargarh",
+  "Bhadrak",
+  "Boudh",
+  "Cuttack",
+  "Deogarh",
+  "Dhenkanal",
+  "Gajapati",
+  "Ganjam",
+  "Jagatsinghpur",
+  "Jajpur",
+  "Jharsuguda",
+  "Kalahandi",
+  "Kandhamal",
+  "Kendrapara",
+  "Keonjhar",
+  "Khordha",
+  "Koraput",
+  "Malkangiri",
+  "Mayurbhanj",
+  "Nabarangpur",
+  "Nayagarh",
+  "Nuapada",
+  "Puri",
+  "Rayagada",
+  "Sambalpur",
+  "Subarnapur",
+  "Sundargarh",
+
+  
+ 
+]
   },
   locality: {
     label: 'Locality',
@@ -302,78 +338,112 @@ const SellProperty = () => {
     }
   ];
 
-  const renderSummaryControl = (key) => {
-    if (key === 'uploadImages') {
-      return (
-        <div className="sp-summary-file-control">
-          <input 
-            type="file" 
-            ref={summaryFileInputRef} 
-            onChange={handleImageUpload} 
-            multiple 
-            accept="image/*" 
-            style={{ display: 'none' }} 
-          />
-          <button 
-            type="button" 
-            className="sp-table-upload-btn"
-            onClick={() => summaryFileInputRef.current.click()}
-          >
-            📷 Choose Files
-          </button>
-          <ul className="sp-file-list">
-            <li>Supported formats: PNG, JPG, WEBP</li>
-            <li>Max file size: 5MB each</li>
-            <li>Uploaded: {uploadedImages.length} image(s)</li>
-          </ul>
-        </div>
-      );
-    }
+ const renderSummaryControl = (key) => {
 
-    const config = FIELD_CONFIG_MAP[key];
-    if (!config) return null;
+  /* =====================================================
+     IMAGE UPLOAD
+  ===================================================== */
 
-    if (config.type === 'select') {
-      return (
-        <select 
-          className="sell-property-select sp-summary-select"
-          value={formData[key]}
-          onChange={(e) => handleInputChange(key, e.target.value)}
+  if (key === "uploadImages") {
+    return (
+      <div className="sp-summary-file-control">
+
+        <input
+          type="file"
+          ref={summaryFileInputRef}
+          onChange={handleImageUpload}
+          multiple
+          accept="image/*"
+          style={{ display: "none" }}
+        />
+
+        <button
+          type="button"
+          className="sp-table-upload-btn"
+          onClick={() =>
+            summaryFileInputRef.current?.click()
+          }
         >
-          {config.options.map((opt, idx) => (
-            <option key={idx} value={opt}>{opt}</option>
-          ))}
-        </select>
-      );
-    }
+          📷 Choose Files
+        </button>
 
-    if (config.type === 'radio') {
-      return (
-        <div className="sell-property-radio-group">
-          {config.options.map((opt, idx) => (
-            <label key={idx} className="sell-property-radio">
-              <input 
-                type="radio" 
-                name={`summary-${key}`}
-                checked={formData[key] === opt}
-                onChange={() => handleInputChange(key, opt)}
-              /> {opt}
-            </label>
-          ))}
-        </div>
-      );
-    }
+        <ul className="sp-file-list">
+          <li>
+            Supported formats: PNG, JPG, WEBP
+          </li>
+
+          <li>
+            Max file size: 5MB each
+          </li>
+
+          <li>
+            Uploaded: {uploadedImages.length} image(s)
+          </li>
+        </ul>
+
+      </div>
+    );
+  }
+
+
+  /* =====================================================
+     GET FIELD CONFIG
+  ===================================================== */
+
+  const config =
+    FIELD_CONFIG_MAP[key];
+
+  if (!config) {
+    return null;
+  }
+
+
+  /* =====================================================
+     PREVIEW SELECT
+  ===================================================== */
+
+  if (config.type === "select") {
 
     return (
-      <input 
-        type={config.inputType || 'text'} 
-        className="sell-property-input sp-summary-input"
-        placeholder={config.placeholder || ''}
-        value={formData[key]}
-        onChange={(e) => handleInputChange(key, e.target.value)}
-      />
+      <div className="sp-summary-preview">
+        {formData[key] || "-"}
+      </div>
     );
-  };
+
+  }
+
+
+  /* =====================================================
+     PREVIEW RADIO
+  ===================================================== */
+
+  if (config.type === "radio") {
+
+    return (
+      <div className="sp-summary-preview">
+        {formData[key] || "-"}
+      </div>
+    );
+
+  }
+
+
+  /* =====================================================
+     PREVIEW INPUT
+  ===================================================== */
+
+  return (
+    <div
+      className={`sp-summary-preview ${
+        !formData[key]
+          ? "is-empty"
+          : ""
+      }`}
+    >
+      {formData[key] || "Not entered yet"}
+    </div>
+  );
+};
 
   return (
     <div className="sell-property-container">
@@ -381,13 +451,13 @@ const SellProperty = () => {
       <div className="sell-property-banner">
         <div className="sell-property-banner-content">
           <div className="sell-property-banner-badge">
-            <span>🏠</span> SALE
+            <span>🏠</span> SALE & RENT
           </div>
           <div className="sell-property-banner-text">
             <h1>
-              Sell a Property with <span className="highlight-green">Utkal Property</span>
+              Sell & Rent a Property with <span className="highlight-green">Utkal Property</span>
             </h1>
-            <p>List your property for sale and connect with potential buyers across Odisha easily.</p>
+            <p>List your property and reach trusted buyers and verified tenants across Odisha quickly and effortlessly..</p>
           </div>
         </div>
         <div className="sell-property-banner-illustration">
@@ -799,7 +869,7 @@ const SellProperty = () => {
         {/* Submit Action Button */}
         <div className="sell-property-action-footer">
           <button type="submit" className="sell-property-submit-btn" disabled={loading}>
-            <span>✈</span> {loading ? 'Submitting Property...' : 'Continue to Next Step →'}
+            <span>✈</span> {loading ? 'Submitting Property...' : 'Submit Your Property →'}
           </button>
         </div>
 

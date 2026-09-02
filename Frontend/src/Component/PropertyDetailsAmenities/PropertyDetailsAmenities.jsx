@@ -287,16 +287,7 @@ const PropertyDetailsAmenities = ({
       property?._id ||
       property?.id;
 
-    console.log(
-      "PROPERTY DATA:",
-      property
-    );
-
-    console.log(
-      "PROPERTY ID:",
-      currentPropertyId
-    );
-
+   
     // ==============================================
     // CHECK PROPERTY ID
     // ==============================================
@@ -380,10 +371,7 @@ const PropertyDetailsAmenities = ({
           reviewForm.review.trim(),
       };
 
-      console.log(
-        "REVIEW PAYLOAD:",
-        reviewPayload
-      );
+     
 
       const response =
         await API.post(
@@ -391,10 +379,7 @@ const PropertyDetailsAmenities = ({
           reviewPayload
         );
 
-      console.log(
-        "REVIEW RESPONSE:",
-        response.data
-      );
+     
 
       alert(
         response.data?.message ||
@@ -476,27 +461,7 @@ const PropertyDetailsAmenities = ({
       property?._id ||
       property?.id;
 
-    console.log(
-      "================================"
-    );
-
-    console.log(
-      "CONTACT PROPERTY:"
-    );
-
-    console.log(
-      property
-    );
-
-    console.log(
-      "CONTACT PROPERTY ID:",
-      currentPropertyId
-    );
-
-    console.log(
-      "================================"
-    );
-
+    
     // ==============================================
     // CHECK PROPERTY ID
     // ==============================================
@@ -602,10 +567,7 @@ const PropertyDetailsAmenities = ({
         contactForm.mobile.trim(),
     };
 
-    console.log(
-      "CONTACT PAYLOAD:",
-      contactPayload
-    );
+    
 
     // ==============================================
     // SUBMIT CONTACT
@@ -620,10 +582,7 @@ const PropertyDetailsAmenities = ({
           contactPayload
         );
 
-      console.log(
-        "CONTACT RESPONSE:",
-        response.data
-      );
+     
 
       // ==========================================
       // SUCCESS

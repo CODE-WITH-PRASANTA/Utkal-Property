@@ -61,6 +61,8 @@ const menuItems = [
   { title: 'Testimonial', path: '/testimonial', icon: FiMessageSquare },
   { title: 'Gallery', path: '/gallery', icon: FiImage },
   { title: 'Our Team', path: '/team', icon: FiUsers },
+  { title: 'Property Listing', path: '/PropertyListing', icon: FiHelpCircle },
+
 ];
 
 const Sidebar = ({ isCollapsed, isMobileOpen, setIsMobileOpen, user, onLogout }) => {

@@ -1,11 +1,24 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+import viteCompression from "vite-plugin-compression";
 
 export default defineConfig({
   plugins: [
     react(),
-
-    // Generate robots.txt automatically during production build
+    cssInjectedByJsPlugin(),
+    // Generates .gz compressed assets
+    viteCompression({
+      algorithm: "gzip",
+      ext: ".gz",
+      threshold: 1024,
+    }),
+    // Generates .br (Brotli) compressed assets
+    viteCompression({
+      algorithm: "brotliCompress",
+      ext: ".br",
+      threshold: 1024,
+    }),
     {
       name: "generate-robots-txt",
       generateBundle() {
@@ -22,8 +35,7 @@ export default defineConfig({
   build: {
     target: "esnext",
     minify: "esbuild",
-    cssCodeSplit: true,
-    cssMinify: true,
+    cssCodeSplit: false,
     sourcemap: false,
     modulePreload: {
       polyfill: true,
@@ -32,16 +44,11 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            // Group primary vendor code together to reduce chained roundtrips
-            if (
-              id.includes("react") ||
-              id.includes("react-dom") ||
-              id.includes("react-router") ||
-              id.includes("react-icons")
-            ) {
-              return "vendor";
+            // Keep framework core separate
+            if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
+              return "framework";
             }
-            // Separate secondary utilities
+            // Separate utilities
             if (id.includes("axios")) {
               return "network";
             }

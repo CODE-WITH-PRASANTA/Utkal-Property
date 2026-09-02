@@ -1,61 +1,22 @@
 <!doctype html>
-
 <html lang="en">
   <head>
-    <!-- Character Encoding & Core Viewport -->
+    <!-- Character Encoding & Viewport -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <!-- Privacy & Cookie Protection: Eliminates 3rd-party tracking cookies -->
     <meta name="referrer" content="no-referrer" />
 
-    <!-- Critical LCP Image Preload (Vite compiles and transforms this relative path to the hashed asset in dist) -->
-    <link 
-      rel="preload" 
-      as="image" 
-      type="image/webp" 
-      href="./src/assets/slider-1.webp" 
-      fetchpriority="high" 
-    />
-
-    <!-- Google Fonts Optimization (Preconnect + Slimmed 400,600,700,800 weights) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link 
-      rel="preload" 
-      as="style" 
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" 
-    />
-    <link 
-      rel="stylesheet" 
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" 
-      media="print" 
-      onload="this.media='all'" 
-    />
-    <noscript>
-      <link 
-        rel="stylesheet" 
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" 
-      />
-    </noscript>
-
-    <!-- Primary Title (Optimized for Core SEO Keywords & NAP) -->
+    <!-- SEO Title & Meta -->
     <title>Utkal Property | Top Real Estate Company in Bhubaneswar, Odisha | Best Property Dealers</title>
-
-    <!-- Meta Description -->
-    <meta 
-      name="description" 
-      content="Utkal Property is the top real estate company & agency in Bhubaneswar, Odisha. Connect with the best property dealers, consultants & brokers for premium 2/3/4 BHK flats, luxury apartments, duplexes, and commercial plots across Bhubaneswar." 
+    <meta
+      name="description"
+      content="Utkal Property is the top real estate company & agency in Bhubaneswar, Odisha. Connect with the best property dealers, consultants & brokers for premium 2/3/4 BHK flats, luxury apartments, duplexes, and commercial plots across Bhubaneswar."
     />
-
-    <!-- Categorized SEO Keywords -->
-    <meta 
-      name="keywords" 
-      content="Top Real estate agent in Bhubaneswar, Best Property dealers in Bhubaneswar, best apartment dealers in Bhubaneswar, best Flat dealers in Bhubaneswar, Best Property Consultant in Bhubaneswar, Top Real Estate Company in Bhubaneswar Odisha, Premium Apartments and Flats Dealer in Bhubaneswar, Best real estate company in Bhubaneswar, Best real estate company in Odisha, best real estate developer in Bhubaneswar, best real estate agency in Bhubaneswar, top real estate brokers in Bhubaneswar, luxury apartments in Bhubaneswar, ready to move flats in Bhubaneswar, commercial property for sale in Bhubaneswar, residential plots in Baramunda Bhubaneswar, buy 2 BHK 3 BHK flats in Bhubaneswar Odisha, verified property listings Bhubaneswar" 
+    <meta
+      name="keywords"
+      content="Top Real estate agent in Bhubaneswar, Best Property dealers in Bhubaneswar, best apartment dealers in Bhubaneswar, best Flat dealers in Bhubaneswar, Best Property Consultant in Bhubaneswar, Top Real Estate Company in Bhubaneswar Odisha, Premium Apartments and Flats Dealer in Bhubaneswar, Best real estate company in Bhubaneswar, Best real estate company in Odisha, best real estate developer in Bhubaneswar, best real estate agency in Bhubaneswar, top real estate brokers in Bhubaneswar, luxury apartments in Bhubaneswar, ready to move flats in Bhubaneswar, commercial property for sale in Bhubaneswar, residential plots in Baramunda Bhubaneswar, buy 2 BHK 3 BHK flats in Bhubaneswar Odisha, verified property listings Bhubaneswar"
     />
-
-    <!-- Search Engine Indexing & Robots Directives -->
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
 
@@ -71,28 +32,28 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Utkal Property Real Estate Agency Bhubaneswar" />
 
-    <!-- Twitter Card Data -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Utkal Property | Best Real Estate Agency & Property Dealers Bhubaneswar" />
     <meta name="twitter:description" content="Find verified flats, apartments, and lands across Bhubaneswar, Odisha with top property consultants." />
     <meta name="twitter:image" content="https://utkalproperty.com/og-image.jpg" />
 
-    <!-- Geo-Targeting & Local SEO Tags -->
+    <!-- Local SEO -->
     <meta name="geo.region" content="IN-OR" />
     <meta name="geo.placename" content="Bhubaneswar, Odisha" />
     <meta name="geo.position" content="20.2764;85.7958" />
     <meta name="ICBM" content="20.2764, 85.7958" />
 
-    <!-- Author & Contact Metadata -->
+    <!-- Author & Contact -->
     <meta name="author" content="Utkal Property" />
     <meta name="publisher" content="Utkal Property" />
     <meta name="format-detection" content="telephone=yes" />
 
-    <!-- Favicon & Touch Icons -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.webp" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="/favicon.webp" />
     <link rel="apple-touch-icon" href="/favicon.webp" />
 
-    <!-- Structured Data: RealEstateAgent + LocalBusiness JSON-LD -->
+    <!-- Structured Data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -175,9 +136,14 @@
       }
     </script>
   </head>
+
   <body>
-    <noscript>You need to enable JavaScript to run this website.</noscript>
+    <noscript>
+      You need to enable JavaScript to run this website.
+    </noscript>
+
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

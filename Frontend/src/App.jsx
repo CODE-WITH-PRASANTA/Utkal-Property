@@ -1,20 +1,24 @@
-import React, { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import React, { lazy, Suspense, useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+
 import "./App.css";
 
-// Critical above-the-fold layout (eager load)
+// Eager load critical above-the-fold layout & Home
 import Navbar from "./Component/Navbar/Navbar";
 import PageLoader from "./Component/PageLoader/PageLoader";
+import Home from "./Pages/Home/Home";
 
-// Lazy-load below-the-fold Footer to keep initial JS bundle small
+// Lazy-load widgets and secondary pages
 const Footer = lazy(() => import("./Component/Footer/Footer"));
-
-// Non-critical global floating components
 const FloatingIcons = lazy(() => import("./Component/FloatingIcons/FloatingIcons"));
 const FloatingForm = lazy(() => import("./Component/FloatingForm/FloatingForm"));
 
-// Lazy-loaded routes
-const Home = lazy(() => import("./Pages/Home/Home"));
 const AboutUs = lazy(() => import("./Pages/AboutUs/AboutUs"));
 const PropertyGrid = lazy(() => import("./Pages/PropertyGrid/PropertyGrid"));
 const PropertyDetails = lazy(() => import("./Pages/PropertyDetails/PropertyDetails"));
@@ -33,7 +37,6 @@ function RouteHelper() {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    // Defer non-critical DOM canonical update so it doesn't block layout paint
     requestAnimationFrame(() => {
       let canonicalLink = document.querySelector("link[rel='canonical']");
       if (!canonicalLink) {
@@ -80,7 +83,7 @@ function App() {
         </Routes>
       </Suspense>
 
-      {/* Below-the-fold & Deferred Utilities */}
+      {/* Deferred Utilities */}
       <Suspense fallback={null}>
         <Footer />
         <FloatingIcons />
