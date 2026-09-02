@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import contactSellerImg from '../../assets/mark-contact3.png';
+import footerImage from '../../assets/footerImage.avif';
 import './RealNear.css';
 
 const RealNear = () => {
@@ -57,6 +58,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=300&q=80" 
                 alt="Moncton Real Estate" 
                 className="utkal-rn-card-img"
+                width="300"
+                height="110"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-card-overlay">
                 <h4 className="utkal-rn-location-name">Moncton</h4>
@@ -69,6 +74,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=300&q=80" 
                 alt="Mississauga Real Estate" 
                 className="utkal-rn-card-img"
+                width="300"
+                height="110"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-card-overlay">
                 <h4 className="utkal-rn-location-name">Mississauga</h4>
@@ -81,6 +90,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=300&q=80" 
                 alt="Halifax Real Estate" 
                 className="utkal-rn-card-img"
+                width="300"
+                height="110"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-card-overlay">
                 <h4 className="utkal-rn-location-name">Halifax</h4>
@@ -93,6 +106,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=300&q=80" 
                 alt="Ottawa Real Estate" 
                 className="utkal-rn-card-img"
+                width="300"
+                height="110"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-card-overlay">
                 <h4 className="utkal-rn-location-name">Ottawa</h4>
@@ -105,6 +122,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=300&q=80" 
                 alt="Iqaluit Real Estate" 
                 className="utkal-rn-card-img"
+                width="300"
+                height="110"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-card-overlay">
                 <h4 className="utkal-rn-location-name">Iqaluit</h4>
@@ -117,6 +138,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=300&q=80" 
                 alt="Toronto Real Estate" 
                 className="utkal-rn-card-img"
+                width="300"
+                height="110"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-card-overlay">
                 <h4 className="utkal-rn-location-name">Toronto</h4>
@@ -155,6 +180,10 @@ const RealNear = () => {
               src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80" 
               alt="Gorgeous Apartment Building in Bhubaneswar" 
               className="utkal-rn-featured-img"
+              width="600"
+              height="180"
+              loading="lazy"
+              decoding="async"
             />
             <div className="utkal-rn-featured-details">
               <h4 className="utkal-rn-featured-title">Gorgeous Apartment Building</h4>
@@ -185,9 +214,13 @@ const RealNear = () => {
         <div className="utkal-rn-comment-item">
           <div className="utkal-rn-comment-avatar-col">
             <img 
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" 
+              src={footerImage} 
               alt="Leslie Alexander" 
               className="utkal-rn-avatar"
+              width="50"
+              height="50"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="utkal-rn-comment-body-col">
@@ -202,9 +235,9 @@ const RealNear = () => {
               Buying your first home can be fun and exciting but requires lots of research. Utkal Property made it so easy to find the place of our dreams without reaching out to different brokers!
             </p>
             <div className="utkal-rn-comment-images">
-              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=200&q=80" alt="Interior preview" />
-              <img src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=200&q=80" alt="Living room preview" />
-              <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=200&q=80" alt="House exterior preview" />
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=200&q=80" alt="Interior preview" width="90" height="65" loading="lazy" decoding="async" />
+              <img src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=200&q=80" alt="Living room preview" width="90" height="65" loading="lazy" decoding="async" />
+              <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=200&q=80" alt="House exterior preview" width="90" height="65" loading="lazy" decoding="async" />
             </div>
             <div className="utkal-rn-comment-actions">
               <button type="button" className="utkal-rn-action-btn">👍 Useful</button>
@@ -220,6 +253,10 @@ const RealNear = () => {
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" 
               alt="Jenny Wilson" 
               className="utkal-rn-avatar"
+              width="50"
+              height="50"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="utkal-rn-comment-body-col">
@@ -247,6 +284,10 @@ const RealNear = () => {
               src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" 
               alt="Bessie Cooper" 
               className="utkal-rn-avatar"
+              width="50"
+              height="50"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="utkal-rn-comment-body-col">
@@ -346,6 +387,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=500&q=80" 
                 alt="Traditional House in Odisha" 
                 className="utkal-rn-related-img"
+                width="500"
+                height="200"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-related-badge">
                 <span>April</span>
@@ -366,6 +411,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=500&q=80" 
                 alt="Architecture View Bhubaneswar" 
                 className="utkal-rn-related-img"
+                width="500"
+                height="200"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-related-badge">
                 <span>April</span>
@@ -386,6 +435,10 @@ const RealNear = () => {
                 src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=500&q=80" 
                 alt="Modern House Listing" 
                 className="utkal-rn-related-img"
+                width="500"
+                height="200"
+                loading="lazy"
+                decoding="async"
               />
               <div className="utkal-rn-related-badge">
                 <span>April</span>
@@ -402,14 +455,14 @@ const RealNear = () => {
         </div>
       </div>
 
-      {/* Promotional Banner Section (Added Below Related Posts using imported image) */}
+      {/* Promotional Banner Section */}
       <div className="utkal-rn-promo-banner">
         <div className="utkal-rn-promo-content">
           <h2 className="utkal-rn-promo-title">
             Find for your dream home and increase your investment opportunities
           </h2>
           <p className="utkal-rn-promo-description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed tristique metus proin id lorem odio
+            Discover premium villas, residential plots, and modern apartments with Utkal Property.
           </p>
           <a href="tel:09861566735" className="utkal-rn-contact-seller-btn">
             📞 Contact Seller
@@ -420,6 +473,8 @@ const RealNear = () => {
             src={contactSellerImg} 
             alt="Utkal Property Consultant Bhubaneswar" 
             className="utkal-rn-promo-img"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       </div>

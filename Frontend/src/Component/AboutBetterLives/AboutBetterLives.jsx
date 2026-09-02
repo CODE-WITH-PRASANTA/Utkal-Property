@@ -51,7 +51,7 @@ export function AboutBetterLives() {
             </div>
           </div>
 
-          {/* Author Block without signature */}
+          {/* Author Block */}
           <div className="about-modern-author-block">
             <h4 className="about-modern-author-name">Utkal Property Leadership</h4>
             <span className="about-modern-author-title">Property Consultant & Advisory Team</span>
@@ -64,7 +64,11 @@ export function AboutBetterLives() {
             <img 
               src={aboutVideoImg} 
               alt="Utkal Property Real Estate Projects in Bhubaneswar" 
-              className="about-modern-main-image" 
+              className="about-modern-main-image"
+              loading="lazy"
+              decoding="async"
+              width="480"
+              height="400"
             />
             <button className="about-modern-play-btn" aria-label="Play Corporate Overview Video">
               <FaPlay className="about-modern-play-icon" />
@@ -74,7 +78,15 @@ export function AboutBetterLives() {
           <div className="about-modern-stats-grid">
             <div className="about-stat-card card-green">
               <div className="stat-icon-wrapper">
-                <img src={about1Img} alt="Client Satisfaction Rate" className="stat-card-img" />
+                <img 
+                  src={about1Img} 
+                  alt="Client Satisfaction Rate" 
+                  className="stat-card-img" 
+                  loading="lazy"
+                  decoding="async"
+                  width="48"
+                  height="48"
+                />
               </div>
               <div className="stat-info">
                 <span className="stat-value">98%</span>
@@ -84,7 +96,15 @@ export function AboutBetterLives() {
 
             <div className="about-stat-card card-cream">
               <div className="stat-icon-wrapper">
-                <img src={about2Img} alt="Verified Property Listings" className="stat-card-img" />
+                <img 
+                  src={about2Img} 
+                  alt="Verified Property Listings" 
+                  className="stat-card-img" 
+                  loading="lazy"
+                  decoding="async"
+                  width="48"
+                  height="48"
+                />
               </div>
               <div className="stat-info">
                 <span className="stat-value">100⁺</span>

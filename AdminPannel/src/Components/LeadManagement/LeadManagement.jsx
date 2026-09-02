@@ -610,10 +610,7 @@ const LeadManagement = () => {
           }
         );
 
-      console.log(
-        "LEADS RESPONSE:",
-        response.data
-      );
+     
 
       const backendLeads =
         response.data?.leads ||
@@ -978,10 +975,7 @@ const LeadManagement = () => {
           score: 0,
         };
 
-        console.log(
-          "CREATE LEAD:",
-          payload
-        );
+       
 
         const response =
           await API.post(
@@ -989,10 +983,8 @@ const LeadManagement = () => {
             payload
           );
 
-        console.log(
-          "CREATE LEAD RESPONSE:",
-          response.data
-        );
+       
+          
 
         if (
           response.data?.success
@@ -1068,10 +1060,7 @@ const LeadManagement = () => {
           changes
         );
 
-      console.log(
-        "UPDATE LEAD RESPONSE:",
-        response.data
-      );
+      
 
       if (
         response.data?.success
@@ -1189,10 +1178,7 @@ const LeadManagement = () => {
           `/leads/${lead.id}`
         );
 
-      console.log(
-        "DELETE LEAD RESPONSE:",
-        response.data
-      );
+     
 
       if (
         response.data?.success

@@ -169,10 +169,11 @@
 
 /* ===================================================
    RIGHT VISUAL & STATS COLUMN
-   ================================================== */
+   =================================================== */
 .about-modern-visual-col {
   flex: 0.95;
   max-width: 480px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -181,7 +182,7 @@
 .about-modern-image-frame {
   position: relative;
   width: 100%;
-  height: 400px;
+  aspect-ratio: 480 / 400;
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
@@ -266,6 +267,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  display: block;
 }
 
 .stat-info {
@@ -327,10 +329,6 @@
     gap: 40px;
   }
 
-  .about-modern-image-frame {
-    height: 350px;
-  }
-
   .stat-value {
     font-size: 1.5rem;
   }
@@ -347,10 +345,6 @@
     max-width: 100%;
     width: 100%;
   }
-
-  .about-modern-image-frame {
-    height: 380px;
-  }
 }
 
 @media screen and (max-width: 540px) {
@@ -359,7 +353,6 @@
   }
 
   .about-modern-image-frame {
-    height: 260px;
     border-radius: 18px;
   }
 
