@@ -10,7 +10,7 @@ import MainLayout from "./Layout/MainLayout/MainLayout";
 // =====================================================
 // AUTHENTICATION
 // =====================================================
-import LogIn from "./Pages/login/LogIn";
+import LogIn from "./Pages/LogIn/LogIn";
 
 // =====================================================
 // DASHBOARD
