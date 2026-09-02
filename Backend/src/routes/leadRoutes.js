@@ -1,4 +1,3 @@
-
 const express = require("express");
 
 const {
@@ -9,53 +8,21 @@ const {
   deleteLead,
 } = require("../controllers/leadController");
 
-const router =
-  express.Router();
+const router = express.Router();
 
-/* =====================================================
-   CREATE ENQUIRY
-===================================================== */
+// CREATE LEAD
+router.post("/", createLead);
 
-router.post(
-  "/",
-  createLead
-);
+// GET ALL LEADS
+router.get("/", getAllLeads);
 
-/* =====================================================
-   GET ALL ENQUIRIES
-===================================================== */
+// GET SINGLE LEAD
+router.get("/:id", getLeadById);
 
-router.get(
-  "/",
-  getAllLeads
-);
+// UPDATE LEAD
+router.put("/:id", updateLead);
 
-/* =====================================================
-   GET SINGLE ENQUIRY
-===================================================== */
-
-router.get(
-  "/:id",
-  getLeadById
-);
-
-/* =====================================================
-   UPDATE ENQUIRY
-===================================================== */
-
-router.put(
-  "/:id",
-  updateLead
-);
-
-/* =====================================================
-   DELETE ENQUIRY
-===================================================== */
-
-router.delete(
-  "/:id",
-  deleteLead
-);
+// DELETE LEAD
+router.delete("/:id", deleteLead);
 
 module.exports = router;
-

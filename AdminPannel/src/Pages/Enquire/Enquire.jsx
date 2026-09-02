@@ -1,4 +1,3 @@
-
 import React, {
   useCallback,
   useEffect,
@@ -526,9 +525,7 @@ const Enquiry = () => {
           `/leads/${enquiry._id}`
         );
 
-<<<<<<< HEAD
-     
-=======
+
       const lead =
         response.data?.lead ||
         enquiry;
@@ -536,7 +533,6 @@ const Enquiry = () => {
       setSelectedEnquiry(
         lead
       );
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
       setViewOpen(true);
 
@@ -744,12 +740,8 @@ const Enquiry = () => {
      DELETE CONFIRM
   ========================================================= */
 
-<<<<<<< HEAD
-     
-=======
   const handleDeleteConfirm =
     async () => {
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
 
       if (
         !selectedEnquiry?._id
@@ -771,59 +763,9 @@ const Enquiry = () => {
           response.data
         );
 
-<<<<<<< HEAD
-     
-
-      alert(
-        response.data?.message ||
-          "Enquiry updated successfully."
-      );
-
-      await fetchEnquiries();
-
-      setIsFormModalOpen(false);
-
-      resetForm();
-    } catch (error) {
-      console.error(
-        "UPDATE ENQUIRY ERROR:",
-        error.response?.data ||
-          error
-      );
-
-      alert(
-        error.response?.data?.message ||
-          "Failed to update enquiry."
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // ===================================================
-  // DELETE
-  // ===================================================
-
-  const handleDelete = async (id) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this enquiry?"
-      )
-    ) {
-      return;
-    }
-
-    try {
-      setDeletingId(id);
-
-      const response =
-        await API.delete(
-          `/property-contacts/${id}`
-=======
         setMessage(
           response.data?.message ||
             "Enquiry deleted successfully."
->>>>>>> 33dc575c48257ed0367008a23664dd650efa1e77
         );
 
         setMessageType(
@@ -2341,4 +2283,3 @@ const MessageEmptyIcon = () => {
 };
 
 export default Enquiry;
-
