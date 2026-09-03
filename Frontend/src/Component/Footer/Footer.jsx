@@ -39,7 +39,7 @@ const Footer = () => {
           </div>
           <div className="footer-brand-text">
             <h2>
-              UTKAL<span>PROPERTY</span>
+              UTKAL<span>PROPERTY</span> PVT. LTD.
             </h2>
             <p>A Unit of Legwork Services Pvt Ltd</p>
           </div>
@@ -77,10 +77,10 @@ const Footer = () => {
             </div>
           </div>
           <div className="footer-card-btn-wrapper">
-            <Link to="/contact" className="footer-card-btn" aria-label="Contact Seller for buying a house">
+            <a href="tel:+918338908897" className="footer-card-btn" aria-label="Call to buy a house">
               <FaPhoneAlt className="btn-react-icon" aria-hidden="true" />
               Contact Seller
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -115,16 +115,18 @@ const Footer = () => {
           <div className="address-group">
             <span className="address-label">Head office:</span>
             <p className="address-text bold-address">
-              Plot No-55, Ln 2, Jagannath Vihar, Baramunda,<br />
-              Bhubaneswar, Odisha 751003
+              Plot No-55, Lane-2, Road-2,<br />
+              Jagrath Vihar, Baramunda,<br />
+              Bhubaneswar, Pin-751003
             </p>
           </div>
 
           <div className="address-group">
             <span className="address-label">Branch:</span>
             <p className="address-text">
-              Patia Square, Near KIIT Road,<br />
-              Bhubaneswar, Odisha 751024
+              LIG-35, Satyauryan, Po-Sahid Nagar,<br />
+              Bhubaneswar (Infront of Lodia Apartment,<br />
+              Toshali AAH Complex)
             </p>
           </div>
         </div>
@@ -138,7 +140,7 @@ const Footer = () => {
             <div className="agent-avatar-wrapper">
               <img
                 src={footerImage}
-                alt="Darrell Steward - Utkal Property Consultant"
+                alt="Krushna Chandra Panda - Property Advisor"
                 className="agent-avatar"
                 width="40"
                 height="40"
@@ -147,22 +149,23 @@ const Footer = () => {
               />
             </div>
             <div className="agent-info">
-              <span className="agent-name">Darrell Steward</span>
-              <a href="tel:+919861566735" className="agent-phone" aria-label="Call Darrell Steward">+91 98615 66735</a>
+              <span className="agent-name">Property Advisor</span>
+              <span className="agent-subname" style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff' }}>Krushna Chandra Panda</span>
+              <a href="tel:+918338908897" className="agent-phone" aria-label="Call Krushna Chandra Panda">+91 83389 08897</a>
             </div>
-            <Link to="/contact" className="agent-action-btn" aria-label="Contact Darrell Steward">
+            <a href="tel:+918338908897" className="agent-action-btn" aria-label="Call Krushna Chandra Panda">
               <FaChevronRight size={12} aria-hidden="true" />
-            </Link>
+            </a>
           </div>
 
-          {/* Hotline */}
+          {/* Hotline / Office Phone */}
           <div className="contact-detail-row">
             <div className="contact-icon-wrapper" aria-hidden="true">
               <FiPhoneCall size={20} />
             </div>
             <div className="contact-detail-text">
-              <span className="detail-label">Hotline:</span>
-              <a href="tel:+919861566735" className="detail-value bold-value" aria-label="Call Hotline">+91 98615 66735</a>
+              <span className="detail-label">Office Hotline:</span>
+              <a href="tel:+917077606668" className="detail-value bold-value" aria-label="Call Office Hotline">+91 70776 06668</a>
             </div>
           </div>
 
@@ -221,7 +224,7 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="footer-bottom-bar">
-        <p>© {new Date().getFullYear()} Utkal Property. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Utkal Property. Developed By PRWEBSTOCK.</p>
         <div className="footer-bottom-links">
           <Link to="/privacy-policy">Privacy Policy</Link>
           <span className="footer-bottom-dot" aria-hidden="true">•</span>
