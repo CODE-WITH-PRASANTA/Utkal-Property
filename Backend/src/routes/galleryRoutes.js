@@ -1,5 +1,7 @@
 const express = require("express");
+
 const router = express.Router();
+
 const {
   getGalleryItems,
   createGalleryItem,
@@ -7,18 +9,36 @@ const {
   deleteGalleryItem,
 } = require("../controllers/galleryController");
 
-// Import your custom Multer & Sharp middleware setup
-const { upload, convertToWebp } = require("../middleware/multer"); // Adjust path if needed
+// =====================================================
+// MULTER
+// =====================================================
 
-// Router Endpoints
+const {
+  upload,
+} = require("../middleware/multer");
+
+// =====================================================
+// GET ALL + CREATE
+// =====================================================
+
 router
   .route("/")
   .get(getGalleryItems)
-  .post(upload.single("image"), convertToWebp, createGalleryItem);
+  .post(
+    upload.single("image"),
+    createGalleryItem
+  );
+
+// =====================================================
+// UPDATE + DELETE
+// =====================================================
 
 router
   .route("/:id")
-  .put(upload.single("image"), convertToWebp, updateGalleryItem)
+  .put(
+    upload.single("image"),
+    updateGalleryItem
+  )
   .delete(deleteGalleryItem);
 
 module.exports = router;

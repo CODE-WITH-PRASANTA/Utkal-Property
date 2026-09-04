@@ -1,4 +1,3 @@
-
 :root {
   --utkal-green: #126229;
   --utkal-green-hover: #0e4c20;
@@ -9,73 +8,99 @@
   --utkal-red: #ef4444;
 }
 
-* {
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+.utkal-gallery-section,
+.utkal-gallery-section * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
 }
 
-/* Outer Section */
 .utkal-gallery-section {
   width: 100%;
-  padding: 40px 24px;
-  background-color: var(--utkal-bg-light);
   min-height: 100vh;
+  padding: 40px 24px;
+  background: var(--utkal-bg-light);
 }
 
 .utkal-gallery-container {
+  width: 100%;
   max-width: 1240px;
   margin: 0 auto;
 }
 
-/* Header */
+/* =====================================================
+   HEADER
+===================================================== */
+
 .utkal-gallery-header {
   margin-bottom: 30px;
 }
 
 .utkal-gallery-tag {
   display: inline-block;
+  padding: 6px 16px;
+  margin-bottom: 10px;
+
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+
+  border-radius: 20px;
+
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--utkal-green);
-  background: rgba(18, 98, 41, 0.08);
-  padding: 6px 16px;
-  border-radius: 20px;
-  margin-bottom: 10px;
 }
 
 .utkal-gallery-title {
+  margin: 0 0 6px;
+
+  color: var(--utkal-navy);
+
   font-size: 32px;
   font-weight: 800;
-  color: var(--utkal-navy);
-  margin-bottom: 6px;
+  line-height: 1.2;
   letter-spacing: -0.5px;
 }
 
 .utkal-gallery-subtitle {
-  font-size: 14px;
+  margin: 0;
+
   color: var(--utkal-text-muted);
+
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-/* ---------------- FORM CARD STYLING ---------------- */
+/* =====================================================
+   FORM CARD
+===================================================== */
+
 .utkal-gallery-form-card {
+  width: 100%;
+
+  padding: 32px;
+  margin-bottom: 40px;
+
   background: #ffffff;
+
   border: 1px solid var(--utkal-border);
   border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 8px 30px rgba(12, 29, 46, 0.04);
-  margin-bottom: 40px;
+
+  box-shadow:
+    0 8px 30px rgba(12, 29, 46, 0.04);
 }
 
 .utkal-gallery-form-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  justify-content: space-between;
+
   padding-bottom: 16px;
+  margin-bottom: 24px;
+
   border-bottom: 1px solid #f1f5f9;
 }
 
@@ -88,130 +113,200 @@
 .utkal-gallery-form-indicator {
   width: 4px;
   height: 20px;
-  background-color: var(--utkal-green);
+
+  background: var(--utkal-green);
+
   border-radius: 2px;
 }
 
 .utkal-gallery-form-header h2 {
+  margin: 0;
+
+  color: var(--utkal-navy);
+
   font-size: 20px;
   font-weight: 700;
-  color: var(--utkal-navy);
 }
 
 .utkal-gallery-cancel-edit-btn {
-  background: #fee2e2;
-  color: #dc2626;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
+
+  padding: 8px 14px;
+
+  color: #dc2626;
+  background: #fee2e2;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
 }
 
-/* Form Layout */
+.utkal-gallery-cancel-edit-btn:hover {
+  background: #fecaca;
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
 .utkal-gallery-form {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-/* Upload Row (Dropzone + Preview) */
+/* =====================================================
+   UPLOAD ROW
+===================================================== */
+
 .utkal-gallery-upload-row {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(260px, 1fr);
+
   gap: 24px;
+
+  width: 100%;
 }
 
-/* Drag & Dropzone */
+/* =====================================================
+   DROPZONE
+===================================================== */
+
 .utkal-gallery-dropzone {
-  border: 2px dashed rgba(18, 98, 41, 0.35);
-  background-color: rgba(18, 98, 41, 0.03);
-  border-radius: 14px;
+  min-height: 345px;
+
   padding: 32px 20px;
-  text-align: center;
-  cursor: pointer;
+
+  background: rgba(18, 98, 41, 0.03);
+
+  border: 2px dashed rgba(18, 98, 41, 0.35);
+  border-radius: 14px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .utkal-gallery-dropzone:hover,
 .utkal-gallery-dropzone.drag-active {
-  background-color: rgba(18, 98, 41, 0.08);
+  background: rgba(18, 98, 41, 0.08);
+
   border-color: var(--utkal-green);
 }
 
 .utkal-gallery-dropzone-icon {
-  font-size: 42px;
+  margin-bottom: 8px;
+
   color: var(--utkal-green);
-  margin-bottom: 6px;
+
+  font-size: 42px;
 }
 
 .utkal-gallery-dropzone-text {
+  margin: 0;
+
+  color: var(--utkal-navy);
+
   font-size: 15px;
   font-weight: 700;
-  color: var(--utkal-navy);
 }
 
 .utkal-gallery-or {
+  margin: 8px 0;
+
+  color: var(--utkal-text-muted);
+
   font-size: 11px;
   font-weight: 700;
-  color: var(--utkal-text-muted);
-  margin: 8px 0;
 }
 
 .utkal-gallery-choose-btn {
-  background-color: var(--utkal-navy);
+  padding: 10px 22px;
+
   color: #ffffff;
+  background: var(--utkal-navy);
+
   border: none;
-  padding: 9px 20px;
   border-radius: 8px;
+
   font-size: 13px;
   font-weight: 600;
+
   cursor: pointer;
-  transition: background 0.2s;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .utkal-gallery-choose-btn:hover {
-  background-color: #172a3a;
+  background: #172a3a;
+  transform: translateY(-1px);
 }
 
 .utkal-gallery-dropzone-footer {
-  margin-top: 16px;
   display: flex;
   gap: 16px;
+
+  margin-top: 16px;
+
+  color: var(--utkal-text-muted);
+
   font-size: 11px;
   font-weight: 600;
-  color: var(--utkal-text-muted);
 }
 
-/* Preview Box */
+/* =====================================================
+   PREVIEW
+===================================================== */
+
 .utkal-gallery-preview-wrapper {
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  min-width: 0;
 }
 
 .utkal-gallery-preview-label {
+  color: var(--utkal-navy);
+
   font-size: 13px;
   font-weight: 700;
-  color: var(--utkal-navy);
 }
 
 .utkal-gallery-preview-box {
+  position: relative;
+
+  width: 100%;
+  min-height: 345px;
+
+  overflow: hidden;
+
+  background: var(--utkal-bg-light);
+
   border: 1px solid var(--utkal-border);
   border-radius: 14px;
-  height: 100%;
-  min-height: 180px;
-  background-color: var(--utkal-bg-light);
-  overflow: hidden;
-  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -219,33 +314,46 @@
 
 .utkal-gallery-preview-content {
   position: relative;
+
   width: 100%;
   height: 100%;
+  min-height: 345px;
 }
 
 .utkal-gallery-preview-content img {
+  display: block;
+
   width: 100%;
   height: 100%;
+  min-height: 345px;
+
   object-fit: cover;
-  display: block;
 }
 
 .utkal-gallery-preview-remove {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(12, 29, 46, 0.8);
-  color: #ffffff;
-  border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+
+  top: 10px;
+  right: 10px;
+
+  width: 32px;
+  height: 32px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  color: #ffffff;
+  background: rgba(12, 29, 46, 0.8);
+
+  border: none;
+  border-radius: 50%;
+
+  font-size: 13px;
+
   cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s;
+
+  z-index: 5;
 }
 
 .utkal-gallery-preview-remove:hover {
@@ -256,7 +364,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+
   gap: 8px;
+
   color: #cbd5e1;
 }
 
@@ -265,42 +376,68 @@
 }
 
 .utkal-gallery-preview-placeholder span {
-  font-size: 12px;
   color: var(--utkal-text-muted);
+
+  font-size: 12px;
 }
 
-/* Buttons */
+/* =====================================================
+   FORM BUTTONS
+===================================================== */
+
 .utkal-gallery-form-footer {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+
   gap: 12px;
 }
 
 .utkal-gallery-cancel-btn {
-  background: #f1f5f9;
-  color: var(--utkal-text-muted);
-  border: none;
   padding: 12px 24px;
+
+  color: var(--utkal-text-muted);
+  background: #f1f5f9;
+
+  border: none;
   border-radius: 10px;
+
   font-size: 14px;
   font-weight: 600;
+
   cursor: pointer;
 }
 
+.utkal-gallery-cancel-btn:hover {
+  background: #e2e8f0;
+}
+
 .utkal-gallery-submit-btn {
-  background: var(--utkal-green);
-  color: #ffffff;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(18, 98, 41, 0.3);
-  transition: background 0.2s, transform 0.1s;
+
+  padding: 12px 28px;
+
+  color: #ffffff;
+  background: var(--utkal-green);
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 14px rgba(18, 98, 41, 0.3);
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
 }
 
 .utkal-gallery-submit-btn:hover {
@@ -308,25 +445,43 @@
   transform: translateY(-1px);
 }
 
-/* ---------------- TABLE CARD STYLING ---------------- */
+.utkal-gallery-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* =====================================================
+   TABLE CARD
+===================================================== */
+
 .utkal-gallery-table-card {
+  width: 100%;
+
+  overflow: hidden;
+
   background: #ffffff;
+
   border: 1px solid var(--utkal-border);
   border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 30px rgba(12, 29, 46, 0.04);
+
+  box-shadow:
+    0 8px 30px rgba(12, 29, 46, 0.04);
 }
 
 .utkal-gallery-table-header {
   padding: 20px 24px;
-  border-bottom: 1px solid var(--utkal-border);
+
   background: #ffffff;
+
+  border-bottom: 1px solid var(--utkal-border);
 }
 
 .utkal-gallery-table-header h3 {
+  margin: 0;
+
+  color: var(--utkal-navy);
+
   font-size: 18px;
   font-weight: 700;
-  color: var(--utkal-navy);
 }
 
 .utkal-gallery-table-responsive {
@@ -336,74 +491,134 @@
 
 .utkal-gallery-table {
   width: 100%;
+
   border-collapse: collapse;
+
   text-align: left;
+
   font-size: 13.5px;
 }
 
 .utkal-gallery-table th {
-  background: var(--utkal-bg-light);
-  color: var(--utkal-navy);
-  font-weight: 700;
   padding: 14px 20px;
+
+  color: var(--utkal-navy);
+  background: var(--utkal-bg-light);
+
   border-bottom: 1px solid var(--utkal-border);
+
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .utkal-gallery-table td {
   padding: 14px 20px;
+
   border-bottom: 1px solid #f1f5f9;
+
   vertical-align: middle;
 }
 
-.utkal-gallery-table tr:hover {
+.utkal-gallery-table tbody tr:hover {
   background: #f8fafc;
 }
 
-/* Table Cells */
+/* =====================================================
+   THUMBNAIL
+===================================================== */
+
 .utkal-gallery-thumb-wrap {
-  width: 80px;
-  height: 60px;
-  border-radius: 10px;
+  width: 100px;
+  height: 70px;
+
   overflow: hidden;
+
+  background: var(--utkal-navy);
+
   border: 1px solid var(--utkal-border);
-  background-color: var(--utkal-navy);
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .utkal-gallery-thumb-wrap img {
+  display: block;
+
   width: 100%;
   height: 100%;
+
   object-fit: cover;
 }
 
+.utkal-gallery-broken-placeholder {
+  width: 100%;
+  height: 100%;
+
+  padding: 5px;
+
+  color: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  font-size: 9px;
+}
+
+.utkal-gallery-broken-placeholder svg {
+  margin-bottom: 4px;
+  font-size: 18px;
+}
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
 .utkal-gallery-actions-cell {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
   gap: 12px;
 }
 
 .utkal-action-btn {
   width: 36px;
   height: 36px;
-  border-radius: 8px;
-  border: 1px solid var(--utkal-border);
-  background: #ffffff;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+
+  background: #ffffff;
+
+  border: 1px solid var(--utkal-border);
+  border-radius: 8px;
+
   font-size: 14px;
-  transition: all 0.2s;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.utkal-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .utkal-action-btn.view-btn {
   color: var(--utkal-navy);
 }
 
-.utkal-action-btn.view-btn:hover {
-  background: var(--utkal-navy);
+.utkal-action-btn.view-btn:hover:not(:disabled) {
   color: #ffffff;
+  background: var(--utkal-navy);
   border-color: var(--utkal-navy);
 }
 
@@ -412,8 +627,8 @@
 }
 
 .utkal-action-btn.edit-btn:hover {
-  background: var(--utkal-green);
   color: #ffffff;
+  background: var(--utkal-green);
   border-color: var(--utkal-green);
 }
 
@@ -422,63 +637,90 @@
 }
 
 .utkal-action-btn.delete-btn:hover {
-  background: var(--utkal-red);
   color: #ffffff;
+  background: var(--utkal-red);
   border-color: var(--utkal-red);
 }
 
+/* =====================================================
+   EMPTY
+===================================================== */
+
 .utkal-gallery-empty-td {
-  text-align: center;
   padding: 40px;
+
   color: var(--utkal-text-muted);
+
+  text-align: center;
 }
 
 .text-center {
   text-align: center !important;
 }
 
-/* ---------------- LIGHTBOX MODAL STYLING ---------------- */
+/* =====================================================
+   MODAL
+===================================================== */
+
 .utkal-gallery-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+
+  inset: 0;
+
   width: 100vw;
   height: 100vh;
+
+  padding: 20px;
+
   background: rgba(12, 29, 46, 0.85);
+
   backdrop-filter: blur(4px);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  padding: 20px;
+
+  z-index: 9999;
 }
 
 .utkal-gallery-modal-card {
   position: relative;
-  background: #ffffff;
-  border-radius: 16px;
-  max-width: 650px;
+
   width: 100%;
+  max-width: 900px;
+
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+
+  background: #ffffff;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.4);
 }
 
 .utkal-gallery-modal-close {
   position: absolute;
+
   top: 14px;
   right: 14px;
-  background: rgba(12, 29, 46, 0.7);
+
+  width: 36px;
+  height: 36px;
+
   color: #ffffff;
+  background: rgba(12, 29, 46, 0.75);
+
   border: none;
-  width: 34px;
-  height: 34px;
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
-  transition: background 0.2s;
-  z-index: 2;
+
+  z-index: 5;
 }
 
 .utkal-gallery-modal-close:hover {
@@ -487,23 +729,44 @@
 
 .utkal-gallery-modal-body {
   width: 100%;
-  max-height: 80vh;
+  max-height: 85vh;
+
   overflow: hidden;
-  background-color: var(--utkal-navy);
+
+  background: var(--utkal-navy);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .utkal-gallery-modal-body img {
-  width: 100%;
-  height: 100%;
-  max-height: 80vh;
-  object-fit: contain;
   display: block;
+
+  width: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+
+  object-fit: contain;
 }
 
-/* ---------------- RESPONSIVE BREAKPOINTS ---------------- */
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
 @media (max-width: 992px) {
   .utkal-gallery-upload-row {
     grid-template-columns: 1fr;
+  }
+
+  .utkal-gallery-preview-box,
+  .utkal-gallery-dropzone {
+    min-height: 300px;
+  }
+
+  .utkal-gallery-preview-content,
+  .utkal-gallery-preview-content img {
+    min-height: 300px;
   }
 }
 
@@ -515,4 +778,65 @@
   .utkal-gallery-form-card {
     padding: 20px;
   }
+
+  .utkal-gallery-title {
+    font-size: 26px;
+  }
+
+  .utkal-gallery-form-header {
+    align-items: flex-start;
+    gap: 15px;
+    flex-direction: column;
+  }
+
+  .utkal-gallery-dropzone {
+    min-height: 260px;
+  }
+
+  .utkal-gallery-preview-box {
+    min-height: 260px;
+  }
+
+  .utkal-gallery-preview-content,
+  .utkal-gallery-preview-content img {
+    min-height: 260px;
+  }
+
+  .utkal-gallery-form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .utkal-gallery-cancel-btn,
+  .utkal-gallery-submit-btn {
+    width: 100%;
+  }
+
+  .utkal-gallery-actions-cell {
+    gap: 6px;
+  }
 }
+
+@media (max-width: 480px) {
+  .utkal-gallery-section {
+    padding: 20px 12px;
+  }
+
+  .utkal-gallery-form-card {
+    padding: 16px;
+  }
+
+  .utkal-gallery-title {
+    font-size: 23px;
+  }
+
+  .utkal-gallery-dropzone-footer {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .utkal-gallery-thumb-wrap {
+    width: 80px;
+    height: 60px;
+  }
+} 
