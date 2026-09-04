@@ -10,7 +10,7 @@ import MainLayout from "./Layout/MainLayout/MainLayout";
 // =====================================================
 // AUTHENTICATION
 // =====================================================
-import LogIn from "./Pages/login/LogIn";
+import LogIn from "./Pages/LogIn/LogIn";
 
 // =====================================================
 // DASHBOARD
@@ -53,7 +53,7 @@ import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
 import PropertyListing from "./Components/PropertyListing/PropertyListing";
 // import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
-// import Amenities from "./Components/Amenities/Amenities";
+
 // import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
 
 // =====================================================

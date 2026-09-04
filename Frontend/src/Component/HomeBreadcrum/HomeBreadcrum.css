@@ -106,8 +106,6 @@
   color: var(--hb-green);
 }
 
-
-
 /* -------------------------
    SUBTITLE
 ------------------------- */
@@ -356,46 +354,44 @@
 }
 
 /* -------------------------
-   DROPDOWN
+   DROPDOWN MENU (Refined & Smooth)
 ------------------------- */
 .HomeBreadcrum-dropdownMenu {
   position: absolute;
-  top: calc(100% + 9px);
+  top: calc(100% + 12px);
   left: 0;
   width: 100%;
-  min-width: 300px;
-  max-height: 360px;
+  min-width: 280px;
+  max-height: 320px;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 7px;
+  padding: 12px 0 8px 0;
   background: #ffffff;
-  border: 1px solid #e8ede9;
-  border-radius: 14px;
-  box-shadow:
-    0 24px 60px rgba(20, 35, 24, 0.14),
-    0 5px 20px rgba(20, 35, 24, 0.06);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
   z-index: 99999;
-  animation: HomeBreadcrumDropdownIn 0.18s ease both;
+  animation: HomeBreadcrumDropdownIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes HomeBreadcrumDropdownIn {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-8px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .HomeBreadcrum-dropdownTitle {
-  padding: 11px 13px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #f0f2f0;
-  color: #667069;
-  font-size: 10px;
-  font-weight: 800;
+  padding: 4px 20px 10px 20px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
 }
@@ -406,13 +402,35 @@
   list-style: none;
 }
 
+.HomeBreadcrum-dropdownMenu ul li {
+  padding: 10px 20px;
+  margin: 2px 8px;
+  border-radius: 10px;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.HomeBreadcrum-dropdownMenu ul li:hover {
+  background: #f8fafc;
+  color: var(--hb-green);
+}
+
+.HomeBreadcrum-dropdownMenu ul li.selected {
+  background: #f0fdf4;
+  color: var(--hb-green);
+  font-weight: 600;
+}
+
 .HomeBreadcrum-dropdownSeparator {
-  padding: 12px 12px 7px;
-  margin-top: 4px;
-  border-top: 1px solid #edf0ed;
-  color: #9aa19c;
-  font-size: 9px;
-  font-weight: 800;
+  padding: 14px 20px 6px 20px;
+  margin-top: 6px;
+  border-top: 1px solid #f1f5f9;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
@@ -421,42 +439,44 @@
    PROPERTY DROPDOWN ITEMS
 ------------------------- */
 .HomeBreadcrum-propertyItem {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 11px;
-  padding: 11px 12px;
-  margin: 2px 0;
+  padding: 10px 16px !important;
+  margin: 2px 8px !important;
   border-radius: 10px;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .HomeBreadcrum-propertyItem:hover {
-  background: linear-gradient(90deg, #f1faf3, #fbfefb);
-  transform: translateX(2px);
+  background: #f8fafc !important;
+  color: var(--hb-green);
+  transform: none !important;
 }
 
 .HomeBreadcrum-propertyItem.selected {
-  background: #eef8f0;
+  background: #f0fdf4 !important;
+  color: var(--hb-green);
 }
 
 .HomeBreadcrum-propertyIcon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9px;
-  background: #f0f8f2;
+  border-radius: 8px;
+  background: #f1f5f9;
   color: var(--hb-green);
-  font-size: 15px;
-  transition: background 0.2s ease, color 0.2s ease;
+  font-size: 14px;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .HomeBreadcrum-propertyItem:hover .HomeBreadcrum-propertyIcon {
   color: #ffffff;
-  background: linear-gradient(135deg, var(--hb-green), var(--hb-green-dark));
+  background: var(--hb-green);
 }
 
 .HomeBreadcrum-propertyContent {
@@ -464,7 +484,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .HomeBreadcrum-propertyContent strong {
@@ -472,9 +492,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #1f2937;
+  color: #1e293b;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .HomeBreadcrum-propertyContent span {
@@ -482,12 +502,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #929994;
-  font-size: 10px;
-}
-
-.HomeBreadcrum-propertyItem:hover .HomeBreadcrum-propertyContent strong {
-  color: #287f3d;
+  color: #64748b;
+  font-size: 11px;
 }
 
 /* -------------------------
@@ -497,31 +513,31 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px;
-  margin: 2px 0;
+  padding: 10px 16px !important;
+  margin: 2px 8px !important;
   border-radius: 10px;
   cursor: pointer;
-  color: #1f2937;
+  color: #1e293b;
   font-size: 13px;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .HomeBreadcrum-locationItem svg {
   flex-shrink: 0;
   color: var(--hb-green);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .HomeBreadcrum-locationItem:hover {
   color: var(--hb-green);
-  background: #f1faf3;
-  transform: translateX(2px);
+  background: #f8fafc;
+  transform: none !important;
 }
 
 .HomeBreadcrum-locationItem.selected {
-  color: #287f3d;
-  background: #eef8f0;
-  font-weight: 650;
+  color: var(--hb-green);
+  background: #f0fdf4;
+  font-weight: 600;
 }
 
 /* -------------------------
@@ -529,17 +545,17 @@
 ------------------------- */
 .HomeBreadcrum-loadingItem,
 .HomeBreadcrum-emptyItem {
-  padding: 18px 14px;
+  padding: 16px 20px;
   text-align: center;
-  color: #6b7280;
-  font-size: 12px;
+  color: #64748b;
+  font-size: 13px;
 }
 
 /* -------------------------
    DROPDOWN SCROLLBAR
 ------------------------- */
 .HomeBreadcrum-dropdownMenu::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
 }
 
 .HomeBreadcrum-dropdownMenu::-webkit-scrollbar-track {
@@ -547,12 +563,12 @@
 }
 
 .HomeBreadcrum-dropdownMenu::-webkit-scrollbar-thumb {
-  background: #d4dbd5;
-  border-radius: 20px;
+  background: #cbd5e1;
+  border-radius: 10px;
 }
 
 .HomeBreadcrum-dropdownMenu::-webkit-scrollbar-thumb:hover {
-  background: #319b4b;
+  background: #94a3b8;
 }
 
 /* -------------------------
@@ -670,7 +686,7 @@
 
 .HomeBreadcrum-filterTop {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 18px;
   align-items: center;
 }
@@ -716,17 +732,6 @@
   font-size: 14px;
 }
 
-.HomeBreadcrum-filterSelectGroup {
-  display: flex;
-  gap: 10px;
-}
-
-.HomeBreadcrum-filterHeaderLabel {
-  color: #4b5563;
-  font-size: 12px;
-  font-weight: 600;
-}
-
 .HomeBreadcrum-divider {
   width: 100%;
   height: 1px;
@@ -735,8 +740,55 @@
 }
 
 /* -------------------------
-   AMENITIES
+   AMENITIES SECTION IN FILTER PANEL
 ------------------------- */
+.HomeBreadcrum-filterSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.HomeBreadcrum-filterSectionHeader h4 {
+  margin: 0 0 2px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.HomeBreadcrum-filterSectionHeader p {
+  margin: 0;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.HomeBreadcrum-clearFilters {
+  background: transparent;
+  border: 0;
+  color: var(--hb-green);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.HomeBreadcrum-clearFilters:hover {
+  background: #edf8ef;
+}
+
+.HomeBreadcrum-filterMessage {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.HomeBreadcrum-filterMessage.error {
+  color: #dc2626;
+}
+
 .HomeBreadcrum-amenitiesGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1106,18 +1158,12 @@
     letter-spacing: -1.6px;
   }
 
-  .highlight-green::after {
-    bottom: -3px;
-    height: 2px;
-  }
-
   .HomeBreadcrum-subtitle {
     margin: 18px 0 25px;
     font-size: 13px;
     line-height: 1.7;
   }
 
-  /* Search becomes a clean vertical card */
   .HomeBreadcrum-searchCardContainer {
     width: 100%;
   }
@@ -1193,7 +1239,6 @@
     margin-top: 5px;
   }
 
-  /* Advanced filters */
   .HomeBreadcrum-filterPanel {
     padding: 16px;
     margin-top: 10px;
@@ -1204,16 +1249,11 @@
     gap: 10px;
   }
 
-  .HomeBreadcrum-filterSelectGroup {
-    flex-direction: column;
-  }
-
   .HomeBreadcrum-amenitiesGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
-  /* Stats */
   .HomeBreadcrum-stats {
     gap: 35px;
     margin-top: 30px;
@@ -1232,7 +1272,6 @@
     height: 38px;
   }
 
-  /* Hero */
   .HomeBreadcrum-right {
     min-height: 380px;
   }
