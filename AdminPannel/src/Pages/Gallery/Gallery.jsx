@@ -1,5 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import "./Gallery.css";
+
 import API, { IMG_URL } from "../../api/axios";
 
 import {
@@ -10,19 +16,48 @@ import {
   FaTimes,
   FaPlus,
   FaImage,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 const Gallery = () => {
+  // =====================================================
+  // STATES
+  // =====================================================
+
   const [galleryItems, setGalleryItems] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
   const [selectedFile, setSelectedFile] = useState(null);
+
   const [editingId, setEditingId] = useState(null);
+
   const [viewingImage, setViewingImage] = useState(null);
 
   const [dragActive, setDragActive] = useState(false);
+
   const [previewImage, setPreviewImage] = useState(null);
+
   const [brokenImages, setBrokenImages] = useState({});
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // =====================================================
+  // PAGINATION
+  // =====================================================
+
+  const ITEMS_PER_PAGE = 10;
+
+  // =====================================================
+  // FORM DATA
+  // =====================================================
+
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    description: "",
+  });
 
   const fileInputRef = useRef(null);
 
@@ -31,41 +66,41 @@ const Gallery = () => {
   // =====================================================
 
   const getImageUrl = (photoPath) => {
-    if (!photoPath) return "";
+    if (!photoPath) {
+      return "";
+    }
 
     const value = String(photoPath).trim();
 
-    // Blob URL
-    if (value.startsWith("blob:")) {
-      return value;
-    }
-
-    // Already absolute URL
+    // Already complete URL
     if (
       value.startsWith("http://") ||
-      value.startsWith("https://")
+      value.startsWith("https://") ||
+      value.startsWith("blob:")
     ) {
       return value;
     }
 
-    // Normalize Windows path
+    // Normalize path
     let cleanPath = value.replace(/\\/g, "/");
 
     // Find uploads folder
-    const uploadsIndex = cleanPath.toLowerCase().indexOf("uploads/");
+    const uploadsIndex = cleanPath
+      .toLowerCase()
+      .indexOf("uploads/");
 
     if (uploadsIndex !== -1) {
-      cleanPath = "/" + cleanPath.substring(uploadsIndex);
+      cleanPath =
+        "/" + cleanPath.substring(uploadsIndex);
     } else {
       cleanPath = cleanPath.startsWith("/")
         ? cleanPath
         : `/${cleanPath}`;
     }
 
-    // Remove duplicate slashes
+    // Remove duplicate slash
     cleanPath = cleanPath.replace(/\/+/g, "/");
 
-    // Base image URL
     let baseUrl = IMG_URL;
 
     if (!baseUrl) {
@@ -74,7 +109,7 @@ const Gallery = () => {
 
     baseUrl = String(baseUrl).replace(/\/+$/, "");
 
-    // If IMG_URL accidentally contains /api, remove it
+    // If IMG_URL contains /api remove it
     baseUrl = baseUrl.replace(/\/api$/, "");
 
     return `${baseUrl}${cleanPath}`;
@@ -92,7 +127,10 @@ const Gallery = () => {
 
       let data = [];
 
-      if (response.data?.data && Array.isArray(response.data.data)) {
+      if (
+        response.data?.data &&
+        Array.isArray(response.data.data)
+      ) {
         data = response.data.data;
       } else if (Array.isArray(response.data)) {
         data = response.data;
@@ -100,40 +138,77 @@ const Gallery = () => {
 
       setGalleryItems(data);
 
-      // Reset broken image states after fresh fetch
       setBrokenImages({});
+
+      // Keep page valid after refresh/update/delete
+      const totalPages = Math.max(
+        1,
+        Math.ceil(data.length / ITEMS_PER_PAGE)
+      );
+
+      setCurrentPage((previousPage) =>
+        previousPage > totalPages
+          ? totalPages
+          : previousPage
+      );
     } catch (error) {
-      console.error("Error fetching gallery assets:", error);
+      console.error(
+        "Error fetching gallery assets:",
+        error
+      );
+
+      setGalleryItems([]);
     } finally {
       setLoading(false);
     }
   };
+
+  // =====================================================
+  // INITIAL FETCH
+  // =====================================================
 
   useEffect(() => {
     fetchGalleryItems();
   }, []);
 
   // =====================================================
+  // FORM CHANGE
+  // =====================================================
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  // =====================================================
   // IMAGE ERROR
   // =====================================================
 
   const handleImageError = (id, url) => {
-    console.error("Gallery image failed to load:", url);
+    console.error(
+      "Gallery image failed to load:",
+      url
+    );
 
-    setBrokenImages((prev) => ({
-      ...prev,
+    setBrokenImages((previous) => ({
+      ...previous,
       [id]: true,
     }));
   };
 
   // =====================================================
-  // PROCESS SELECTED FILE
+  // PROCESS FILE
   // =====================================================
 
   const processFile = (file) => {
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
-    // Check file type
     const allowedTypes = [
       "image/jpeg",
       "image/jpg",
@@ -142,20 +217,24 @@ const Gallery = () => {
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      alert("Only JPG, JPEG, PNG and WEBP images are allowed.");
-      return;
-    }
-
-    // 5MB
-    if (file.size > 5 * 1024 * 1024) {
       alert(
-        "File size exceeds 5MB limit. Please upload a smaller image."
+        "Only JPG, JPEG, PNG and WEBP images are allowed."
       );
       return;
     }
 
-    // Remove previous blob URL
-    if (previewImage && previewImage.startsWith("blob:")) {
+    if (file.size > 5 * 1024 * 1024) {
+      alert(
+        "File size exceeds 5MB limit."
+      );
+      return;
+    }
+
+    // Revoke old blob preview
+    if (
+      previewImage &&
+      previewImage.startsWith("blob:")
+    ) {
       URL.revokeObjectURL(previewImage);
     }
 
@@ -166,7 +245,7 @@ const Gallery = () => {
   };
 
   // =====================================================
-  // FILE INPUT
+  // FILE CHANGE
   // =====================================================
 
   const handleFileChange = (e) => {
@@ -178,14 +257,17 @@ const Gallery = () => {
   };
 
   // =====================================================
-  // DRAG HANDLERS
+  // DRAG EVENTS
   // =====================================================
 
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (e.type === "dragenter" || e.type === "dragover") {
+    if (
+      e.type === "dragenter" ||
+      e.type === "dragover"
+    ) {
       setDragActive(true);
     }
 
@@ -212,13 +294,22 @@ const Gallery = () => {
   // =====================================================
 
   const handleRemovePreview = () => {
-    if (previewImage && previewImage.startsWith("blob:")) {
+    if (
+      previewImage &&
+      previewImage.startsWith("blob:")
+    ) {
       URL.revokeObjectURL(previewImage);
     }
 
     setPreviewImage(null);
     setSelectedFile(null);
     setEditingId(null);
+
+    setFormData({
+      title: "",
+      category: "",
+      description: "",
+    });
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -232,22 +323,50 @@ const Gallery = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // CREATE
+    if (!formData.title.trim()) {
+      alert("Please enter gallery title.");
+      return;
+    }
+
+    if (!formData.category.trim()) {
+      alert("Please enter gallery category.");
+      return;
+    }
+
+    if (!formData.description.trim()) {
+      alert(
+        "Please enter gallery description."
+      );
+      return;
+    }
+
+    // New gallery item needs image
     if (!editingId && !selectedFile) {
-      alert("Please select or drag & drop an image file.");
+      alert(
+        "Please select or drag & drop an image file."
+      );
       return;
     }
 
-    // UPDATE
-    if (editingId && !selectedFile) {
-      alert("Please choose a new image to update.");
-      return;
-    }
+    const data = new FormData();
 
-    const formData = new FormData();
+    data.append(
+      "title",
+      formData.title.trim()
+    );
+
+    data.append(
+      "category",
+      formData.category.trim()
+    );
+
+    data.append(
+      "description",
+      formData.description.trim()
+    );
 
     if (selectedFile) {
-      formData.append("image", selectedFile);
+      data.append("image", selectedFile);
     }
 
     try {
@@ -256,12 +375,12 @@ const Gallery = () => {
       if (editingId) {
         response = await API.put(
           `/gallery/${editingId}`,
-          formData
+          data
         );
       } else {
         response = await API.post(
           "/gallery",
-          formData
+          data
         );
       }
 
@@ -271,8 +390,8 @@ const Gallery = () => {
       ) {
         alert(
           editingId
-            ? "Gallery image updated successfully!"
-            : "Gallery image uploaded successfully!"
+            ? "Gallery item updated successfully!"
+            : "Gallery item uploaded successfully!"
         );
 
         await fetchGalleryItems();
@@ -287,7 +406,7 @@ const Gallery = () => {
 
       alert(
         error.response?.data?.message ||
-          "Failed to save gallery image."
+          "Failed to save gallery item."
       );
     }
   };
@@ -302,8 +421,16 @@ const Gallery = () => {
     const imageUrl = getImageUrl(item.image);
 
     setEditingId(itemId);
+
     setSelectedFile(null);
+
     setPreviewImage(imageUrl);
+
+    setFormData({
+      title: item.title || "",
+      category: item.category || "",
+      description: item.description || "",
+    });
 
     window.scrollTo({
       top: 0,
@@ -320,7 +447,9 @@ const Gallery = () => {
       "Are you sure you want to delete this gallery item?"
     );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     try {
       const response = await API.delete(
@@ -331,17 +460,36 @@ const Gallery = () => {
         response.status === 200 ||
         response.status === 204
       ) {
-        setGalleryItems((prev) =>
-          prev.filter(
-            (item) => (item._id || item.id) !== id
+        const updatedItems =
+          galleryItems.filter(
+            (item) =>
+              (item._id || item.id) !== id
+          );
+
+        setGalleryItems(updatedItems);
+
+        // Calculate pages after deletion
+        const totalPages = Math.max(
+          1,
+          Math.ceil(
+            updatedItems.length /
+              ITEMS_PER_PAGE
           )
+        );
+
+        setCurrentPage((previousPage) =>
+          previousPage > totalPages
+            ? totalPages
+            : previousPage
         );
 
         if (editingId === id) {
           handleRemovePreview();
         }
 
-        alert("Gallery image deleted successfully!");
+        alert(
+          "Gallery item deleted successfully!"
+        );
       }
     } catch (error) {
       console.error(
@@ -351,9 +499,127 @@ const Gallery = () => {
 
       alert(
         error.response?.data?.message ||
-          "Failed to delete gallery image."
+          "Failed to delete gallery item."
       );
     }
+  };
+
+  // =====================================================
+  // PAGINATION CALCULATIONS
+  // =====================================================
+
+  const totalItems = galleryItems.length;
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(
+      totalItems / ITEMS_PER_PAGE
+    )
+  );
+
+  const startIndex =
+    (currentPage - 1) *
+    ITEMS_PER_PAGE;
+
+  const endIndex =
+    startIndex + ITEMS_PER_PAGE;
+
+  const currentItems =
+    galleryItems.slice(
+      startIndex,
+      endIndex
+    );
+
+  // =====================================================
+  // PAGE CHANGE
+  // =====================================================
+
+  const handlePageChange = (page) => {
+    if (
+      page < 1 ||
+      page > totalPages ||
+      page === currentPage
+    ) {
+      return;
+    }
+
+    setCurrentPage(page);
+
+    // Scroll to table
+    setTimeout(() => {
+      const tableCard =
+        document.querySelector(
+          ".utkal-gallery-table-card"
+        );
+
+      if (tableCard) {
+        tableCard.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 50);
+  };
+
+  // =====================================================
+  // PAGE NUMBERS
+  // =====================================================
+
+  const getPageNumbers = () => {
+    const pages = [];
+
+    // Small number of pages
+    if (totalPages <= 7) {
+      for (
+        let i = 1;
+        i <= totalPages;
+        i++
+      ) {
+        pages.push(i);
+      }
+
+      return pages;
+    }
+
+    // First pages
+    if (currentPage <= 4) {
+      return [
+        1,
+        2,
+        3,
+        4,
+        5,
+        "...",
+        totalPages,
+      ];
+    }
+
+    // Last pages
+    if (
+      currentPage >=
+      totalPages - 3
+    ) {
+      return [
+        1,
+        "...",
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      ];
+    }
+
+    // Middle pages
+    return [
+      1,
+      "...",
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      "...",
+      totalPages,
+    ];
   };
 
   // =====================================================
@@ -364,7 +630,10 @@ const Gallery = () => {
     <section className="utkal-gallery-section">
       <div className="utkal-gallery-container">
 
-        {/* HEADER */}
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
         <div className="utkal-gallery-header">
           <span className="utkal-gallery-tag">
             Media Manager
@@ -375,23 +644,26 @@ const Gallery = () => {
           </h1>
 
           <p className="utkal-gallery-subtitle">
-            Upload and manage property photos for Utkal Property.
+            Upload and manage property
+            photos, titles, categories and
+            descriptions for Utkal Property.
           </p>
         </div>
 
-        {/* =====================================================
-            UPLOAD CARD
-        ===================================================== */}
+        {/* =================================================
+            FORM CARD
+        ================================================= */}
 
         <div className="utkal-gallery-form-card">
 
           <div className="utkal-gallery-form-header">
+
             <div className="utkal-gallery-form-title-wrap">
               <span className="utkal-gallery-form-indicator"></span>
 
               <h2>
                 {editingId
-                  ? "Edit Media Image"
+                  ? "Edit Gallery Item"
                   : "Upload New Media"}
               </h2>
             </div>
@@ -400,12 +672,15 @@ const Gallery = () => {
               <button
                 type="button"
                 className="utkal-gallery-cancel-edit-btn"
-                onClick={handleRemovePreview}
+                onClick={
+                  handleRemovePreview
+                }
               >
                 <FaTimes />
                 Cancel Edit
               </button>
             )}
+
           </div>
 
           <form
@@ -413,17 +688,112 @@ const Gallery = () => {
             className="utkal-gallery-form"
           >
 
-            {/* UPLOAD ROW */}
+            {/* =================================================
+                TEXT FIELDS
+            ================================================= */}
+
+            <div className="utkal-gallery-fields">
+
+              <div className="utkal-gallery-field">
+
+                <label htmlFor="gallery-title">
+                  Title
+                  <span>*</span>
+                </label>
+
+                <input
+                  id="gallery-title"
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={
+                    handleInputChange
+                  }
+                  placeholder="e.g. Utkal Luxury Apartments"
+                  maxLength={150}
+                />
+
+              </div>
+
+              <div className="utkal-gallery-field">
+
+                <label htmlFor="gallery-category">
+                  Category
+                  <span>*</span>
+                </label>
+
+                <input
+                  id="gallery-category"
+                  type="text"
+                  name="category"
+                  value={
+                    formData.category
+                  }
+                  onChange={
+                    handleInputChange
+                  }
+                  placeholder="e.g. Prime Location"
+                  maxLength={100}
+                />
+
+              </div>
+
+              <div className="utkal-gallery-field utkal-gallery-field-full">
+
+                <label htmlFor="gallery-description">
+                  Description
+                  <span>*</span>
+                </label>
+
+                <textarea
+                  id="gallery-description"
+                  name="description"
+                  value={
+                    formData.description
+                  }
+                  onChange={
+                    handleInputChange
+                  }
+                  placeholder="Write a short description about this property area..."
+                  rows={4}
+                  maxLength={500}
+                />
+
+                <div className="utkal-gallery-character-count">
+                  {
+                    formData.description
+                      .length
+                  }
+                  /500
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* =================================================
+                UPLOAD + PREVIEW
+            ================================================= */}
+
             <div className="utkal-gallery-upload-row">
 
               {/* DROPZONE */}
+
               <div
                 className={`utkal-gallery-dropzone ${
-                  dragActive ? "drag-active" : ""
+                  dragActive
+                    ? "drag-active"
+                    : ""
                 }`}
-                onDragEnter={handleDrag}
-                onDragLeave={handleDrag}
-                onDragOver={handleDrag}
+                onDragEnter={
+                  handleDrag
+                }
+                onDragLeave={
+                  handleDrag
+                }
+                onDragOver={
+                  handleDrag
+                }
                 onDrop={handleDrop}
                 onClick={() =>
                   fileInputRef.current?.click()
@@ -433,9 +803,13 @@ const Gallery = () => {
                 <input
                   type="file"
                   ref={fileInputRef}
-                  onChange={handleFileChange}
+                  onChange={
+                    handleFileChange
+                  }
                   accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                  style={{ display: "none" }}
+                  style={{
+                    display: "none",
+                  }}
                 />
 
                 <div className="utkal-gallery-dropzone-icon">
@@ -455,6 +829,7 @@ const Gallery = () => {
                   className="utkal-gallery-choose-btn"
                   onClick={(e) => {
                     e.stopPropagation();
+
                     fileInputRef.current?.click();
                   }}
                 >
@@ -462,13 +837,19 @@ const Gallery = () => {
                 </button>
 
                 <div className="utkal-gallery-dropzone-footer">
-                  <span>JPG • PNG • WEBP</span>
-                  <span>Max Size : 5MB</span>
+                  <span>
+                    JPG • PNG • WEBP
+                  </span>
+
+                  <span>
+                    Max Size : 5MB
+                  </span>
                 </div>
 
               </div>
 
               {/* PREVIEW */}
+
               <div className="utkal-gallery-preview-wrapper">
 
                 <span className="utkal-gallery-preview-label">
@@ -483,15 +864,14 @@ const Gallery = () => {
                       <img
                         src={previewImage}
                         alt="Gallery preview"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                        }}
                       />
 
                       <button
                         type="button"
                         className="utkal-gallery-preview-remove"
-                        onClick={handleRemovePreview}
+                        onClick={
+                          handleRemovePreview
+                        }
                         title="Remove Image"
                       >
                         <FaTimes />
@@ -500,25 +880,34 @@ const Gallery = () => {
                     </div>
                   ) : (
                     <div className="utkal-gallery-preview-placeholder">
+
                       <FaImage />
 
                       <span>
                         Image Preview Area
                       </span>
+
                     </div>
                   )}
 
                 </div>
+
               </div>
+
             </div>
 
-            {/* FOOTER BUTTONS */}
+            {/* =================================================
+                FORM BUTTONS
+            ================================================= */}
+
             <div className="utkal-gallery-form-footer">
 
               <button
                 type="button"
                 className="utkal-gallery-cancel-btn"
-                onClick={handleRemovePreview}
+                onClick={
+                  handleRemovePreview
+                }
               >
                 Cancel
               </button>
@@ -527,6 +916,7 @@ const Gallery = () => {
                 type="submit"
                 className="utkal-gallery-submit-btn"
               >
+
                 {editingId ? (
                   <FaEdit />
                 ) : (
@@ -534,25 +924,44 @@ const Gallery = () => {
                 )}
 
                 {editingId
-                  ? "Update Image"
-                  : "Save Image"}
+                  ? "Update Gallery"
+                  : "Save Gallery"}
+
               </button>
 
             </div>
+
           </form>
         </div>
 
-        {/* =====================================================
-            GALLERY TABLE
-        ===================================================== */}
+        {/* =================================================
+            TABLE CARD
+        ================================================= */}
 
         <div className="utkal-gallery-table-card">
 
+          {/* TABLE HEADER */}
+
           <div className="utkal-gallery-table-header">
-            <h3>
-              Gallery Assets List ({galleryItems.length})
-            </h3>
+
+            <div>
+              <h3>
+                Gallery Assets List
+              </h3>
+
+              <p>
+                Manage your property gallery
+                content.
+              </p>
+            </div>
+
+            <span className="utkal-gallery-total-badge">
+              {totalItems} Items
+            </span>
+
           </div>
+
+          {/* TABLE */}
 
           <div className="utkal-gallery-table-responsive">
 
@@ -560,130 +969,221 @@ const Gallery = () => {
 
               <thead>
                 <tr>
-                  <th>Media Thumbnail</th>
+
+                  <th>
+                    Media
+                  </th>
+
+                  <th>
+                    Property Information
+                  </th>
+
                   <th className="text-center">
                     Actions
                   </th>
+
                 </tr>
               </thead>
 
               <tbody>
 
                 {loading ? (
+
                   <tr>
                     <td
-                      colSpan="2"
+                      colSpan="3"
                       className="utkal-gallery-empty-td"
                     >
-                      Loading gallery assets...
+                      <div className="utkal-gallery-loading">
+                        <div className="utkal-gallery-spinner"></div>
+                        Loading gallery assets...
+                      </div>
                     </td>
                   </tr>
-                ) : galleryItems.length > 0 ? (
 
-                  galleryItems.map((item) => {
-                    const itemId =
-                      item._id || item.id;
+                ) : currentItems.length > 0 ? (
 
-                    const imageUrl =
-                      getImageUrl(item.image);
+                  currentItems.map(
+                    (item, index) => {
 
-                    const isBroken =
-                      brokenImages[itemId];
+                      const itemId =
+                        item._id ||
+                        item.id;
 
-                    return (
-                      <tr key={itemId}>
+                      const imageUrl =
+                        getImageUrl(
+                          item.image
+                        );
 
-                        {/* THUMBNAIL */}
-                        <td>
+                      const isBroken =
+                        brokenImages[
+                          itemId
+                        ];
 
-                          <div className="utkal-gallery-thumb-wrap">
+                      const globalIndex =
+                        startIndex +
+                        index;
 
-                            {!isBroken ? (
-                              <img
-                                src={imageUrl}
-                                alt="Gallery item"
-                                loading="lazy"
-                                onError={() =>
-                                  handleImageError(
-                                    itemId,
+                      return (
+                        <tr
+                          key={itemId}
+                        >
+
+                          {/* MEDIA */}
+
+                          <td>
+
+                            <div className="utkal-gallery-media-cell">
+
+                              <div className="utkal-gallery-thumb-wrap">
+
+                                {!isBroken ? (
+                                  <img
+                                    src={
+                                      imageUrl
+                                    }
+                                    alt={
+                                      item.title ||
+                                      "Gallery item"
+                                    }
+                                    loading="lazy"
+                                    onError={() =>
+                                      handleImageError(
+                                        itemId,
+                                        imageUrl
+                                      )
+                                    }
+                                  />
+                                ) : (
+                                  <div className="utkal-gallery-broken-placeholder">
+
+                                    <FaImage />
+
+                                    <span>
+                                      Image Unavailable
+                                    </span>
+
+                                  </div>
+                                )}
+
+                              </div>
+
+                              <span className="utkal-gallery-row-number">
+                                #{String(
+                                  globalIndex + 1
+                                ).padStart(
+                                  2,
+                                  "0"
+                                )}
+                              </span>
+
+                            </div>
+
+                          </td>
+
+                          {/* INFORMATION */}
+
+                          <td>
+
+                            <div className="utkal-gallery-info-cell">
+
+                              <h4>
+                                {item.title ||
+                                  "Untitled Property"}
+                              </h4>
+
+                              <span className="utkal-gallery-category-badge">
+                                {item.category ||
+                                  "General"}
+                              </span>
+
+                              <p>
+                                {item.description ||
+                                  "No description available."}
+                              </p>
+
+                            </div>
+
+                          </td>
+
+                          {/* ACTIONS */}
+
+                          <td>
+
+                            <div className="utkal-gallery-actions-cell">
+
+                              <button
+                                type="button"
+                                className="utkal-action-btn view-btn"
+                                title="View Image"
+                                disabled={
+                                  isBroken
+                                }
+                                onClick={() =>
+                                  setViewingImage(
                                     imageUrl
                                   )
                                 }
-                              />
-                            ) : (
-                              <div className="utkal-gallery-broken-placeholder">
-                                <FaImage />
+                              >
+                                <FaEye />
+                              </button>
 
-                                <span>
-                                  Image Unavailable
-                                </span>
-                              </div>
-                            )}
+                              <button
+                                type="button"
+                                className="utkal-action-btn edit-btn"
+                                title="Edit Gallery"
+                                onClick={() =>
+                                  handleEdit(
+                                    item
+                                  )
+                                }
+                              >
+                                <FaEdit />
+                              </button>
 
-                          </div>
+                              <button
+                                type="button"
+                                className="utkal-action-btn delete-btn"
+                                title="Delete Gallery"
+                                onClick={() =>
+                                  handleDelete(
+                                    itemId
+                                  )
+                                }
+                              >
+                                <FaTrash />
+                              </button>
 
-                        </td>
+                            </div>
 
-                        {/* ACTIONS */}
-                        <td>
+                          </td>
 
-                          <div className="utkal-gallery-actions-cell">
-
-                            {/* VIEW */}
-                            <button
-                              type="button"
-                              className="utkal-action-btn view-btn"
-                              title="View Image"
-                              disabled={isBroken}
-                              onClick={() =>
-                                setViewingImage(
-                                  imageUrl
-                                )
-                              }
-                            >
-                              <FaEye />
-                            </button>
-
-                            {/* EDIT */}
-                            <button
-                              type="button"
-                              className="utkal-action-btn edit-btn"
-                              title="Edit Image"
-                              onClick={() =>
-                                handleEdit(item)
-                              }
-                            >
-                              <FaEdit />
-                            </button>
-
-                            {/* DELETE */}
-                            <button
-                              type="button"
-                              className="utkal-action-btn delete-btn"
-                              title="Delete Image"
-                              onClick={() =>
-                                handleDelete(itemId)
-                              }
-                            >
-                              <FaTrash />
-                            </button>
-
-                          </div>
-
-                        </td>
-                      </tr>
-                    );
-                  })
+                        </tr>
+                      );
+                    }
+                  )
 
                 ) : (
 
                   <tr>
                     <td
-                      colSpan="2"
+                      colSpan="3"
                       className="utkal-gallery-empty-td"
                     >
-                      No gallery assets found.
-                      Upload your first image above!
+                      <div className="utkal-gallery-empty-content">
+
+                        <FaImage />
+
+                        <strong>
+                          No gallery assets found.
+                        </strong>
+
+                        <span>
+                          Upload your first gallery
+                          item above.
+                        </span>
+
+                      </div>
                     </td>
                   </tr>
 
@@ -694,11 +1194,148 @@ const Gallery = () => {
             </table>
 
           </div>
+
+          {/* =================================================
+              PAGINATION FOOTER
+          ================================================= */}
+
+          {!loading && totalItems > 0 && (
+            <div className="utkal-gallery-pagination-footer">
+
+              {/* PAGINATION INFO */}
+
+              <div className="utkal-gallery-pagination-info">
+
+                Showing{" "}
+
+                <strong>
+                  {startIndex + 1}
+                </strong>
+
+                {" - "}
+
+                <strong>
+                  {Math.min(
+                    endIndex,
+                    totalItems
+                  )}
+                </strong>
+
+                {" of "}
+
+                <strong>
+                  {totalItems}
+                </strong>
+
+                {" items"}
+
+              </div>
+
+              {/* PAGINATION */}
+
+              {totalPages > 1 && (
+                <div className="utkal-gallery-pagination">
+
+                  {/* PREVIOUS */}
+
+                  <button
+                    type="button"
+                    className="utkal-gallery-pagination-arrow"
+                    disabled={
+                      currentPage === 1
+                    }
+                    onClick={() =>
+                      handlePageChange(
+                        currentPage - 1
+                      )
+                    }
+                    aria-label="Previous page"
+                  >
+                    <FaChevronLeft />
+                  </button>
+
+                  {/* PAGE NUMBERS */}
+
+                  <div className="utkal-gallery-pagination-numbers">
+
+                    {getPageNumbers().map(
+                      (page, index) => {
+
+                        if (
+                          page ===
+                          "..."
+                        ) {
+                          return (
+                            <span
+                              key={`dots-${index}`}
+                              className="utkal-gallery-pagination-dots"
+                            >
+                              ...
+                            </span>
+                          );
+                        }
+
+                        return (
+                          <button
+                            key={page}
+                            type="button"
+                            className={`utkal-gallery-pagination-number ${
+                              currentPage ===
+                              page
+                                ? "active"
+                                : ""
+                            }`}
+                            onClick={() =>
+                              handlePageChange(
+                                page
+                              )
+                            }
+                            aria-label={`Go to page ${page}`}
+                            aria-current={
+                              currentPage ===
+                              page
+                                ? "page"
+                                : undefined
+                            }
+                          >
+                            {page}
+                          </button>
+                        );
+                      }
+                    )}
+
+                  </div>
+
+                  {/* NEXT */}
+
+                  <button
+                    type="button"
+                    className="utkal-gallery-pagination-arrow"
+                    disabled={
+                      currentPage ===
+                      totalPages
+                    }
+                    onClick={() =>
+                      handlePageChange(
+                        currentPage + 1
+                      )
+                    }
+                    aria-label="Next page"
+                  >
+                    <FaChevronRight />
+                  </button>
+
+                </div>
+              )}
+
+            </div>
+          )}
+
         </div>
 
-        {/* =====================================================
-            LIGHTBOX
-        ===================================================== */}
+        {/* =================================================
+            VIEW IMAGE MODAL
+        ================================================= */}
 
         {viewingImage && (
           <div
@@ -721,6 +1358,7 @@ const Gallery = () => {
                 onClick={() =>
                   setViewingImage(null)
                 }
+                aria-label="Close image"
               >
                 <FaTimes />
               </button>

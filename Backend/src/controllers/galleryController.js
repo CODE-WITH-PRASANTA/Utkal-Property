@@ -59,7 +59,6 @@ const removeFile = async (filePath) => {
         "Invalid upload path:",
         filePath
       );
-
       return;
     }
 
@@ -183,6 +182,48 @@ exports.createGalleryItem = async (
 ) => {
   try {
     // ---------------------------------------------------
+    // GET TEXT DATA
+    // ---------------------------------------------------
+
+    const title = String(
+      req.body.title || ""
+    ).trim();
+
+    const category = String(
+      req.body.category || ""
+    ).trim();
+
+    const description = String(
+      req.body.description || ""
+    ).trim();
+
+    // ---------------------------------------------------
+    // VALIDATE TEXT DATA
+    // ---------------------------------------------------
+
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: "Title is required.",
+      });
+    }
+
+    if (!category) {
+      return res.status(400).json({
+        success: false,
+        message: "Category is required.",
+      });
+    }
+
+    if (!description) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Description is required.",
+      });
+    }
+
+    // ---------------------------------------------------
     // CHECK FILE
     // ---------------------------------------------------
 
@@ -224,6 +265,9 @@ exports.createGalleryItem = async (
 
     const newItem =
       await Gallery.create({
+        title,
+        category,
+        description,
         image: processed.path,
       });
 
@@ -234,7 +278,7 @@ exports.createGalleryItem = async (
     return res.status(201).json({
       success: true,
       message:
-        "Gallery image uploaded successfully.",
+        "Gallery item uploaded successfully.",
       data: newItem,
     });
   } catch (error) {
@@ -280,58 +324,92 @@ exports.updateGalleryItem = async (
     }
 
     // ---------------------------------------------------
-    // REQUIRE NEW FILE
+    // GET TEXT DATA
     // ---------------------------------------------------
 
-    if (!req.file) {
+    const title =
+      req.body.title !== undefined
+        ? String(req.body.title).trim()
+        : item.title;
+
+    const category =
+      req.body.category !== undefined
+        ? String(req.body.category).trim()
+        : item.category;
+
+    const description =
+      req.body.description !== undefined
+        ? String(req.body.description).trim()
+        : item.description;
+
+    // ---------------------------------------------------
+    // VALIDATE
+    // ---------------------------------------------------
+
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: "Title is required.",
+      });
+    }
+
+    if (!category) {
+      return res.status(400).json({
+        success: false,
+        message: "Category is required.",
+      });
+    }
+
+    if (!description) {
       return res.status(400).json({
         success: false,
         message:
-          "Please select a new image.",
+          "Description is required.",
       });
     }
 
     // ---------------------------------------------------
-    // PROCESS NEW IMAGE
+    // UPDATE TEXT DATA
     // ---------------------------------------------------
 
-    const processed =
-      await processGalleryImage(
-        req.file
+    item.title = title;
+    item.category = category;
+    item.description = description;
+
+    // ---------------------------------------------------
+    // IF NEW IMAGE EXISTS
+    // ---------------------------------------------------
+
+    if (req.file) {
+      const processed =
+        await processGalleryImage(
+          req.file
+        );
+
+      console.log(
+        "NEW GALLERY IMAGE:",
+        processed.path
       );
 
-    console.log(
-      "NEW GALLERY IMAGE:",
-      processed.path
-    );
+      const oldImagePath =
+        item.image;
 
-    // ---------------------------------------------------
-    // OLD IMAGE PATH
-    // ---------------------------------------------------
+      item.image =
+        processed.path;
 
-    const oldImagePath =
-      item.image;
+      await item.save();
 
-    // ---------------------------------------------------
-    // UPDATE DATABASE
-    // ---------------------------------------------------
-
-    item.image =
-      processed.path;
-
-    await item.save();
-
-    // ---------------------------------------------------
-    // DELETE OLD FILE
-    // ---------------------------------------------------
-
-    if (
-      oldImagePath &&
-      oldImagePath !== processed.path
-    ) {
-      await removeFile(
-        oldImagePath
-      );
+      // Delete old image
+      if (
+        oldImagePath &&
+        oldImagePath !== processed.path
+      ) {
+        await removeFile(
+          oldImagePath
+        );
+      }
+    } else {
+      await item.save();
     }
 
     // ---------------------------------------------------
@@ -341,7 +419,7 @@ exports.updateGalleryItem = async (
     return res.status(200).json({
       success: true,
       message:
-        "Gallery image updated successfully.",
+        "Gallery item updated successfully.",
       data: item,
     });
   } catch (error) {
@@ -353,7 +431,7 @@ exports.updateGalleryItem = async (
     return res.status(500).json({
       success: false,
       message:
-        "Failed to update gallery image.",
+        "Failed to update gallery item.",
       error: error.message,
     });
   }
@@ -390,9 +468,7 @@ exports.deleteGalleryItem = async (
     // DELETE DATABASE
     // ---------------------------------------------------
 
-    await Gallery.findByIdAndDelete(
-      id
-    );
+    await Gallery.findByIdAndDelete(id);
 
     // ---------------------------------------------------
     // DELETE IMAGE FILE

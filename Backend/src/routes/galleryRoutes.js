@@ -9,10 +9,6 @@ const {
   deleteGalleryItem,
 } = require("../controllers/galleryController");
 
-// =====================================================
-// MULTER
-// =====================================================
-
 const {
   upload,
 } = require("../middleware/multer");

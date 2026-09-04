@@ -22,6 +22,12 @@
   min-height: 100vh;
   padding: 40px 24px;
   background: var(--utkal-bg-light);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 .utkal-gallery-container {
@@ -42,12 +48,9 @@
   display: inline-block;
   padding: 6px 16px;
   margin-bottom: 10px;
-
   color: var(--utkal-green);
   background: rgba(18, 98, 41, 0.08);
-
   border-radius: 20px;
-
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
@@ -56,20 +59,15 @@
 
 .utkal-gallery-title {
   margin: 0 0 6px;
-
   color: var(--utkal-navy);
-
   font-size: 32px;
   font-weight: 800;
   line-height: 1.2;
-  letter-spacing: -0.5px;
 }
 
 .utkal-gallery-subtitle {
   margin: 0;
-
   color: var(--utkal-text-muted);
-
   font-size: 14px;
   line-height: 1.6;
 }
@@ -80,15 +78,11 @@
 
 .utkal-gallery-form-card {
   width: 100%;
-
   padding: 32px;
   margin-bottom: 40px;
-
   background: #ffffff;
-
   border: 1px solid var(--utkal-border);
   border-radius: 16px;
-
   box-shadow:
     0 8px 30px rgba(12, 29, 46, 0.04);
 }
@@ -97,10 +91,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  gap: 15px;
   padding-bottom: 16px;
-  margin-bottom: 24px;
-
+  margin-bottom: 25px;
   border-bottom: 1px solid #f1f5f9;
 }
 
@@ -112,39 +105,31 @@
 
 .utkal-gallery-form-indicator {
   width: 4px;
-  height: 20px;
-
+  height: 22px;
   background: var(--utkal-green);
-
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .utkal-gallery-form-header h2 {
   margin: 0;
-
   color: var(--utkal-navy);
-
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 750;
 }
 
 .utkal-gallery-cancel-edit-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-
-  padding: 8px 14px;
-
+  gap: 7px;
+  padding: 9px 14px;
   color: #dc2626;
   background: #fee2e2;
-
   border: none;
   border-radius: 8px;
-
   font-size: 12px;
-  font-weight: 600;
-
+  font-weight: 700;
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .utkal-gallery-cancel-edit-btn:hover {
@@ -158,7 +143,82 @@
 .utkal-gallery-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 25px;
+}
+
+.utkal-gallery-fields {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.utkal-gallery-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.utkal-gallery-field-full {
+  grid-column: 1 / -1;
+}
+
+.utkal-gallery-field label {
+  color: var(--utkal-navy);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.utkal-gallery-field label span {
+  margin-left: 4px;
+  color: var(--utkal-red);
+}
+
+.utkal-gallery-field input,
+.utkal-gallery-field textarea {
+  width: 100%;
+  padding: 13px 14px;
+  color: var(--utkal-navy);
+  background: #ffffff;
+  border: 1px solid var(--utkal-border);
+  border-radius: 9px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.utkal-gallery-field input {
+  height: 46px;
+}
+
+.utkal-gallery-field textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.utkal-gallery-field input::placeholder,
+.utkal-gallery-field textarea::placeholder {
+  color: #94a3b8;
+}
+
+.utkal-gallery-field input:focus,
+.utkal-gallery-field textarea:focus {
+  border-color: var(--utkal-green);
+  box-shadow:
+    0 0 0 3px
+    rgba(18, 98, 41, 0.08);
+}
+
+.utkal-gallery-character-count {
+  position: absolute;
+  right: 10px;
+  bottom: 9px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 /* =====================================================
@@ -167,13 +227,10 @@
 
 .utkal-gallery-upload-row {
   display: grid;
-
   grid-template-columns:
     minmax(0, 2fr)
     minmax(260px, 1fr);
-
   gap: 24px;
-
   width: 100%;
 }
 
@@ -183,79 +240,56 @@
 
 .utkal-gallery-dropzone {
   min-height: 345px;
-
   padding: 32px 20px;
-
   background: rgba(18, 98, 41, 0.03);
-
-  border: 2px dashed rgba(18, 98, 41, 0.35);
+  border: 2px dashed
+    rgba(18, 98, 41, 0.35);
   border-radius: 14px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   text-align: center;
-
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .utkal-gallery-dropzone:hover,
 .utkal-gallery-dropzone.drag-active {
   background: rgba(18, 98, 41, 0.08);
-
   border-color: var(--utkal-green);
 }
 
 .utkal-gallery-dropzone-icon {
   margin-bottom: 8px;
-
   color: var(--utkal-green);
-
   font-size: 42px;
 }
 
 .utkal-gallery-dropzone-text {
   margin: 0;
-
   color: var(--utkal-navy);
-
   font-size: 15px;
   font-weight: 700;
 }
 
 .utkal-gallery-or {
   margin: 8px 0;
-
   color: var(--utkal-text-muted);
-
   font-size: 11px;
   font-weight: 700;
 }
 
 .utkal-gallery-choose-btn {
   padding: 10px 22px;
-
   color: #ffffff;
   background: var(--utkal-navy);
-
   border: none;
   border-radius: 8px;
-
   font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .utkal-gallery-choose-btn:hover {
@@ -266,11 +300,8 @@
 .utkal-gallery-dropzone-footer {
   display: flex;
   gap: 16px;
-
   margin-top: 16px;
-
   color: var(--utkal-text-muted);
-
   font-size: 11px;
   font-weight: 600;
 }
@@ -283,30 +314,23 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-
   min-width: 0;
 }
 
 .utkal-gallery-preview-label {
   color: var(--utkal-navy);
-
   font-size: 13px;
   font-weight: 700;
 }
 
 .utkal-gallery-preview-box {
   position: relative;
-
   width: 100%;
   min-height: 345px;
-
   overflow: hidden;
-
   background: var(--utkal-bg-light);
-
   border: 1px solid var(--utkal-border);
   border-radius: 14px;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -314,7 +338,6 @@
 
 .utkal-gallery-preview-content {
   position: relative;
-
   width: 100%;
   height: 100%;
   min-height: 345px;
@@ -322,37 +345,26 @@
 
 .utkal-gallery-preview-content img {
   display: block;
-
   width: 100%;
   height: 100%;
   min-height: 345px;
-
   object-fit: cover;
 }
 
 .utkal-gallery-preview-remove {
   position: absolute;
-
   top: 10px;
   right: 10px;
-
   width: 32px;
   height: 32px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   color: #ffffff;
   background: rgba(12, 29, 46, 0.8);
-
   border: none;
   border-radius: 50%;
-
-  font-size: 13px;
-
   cursor: pointer;
-
   z-index: 5;
 }
 
@@ -365,9 +377,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   gap: 8px;
-
   color: #cbd5e1;
 }
 
@@ -377,7 +387,6 @@
 
 .utkal-gallery-preview-placeholder span {
   color: var(--utkal-text-muted);
-
   font-size: 12px;
 }
 
@@ -389,22 +398,17 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 12px;
 }
 
 .utkal-gallery-cancel-btn {
   padding: 12px 24px;
-
   color: var(--utkal-text-muted);
   background: #f1f5f9;
-
   border: none;
   border-radius: 10px;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
 }
 
@@ -416,37 +420,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 8px;
-
   padding: 12px 28px;
-
   color: #ffffff;
   background: var(--utkal-green);
-
   border: none;
   border-radius: 10px;
-
   font-size: 14px;
   font-weight: 700;
-
   cursor: pointer;
-
   box-shadow:
-    0 4px 14px rgba(18, 98, 41, 0.3);
-
-  transition:
-    background 0.2s ease,
-    transform 0.1s ease;
+    0 4px 14px
+    rgba(18, 98, 41, 0.3);
+  transition: 0.2s ease;
 }
 
 .utkal-gallery-submit-btn:hover {
   background: var(--utkal-green-hover);
   transform: translateY(-1px);
-}
-
-.utkal-gallery-submit-btn:active {
-  transform: translateY(0);
 }
 
 /* =====================================================
@@ -455,34 +446,53 @@
 
 .utkal-gallery-table-card {
   width: 100%;
-
   overflow: hidden;
-
   background: #ffffff;
-
   border: 1px solid var(--utkal-border);
   border-radius: 16px;
-
   box-shadow:
     0 8px 30px rgba(12, 29, 46, 0.04);
 }
 
+/* =====================================================
+   TABLE HEADER
+===================================================== */
+
 .utkal-gallery-table-header {
   padding: 20px 24px;
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
   background: #ffffff;
-
   border-bottom: 1px solid var(--utkal-border);
 }
 
 .utkal-gallery-table-header h3 {
-  margin: 0;
-
+  margin: 0 0 4px;
   color: var(--utkal-navy);
-
   font-size: 18px;
   font-weight: 700;
 }
+
+.utkal-gallery-table-header p {
+  margin: 0;
+  color: var(--utkal-text-muted);
+  font-size: 12px;
+}
+
+.utkal-gallery-total-badge {
+  padding: 7px 12px;
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
 
 .utkal-gallery-table-responsive {
   width: 100%;
@@ -491,53 +501,49 @@
 
 .utkal-gallery-table {
   width: 100%;
-
+  min-width: 750px;
   border-collapse: collapse;
-
   text-align: left;
-
-  font-size: 13.5px;
+  font-size: 13px;
 }
 
 .utkal-gallery-table th {
   padding: 14px 20px;
-
   color: var(--utkal-navy);
   background: var(--utkal-bg-light);
-
   border-bottom: 1px solid var(--utkal-border);
-
   font-weight: 700;
   white-space: nowrap;
 }
 
 .utkal-gallery-table td {
-  padding: 14px 20px;
-
+  padding: 15px 20px;
   border-bottom: 1px solid #f1f5f9;
-
   vertical-align: middle;
 }
 
 .utkal-gallery-table tbody tr:hover {
-  background: #f8fafc;
+  background: #fafdfb;
 }
 
 /* =====================================================
-   THUMBNAIL
+   MEDIA CELL
 ===================================================== */
 
+.utkal-gallery-media-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .utkal-gallery-thumb-wrap {
-  width: 100px;
-  height: 70px;
-
+  width: 110px;
+  height: 78px;
   overflow: hidden;
-
+  flex-shrink: 0;
   background: var(--utkal-navy);
-
   border: 1px solid var(--utkal-border);
   border-radius: 10px;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -545,28 +551,75 @@
 
 .utkal-gallery-thumb-wrap img {
   display: block;
-
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
+
+.utkal-gallery-row-number {
+  padding: 5px 7px;
+  color: var(--utkal-text-muted);
+  background: #f8fafc;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* =====================================================
+   INFO
+===================================================== */
+
+.utkal-gallery-info-cell {
+  max-width: 520px;
+}
+
+.utkal-gallery-info-cell h4 {
+  margin: 0 0 7px;
+  color: var(--utkal-navy);
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.utkal-gallery-category-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  margin-bottom: 7px;
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.utkal-gallery-info-cell p {
+  margin: 0;
+  color: var(--utkal-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =====================================================
+   BROKEN IMAGE
+===================================================== */
 
 .utkal-gallery-broken-placeholder {
   width: 100%;
   height: 100%;
-
   padding: 5px;
-
   color: #ffffff;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   text-align: center;
-
   font-size: 9px;
 }
 
@@ -583,28 +636,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  gap: 12px;
+  gap: 9px;
 }
 
 .utkal-action-btn {
   width: 36px;
   height: 36px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: #ffffff;
-
   border: 1px solid var(--utkal-border);
   border-radius: 8px;
-
   font-size: 14px;
-
   cursor: pointer;
-
-  transition: all 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .utkal-action-btn:disabled {
@@ -643,19 +689,211 @@
 }
 
 /* =====================================================
+   LOADING
+===================================================== */
+
+.utkal-gallery-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.utkal-gallery-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #dbe5df;
+  border-top-color: var(--utkal-green);
+  border-radius: 50%;
+  animation:
+    utkalGallerySpin
+    0.8s linear infinite;
+}
+
+@keyframes utkalGallerySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =====================================================
    EMPTY
 ===================================================== */
 
 .utkal-gallery-empty-td {
-  padding: 40px;
-
+  padding: 50px 20px !important;
   color: var(--utkal-text-muted);
-
   text-align: center;
+}
+
+.utkal-gallery-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.utkal-gallery-empty-content svg {
+  margin-bottom: 5px;
+  color: #cbd5e1;
+  font-size: 34px;
+}
+
+.utkal-gallery-empty-content strong {
+  color: var(--utkal-navy);
+  font-size: 14px;
+}
+
+.utkal-gallery-empty-content span {
+  font-size: 12px;
 }
 
 .text-center {
   text-align: center !important;
+}
+
+/* =====================================================
+   PAGINATION FOOTER
+===================================================== */
+
+.utkal-gallery-pagination-footer {
+  min-height: 76px;
+  padding: 16px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  background: #ffffff;
+  border-top: 1px solid var(--utkal-border);
+}
+
+/* =====================================================
+   PAGINATION INFO
+===================================================== */
+
+.utkal-gallery-pagination-info {
+  color: var(--utkal-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.utkal-gallery-pagination-info strong {
+  color: var(--utkal-navy);
+  font-weight: 800;
+}
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+.utkal-gallery-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.utkal-gallery-pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* =====================================================
+   PAGINATION ARROWS
+===================================================== */
+
+.utkal-gallery-pagination-arrow {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--utkal-navy);
+  background: #ffffff;
+
+  border: 1px solid var(--utkal-border);
+  border-radius: 8px;
+
+  font-size: 11px;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.utkal-gallery-pagination-arrow:hover:not(:disabled) {
+  color: #ffffff;
+  background: var(--utkal-green);
+  border-color: var(--utkal-green);
+
+  transform: translateY(-1px);
+}
+
+.utkal-gallery-pagination-arrow:disabled {
+  color: #cbd5e1;
+  background: #f8fafc;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* =====================================================
+   PAGE NUMBERS
+===================================================== */
+
+.utkal-gallery-pagination-number {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #64748b;
+  background: #ffffff;
+
+  border: 1px solid var(--utkal-border);
+  border-radius: 8px;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.utkal-gallery-pagination-number:hover {
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.06);
+  border-color: rgba(18, 98, 41, 0.3);
+}
+
+.utkal-gallery-pagination-number.active {
+  color: #ffffff;
+  background: var(--utkal-green);
+  border-color: var(--utkal-green);
+
+  box-shadow:
+    0 4px 12px
+    rgba(18, 98, 41, 0.22);
+}
+
+.utkal-gallery-pagination-dots {
+  width: 30px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 /* =====================================================
@@ -664,7 +902,6 @@
 
 .utkal-gallery-modal-overlay {
   position: fixed;
-
   inset: 0;
 
   width: 100vw;
@@ -692,11 +929,11 @@
   overflow: hidden;
 
   background: #ffffff;
-
   border-radius: 16px;
 
   box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.4);
+    0 20px 50px
+    rgba(0, 0, 0, 0.4);
 }
 
 .utkal-gallery-modal-close {
@@ -719,8 +956,9 @@
   justify-content: center;
 
   cursor: pointer;
-
   z-index: 5;
+
+  transition: 0.2s ease;
 }
 
 .utkal-gallery-modal-close:hover {
@@ -751,12 +989,20 @@
 }
 
 /* =====================================================
-   RESPONSIVE
+   RESPONSIVE - 992
 ===================================================== */
 
 @media (max-width: 992px) {
   .utkal-gallery-upload-row {
     grid-template-columns: 1fr;
+  }
+
+  .utkal-gallery-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .utkal-gallery-field-full {
+    grid-column: auto;
   }
 
   .utkal-gallery-preview-box,
@@ -769,6 +1015,10 @@
     min-height: 300px;
   }
 }
+
+/* =====================================================
+   RESPONSIVE - 768
+===================================================== */
 
 @media (max-width: 768px) {
   .utkal-gallery-section {
@@ -785,7 +1035,6 @@
 
   .utkal-gallery-form-header {
     align-items: flex-start;
-    gap: 15px;
     flex-direction: column;
   }
 
@@ -812,10 +1061,32 @@
     width: 100%;
   }
 
-  .utkal-gallery-actions-cell {
-    gap: 6px;
+  .utkal-gallery-table-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  /* Pagination footer mobile */
+
+  .utkal-gallery-pagination-footer {
+    padding: 15px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .utkal-gallery-pagination-info {
+    order: 1;
+  }
+
+  .utkal-gallery-pagination {
+    order: 2;
   }
 }
+
+/* =====================================================
+   RESPONSIVE - 480
+===================================================== */
 
 @media (max-width: 480px) {
   .utkal-gallery-section {
@@ -839,4 +1110,29 @@
     width: 80px;
     height: 60px;
   }
-} 
+
+  .utkal-gallery-row-number {
+    display: none;
+  }
+
+  /* Smaller pagination */
+
+  .utkal-gallery-pagination {
+    width: 100%;
+  }
+
+  .utkal-gallery-pagination-numbers {
+    gap: 3px;
+  }
+
+  .utkal-gallery-pagination-number,
+  .utkal-gallery-pagination-arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .utkal-gallery-pagination-dots {
+    width: 22px;
+    height: 32px;
+  }
+}

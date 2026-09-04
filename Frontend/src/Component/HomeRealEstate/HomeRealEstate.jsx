@@ -1,9 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import "./HomeRealEstate.css";
 
 import API, { IMG_URL } from "../../api/axios";
 
-// React Icons
 import {
   FaTimes,
   FaImage,
@@ -15,10 +19,19 @@ import {
 } from "react-icons/fa";
 
 const HomeRealEstate = () => {
+  // =====================================================
+  // STATES
+  // =====================================================
+
   const [galleryItems, setGalleryItems] = useState([]);
+
   const [loading, setLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [brokenImages, setBrokenImages] = useState({});
+
+  const [selectedImage, setSelectedImage] =
+    useState(null);
+
+  const [brokenImages, setBrokenImages] =
+    useState({});
 
   // =====================================================
   // PAGINATION
@@ -33,11 +46,13 @@ const HomeRealEstate = () => {
   // =====================================================
 
   const getImageUrl = (photoPath) => {
-    if (!photoPath) return "";
+    if (!photoPath) {
+      return "";
+    }
 
     const value = String(photoPath).trim();
 
-    // Absolute URL / Blob URL
+    // Already absolute URL
     if (
       value.startsWith("http://") ||
       value.startsWith("https://") ||
@@ -46,7 +61,7 @@ const HomeRealEstate = () => {
       return value;
     }
 
-    // Normalize Windows path
+    // Normalize Windows paths
     let cleanPath = value.replace(/\\/g, "/");
 
     // Find uploads/
@@ -56,7 +71,8 @@ const HomeRealEstate = () => {
 
     if (uploadsIndex !== -1) {
       cleanPath =
-        "/" + cleanPath.substring(uploadsIndex);
+        "/" +
+        cleanPath.substring(uploadsIndex);
     } else {
       cleanPath = cleanPath.startsWith("/")
         ? cleanPath
@@ -64,7 +80,10 @@ const HomeRealEstate = () => {
     }
 
     // Remove duplicate slash
-    cleanPath = cleanPath.replace(/\/+/g, "/");
+    cleanPath = cleanPath.replace(
+      /\/+/g,
+      "/"
+    );
 
     // Backend URL
     let baseUrl = IMG_URL;
@@ -73,42 +92,76 @@ const HomeRealEstate = () => {
       baseUrl = "http://localhost:5000";
     }
 
-    baseUrl = String(baseUrl).replace(/\/+$/, "");
+    baseUrl = String(baseUrl).replace(
+      /\/+$/,
+      ""
+    );
 
     // Prevent /api/uploads
-    baseUrl = baseUrl.replace(/\/api$/, "");
+    baseUrl = baseUrl.replace(
+      /\/api$/,
+      ""
+    );
 
     return `${baseUrl}${cleanPath}`;
   };
 
   // =====================================================
-  // FETCH GALLERY
+  // FETCH GALLERY ITEMS
   // =====================================================
 
   const fetchGalleryItems = async () => {
     try {
       setLoading(true);
 
-      const response = await API.get("/gallery");
+      const response = await API.get(
+        "/gallery"
+      );
 
       let data = [];
+
+      // Backend response:
+      // {
+      //   success: true,
+      //   count: 4,
+      //   data: [...]
+      // }
 
       if (
         response.data &&
         Array.isArray(response.data.data)
       ) {
         data = response.data.data;
-      } else if (Array.isArray(response.data)) {
+      } else if (
+        Array.isArray(response.data)
+      ) {
         data = response.data;
       }
 
       setGalleryItems(data);
+
       setBrokenImages({});
+
+      // Keep current page valid
+      const calculatedPages = Math.max(
+        1,
+        Math.ceil(
+          data.length / ITEMS_PER_PAGE
+        )
+      );
+
+      setCurrentPage((previousPage) =>
+        previousPage > calculatedPages
+          ? calculatedPages
+          : previousPage
+      );
     } catch (error) {
       console.error(
-        "Error fetching real estate gallery items:",
+        "Error fetching HomeRealEstate gallery:",
         error
       );
+
+      setGalleryItems([]);
     } finally {
       setLoading(false);
     }
@@ -123,19 +176,25 @@ const HomeRealEstate = () => {
   }, []);
 
   // =====================================================
-  // PAGINATION CALCULATION
+  // TOTAL PAGES
   // =====================================================
 
   const totalPages = Math.max(
     1,
     Math.ceil(
-      galleryItems.length / ITEMS_PER_PAGE
+      galleryItems.length /
+        ITEMS_PER_PAGE
     )
   );
 
+  // =====================================================
+  // PAGINATED ITEMS
+  // =====================================================
+
   const paginatedItems = useMemo(() => {
     const startIndex =
-      (currentPage - 1) * ITEMS_PER_PAGE;
+      (currentPage - 1) *
+      ITEMS_PER_PAGE;
 
     const endIndex =
       startIndex + ITEMS_PER_PAGE;
@@ -144,43 +203,61 @@ const HomeRealEstate = () => {
       startIndex,
       endIndex
     );
-  }, [galleryItems, currentPage]);
+  }, [
+    galleryItems,
+    currentPage,
+  ]);
 
   // =====================================================
-  // KEEP PAGE VALID
+  // KEEP CURRENT PAGE VALID
   // =====================================================
 
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(totalPages);
     }
-  }, [currentPage, totalPages]);
+  }, [
+    currentPage,
+    totalPages,
+  ]);
 
   // =====================================================
   // IMAGE ERROR
   // =====================================================
 
-  const handleImageError = (id, url) => {
+  const handleImageError = (
+    id,
+    url
+  ) => {
     console.error(
       "Gallery image failed to load:",
       url
     );
 
-    setBrokenImages((prev) => ({
-      ...prev,
+    setBrokenImages((previous) => ({
+      ...previous,
       [id]: true,
     }));
   };
 
   // =====================================================
-  // MODAL
+  // OPEN MODAL
   // =====================================================
 
-  const handleOpenModal = (image) => {
-    setSelectedImage(image);
+  const handleOpenModal = (imageUrl) => {
+    if (!imageUrl) {
+      return;
+    }
 
-    document.body.style.overflow = "hidden";
+    setSelectedImage(imageUrl);
+
+    document.body.style.overflow =
+      "hidden";
   };
+
+  // =====================================================
+  // CLOSE MODAL
+  // =====================================================
 
   const handleCloseModal = () => {
     setSelectedImage(null);
@@ -229,11 +306,10 @@ const HomeRealEstate = () => {
 
     setCurrentPage(page);
 
-    // Scroll slightly to gallery
+    // Scroll slightly upward
     window.scrollTo({
       top:
-        window.scrollY -
-        150,
+        window.scrollY - 150,
       behavior: "smooth",
     });
   };
@@ -242,10 +318,13 @@ const HomeRealEstate = () => {
   // PAGINATION NUMBERS
   // =====================================================
 
-  const paginationNumbers = Array.from(
-    { length: totalPages },
-    (_, index) => index + 1
-  );
+  const paginationNumbers =
+    Array.from(
+      {
+        length: totalPages,
+      },
+      (_, index) => index + 1
+    );
 
   // =====================================================
   // RENDER
@@ -274,7 +353,8 @@ const HomeRealEstate = () => {
             id="apartment-dealers-heading"
             className="HomeRealEstate-title"
           >
-            Best Apartment Dealers in Bhubaneswar
+            Best Apartment Dealers in
+            Bhubaneswar
 
             <span className="HomeRealEstate-title-break">
               Explore Properties by Area
@@ -284,13 +364,16 @@ const HomeRealEstate = () => {
           <p className="HomeRealEstate-subtitle">
             Partner with the{" "}
             <strong>
-              best apartment dealers in Bhubaneswar
+              best apartment dealers in
+              Bhubaneswar
             </strong>{" "}
-            to discover luxury 2 BHK, 3 BHK, and 4 BHK
-            residential flats, penthouses, and premium
-            gated communities across top localities
-            including Patia, Jaydev Vihar, Saheed Nagar,
-            Khandagiri, and Rasulgarh.
+            to discover luxury 2 BHK, 3 BHK,
+            and 4 BHK residential flats,
+            penthouses, and premium gated
+            communities across top localities
+            including Patia, Jaydev Vihar,
+            Saheed Nagar, Khandagiri, and
+            Rasulgarh.
           </p>
 
         </header>
@@ -326,7 +409,8 @@ const HomeRealEstate = () => {
                 </span>
 
                 <small>
-                  {galleryItems.length === 1
+                  {galleryItems.length ===
+                  1
                     ? "Property"
                     : "Properties"}
                 </small>
@@ -342,7 +426,10 @@ const HomeRealEstate = () => {
 
         <div className="HomeRealEstate-grid">
 
-          {/* LOADING */}
+          {/* =================================================
+              LOADING
+          ================================================= */}
+
           {loading ? (
             Array.from({
               length: ITEMS_PER_PAGE,
@@ -361,27 +448,37 @@ const HomeRealEstate = () => {
             ))
           ) : galleryItems.length > 0 ? (
 
-            /* PAGINATED ITEMS */
+            /* =================================================
+               PAGINATED ITEMS
+            ================================================= */
+
             paginatedItems.map(
               (item, index) => {
-
                 const itemId =
                   item._id ||
                   item.id ||
                   `${currentPage}-${index}`;
 
                 const imageUrl =
-                  getImageUrl(item.image);
+                  getImageUrl(
+                    item.image
+                  );
 
                 const isBroken =
-                  brokenImages[itemId];
+                  brokenImages[
+                    itemId
+                  ];
 
                 /*
                   Global image number.
-                  Example:
-                  Page 1 => 01,02,03,04
-                  Page 2 => 05,06,07,08
+
+                  Page 1:
+                  01 02 03 04
+
+                  Page 2:
+                  05 06 07 08
                 */
+
                 const globalIndex =
                   (currentPage - 1) *
                     ITEMS_PER_PAGE +
@@ -428,19 +525,22 @@ const HomeRealEstate = () => {
                     )}
 
                     {/* =====================================
-                        NUMBER
+                        IMAGE NUMBER
                     ===================================== */}
 
                     {!isBroken && (
                       <div className="HomeRealEstate-card-number">
                         {String(
                           globalIndex + 1
-                        ).padStart(2, "0")}
+                        ).padStart(
+                          2,
+                          "0"
+                        )}
                       </div>
                     )}
 
                     {/* =====================================
-                        TOP VIEW BUTTON
+                        VIEW BUTTON
                     ===================================== */}
 
                     {!isBroken && (
@@ -472,11 +572,15 @@ const HomeRealEstate = () => {
                         }
                         role="button"
                         tabIndex={0}
-                        onKeyDown={(e) => {
+                        onKeyDown={(event) => {
                           if (
-                            e.key === "Enter" ||
-                            e.key === " "
+                            event.key ===
+                              "Enter" ||
+                            event.key ===
+                              " "
                           ) {
+                            event.preventDefault();
+
                             handleOpenModal(
                               imageUrl
                             );
@@ -503,30 +607,36 @@ const HomeRealEstate = () => {
                     <div className="HomeRealEstate-card-gradient"></div>
 
                     {/* =====================================
-                        CONTENT
+                        CARD CONTENT
                     ===================================== */}
 
                     <div className="HomeRealEstate-card-content">
 
+                      {/* CATEGORY */}
+
                       <div className="HomeRealEstate-card-content-top">
 
                         <span className="HomeRealEstate-card-location-label">
-                          PRIME LOCATION
+                          {item.category ||
+                            "PRIME LOCATION"}
                         </span>
 
                       </div>
+
+                      {/* TITLE */}
 
                       <h2 className="HomeRealEstate-card-title">
                         {item.title ||
                           "Utkal Luxury Apartments"}
                       </h2>
 
+                      {/* DESCRIPTION */}
+
                       <div className="HomeRealEstate-card-footer">
 
                         <p className="HomeRealEstate-card-listings">
-                          {item.location ||
-                            item.listings ||
-                            "Explore Area Listings"}
+                          {item.description ||
+                            "Explore our premium property areas in Bhubaneswar."}
                         </p>
 
                         <span className="HomeRealEstate-card-arrow">
@@ -544,7 +654,10 @@ const HomeRealEstate = () => {
 
           ) : (
 
-            /* EMPTY */
+            /* =================================================
+               EMPTY
+            ================================================= */
+
             <div className="HomeRealEstate-empty">
 
               <div className="HomeRealEstate-empty-icon">
@@ -556,9 +669,9 @@ const HomeRealEstate = () => {
               </h3>
 
               <p>
-                Upload new gallery images from
-                the admin panel to display them
-                here.
+                Upload new gallery images
+                from the admin panel to
+                display them here.
               </p>
 
             </div>
@@ -571,14 +684,18 @@ const HomeRealEstate = () => {
         ================================================= */}
 
         {!loading &&
-          galleryItems.length > ITEMS_PER_PAGE && (
+          galleryItems.length >
+            ITEMS_PER_PAGE && (
             <div className="HomeRealEstate-pagination">
 
               {/* PREVIOUS */}
+
               <button
                 type="button"
                 className="HomeRealEstate-pagination-arrow"
-                disabled={currentPage === 1}
+                disabled={
+                  currentPage === 1
+                }
                 onClick={() =>
                   handlePageChange(
                     currentPage - 1
@@ -590,6 +707,7 @@ const HomeRealEstate = () => {
               </button>
 
               {/* PAGE NUMBERS */}
+
               <div className="HomeRealEstate-pagination-numbers">
 
                 {paginationNumbers.map(
@@ -598,7 +716,8 @@ const HomeRealEstate = () => {
                       type="button"
                       key={page}
                       className={`HomeRealEstate-pagination-number ${
-                        currentPage === page
+                        currentPage ===
+                        page
                           ? "active"
                           : ""
                       }`}
@@ -609,12 +728,15 @@ const HomeRealEstate = () => {
                       }
                       aria-label={`Go to page ${page}`}
                       aria-current={
-                        currentPage === page
+                        currentPage ===
+                        page
                           ? "page"
                           : undefined
                       }
                     >
-                      {String(page).padStart(
+                      {String(
+                        page
+                      ).padStart(
                         2,
                         "0"
                       )}
@@ -625,6 +747,7 @@ const HomeRealEstate = () => {
               </div>
 
               {/* NEXT */}
+
               <button
                 type="button"
                 className="HomeRealEstate-pagination-arrow"
@@ -650,27 +773,36 @@ const HomeRealEstate = () => {
         ================================================= */}
 
         {!loading &&
-          galleryItems.length > ITEMS_PER_PAGE && (
+          galleryItems.length >
+            ITEMS_PER_PAGE && (
             <div className="HomeRealEstate-pagination-info">
+
               Showing{" "}
+
               <strong>
                 {(currentPage - 1) *
                   ITEMS_PER_PAGE +
                   1}
               </strong>
+
               {" - "}
+
               <strong>
                 {Math.min(
                   currentPage *
                     ITEMS_PER_PAGE,
                   galleryItems.length
                 )}
-              </strong>{" "}
-              of{" "}
+              </strong>
+
+              {" "}of{" "}
+
               <strong>
                 {galleryItems.length}
-              </strong>{" "}
-              properties
+              </strong>
+
+              {" "}properties
+
             </div>
           )}
 
@@ -681,7 +813,9 @@ const HomeRealEstate = () => {
         {selectedImage && (
           <div
             className="HomeRealEstate-modal-overlay"
-            onClick={handleCloseModal}
+            onClick={
+              handleCloseModal
+            }
             role="dialog"
             aria-modal="true"
             aria-label="Property image preview"
@@ -689,15 +823,17 @@ const HomeRealEstate = () => {
 
             <div
               className="HomeRealEstate-modal-content"
-              onClick={(e) =>
-                e.stopPropagation()
+              onClick={(event) =>
+                event.stopPropagation()
               }
             >
 
               <button
                 type="button"
                 className="HomeRealEstate-modal-close"
-                onClick={handleCloseModal}
+                onClick={
+                  handleCloseModal
+                }
                 aria-label="Close image preview"
               >
                 <FaTimes />
@@ -705,7 +841,7 @@ const HomeRealEstate = () => {
 
               <img
                 src={selectedImage}
-                alt="Enlarged view of Bhubaneswar Apartment"
+                alt="Enlarged property view"
                 className="HomeRealEstate-modal-img"
               />
 
