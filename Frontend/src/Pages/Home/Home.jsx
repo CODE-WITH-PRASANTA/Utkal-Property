@@ -10,6 +10,7 @@ import HomeMeetagents from '../../Component/HomeMeetagents/HomeMeetagents'
 import HomeContact from '../../Component/HomeContact/HomeContact'
 import HomeBlog from '../../Component/HomeBlog/HomeBlog'
 import HomeCustomer from '../../Component/HomeCustomer/HomeCustomer'
+import EmiHome from '../../Component/EmiHome/EmiHome'
 
 const Home = () => {
   return (
@@ -77,6 +78,7 @@ const Home = () => {
         <HomeCompanies />
         <HomeFeaturedproperties />
         <HomeRealEstate />
+        <EmiHome/>
         <Propertiesforsale />
         <Propertiesforrent />
         <HomeMeetagents />

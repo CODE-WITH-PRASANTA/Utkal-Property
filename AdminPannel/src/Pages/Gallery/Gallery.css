@@ -1,4 +1,3 @@
-
 :root {
   --utkal-green: #126229;
   --utkal-green-hover: #0e4c20;
@@ -9,73 +8,92 @@
   --utkal-red: #ef4444;
 }
 
-* {
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+.utkal-gallery-section,
+.utkal-gallery-section * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
 }
 
-/* Outer Section */
 .utkal-gallery-section {
   width: 100%;
-  padding: 40px 24px;
-  background-color: var(--utkal-bg-light);
   min-height: 100vh;
+  padding: 40px 24px;
+  background: var(--utkal-bg-light);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 .utkal-gallery-container {
+  width: 100%;
   max-width: 1240px;
   margin: 0 auto;
 }
 
-/* Header */
+/* =====================================================
+   HEADER
+===================================================== */
+
 .utkal-gallery-header {
   margin-bottom: 30px;
 }
 
 .utkal-gallery-tag {
   display: inline-block;
+  padding: 6px 16px;
+  margin-bottom: 10px;
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+  border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--utkal-green);
-  background: rgba(18, 98, 41, 0.08);
-  padding: 6px 16px;
-  border-radius: 20px;
-  margin-bottom: 10px;
 }
 
 .utkal-gallery-title {
+  margin: 0 0 6px;
+  color: var(--utkal-navy);
   font-size: 32px;
   font-weight: 800;
-  color: var(--utkal-navy);
-  margin-bottom: 6px;
-  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .utkal-gallery-subtitle {
-  font-size: 14px;
+  margin: 0;
   color: var(--utkal-text-muted);
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-/* ---------------- FORM CARD STYLING ---------------- */
+/* =====================================================
+   FORM CARD
+===================================================== */
+
 .utkal-gallery-form-card {
+  width: 100%;
+  padding: 32px;
+  margin-bottom: 40px;
   background: #ffffff;
   border: 1px solid var(--utkal-border);
   border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 8px 30px rgba(12, 29, 46, 0.04);
-  margin-bottom: 40px;
+  box-shadow:
+    0 8px 30px rgba(12, 29, 46, 0.04);
 }
 
 .utkal-gallery-form-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  justify-content: space-between;
+  gap: 15px;
   padding-bottom: 16px;
+  margin-bottom: 25px;
   border-bottom: 1px solid #f1f5f9;
 }
 
@@ -87,131 +105,232 @@
 
 .utkal-gallery-form-indicator {
   width: 4px;
-  height: 20px;
-  background-color: var(--utkal-green);
-  border-radius: 2px;
+  height: 22px;
+  background: var(--utkal-green);
+  border-radius: 4px;
 }
 
 .utkal-gallery-form-header h2 {
-  font-size: 20px;
-  font-weight: 700;
+  margin: 0;
   color: var(--utkal-navy);
+  font-size: 21px;
+  font-weight: 750;
 }
 
 .utkal-gallery-cancel-edit-btn {
-  background: #fee2e2;
-  color: #dc2626;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
+  padding: 9px 14px;
+  color: #dc2626;
+  background: #fee2e2;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-/* Form Layout */
+.utkal-gallery-cancel-edit-btn:hover {
+  background: #fecaca;
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
 .utkal-gallery-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 25px;
 }
 
-/* Upload Row (Dropzone + Preview) */
-.utkal-gallery-upload-row {
+.utkal-gallery-fields {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 20px;
 }
 
-/* Drag & Dropzone */
-.utkal-gallery-dropzone {
-  border: 2px dashed rgba(18, 98, 41, 0.35);
-  background-color: rgba(18, 98, 41, 0.03);
-  border-radius: 14px;
-  padding: 32px 20px;
-  text-align: center;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.utkal-gallery-dropzone:hover,
-.utkal-gallery-dropzone.drag-active {
-  background-color: rgba(18, 98, 41, 0.08);
-  border-color: var(--utkal-green);
-}
-
-.utkal-gallery-dropzone-icon {
-  font-size: 42px;
-  color: var(--utkal-green);
-  margin-bottom: 6px;
-}
-
-.utkal-gallery-dropzone-text {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--utkal-navy);
-}
-
-.utkal-gallery-or {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--utkal-text-muted);
-  margin: 8px 0;
-}
-
-.utkal-gallery-choose-btn {
-  background-color: var(--utkal-navy);
-  color: #ffffff;
-  border: none;
-  padding: 9px 20px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.utkal-gallery-choose-btn:hover {
-  background-color: #172a3a;
-}
-
-.utkal-gallery-dropzone-footer {
-  margin-top: 16px;
-  display: flex;
-  gap: 16px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--utkal-text-muted);
-}
-
-/* Preview Box */
-.utkal-gallery-preview-wrapper {
+.utkal-gallery-field {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.utkal-gallery-preview-label {
+.utkal-gallery-field-full {
+  grid-column: 1 / -1;
+}
+
+.utkal-gallery-field label {
+  color: var(--utkal-navy);
   font-size: 13px;
   font-weight: 700;
+}
+
+.utkal-gallery-field label span {
+  margin-left: 4px;
+  color: var(--utkal-red);
+}
+
+.utkal-gallery-field input,
+.utkal-gallery-field textarea {
+  width: 100%;
+  padding: 13px 14px;
   color: var(--utkal-navy);
+  background: #ffffff;
+  border: 1px solid var(--utkal-border);
+  border-radius: 9px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.utkal-gallery-field input {
+  height: 46px;
+}
+
+.utkal-gallery-field textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.utkal-gallery-field input::placeholder,
+.utkal-gallery-field textarea::placeholder {
+  color: #94a3b8;
+}
+
+.utkal-gallery-field input:focus,
+.utkal-gallery-field textarea:focus {
+  border-color: var(--utkal-green);
+  box-shadow:
+    0 0 0 3px
+    rgba(18, 98, 41, 0.08);
+}
+
+.utkal-gallery-character-count {
+  position: absolute;
+  right: 10px;
+  bottom: 9px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* =====================================================
+   UPLOAD ROW
+===================================================== */
+
+.utkal-gallery-upload-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(260px, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+/* =====================================================
+   DROPZONE
+===================================================== */
+
+.utkal-gallery-dropzone {
+  min-height: 345px;
+  padding: 32px 20px;
+  background: rgba(18, 98, 41, 0.03);
+  border: 2px dashed
+    rgba(18, 98, 41, 0.35);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.utkal-gallery-dropzone:hover,
+.utkal-gallery-dropzone.drag-active {
+  background: rgba(18, 98, 41, 0.08);
+  border-color: var(--utkal-green);
+}
+
+.utkal-gallery-dropzone-icon {
+  margin-bottom: 8px;
+  color: var(--utkal-green);
+  font-size: 42px;
+}
+
+.utkal-gallery-dropzone-text {
+  margin: 0;
+  color: var(--utkal-navy);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.utkal-gallery-or {
+  margin: 8px 0;
+  color: var(--utkal-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.utkal-gallery-choose-btn {
+  padding: 10px 22px;
+  color: #ffffff;
+  background: var(--utkal-navy);
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.utkal-gallery-choose-btn:hover {
+  background: #172a3a;
+  transform: translateY(-1px);
+}
+
+.utkal-gallery-dropzone-footer {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  color: var(--utkal-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* =====================================================
+   PREVIEW
+===================================================== */
+
+.utkal-gallery-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.utkal-gallery-preview-label {
+  color: var(--utkal-navy);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .utkal-gallery-preview-box {
+  position: relative;
+  width: 100%;
+  min-height: 345px;
+  overflow: hidden;
+  background: var(--utkal-bg-light);
   border: 1px solid var(--utkal-border);
   border-radius: 14px;
-  height: 100%;
-  min-height: 180px;
-  background-color: var(--utkal-bg-light);
-  overflow: hidden;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -221,31 +340,32 @@
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 345px;
 }
 
 .utkal-gallery-preview-content img {
+  display: block;
   width: 100%;
   height: 100%;
+  min-height: 345px;
   object-fit: cover;
-  display: block;
 }
 
 .utkal-gallery-preview-remove {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(12, 29, 46, 0.8);
-  color: #ffffff;
-  border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #ffffff;
+  background: rgba(12, 29, 46, 0.8);
+  border: none;
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s;
+  z-index: 5;
 }
 
 .utkal-gallery-preview-remove:hover {
@@ -256,6 +376,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   color: #cbd5e1;
 }
@@ -265,42 +386,53 @@
 }
 
 .utkal-gallery-preview-placeholder span {
-  font-size: 12px;
   color: var(--utkal-text-muted);
+  font-size: 12px;
 }
 
-/* Buttons */
+/* =====================================================
+   FORM BUTTONS
+===================================================== */
+
 .utkal-gallery-form-footer {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 12px;
 }
 
 .utkal-gallery-cancel-btn {
-  background: #f1f5f9;
-  color: var(--utkal-text-muted);
-  border: none;
   padding: 12px 24px;
+  color: var(--utkal-text-muted);
+  background: #f1f5f9;
+  border: none;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
 
+.utkal-gallery-cancel-btn:hover {
+  background: #e2e8f0;
+}
+
 .utkal-gallery-submit-btn {
-  background: var(--utkal-green);
-  color: #ffffff;
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 12px 28px;
+  color: #ffffff;
+  background: var(--utkal-green);
+  border: none;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 14px rgba(18, 98, 41, 0.3);
-  transition: background 0.2s, transform 0.1s;
+  box-shadow:
+    0 4px 14px
+    rgba(18, 98, 41, 0.3);
+  transition: 0.2s ease;
 }
 
 .utkal-gallery-submit-btn:hover {
@@ -308,26 +440,59 @@
   transform: translateY(-1px);
 }
 
-/* ---------------- TABLE CARD STYLING ---------------- */
+/* =====================================================
+   TABLE CARD
+===================================================== */
+
 .utkal-gallery-table-card {
+  width: 100%;
+  overflow: hidden;
   background: #ffffff;
   border: 1px solid var(--utkal-border);
   border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 30px rgba(12, 29, 46, 0.04);
+  box-shadow:
+    0 8px 30px rgba(12, 29, 46, 0.04);
 }
+
+/* =====================================================
+   TABLE HEADER
+===================================================== */
 
 .utkal-gallery-table-header {
   padding: 20px 24px;
-  border-bottom: 1px solid var(--utkal-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
   background: #ffffff;
+  border-bottom: 1px solid var(--utkal-border);
 }
 
 .utkal-gallery-table-header h3 {
+  margin: 0 0 4px;
+  color: var(--utkal-navy);
   font-size: 18px;
   font-weight: 700;
-  color: var(--utkal-navy);
 }
+
+.utkal-gallery-table-header p {
+  margin: 0;
+  color: var(--utkal-text-muted);
+  font-size: 12px;
+}
+
+.utkal-gallery-total-badge {
+  padding: 7px 12px;
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
 
 .utkal-gallery-table-responsive {
   width: 100%;
@@ -336,74 +501,170 @@
 
 .utkal-gallery-table {
   width: 100%;
+  min-width: 750px;
   border-collapse: collapse;
   text-align: left;
-  font-size: 13.5px;
+  font-size: 13px;
 }
 
 .utkal-gallery-table th {
-  background: var(--utkal-bg-light);
-  color: var(--utkal-navy);
-  font-weight: 700;
   padding: 14px 20px;
+  color: var(--utkal-navy);
+  background: var(--utkal-bg-light);
   border-bottom: 1px solid var(--utkal-border);
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .utkal-gallery-table td {
-  padding: 14px 20px;
+  padding: 15px 20px;
   border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
 }
 
-.utkal-gallery-table tr:hover {
-  background: #f8fafc;
+.utkal-gallery-table tbody tr:hover {
+  background: #fafdfb;
 }
 
-/* Table Cells */
+/* =====================================================
+   MEDIA CELL
+===================================================== */
+
+.utkal-gallery-media-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .utkal-gallery-thumb-wrap {
-  width: 80px;
-  height: 60px;
-  border-radius: 10px;
+  width: 110px;
+  height: 78px;
   overflow: hidden;
+  flex-shrink: 0;
+  background: var(--utkal-navy);
   border: 1px solid var(--utkal-border);
-  background-color: var(--utkal-navy);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .utkal-gallery-thumb-wrap img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+.utkal-gallery-row-number {
+  padding: 5px 7px;
+  color: var(--utkal-text-muted);
+  background: #f8fafc;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* =====================================================
+   INFO
+===================================================== */
+
+.utkal-gallery-info-cell {
+  max-width: 520px;
+}
+
+.utkal-gallery-info-cell h4 {
+  margin: 0 0 7px;
+  color: var(--utkal-navy);
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.utkal-gallery-category-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  margin-bottom: 7px;
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.08);
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.utkal-gallery-info-cell p {
+  margin: 0;
+  color: var(--utkal-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =====================================================
+   BROKEN IMAGE
+===================================================== */
+
+.utkal-gallery-broken-placeholder {
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 9px;
+}
+
+.utkal-gallery-broken-placeholder svg {
+  margin-bottom: 4px;
+  font-size: 18px;
+}
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
 .utkal-gallery-actions-cell {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 9px;
 }
 
 .utkal-action-btn {
   width: 36px;
   height: 36px;
-  border-radius: 8px;
-  border: 1px solid var(--utkal-border);
-  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  background: #ffffff;
+  border: 1px solid var(--utkal-border);
+  border-radius: 8px;
   font-size: 14px;
-  transition: all 0.2s;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.utkal-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .utkal-action-btn.view-btn {
   color: var(--utkal-navy);
 }
 
-.utkal-action-btn.view-btn:hover {
-  background: var(--utkal-navy);
+.utkal-action-btn.view-btn:hover:not(:disabled) {
   color: #ffffff;
+  background: var(--utkal-navy);
   border-color: var(--utkal-navy);
 }
 
@@ -412,8 +673,8 @@
 }
 
 .utkal-action-btn.edit-btn:hover {
-  background: var(--utkal-green);
   color: #ffffff;
+  background: var(--utkal-green);
   border-color: var(--utkal-green);
 }
 
@@ -422,63 +683,282 @@
 }
 
 .utkal-action-btn.delete-btn:hover {
-  background: var(--utkal-red);
   color: #ffffff;
+  background: var(--utkal-red);
   border-color: var(--utkal-red);
 }
 
+/* =====================================================
+   LOADING
+===================================================== */
+
+.utkal-gallery-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.utkal-gallery-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #dbe5df;
+  border-top-color: var(--utkal-green);
+  border-radius: 50%;
+  animation:
+    utkalGallerySpin
+    0.8s linear infinite;
+}
+
+@keyframes utkalGallerySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
 .utkal-gallery-empty-td {
-  text-align: center;
-  padding: 40px;
+  padding: 50px 20px !important;
   color: var(--utkal-text-muted);
+  text-align: center;
+}
+
+.utkal-gallery-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.utkal-gallery-empty-content svg {
+  margin-bottom: 5px;
+  color: #cbd5e1;
+  font-size: 34px;
+}
+
+.utkal-gallery-empty-content strong {
+  color: var(--utkal-navy);
+  font-size: 14px;
+}
+
+.utkal-gallery-empty-content span {
+  font-size: 12px;
 }
 
 .text-center {
   text-align: center !important;
 }
 
-/* ---------------- LIGHTBOX MODAL STYLING ---------------- */
-.utkal-gallery-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(12, 29, 46, 0.85);
-  backdrop-filter: blur(4px);
+/* =====================================================
+   PAGINATION FOOTER
+===================================================== */
+
+.utkal-gallery-pagination-footer {
+  min-height: 76px;
+  padding: 16px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  background: #ffffff;
+  border-top: 1px solid var(--utkal-border);
+}
+
+/* =====================================================
+   PAGINATION INFO
+===================================================== */
+
+.utkal-gallery-pagination-info {
+  color: var(--utkal-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.utkal-gallery-pagination-info strong {
+  color: var(--utkal-navy);
+  font-weight: 800;
+}
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+
+.utkal-gallery-pagination {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  gap: 6px;
+}
+
+.utkal-gallery-pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* =====================================================
+   PAGINATION ARROWS
+===================================================== */
+
+.utkal-gallery-pagination-arrow {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--utkal-navy);
+  background: #ffffff;
+
+  border: 1px solid var(--utkal-border);
+  border-radius: 8px;
+
+  font-size: 11px;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.utkal-gallery-pagination-arrow:hover:not(:disabled) {
+  color: #ffffff;
+  background: var(--utkal-green);
+  border-color: var(--utkal-green);
+
+  transform: translateY(-1px);
+}
+
+.utkal-gallery-pagination-arrow:disabled {
+  color: #cbd5e1;
+  background: #f8fafc;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* =====================================================
+   PAGE NUMBERS
+===================================================== */
+
+.utkal-gallery-pagination-number {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #64748b;
+  background: #ffffff;
+
+  border: 1px solid var(--utkal-border);
+  border-radius: 8px;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.utkal-gallery-pagination-number:hover {
+  color: var(--utkal-green);
+  background: rgba(18, 98, 41, 0.06);
+  border-color: rgba(18, 98, 41, 0.3);
+}
+
+.utkal-gallery-pagination-number.active {
+  color: #ffffff;
+  background: var(--utkal-green);
+  border-color: var(--utkal-green);
+
+  box-shadow:
+    0 4px 12px
+    rgba(18, 98, 41, 0.22);
+}
+
+.utkal-gallery-pagination-dots {
+  width: 30px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.utkal-gallery-modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
   padding: 20px;
+
+  background: rgba(12, 29, 46, 0.85);
+
+  backdrop-filter: blur(4px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
 }
 
 .utkal-gallery-modal-card {
   position: relative;
+
+  width: 100%;
+  max-width: 900px;
+
+  overflow: hidden;
+
   background: #ffffff;
   border-radius: 16px;
-  max-width: 650px;
-  width: 100%;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+
+  box-shadow:
+    0 20px 50px
+    rgba(0, 0, 0, 0.4);
 }
 
 .utkal-gallery-modal-close {
   position: absolute;
+
   top: 14px;
   right: 14px;
-  background: rgba(12, 29, 46, 0.7);
+
+  width: 36px;
+  height: 36px;
+
   color: #ffffff;
+  background: rgba(12, 29, 46, 0.75);
+
   border: none;
-  width: 34px;
-  height: 34px;
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
-  transition: background 0.2s;
-  z-index: 2;
+  z-index: 5;
+
+  transition: 0.2s ease;
 }
 
 .utkal-gallery-modal-close:hover {
@@ -487,25 +967,58 @@
 
 .utkal-gallery-modal-body {
   width: 100%;
-  max-height: 80vh;
+  max-height: 85vh;
+
   overflow: hidden;
-  background-color: var(--utkal-navy);
+
+  background: var(--utkal-navy);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .utkal-gallery-modal-body img {
-  width: 100%;
-  height: 100%;
-  max-height: 80vh;
-  object-fit: contain;
   display: block;
+
+  width: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+
+  object-fit: contain;
 }
 
-/* ---------------- RESPONSIVE BREAKPOINTS ---------------- */
+/* =====================================================
+   RESPONSIVE - 992
+===================================================== */
+
 @media (max-width: 992px) {
   .utkal-gallery-upload-row {
     grid-template-columns: 1fr;
   }
+
+  .utkal-gallery-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .utkal-gallery-field-full {
+    grid-column: auto;
+  }
+
+  .utkal-gallery-preview-box,
+  .utkal-gallery-dropzone {
+    min-height: 300px;
+  }
+
+  .utkal-gallery-preview-content,
+  .utkal-gallery-preview-content img {
+    min-height: 300px;
+  }
 }
+
+/* =====================================================
+   RESPONSIVE - 768
+===================================================== */
 
 @media (max-width: 768px) {
   .utkal-gallery-section {
@@ -514,5 +1027,112 @@
 
   .utkal-gallery-form-card {
     padding: 20px;
+  }
+
+  .utkal-gallery-title {
+    font-size: 26px;
+  }
+
+  .utkal-gallery-form-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .utkal-gallery-dropzone {
+    min-height: 260px;
+  }
+
+  .utkal-gallery-preview-box {
+    min-height: 260px;
+  }
+
+  .utkal-gallery-preview-content,
+  .utkal-gallery-preview-content img {
+    min-height: 260px;
+  }
+
+  .utkal-gallery-form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .utkal-gallery-cancel-btn,
+  .utkal-gallery-submit-btn {
+    width: 100%;
+  }
+
+  .utkal-gallery-table-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  /* Pagination footer mobile */
+
+  .utkal-gallery-pagination-footer {
+    padding: 15px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .utkal-gallery-pagination-info {
+    order: 1;
+  }
+
+  .utkal-gallery-pagination {
+    order: 2;
+  }
+}
+
+/* =====================================================
+   RESPONSIVE - 480
+===================================================== */
+
+@media (max-width: 480px) {
+  .utkal-gallery-section {
+    padding: 20px 12px;
+  }
+
+  .utkal-gallery-form-card {
+    padding: 16px;
+  }
+
+  .utkal-gallery-title {
+    font-size: 23px;
+  }
+
+  .utkal-gallery-dropzone-footer {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .utkal-gallery-thumb-wrap {
+    width: 80px;
+    height: 60px;
+  }
+
+  .utkal-gallery-row-number {
+    display: none;
+  }
+
+  /* Smaller pagination */
+
+  .utkal-gallery-pagination {
+    width: 100%;
+  }
+
+  .utkal-gallery-pagination-numbers {
+    gap: 3px;
+  }
+
+  .utkal-gallery-pagination-number,
+  .utkal-gallery-pagination-arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .utkal-gallery-pagination-dots {
+    width: 22px;
+    height: 32px;
   }
 }
