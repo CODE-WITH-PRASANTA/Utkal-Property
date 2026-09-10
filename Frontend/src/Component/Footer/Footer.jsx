@@ -69,6 +69,7 @@ const Footer = () => {
             <div className="footer-card-icon-box card-icon-orange" aria-hidden="true">
               <FaHouseUser className="card-large-icon" />
             </div>
+            
             <div className="footer-card-text">
               <h3 className="footer-card-title">You need a house</h3>
               <p className="footer-card-desc">
