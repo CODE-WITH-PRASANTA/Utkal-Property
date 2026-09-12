@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import API from "../../api/axios";
 import "./HomeBreadcrum.css";
-import heroImg from "../../assets/slider-1.webp";
+import heroImg from "../../assets/hpuseee.png";
 
 const HomeBreadcrum = () => {
   const navigate = useNavigate();
@@ -967,41 +967,47 @@ const HomeBreadcrum = () => {
             RIGHT IMAGE
         =================================================== */}
         <div className="HomeBreadcrum-right">
-          <div className="HomeBreadcrum-badgeWrapper">
-            <div className="HomeBreadcrum-badgeTextContainer">
-              <svg
-                viewBox="0 0 100 100"
-                className="HomeBreadcrum-rotatingSvg"
-                aria-hidden="true"
-              >
-                <path
-                  id="HomeBreadcrum-circlePath"
-                  d="
-                    M 50,50
-                    m -37,0
-                    a 37,37 0 1,1 74,0
-                    a 37,37 0 1,1 -74,0
-                  "
-                  fill="transparent"
-                />
-                <text className="HomeBreadcrum-svgText">
-                  <textPath
-                    href="#HomeBreadcrum-circlePath"
-                    startOffset="0%"
-                  >
-                    find your dream property here •
-                  </textPath>
-                </text>
-              </svg>
-            </div>
+        <button
+  type="button"
+  className="HomeBreadcrum-badgeWrapper"
+  onClick={() => navigate("/properties")}
+  aria-label="Find your dream property"
+>
+  <div className="HomeBreadcrum-badgeTextContainer">
+    <svg
+      viewBox="0 0 100 100"
+      className="HomeBreadcrum-rotatingSvg"
+      aria-hidden="true"
+    >
+      <path
+        id="HomeBreadcrum-circlePath"
+        d="
+          M 50,50
+          m -37,0
+          a 37,37 0 1,1 74,0
+          a 37,37 0 1,1 -74,0
+        "
+        fill="transparent"
+      />
 
-            <div
-              className="HomeBreadcrum-badgeArrow"
-              aria-hidden="true"
-            >
-              <FiArrowUpRight />
-            </div>
-          </div>
+      <text className="HomeBreadcrum-svgText">
+        <textPath
+          href="#HomeBreadcrum-circlePath"
+          startOffset="0%"
+        >
+          find your dream property here •
+        </textPath>
+      </text>
+    </svg>
+  </div>
+
+  <div
+    className="HomeBreadcrum-badgeArrow"
+    aria-hidden="true"
+  >
+    <FiArrowUpRight />
+  </div>
+</button>
 
           <div className="HomeBreadcrum-imageArch">
             <img

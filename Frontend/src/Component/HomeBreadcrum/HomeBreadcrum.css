@@ -57,6 +57,99 @@
   z-index: 5;
 }
 
+.HomeBreadcrum-badgeWrapper {
+  position: absolute;
+  top: 0;
+  left: -85px;
+
+  width: 125px;
+  height: 125px;
+
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+
+  background: #176b36;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  z-index: 5;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.HomeBreadcrum-badgeWrapper:hover {
+  transform: scale(1.06);
+  box-shadow: 0 12px 30px rgba(23, 107, 54, 0.25);
+}
+
+.HomeBreadcrum-badgeWrapper:active {
+  transform: scale(0.98);
+}
+
+.HomeBreadcrum-badgeWrapper:focus-visible {
+  outline: 3px solid rgba(23, 107, 54, 0.35);
+  outline-offset: 4px;
+}
+
+.HomeBreadcrum-badgeTextContainer {
+  position: absolute;
+  inset: 0;
+}
+
+.HomeBreadcrum-rotatingSvg {
+  width: 100%;
+  height: 100%;
+  animation: HomeBreadcrumRotateBadge 14s linear infinite;
+}
+
+.HomeBreadcrum-svgText {
+  fill: #fff;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.HomeBreadcrum-badgeArrow {
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  z-index: 2;
+
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+.HomeBreadcrum-badgeWrapper:hover .HomeBreadcrum-badgeArrow {
+  background: rgba(255, 255, 255, 0.12);
+  transform: rotate(45deg);
+}
+
+@keyframes HomeBreadcrumRotateBadge {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 .HomeBreadcrum-right {
   width: 100%;
   min-height: 570px;

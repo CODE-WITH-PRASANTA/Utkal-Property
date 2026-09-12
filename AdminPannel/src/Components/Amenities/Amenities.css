@@ -1640,22 +1640,26 @@
 
 
 /* =====================================================
-   PRESET SECTION
+   PRESET SECTION — premium, animated
 ===================================================== */
 
 .amx-preset-section {
-  padding: 13px;
+  padding: 14px;
 
   background:
     linear-gradient(
-      145deg,
-      #fafbfe,
-      #f7f8fc
+      150deg,
+      #fbfbff,
+      #f5f6fc
     );
 
-  border: 1px solid #e8ebf0;
+  border: 1px solid #e6e9f2;
 
-  border-radius: 13px;
+  border-radius: 15px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 6px 18px rgba(79, 70, 229, 0.04);
 }
 
 
@@ -1672,7 +1676,7 @@
 
   gap: 10px;
 
-  margin-bottom: 10px;
+  margin-bottom: 11px;
 }
 
 .amx-preset-header > div {
@@ -1717,7 +1721,7 @@
 
   border: 1px solid #dfe3ea;
 
-  border-radius: 7px;
+  border-radius: 999px;
 
   background: white;
 
@@ -1730,15 +1734,22 @@
   cursor: pointer;
 
   transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease;
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .amx-more-icon-button:hover {
-  background: #f5f5ff;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
 
-  border-color: #cfcdf8;
+  border-color: #4f46e5;
+
+  color: white;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.24);
 }
 
 .amx-more-icon-button-active {
@@ -1755,7 +1766,7 @@
   transform: rotate(0deg);
 
   transition:
-    transform 0.2s ease;
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .amx-more-arrow-up {
@@ -1773,13 +1784,51 @@
   grid-template-columns:
     repeat(8, minmax(0, 1fr));
 
-  gap: 7px;
+  gap: 8px;
 }
 
 
 /* =====================================================
-   PRESET ICON
+   PRESET ICON — animated entrance + premium hover/select
 ===================================================== */
+
+@keyframes amx-icon-pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes amx-check-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-20deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.2) rotate(4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes amx-select-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.35), 0 4px 12px rgba(79, 70, 229, 0.13);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(79, 70, 229, 0), 0 4px 12px rgba(79, 70, 229, 0.13);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0), 0 4px 12px rgba(79, 70, 229, 0.13);
+  }
+}
 
 .amx-preset-icon {
   position: relative;
@@ -1798,7 +1847,7 @@
 
   border: 1px solid #e3e6ec;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   background: white;
 
@@ -1806,27 +1855,50 @@
 
   cursor: pointer;
 
+  overflow: hidden;
+
+  animation: amx-icon-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--amx-i, 0) * 0.025s);
+
   transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease;
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.amx-preset-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.14), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
 }
 
 .amx-preset-icon:hover {
-  transform: translateY(-2px) scale(1.02);
+  transform: translateY(-3px) scale(1.06);
 
   border-color: #c7c3fa;
 
   background: #f8f8ff;
 
   box-shadow:
-    0 5px 12px rgba(
+    0 8px 16px rgba(
       79,
       70,
       229,
-      0.08
+      0.12
     );
+}
+
+.amx-preset-icon:hover::after {
+  opacity: 1;
+}
+
+.amx-preset-icon:active {
+  transform: translateY(-1px) scale(0.98);
 }
 
 .amx-preset-icon-selected {
@@ -1839,15 +1911,9 @@
 
   border-color: #7169e8;
 
-  box-shadow:
-    0 4px 12px rgba(
-      79,
-      70,
-      229,
-      0.13
-    );
+  transform: scale(1.05);
 
-  transform: scale(1.03);
+  animation: amx-select-ring 0.7s ease;
 }
 
 .amx-preset-icon small {
@@ -1874,12 +1940,27 @@
   font-size: 7px;
 
   font-weight: 800;
+
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.4);
+
+  animation: amx-check-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 
 /* =====================================================
    CURRENT SELECTION
 ===================================================== */
+
+@keyframes amx-selection-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .amx-current-selection {
   display: flex;
@@ -1902,6 +1983,8 @@
   border: 1px solid #dddafe;
 
   border-radius: 10px;
+
+  animation: amx-selection-in 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .amx-selection-preview {
@@ -2662,4 +2745,757 @@
     font-size: 17px;
   }
 
+}
+/* =====================================================
+   PROPERTY ICON PICKER
+   PREMIUM + ANIMATED
+===================================================== */
+
+.amx-preset-section {
+  position: relative;
+
+  padding: 16px;
+
+  margin-top: 3px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fafbff 48%,
+      #f5f6ff 100%
+    );
+
+  border: 1px solid #e3e6ef;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 10px 28px rgba(15, 23, 42, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+  overflow: hidden;
+}
+
+.amx-preset-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  top: -100px;
+  right: -80px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.10),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.amx-preset-header {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 14px;
+
+  margin-bottom: 14px;
+}
+
+.amx-preset-header > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.amx-preset-title {
+  color: #252b3a;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.15px;
+}
+
+.amx-preset-description {
+  color: #98a1b2;
+
+  font-size: 8.5px;
+
+  font-weight: 500;
+}
+
+
+/* =====================================================
+   MORE ICONS BUTTON
+===================================================== */
+
+.amx-more-icon-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  height: 30px;
+
+  padding: 0 11px;
+
+  border: 1px solid #dfe3ee;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #554fe3;
+
+  font-size: 8.5px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 10px rgba(79, 70, 229, 0.05);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.amx-more-icon-button:hover {
+  transform: translateY(-2px);
+
+  border-color: #7069ef;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6560ed,
+      #4f46e5
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 7px 18px rgba(79, 70, 229, 0.20);
+}
+
+.amx-more-icon-button-active {
+  background: #f0efff;
+
+  border-color: #c9c5ff;
+
+  color: #4f46e5;
+}
+
+.amx-more-arrow {
+  display: inline-flex;
+
+  font-size: 9px;
+
+  transition:
+    transform 0.3s
+    cubic-bezier(
+      0.34,
+      1.56,
+      0.64,
+      1
+    );
+}
+
+.amx-more-arrow-up {
+  transform: rotate(180deg);
+}
+
+
+/* =====================================================
+   ICON GRID
+===================================================== */
+
+.amx-icon-grid {
+  position: relative;
+
+  z-index: 2;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(8, minmax(0, 1fr));
+
+  gap: 9px;
+}
+
+
+/* =====================================================
+   ENTRANCE ANIMATION
+===================================================== */
+
+@keyframes amx-property-icon-enter {
+  0% {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(0.78);
+  }
+
+  60% {
+    opacity: 1;
+
+    transform:
+      translateY(-2px)
+      scale(1.04);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =====================================================
+   SELECT RING
+===================================================== */
+
+@keyframes amx-property-selected {
+  0% {
+    box-shadow:
+      0 0 0 0
+        rgba(79, 70, 229, 0.35),
+      0 6px 15px
+        rgba(79, 70, 229, 0.10);
+  }
+
+  60% {
+    box-shadow:
+      0 0 0 7px
+        rgba(79, 70, 229, 0),
+      0 8px 20px
+        rgba(79, 70, 229, 0.16);
+  }
+
+  100% {
+    box-shadow:
+      0 0 0 0
+        rgba(79, 70, 229, 0),
+      0 6px 15px
+        rgba(79, 70, 229, 0.10);
+  }
+}
+
+
+/* =====================================================
+   ICON CARD
+===================================================== */
+
+.amx-preset-icon {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid #e1e5ed;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fafbfe
+    );
+
+  color: #252b3a;
+
+  font-size: 21px;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  animation:
+    amx-property-icon-enter
+    0.42s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    backwards;
+
+  animation-delay:
+    calc(
+      var(--amx-i, 0) * 0.035s
+    );
+
+  transition:
+    transform 0.28s
+      cubic-bezier(
+        0.34,
+        1.56,
+        0.64,
+        1
+      ),
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+/* =====================================================
+   LIGHT EFFECT
+===================================================== */
+
+.amx-preset-icon::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 50% 15%,
+      rgba(
+        99,
+        102,
+        241,
+        0.15
+      ),
+      transparent 68%
+    );
+
+  opacity: 0;
+
+  transition:
+    opacity 0.28s ease;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.amx-preset-icon:hover {
+  transform:
+    translateY(-4px)
+    scale(1.055);
+
+  border-color: #bdb9f8;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f4f3ff
+    );
+
+  box-shadow:
+    0 10px 22px
+      rgba(
+        79,
+        70,
+        229,
+        0.13
+      ),
+    0 2px 5px
+      rgba(
+        15,
+        23,
+        42,
+        0.04
+      );
+}
+
+.amx-preset-icon:hover::after {
+  opacity: 1;
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.amx-preset-icon > span {
+  position: relative;
+
+  z-index: 2;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  line-height: 1;
+
+  transition:
+    transform 0.25s
+    cubic-bezier(
+      0.34,
+      1.56,
+      0.64,
+      1
+    );
+}
+
+.amx-preset-icon:hover > span {
+  transform:
+    translateY(-1px)
+    scale(1.10);
+}
+
+
+/* =====================================================
+   ACTIVE / SELECTED
+===================================================== */
+
+.amx-preset-icon-selected {
+  background:
+    linear-gradient(
+      145deg,
+      #f1f0ff,
+      #e7e5ff
+    );
+
+  border-color: #6861e8;
+
+  transform: scale(1.055);
+
+  box-shadow:
+    0 7px 18px
+      rgba(
+        79,
+        70,
+        229,
+        0.14
+      );
+
+  animation:
+    amx-property-selected
+    0.7s ease;
+}
+
+.amx-preset-icon-selected::after {
+  opacity: 1;
+}
+
+.amx-preset-icon-selected > span {
+  transform: scale(1.08);
+}
+
+
+/* =====================================================
+   CHECK MARK
+===================================================== */
+
+@keyframes amx-property-check {
+  0% {
+    opacity: 0;
+
+    transform:
+      scale(0)
+      rotate(-25deg);
+  }
+
+  65% {
+    opacity: 1;
+
+    transform:
+      scale(1.2)
+      rotate(5deg);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      scale(1)
+      rotate(0);
+  }
+}
+
+.amx-preset-icon small {
+  position: absolute;
+
+  right: 4px;
+
+  bottom: 4px;
+
+  width: 15px;
+
+  height: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #655eea,
+      #4f46e5
+    );
+
+  color: #ffffff;
+
+  font-size: 8px;
+
+  font-weight: 900;
+
+  border: 2px solid #ffffff;
+
+  box-shadow:
+    0 3px 8px
+      rgba(
+        79,
+        70,
+        229,
+        0.28
+      );
+
+  animation:
+    amx-property-check
+    0.35s
+    cubic-bezier(
+      0.34,
+      1.56,
+      0.64,
+      1
+    );
+}
+
+
+/* =====================================================
+   CURRENT SELECTION
+===================================================== */
+
+@keyframes amx-selection-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+.amx-current-selection {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 10px;
+
+  padding: 10px 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7f7ff,
+      #f0f0ff
+    );
+
+  border: 1px solid #dddafe;
+
+  border-radius: 11px;
+
+  animation:
+    amx-selection-in
+    0.25s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+.amx-selection-preview {
+  width: 34px;
+
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  border: 1px solid #dedcff;
+
+  font-size: 18px;
+}
+
+.amx-selection-preview img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+
+  padding: 4px;
+}
+
+.amx-selection-info {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.amx-selection-info strong {
+  color: #4f46e5;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+.amx-selection-info span {
+  color: #929aaa;
+
+  font-size: 8px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 800px) {
+  .amx-icon-grid {
+    grid-template-columns:
+      repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .amx-icon-grid {
+    grid-template-columns:
+      repeat(6, minmax(0, 1fr));
+  }
+
+  .amx-preset-icon {
+    min-width: 34px;
+
+    font-size: 18px;
+  }
+
+  .amx-preset-section {
+    padding: 13px;
+  }
+
+  .amx-preset-title {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 420px) {
+  .amx-icon-grid {
+    grid-template-columns:
+      repeat(5, minmax(0, 1fr));
+  }
+
+  .amx-preset-icon {
+    font-size: 17px;
+  }
+
+  .amx-preset-header {
+    align-items: flex-start;
+  }
+
+  .amx-more-icon-button {
+    height: 28px;
+
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 340px) {
+  .amx-icon-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .amx-preset-icon,
+  .amx-more-icon-button,
+  .amx-more-arrow,
+  .amx-current-selection {
+    animation: none !important;
+
+    transition: none !important;
+  }
 }

@@ -1,0 +1,455 @@
+/* ==========================================================================
+   EmiHome — Premium Full-Screen Property Loan EMI Calculator (green-white)
+   ========================================================================== */
+
+.emi-home {
+  --emh-bg: #f4f9f5;
+  --emh-white: #ffffff;
+  --emh-dark: #0f2417;
+  --emh-muted: #64748b;
+  --emh-border: #e2e8f0;
+  --emh-primary: #14532d;
+  --emh-primary-light: #1f7a42;
+  --emh-primary-soft: #eaf5ee;
+  --emh-radius: 22px;
+
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(ellipse 900px 520px at 90% -10%, rgba(20, 83, 45, 0.06), transparent 55%),
+    radial-gradient(ellipse 800px 500px at -5% 100%, rgba(20, 83, 45, 0.05), transparent 55%),
+    var(--emh-bg);
+  padding: 4rem 2rem;
+  box-sizing: border-box;
+  font-family: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  color: var(--emh-dark);
+}
+
+.emi-home *,
+.emi-home *::before,
+.emi-home *::after {
+  box-sizing: border-box;
+}
+
+.emi-home__wrapper {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.emi-home__layout {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* ---------- Main Column ---------- */
+
+.emi-home__main {
+  background: var(--emh-white);
+  border: 1px solid var(--emh-border);
+  border-radius: var(--emh-radius);
+  padding: 2.75rem;
+  box-shadow: 0 24px 60px rgba(20, 83, 45, 0.07);
+}
+
+.emi-home__header {
+  margin-bottom: 2rem;
+}
+
+.emi-home__eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--emh-primary-light);
+  background: var(--emh-primary-soft);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.emi-home__title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(1.4rem, 2.6vw, 1.95rem);
+  font-weight: 600;
+  color: var(--emh-dark);
+  line-height: 1.4;
+  margin: 0 0 1.6rem 0;
+}
+
+.emi-home__title-highlight {
+  color: var(--emh-primary);
+}
+
+.emi-home__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 460px;
+}
+
+.emi-home__field-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--emh-muted);
+}
+
+.emi-home__select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.emi-home__select-leading-icon {
+  position: absolute;
+  left: 1rem;
+  font-size: 0.85rem;
+  color: var(--emh-primary);
+  pointer-events: none;
+}
+
+.emi-home__select {
+  width: 100%;
+  appearance: none;
+  background: #fafcfb;
+  border: 1px solid var(--emh-border);
+  border-radius: 14px;
+  padding: 0.9rem 2.4rem 0.9rem 2.6rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--emh-dark);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.emi-home__select:hover {
+  border-color: #cfe4d6;
+}
+
+.emi-home__select:focus {
+  border-color: var(--emh-primary);
+  background: var(--emh-white);
+  box-shadow: 0 0 0 4px rgba(20, 83, 45, 0.12);
+}
+
+.emi-home__select-chevron {
+  position: absolute;
+  right: 1rem;
+  font-size: 0.7rem;
+  color: var(--emh-muted);
+  pointer-events: none;
+}
+
+/* ---------- Property Price Row ---------- */
+
+.emi-home__price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--emh-border);
+}
+
+.emi-home__price-label {
+  font-size: 0.9rem;
+  color: var(--emh-muted);
+  font-weight: 600;
+}
+
+.emi-home__price-value {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--emh-dark);
+}
+
+/* ---------- Slider Blocks ---------- */
+
+.emi-home__slider-block {
+  padding: 1.6rem 0 1.2rem;
+  border-bottom: 1px solid var(--emh-border);
+}
+
+.emi-home__slider-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.emi-home__slider-label {
+  font-size: 0.9rem;
+  color: var(--emh-muted);
+  font-weight: 600;
+}
+
+.emi-home__slider-value {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--emh-primary);
+}
+
+.emi-home__slider-track {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--emh-primary) 0%,
+    var(--emh-primary) var(--emh-fill, 0%),
+    #e4ece6 var(--emh-fill, 0%),
+    #e4ece6 100%
+  );
+  outline: none;
+  cursor: pointer;
+  margin: 0.35rem 0;
+}
+
+.emi-home__slider-track::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--emh-white);
+  border: 4px solid var(--emh-primary);
+  box-shadow: 0 4px 10px rgba(20, 83, 45, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.emi-home__slider-track::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+  box-shadow: 0 6px 16px rgba(20, 83, 45, 0.38);
+}
+
+.emi-home__slider-track::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--emh-white);
+  border: 4px solid var(--emh-primary);
+  box-shadow: 0 4px 10px rgba(20, 83, 45, 0.3);
+  cursor: pointer;
+}
+
+.emi-home__slider-track::-moz-range-progress {
+  background: var(--emh-primary);
+  height: 6px;
+  border-radius: 999px;
+}
+
+.emi-home__slider-track::-moz-range-track {
+  background: #e4ece6;
+  height: 6px;
+  border-radius: 999px;
+}
+
+.emi-home__slider-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  color: var(--emh-muted);
+}
+
+/* ---------- Tenure Buttons ---------- */
+
+.emi-home__tenure-block {
+  padding: 1.6rem 0 0.4rem;
+}
+
+.emi-home__tenure-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--emh-muted);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.emi-home__tenure-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.emi-home__tenure-btn {
+  min-width: 56px;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--emh-border);
+  background: var(--emh-white);
+  color: var(--emh-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.emi-home__tenure-btn:hover {
+  border-color: var(--emh-primary-light);
+  color: var(--emh-primary);
+}
+
+.emi-home__tenure-btn--active {
+  background: var(--emh-primary);
+  border-color: var(--emh-primary);
+  color: var(--emh-white);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(20, 83, 45, 0.28);
+}
+
+/* ---------- Side Column — sticky estimate card ---------- */
+
+.emi-home__side {
+  position: sticky;
+  top: 2rem;
+}
+
+.emi-home__side-card {
+  background: var(--emh-white);
+  border: 1px solid var(--emh-border);
+  border-radius: var(--emh-radius);
+  padding: 2rem;
+  box-shadow: 0 24px 60px rgba(20, 83, 45, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.emi-home__side-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--emh-muted);
+}
+
+.emi-home__result-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: linear-gradient(150deg, var(--emh-primary), var(--emh-primary-light));
+  border-radius: 18px;
+  padding: 1.6rem 1.5rem;
+  box-shadow: 0 16px 34px rgba(20, 83, 45, 0.32);
+}
+
+.emi-home__result-amount {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--emh-white);
+  line-height: 1.1;
+}
+
+.emi-home__result-caption {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: 0.01em;
+}
+
+.emi-home__summary {
+  display: flex;
+  flex-direction: column;
+}
+
+.emi-home__summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0;
+}
+
+.emi-home__summary-label {
+  font-size: 0.86rem;
+  color: var(--emh-muted);
+  font-weight: 600;
+}
+
+.emi-home__summary-value {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--emh-dark);
+}
+
+.emi-home__divider {
+  height: 1px;
+  background: var(--emh-border);
+}
+
+.emi-home__share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--emh-white);
+  border: 1.5px solid var(--emh-border);
+  color: var(--emh-dark);
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.85rem 1.6rem;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, transform 0.25s ease,
+    box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.emi-home__share-btn:hover {
+  border-color: var(--emh-primary);
+  color: var(--emh-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(20, 83, 45, 0.14);
+}
+
+.emi-home__share-btn:active {
+  transform: translateY(0);
+}
+
+.emi-home__share-btn--copied {
+  background: var(--emh-primary-soft);
+  border-color: var(--emh-primary);
+  color: var(--emh-primary);
+}
+
+.emi-home__result-share-icon {
+  font-size: 0.85rem;
+}
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+
+@media (max-width: 1080px) {
+  .emi-home__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .emi-home__side {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .emi-home {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .emi-home__main,
+  .emi-home__side-card {
+    padding: 1.75rem;
+  }
+}
