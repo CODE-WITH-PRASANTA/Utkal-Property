@@ -34,9 +34,10 @@ const app = express();
 
 // Allowed Origins List
 const allowedOrigins = [
-  "https://admin.customersupportdesk.us",
-  "https://customersupportdesk.us",
-  "https://backend.customersupportdesk.us",
+  "https://utkalproperty.com",
+  "https://www.utkalproperty.com",
+  "https://admin.utkalproperty.com",
+  "https://backend.utkalproperty.com",
   // Local development environments
   "http://localhost:3000",
   "http://localhost:5173",
