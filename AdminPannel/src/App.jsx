@@ -53,7 +53,7 @@ import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
 import PropertyListing from "./Components/PropertyListing/PropertyListing";
 // import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
-// import Amenities from "./Components/Amenities/Amenities";
+
 // import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
 
 // =====================================================
