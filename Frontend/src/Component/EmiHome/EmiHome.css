@@ -1,7 +1,3 @@
-/* ==========================================================================
-   EmiHome — Premium Full-Screen Property Loan EMI Calculator (green-white)
-   ========================================================================== */
-
 .emi-home {
   --emh-bg: #f4f9f5;
   --emh-white: #ffffff;
@@ -89,86 +85,49 @@
 .emi-home__field {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
   max-width: 460px;
 }
 
 .emi-home__field-label {
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--emh-muted);
 }
 
-.emi-home__select-wrapper {
+.emi-home__input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.emi-home__select-leading-icon {
+.emi-home__input-leading-icon {
   position: absolute;
   left: 1rem;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--emh-primary);
   pointer-events: none;
 }
 
-.emi-home__select {
+.emi-home__input {
   width: 100%;
-  appearance: none;
   background: #fafcfb;
   border: 1px solid var(--emh-border);
   border-radius: 14px;
-  padding: 0.9rem 2.4rem 0.9rem 2.6rem;
-  font-size: 0.95rem;
+  padding: 0.85rem 1rem 0.85rem 2.6rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--emh-dark);
-  cursor: pointer;
   outline: none;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
-.emi-home__select:hover {
-  border-color: #cfe4d6;
-}
-
-.emi-home__select:focus {
+.emi-home__input:focus {
   border-color: var(--emh-primary);
   background: var(--emh-white);
   box-shadow: 0 0 0 4px rgba(20, 83, 45, 0.12);
-}
-
-.emi-home__select-chevron {
-  position: absolute;
-  right: 1rem;
-  font-size: 0.7rem;
-  color: var(--emh-muted);
-  pointer-events: none;
-}
-
-/* ---------- Property Price Row ---------- */
-
-.emi-home__price-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.2rem 0;
-  border-bottom: 1px solid var(--emh-border);
-}
-
-.emi-home__price-label {
-  font-size: 0.9rem;
-  color: var(--emh-muted);
-  font-weight: 600;
-}
-
-.emi-home__price-value {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--emh-dark);
 }
 
 /* ---------- Slider Blocks ---------- */
@@ -180,7 +139,7 @@
 
 .emi-home__slider-head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
@@ -196,6 +155,13 @@
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--emh-primary);
+}
+
+.emi-home__slider-subtext {
+  font-size: 0.85rem;
+  color: var(--emh-muted);
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-weight: 600;
 }
 
 .emi-home__slider-track {
@@ -310,7 +276,7 @@
   box-shadow: 0 8px 18px rgba(20, 83, 45, 0.28);
 }
 
-/* ---------- Side Column — sticky estimate card ---------- */
+/* ---------- Side Column ---------- */
 
 .emi-home__side {
   position: sticky;
@@ -429,10 +395,7 @@
   font-size: 0.85rem;
 }
 
-/* ==========================================================
-   Responsive
-   ========================================================== */
-
+/* Responsive */
 @media (max-width: 1080px) {
   .emi-home__layout {
     grid-template-columns: 1fr;

@@ -1,42 +1,44 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { FaChevronDown, FaShareAlt, FaCheck, FaHome } from 'react-icons/fa';
+import React, { useMemo, useState } from 'react';
+import { FaShareAlt, FaCheck, FaRupeeSign } from 'react-icons/fa';
 import './EmiHome.css';
 
-const PROPERTIES = [
-  { id: 'greenwood-villa', name: 'Utkal Greenwood Villa', location: 'Cuttack', price: 6543120 },
-  { id: 'riverside-apartments', name: 'Utkal Riverside Apartments', location: 'Bhubaneswar', price: 4850000 },
-  { id: 'smart-homes', name: 'Utkal Smart Homes', location: 'Patia', price: 3250000 },
-];
-
-// Fixed home-loan terms — the loan-type selector was removed, so these
-// bounds now drive the interest-rate slider and tenure options directly.
-const HOME_LOAN = { label: 'Home Loan', minRate: 8.1, maxRate: 11.5, defaultRate: 9.2, maxYears: 30 };
+const HOME_LOAN = { 
+  minRate: 8.1, 
+  maxRate: 11.5, 
+  defaultRate: 9.2, 
+  maxYears: 30 
+};
 
 const ALL_TENURES = [1, 2, 3, 5, 7, 10, 15, 20, 25, 30];
 
 const formatINR = (value) =>
-  `₹${Math.round(value).toLocaleString('en-IN')}`;
+  `₹${Math.round(value || 0).toLocaleString('en-IN')}`;
 
 const EmiHome = () => {
-  const [propertyId, setPropertyId] = useState(PROPERTIES[0].id);
-  const [downPayment, setDownPayment] = useState(Math.round(PROPERTIES[0].price * 0.1));
+  const [totalAmount, setTotalAmount] = useState(5000000);
+  const [downPayment, setDownPayment] = useState(500000);
   const [interestRate, setInterestRate] = useState(HOME_LOAN.defaultRate);
   const [tenureYears, setTenureYears] = useState(15);
   const [shareCopied, setShareCopied] = useState(false);
 
-  const property = PROPERTIES.find((p) => p.id === propertyId) ?? PROPERTIES[0];
+  // Handle direct typing in the Total Amount input field
+  const handleAmountChange = (e) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, '');
+    const numValue = Number(rawValue);
+    setTotalAmount(numValue);
+
+    // Keep down payment proportional or clamped
+    if (downPayment > numValue) {
+      setDownPayment(numValue);
+    }
+  };
 
   const availableTenures = useMemo(
     () => ALL_TENURES.filter((y) => y <= HOME_LOAN.maxYears),
     []
   );
 
-  // Keep down payment sane whenever the property changes.
-  useEffect(() => {
-    setDownPayment(Math.round(property.price * 0.1));
-  }, [property.id]);
-
-  const principal = Math.max(property.price - downPayment, 0);
+  const principal = Math.max(totalAmount - downPayment, 0);
   const months = tenureYears * 12;
   const monthlyRate = interestRate / 12 / 100;
 
@@ -50,12 +52,12 @@ const EmiHome = () => {
   const totalPayable = emi * months;
   const totalInterest = Math.max(totalPayable - principal, 0);
 
-  const downPaymentPercent = property.price > 0 ? (downPayment / property.price) * 100 : 0;
+  const downPaymentPercent = totalAmount > 0 ? (downPayment / totalAmount) * 100 : 0;
   const interestRangePercent =
     ((interestRate - HOME_LOAN.minRate) / (HOME_LOAN.maxRate - HOME_LOAN.minRate)) * 100;
 
   const handleShare = async () => {
-    const summary = `${property.name} — Home Loan EMI: ${formatINR(emi)}/mo for ${tenureYears} yrs @ ${interestRate.toFixed(1)}%`;
+    const summary = `Home Loan EMI: ${formatINR(emi)}/mo for ${tenureYears} yrs @ ${interestRate.toFixed(1)}% (Loan: ${formatINR(principal)})`;
     try {
       if (navigator.share) {
         await navigator.share({ title: 'Loan EMI Estimate', text: summary });
@@ -65,7 +67,7 @@ const EmiHome = () => {
       setShareCopied(true);
       setTimeout(() => setShareCopied(false), 1800);
     } catch {
-      // User cancelled the native share sheet — no action needed.
+      // Sheet closed
     }
   };
 
@@ -74,68 +76,62 @@ const EmiHome = () => {
       <div className="emi-home__wrapper">
         <div className="emi-home__layout">
 
-          {/* ==========================================
-              MAIN COLUMN — property + inputs
-          ========================================== */}
+          {/* MAIN INPUT COLUMN */}
           <div className="emi-home__main">
-
             <div className="emi-home__header">
               <span className="emi-home__eyebrow">Home Loan EMI Calculator</span>
               <h2 className="emi-home__title">
-                Calculate your Loan EMI for{' '}
-                <span className="emi-home__title-highlight">{property.name}</span>
+                Calculate your <span className="emi-home__title-highlight">Monthly EMI</span>
               </h2>
 
               <div className="emi-home__field">
-                <label className="emi-home__field-label" htmlFor="emi-home-property">
-                  Select Property
+                <label className="emi-home__field-label" htmlFor="emi-home-amount">
+                  Enter Property Value / Total Amount
                 </label>
-                <div className="emi-home__select-wrapper">
-                  <FaHome className="emi-home__select-leading-icon" aria-hidden="true" />
-                  <select
-                    id="emi-home-property"
-                    className="emi-home__select"
-                    value={propertyId}
-                    onChange={(e) => setPropertyId(e.target.value)}
-                  >
-                    {PROPERTIES.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name} — {p.location}
-                      </option>
-                    ))}
-                  </select>
-                  <FaChevronDown className="emi-home__select-chevron" aria-hidden="true" />
+                <div className="emi-home__input-wrapper">
+                  <FaRupeeSign className="emi-home__input-leading-icon" aria-hidden="true" />
+                  <input
+                    id="emi-home-amount"
+                    type="text"
+                    inputMode="numeric"
+                    className="emi-home__input"
+                    value={totalAmount ? totalAmount.toLocaleString('en-IN') : ''}
+                    onChange={handleAmountChange}
+                    placeholder="Enter amount"
+                  />
                 </div>
               </div>
             </div>
 
-            <div className="emi-home__price-row">
-              <span className="emi-home__price-label">Property Price in {property.location}</span>
-              <span className="emi-home__price-value">{formatINR(property.price)}</span>
-            </div>
-
+            {/* DOWN PAYMENT SLIDER */}
             <div className="emi-home__slider-block">
               <div className="emi-home__slider-head">
                 <span className="emi-home__slider-label">Down Payment</span>
-                <span className="emi-home__slider-value">{formatINR(downPayment)}</span>
+                <span className="emi-home__slider-value">
+                  {formatINR(downPayment)}{' '}
+                  <span className="emi-home__slider-subtext">
+                    ({downPaymentPercent.toFixed(0)}%)
+                  </span>
+                </span>
               </div>
               <input
                 type="range"
                 className="emi-home__slider-track"
                 min={0}
-                max={property.price}
-                step={5000}
+                max={totalAmount || 100000}
+                step={10000}
                 value={downPayment}
                 onChange={(e) => setDownPayment(Number(e.target.value))}
-                style={{ '--emh-fill': `${downPaymentPercent}%` }}
+                style={{ '--emh-fill': `${Math.min(downPaymentPercent, 100)}%` }}
                 aria-label="Down payment amount"
               />
               <div className="emi-home__slider-scale">
                 <span>₹0</span>
-                <span>{formatINR(property.price)}</span>
+                <span>{formatINR(totalAmount)}</span>
               </div>
             </div>
 
+            {/* INTEREST RATE SLIDER */}
             <div className="emi-home__slider-block">
               <div className="emi-home__slider-head">
                 <span className="emi-home__slider-label">Bank Interest Rate</span>
@@ -158,6 +154,7 @@ const EmiHome = () => {
               </div>
             </div>
 
+            {/* TENURE SELECTOR */}
             <div className="emi-home__tenure-block">
               <span className="emi-home__tenure-label">Loan Period (Years)</span>
               <div className="emi-home__tenure-grid">
@@ -178,21 +175,19 @@ const EmiHome = () => {
             </div>
           </div>
 
-          {/* ==========================================
-              SIDE COLUMN — sticky live estimate
-          ========================================== */}
+          {/* SIDE ESTIMATE COLUMN */}
           <aside className="emi-home__side">
             <div className="emi-home__side-card">
               <span className="emi-home__side-eyebrow">Your Estimate</span>
 
               <div className="emi-home__result-hero">
                 <span className="emi-home__result-amount">{formatINR(emi)}</span>
-                <span className="emi-home__result-caption">per month · calculated on property price</span>
+                <span className="emi-home__result-caption">per month · estimated repayment</span>
               </div>
 
               <div className="emi-home__summary">
                 <div className="emi-home__summary-row">
-                  <span className="emi-home__summary-label">Total Loan Amount</span>
+                  <span className="emi-home__summary-label">Principal Loan Amount</span>
                   <span className="emi-home__summary-value">{formatINR(principal)}</span>
                 </div>
                 <div className="emi-home__divider" />
@@ -202,7 +197,7 @@ const EmiHome = () => {
                 </div>
                 <div className="emi-home__divider" />
                 <div className="emi-home__summary-row">
-                  <span className="emi-home__summary-label">Payable Amount</span>
+                  <span className="emi-home__summary-label">Total Payable Amount</span>
                   <span className="emi-home__summary-value">{formatINR(totalPayable)}</span>
                 </div>
               </div>
