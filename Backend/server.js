@@ -42,12 +42,16 @@ const app = express();
 // =====================================================
 
 const allowedOrigins = [
-  // Production
+  // New Production Domains
+  "https://utkalproperty.com",
+  "https://admin.utkalproperty.com",
+
+  // Previous Production Domains
   "https://admin.customersupportdesk.us",
   "https://customersupportdesk.us",
   "https://backend.customersupportdesk.us",
 
-  // Localhost
+  // Local development environments
   "http://localhost:3000",
   "http://localhost:5173",
   "http://localhost:5174",
@@ -64,8 +68,7 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests without Origin
-    // Example: Postman, server-to-server requests
+    // Allow requests without Origin (e.g. Postman, server-to-server requests)
     if (!origin) {
       return callback(null, true);
     }
@@ -132,24 +135,6 @@ app.use(
 
 // =====================================================
 // STATIC UPLOADS
-// =====================================================
-//
-// IMPORTANT:
-// Files inside:
-//    /uploads/gallery
-//    /uploads/team
-//    /uploads/blogs
-//    /uploads/property
-//    /uploads/categories
-//    /uploads/locations
-//    /uploads/users
-//    /uploads/amenities
-//    /uploads/sell-properties
-//
-// will be accessible through:
-//
-// http://localhost:5000/uploads/...
-//
 // =====================================================
 
 app.use(
@@ -347,10 +332,6 @@ app.listen(PORT, () => {
 
   console.log(
     `Uploads: http://localhost:${PORT}/uploads`
-  );
-
-  console.log(
-    `Gallery API: http://localhost:${PORT}/api/gallery`
   );
 
   console.log(
