@@ -11,6 +11,7 @@ const {
   getAllSellProperties, 
   getSellPropertyById, 
   updateSellProperty, 
+  updateSellPropertyStatus,
   deleteSellProperty 
 } = require("../controllers/sellPropertyController");
 
@@ -22,6 +23,18 @@ router.post(
   sellPropertyUpload.array('images', 10), 
   processSellPropertyImages, 
   createSellProperty
+);
+
+router.patch(
+  '/:id/status',
+  updateSellPropertyStatus
+);
+
+router.patch(
+  '/:id', 
+  sellPropertyUpload.array('images', 10), 
+  processSellPropertyImages, 
+  updateSellProperty
 );
 
 router.put(

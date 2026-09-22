@@ -95,12 +95,14 @@ exports.updateSellProperty = async (req, res) => {
 
     if (imagePaths.length > 0) {
       updateData.images = imagePaths;
+    } else {
+      delete updateData.images;
     }
 
     const updatedProperty = await SellProperty.findByIdAndUpdate(
       req.params.id,
       updateData,
-      { new: true, runValidators: true }
+      { new: true }
     );
 
     if (!updatedProperty) {
@@ -121,6 +123,45 @@ exports.updateSellProperty = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to update property",
+      error: error.message,
+    });
+  }
+};
+
+exports.updateSellPropertyStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        message: "Status is required",
+      });
+    }
+
+    const updatedProperty = await SellProperty.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedProperty) {
+      return res.status(404).json({
+        success: false,
+        message: "Property not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Property status updated successfully",
+      property: updatedProperty,
+    });
+  } catch (error) {
+    console.error("UPDATE SELL PROPERTY STATUS ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update property status",
       error: error.message,
     });
   }

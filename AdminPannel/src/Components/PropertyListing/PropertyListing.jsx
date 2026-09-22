@@ -136,6 +136,7 @@ const PropertyListing = () => {
   const [viewingProperty, setViewingProperty] = useState(null);
   const [viewLoading, setViewLoading] = useState(false);
   const [viewError, setViewError] = useState("");
+  const [statusUpdatingId, setStatusUpdatingId] = useState(null);
 
 
   /* =======================================================
@@ -413,6 +414,68 @@ const PropertyListing = () => {
 
 
   /* =======================================================
+     STATUS UPDATE HANDLER
+  ======================================================= */
+
+  const handleStatusChange = async (property, newStatus) => {
+    const id = getId(property);
+    if (!id) return;
+
+    try {
+      setStatusUpdatingId(id);
+
+      // Optimistic update
+      setProperties((previous) =>
+        previous.map((item) =>
+          getId(item) === id ? { ...item, status: newStatus } : item
+        )
+      );
+
+      if (viewingProperty && getId(viewingProperty) === id) {
+        setViewingProperty((previous) => ({
+          ...previous,
+          status: newStatus,
+        }));
+      }
+
+      let updatedDoc = null;
+      try {
+        const response = await API.patch(`${PROPERTY_ENDPOINT}/${id}/status`, {
+          status: newStatus,
+        });
+        updatedDoc = response.data?.property || response.data;
+      } catch (patchErr) {
+        const response = await API.put(`${PROPERTY_ENDPOINT}/${id}`, {
+          status: newStatus,
+        });
+        updatedDoc = response.data?.property || response.data;
+      }
+
+      if (updatedDoc && typeof updatedDoc === "object") {
+        setProperties((previous) =>
+          previous.map((item) =>
+            getId(item) === id ? { ...item, ...updatedDoc } : item
+          )
+        );
+
+        if (viewingProperty && getId(viewingProperty) === id) {
+          setViewingProperty((previous) => ({
+            ...previous,
+            ...updatedDoc,
+          }));
+        }
+      }
+    } catch (err) {
+      console.error("STATUS UPDATE ERROR:", err);
+      alert("Failed to update status on server. Reverting changes.");
+      fetchProperties();
+    } finally {
+      setStatusUpdatingId(null);
+    }
+  };
+
+
+  /* =======================================================
      SAVE PROPERTY (BACKEND INTEGRATED)
   ======================================================= */
 
@@ -459,6 +522,11 @@ const PropertyListing = () => {
         setProperties((previous) =>
           previous.map((item) => (getId(item) === id ? { ...item, ...updatedDoc } : item))
         );
+
+        if (viewingProperty && getId(viewingProperty) === id) {
+          setViewingProperty((previous) => ({ ...previous, ...updatedDoc }));
+        }
+
         alert("Property updated successfully.");
       } else {
         const response = await API.post(PROPERTY_ENDPOINT, dataPayload);
@@ -798,9 +866,23 @@ const PropertyListing = () => {
                         </td>
 
                         <td>
-                          <span className={`PropertyListing-status PropertyListing-status-${status.toLowerCase()}`}>
-                            {statusIcon(status)} {status}
-                          </span>
+                          <div className="PropertyListing-statusWrapper">
+                            <select
+                              className={`PropertyListing-statusSelect PropertyListing-status-${status.toLowerCase()}`}
+                              value={status}
+                              disabled={statusUpdatingId === id}
+                              onChange={(e) => handleStatusChange(property, e.target.value)}
+                            >
+                              {STATUS_OPTIONS.map((opt) => (
+                                <option key={opt} value={opt}>
+                                  {opt}
+                                </option>
+                              ))}
+                            </select>
+                            {statusUpdatingId === id && (
+                              <FiLoader className="PropertyListing-spin PropertyListing-statusLoader" />
+                            )}
+                          </div>
                         </td>
 
                         <td>
@@ -1045,9 +1127,25 @@ const PropertyListing = () => {
 
               <div className="PropertyListing-viewContent">
                 <h3>{getTitle(viewingProperty)}</h3>
-                <span className={`PropertyListing-status PropertyListing-status-${normalizeStatus(getStatus(viewingProperty)).toLowerCase()}`}>
-                  {statusIcon(getStatus(viewingProperty))} {normalizeStatus(getStatus(viewingProperty))}
-                </span>
+                <div className="PropertyListing-viewStatusRow">
+                  <div className="PropertyListing-statusWrapper">
+                    <select
+                      className={`PropertyListing-statusSelect PropertyListing-status-${normalizeStatus(getStatus(viewingProperty)).toLowerCase()}`}
+                      value={normalizeStatus(getStatus(viewingProperty))}
+                      disabled={statusUpdatingId === getId(viewingProperty)}
+                      onChange={(e) => handleStatusChange(viewingProperty, e.target.value)}
+                    >
+                      {STATUS_OPTIONS.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                    {statusUpdatingId === getId(viewingProperty) && (
+                      <FiLoader className="PropertyListing-spin PropertyListing-statusLoader" />
+                    )}
+                  </div>
+                </div>
 
                 <div className="PropertyListing-viewGrid">
                   <div><FiHome /><span>Property Type</span><strong>{getType(viewingProperty)}</strong></div>
@@ -1079,7 +1177,15 @@ const PropertyListing = () => {
 
             <div className="PropertyListing-formFooter">
               <button type="button" className="PropertyListing-cancelButton" onClick={closeView}>Close</button>
-              <button type="button" className="PropertyListing-saveButton" onClick={() => { const p = viewingProperty; closeView(); handleEdit(p); }}>
+              <button
+                type="button"
+                className="PropertyListing-saveButton"
+                onClick={() => {
+                  const p = { ...viewingProperty };
+                  closeView();
+                  handleEdit(p);
+                }}
+              >
                 <FiEdit2 /> Edit Property
               </button>
             </div>

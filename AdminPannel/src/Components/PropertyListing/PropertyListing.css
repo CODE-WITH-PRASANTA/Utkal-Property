@@ -616,53 +616,94 @@
    STATUS
 ========================================================= */
 
+.PropertyListing-statusWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.PropertyListing-statusSelect {
+  min-width: 88px;
+  padding: 5px 22px 5px 9px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  background-size: 8px 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.PropertyListing-statusSelect:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.PropertyListing-statusSelect:hover:not(:disabled) {
+  filter: brightness(0.96);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.PropertyListing-statusLoader {
+  position: absolute;
+  right: -18px;
+  font-size: 12px;
+  color: #635bdb;
+}
+
+.PropertyListing-viewStatusRow {
+  margin: 10px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .PropertyListing-status {
   min-width: 57px;
-
   padding: 5px 8px;
-
   border-radius: 20px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   gap: 4px;
-
   font-size: 8.5px;
-
   font-weight: 600;
-
   white-space: nowrap;
 }
-
 
 .PropertyListing-status svg {
   font-size: 10px;
 }
 
-
 .PropertyListing-status-pending {
   background: #fff4d9;
   color: #d78b00;
+  border-color: #f7dfa5;
 }
-
 
 .PropertyListing-status-approved {
   background: #def7e9;
   color: #128851;
+  border-color: #b5eed0;
 }
-
 
 .PropertyListing-status-rejected {
   background: #ffe5e5;
   color: #dc3030;
+  border-color: #f8c3c3;
 }
-
 
 .PropertyListing-status-inactive {
   background: #eef1f5;
   color: #687385;
+  border-color: #dbe1ea;
 }
 
 

@@ -50,14 +50,12 @@ const sellPropertySchema = new mongoose.Schema(
 
     bhk: {
       type: String,
-      required: true,
-      trim: true,
+      default: "",
     },
 
     bathrooms: {
       type: String,
-      required: true,
-      trim: true,
+      default: "",
     },
 
     balconies: {
@@ -77,8 +75,7 @@ const sellPropertySchema = new mongoose.Schema(
 
     furnishingStatus: {
       type: String,
-      required: true,
-      trim: true,
+      default: "",
     },
 
     propertyAge: {
@@ -116,8 +113,28 @@ const sellPropertySchema = new mongoose.Schema(
 
     pinCode: {
       type: String,
-      required: true,
-      trim: true,
+      default: "",
+    },
+
+    phone: {
+      type: String,
+      default: "",
+    },
+
+    email: {
+      type: String,
+      default: "",
+    },
+
+    submittedBy: {
+      type: String,
+      default: "Admin User",
+    },
+
+    status: {
+      type: String,
+      enum: ["Pending", "Approved", "Rejected", "Inactive"],
+      default: "Pending",
     },
 
     // Uploaded WebP image paths
