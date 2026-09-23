@@ -92,10 +92,10 @@ const HomeMeetagents = () => {
             <FaUserTie className="HomeMeetagents-tag-icon" /> Verified Property Specialists
           </span>
           <h1 id="consultants-team-heading" className="HomeMeetagents-main-heading">
-            Best Property Consultant in Bhubaneswar — <span className="highlight-green">Meet Our Best Apartment Consultants</span>
+           — Best Property Consultant in    Bhubaneswar — <span className="highlight-green"></span>
           </h1>
           <p className="HomeMeetagents-subheading">
-            Get personalized real estate advisory from the <strong>best property consultant in Bhubaneswar</strong>. Consult our verified luxury flat and plot specialists for market valuations, RERA legal checks, home loan assistance, and smooth property registrations across Patia, Jaydev Vihar, Nayapalli, and Khandagiri.
+           Get personalized real estate advisory from the best property consultant in Bhubaneswar. Consult us for our service related  to  market valuations, RERA legal checks, home loan assistance,  smooth property registrations and documentation across Bhubaneswar,Puri,Cuttack and other places of Odisha  for luxury flat and Land.
           </p>
         </header>
 

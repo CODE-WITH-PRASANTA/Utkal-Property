@@ -36,7 +36,7 @@ const HomeContact = () => {
         <div className="HomeContact-info-section">
           <span className="HomeContact-tag">Contact Utkal Property</span>
           <h1 id="home-contact-title" className="HomeContact-title">
-            Best Real Estate Agency in Bhubaneswar for Flats, Apartments & Plots
+          Best Real Estate Agency in Bhubaneswar for  Apartments ,Duplex & Plots
           </h1>
           
           <p className="HomeContact-description">

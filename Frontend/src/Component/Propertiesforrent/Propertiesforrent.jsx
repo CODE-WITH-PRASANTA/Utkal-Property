@@ -393,7 +393,7 @@ const Propertiesforrent = () => {
             Top Real Estate Brokers in Bhubaneswar — <span className="highlight-green">Verified Properties For Rent</span>
           </h1>
           <p className="Propertiesforrent-subheading">
-            Connect with the <strong>top real estate brokers in Bhubaneswar</strong> to rent fully furnished apartments, modern luxury villas, corporate commercial office spaces, and budget-friendly builder floors across prime hubs such as Patia, Jaydev Vihar, Saheed Nagar, Khandagiri, and Chandrasekharpur.
+            Connect with the top real estate brokers in Odisha  to rent fully furnished apartments, modern luxury villas, corporate commercial office spaces, and budget-friendly builder floors across Bhubaneswar,Puri,Cuttack and other places of Odisha .
           </p>
         </header>
 

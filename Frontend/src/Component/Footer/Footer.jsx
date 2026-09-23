@@ -27,7 +27,7 @@ const Footer = () => {
     <footer className="footer-container" aria-label="Site Footer">
       {/* =====================================================
           TOP BRAND HEADER
-      ===================================================== */}
+      ====================================================== */}
       <div className="footer-brand-row">
         <div className="footer-brand-mark">
           <div className="footer-brand-logo">
@@ -102,11 +102,9 @@ const Footer = () => {
 
       {/* =====================================================
           BUY / SELL CTA CARDS
-      ===================================================== */}
+      ====================================================== */}
       <div className="footer-top-cards">
-        {/* =================================================
-            BUY PROPERTY CARD
-        ================================================= */}
+        {/* BUY PROPERTY CARD */}
         <div className="footer-card footer-buy-card">
           <div className="footer-card-glow" />
 
@@ -148,9 +146,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* =================================================
-            SELL PROPERTY CARD
-        ================================================= */}
+        {/* SELL PROPERTY CARD */}
         <div className="footer-card footer-sell-card">
           <div className="footer-card-glow" />
 
@@ -191,7 +187,7 @@ const Footer = () => {
 
       {/* =====================================================
           MAIN FOOTER CONTENT
-      ===================================================== */}
+      ====================================================== */}
       <div className="footer-main-content">
         {/* =================================================
             OFFICE ADDRESS
@@ -219,6 +215,27 @@ const Footer = () => {
               Jagannath Vihar, Baramunda,
               <br />
               Bhubaneswar, Odisha 751003
+            </p>
+          </div>
+
+          {/* CORPORATE OFFICE */}
+          <div className="address-group">
+            <div className="address-heading">
+              <span className="address-icon">
+                <FiMapPin />
+              </span>
+
+              <span className="address-label">
+                Corporate Office
+              </span>
+            </div>
+
+            <p className="address-text">
+              IDCO Tower, Janpath,
+              <br />
+              Unit-2, Bhubaneswar,
+              <br />
+              Odisha 751001
             </p>
           </div>
 
@@ -465,7 +482,7 @@ const Footer = () => {
 
       {/* =====================================================
           FOOTER TAGLINE
-      ===================================================== */}
+      ====================================================== */}
       <div className="footer-tagline">
         <div className="tagline-line" />
 
@@ -482,7 +499,7 @@ const Footer = () => {
 
       {/* =====================================================
           BOTTOM BAR
-      ===================================================== */}
+      ====================================================== */}
       <div className="footer-bottom-bar">
         <p>
           © {new Date().getFullYear()} Utkal Property. All

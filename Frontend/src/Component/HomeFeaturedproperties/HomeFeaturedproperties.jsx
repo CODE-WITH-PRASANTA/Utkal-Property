@@ -26,8 +26,15 @@ import {
   FaCheckCircle
 } from 'react-icons/fa';
 
-// Categories matching your Dashboard & Backend filters
-const CATEGORIES = ['All', 'Villa', 'Independent House', 'Luxury Villa', 'Apartments', 'Commercial'];
+// Updated Categories list (backend query values remain mapped/unchanged)
+const CATEGORIES = [
+  'All',
+  'Luxury Villa',
+  'Independent House',
+  'Apartments',
+  'Office Space or Shops',
+  'Land'
+];
 
 // Helper to format Indian Rupee values dynamically (matches dashboard formatting)
 const formatIndianCurrency = (amount, statusType = '') => {
@@ -253,10 +260,10 @@ const HomeFeaturedproperties = () => {
             <FaShieldAlt className="tag-icon" aria-hidden="true" /> Verified Property Listings
           </span>
           <h1 id="featured-properties-heading" className="HomeFeaturedproperties-main-heading">
-            Best Property Dealers in Bhubaneswar — <span className="highlight-green">Featured Flats and Apartments</span>
+            Best Property Dealers in Bhubaneswar — <span className="highlight-green">Featured Apartments & Duplex</span>
           </h1>
           <p className="HomeFeaturedproperties-subheading">
-            Connect with top-rated real estate consultants and explore RERA-registered luxury villas, independent duplexes, and verified residential plots.
+            Connect with top-rated real estate consultants and explore RERA-registered Luxury villas / independent House, Apartments and residential plots.
           </p>
         </header>
 

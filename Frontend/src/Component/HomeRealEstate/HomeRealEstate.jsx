@@ -346,7 +346,7 @@ const HomeRealEstate = () => {
           <span className="HomeRealEstate-tag">
             <FaMapMarkedAlt className="HomeRealEstate-tag-icon" />
 
-            Prime Location Showcase
+           Featured Properties
           </span>
 
           <h1
@@ -362,18 +362,7 @@ const HomeRealEstate = () => {
           </h1>
 
           <p className="HomeRealEstate-subtitle">
-            Partner with the{" "}
-            <strong>
-              best apartment dealers in
-              Bhubaneswar
-            </strong>{" "}
-            to discover luxury 2 BHK, 3 BHK,
-            and 4 BHK residential flats,
-            penthouses, and premium gated
-            communities across top localities
-            including Patia, Jaydev Vihar,
-            Saheed Nagar, Khandagiri, and
-            Rasulgarh.
+           Partner with the best apartment dealers in Bhubaneswar to discover luxury 2 BHK, 3 BHK, and 4 BHK residential flats, penthouses  in  premium gated society  across top localities of Bhubaneswar,Puri,Cuttack and other areas .
           </p>
 
         </header>

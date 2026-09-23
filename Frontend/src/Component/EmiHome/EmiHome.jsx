@@ -178,27 +178,29 @@ const EmiHome = () => {
           {/* SIDE ESTIMATE COLUMN */}
           <aside className="emi-home__side">
             <div className="emi-home__side-card">
-              <span className="emi-home__side-eyebrow">Your Estimate</span>
+              <div>
+                <span className="emi-home__side-eyebrow">Your Estimate</span>
 
-              <div className="emi-home__result-hero">
-                <span className="emi-home__result-amount">{formatINR(emi)}</span>
-                <span className="emi-home__result-caption">per month · estimated repayment</span>
-              </div>
+                <div className="emi-home__result-hero">
+                  <span className="emi-home__result-amount">{formatINR(emi)}</span>
+                  <span className="emi-home__result-caption">per month · estimated repayment</span>
+                </div>
 
-              <div className="emi-home__summary">
-                <div className="emi-home__summary-row">
-                  <span className="emi-home__summary-label">Principal Loan Amount</span>
-                  <span className="emi-home__summary-value">{formatINR(principal)}</span>
-                </div>
-                <div className="emi-home__divider" />
-                <div className="emi-home__summary-row">
-                  <span className="emi-home__summary-label">Total Interest Payable</span>
-                  <span className="emi-home__summary-value">{formatINR(totalInterest)}</span>
-                </div>
-                <div className="emi-home__divider" />
-                <div className="emi-home__summary-row">
-                  <span className="emi-home__summary-label">Total Payable Amount</span>
-                  <span className="emi-home__summary-value">{formatINR(totalPayable)}</span>
+                <div className="emi-home__summary">
+                  <div className="emi-home__summary-row">
+                    <span className="emi-home__summary-label">Principal Loan Amount</span>
+                    <span className="emi-home__summary-value">{formatINR(principal)}</span>
+                  </div>
+                  <div className="emi-home__divider" />
+                  <div className="emi-home__summary-row">
+                    <span className="emi-home__summary-label">Total Interest Payable</span>
+                    <span className="emi-home__summary-value">{formatINR(totalInterest)}</span>
+                  </div>
+                  <div className="emi-home__divider" />
+                  <div className="emi-home__summary-row">
+                    <span className="emi-home__summary-label">Total Payable Amount</span>
+                    <span className="emi-home__summary-value">{formatINR(totalPayable)}</span>
+                  </div>
                 </div>
               </div>
 

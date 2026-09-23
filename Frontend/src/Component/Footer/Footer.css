@@ -592,12 +592,12 @@
 }
 
 /* =========================================================
-   ADDRESS
+   ADDRESS (Optimized Compact Medium Height)
 ========================================================= */
 
 .address-group {
-  margin-bottom: 23px;
-  padding-left: 15px;
+  margin-bottom: 14px;
+  padding-left: 12px;
 
   border-left: 2px solid rgba(232, 200, 117, 0.4);
 }
@@ -606,14 +606,14 @@
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 6px;
 
-  margin-bottom: 7px;
+  margin-bottom: 4px;
 }
 
 .address-icon {
-  width: 27px;
-  height: 27px;
+  width: 22px;
+  height: 22px;
 
   display: flex;
   align-items: center;
@@ -623,18 +623,18 @@
 
   background: #ffffff;
 
-  border-radius: 8px;
+  border-radius: 6px;
 
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .address-label {
   color: var(--gold);
 
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 800;
 
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
 
   text-transform: uppercase;
 }
@@ -644,9 +644,9 @@
 
   color: rgba(255, 255, 255, 0.76);
 
-  font-size: 13px;
+  font-size: 12px;
 
-  line-height: 1.7;
+  line-height: 1.45;
 }
 
 .bold-address {
@@ -1193,10 +1193,6 @@
   }
 }
 
-/* =========================================================
-   TABLET / SMALL LAPTOP
-========================================================= */
-
 @media (max-width: 900px) {
   .footer-top-cards {
     grid-template-columns: 1fr;
@@ -1214,10 +1210,6 @@
     max-width: 100%;
   }
 }
-
-/* =========================================================
-   MOBILE
-========================================================= */
 
 @media (max-width: 650px) {
   .footer-container {
@@ -1251,43 +1243,6 @@
     border-radius: 18px;
   }
 
-  .footer-card-content {
-    gap: 13px;
-  }
-
-  .footer-card-icon-box {
-    width: 52px;
-    height: 52px;
-
-    border-radius: 14px;
-  }
-
-  .card-large-icon {
-    font-size: 23px;
-  }
-
-  .footer-card-title {
-    font-size: 18px;
-  }
-
-  .footer-card-desc {
-    font-size: 13px;
-  }
-
-  .footer-card-support-text {
-    font-size: 11.5px;
-  }
-
-  .footer-card-btn-wrapper {
-    justify-content: flex-start;
-
-    margin-top: 18px;
-  }
-
-  .footer-card-btn {
-    width: 100%;
-  }
-
   .footer-main-content {
     grid-template-columns: 1fr;
 
@@ -1310,65 +1265,11 @@
     font-size: 13px;
   }
 
-  .tagline-line {
-    min-width: 20px;
-  }
-
   .footer-bottom-bar {
     align-items: flex-start;
 
     flex-direction: column;
 
     gap: 12px;
-  }
-
-  .footer-bottom-links {
-    order: 2;
-  }
-
-  .footer-developed {
-    order: 3;
-  }
-}
-
-/* =========================================================
-   VERY SMALL MOBILE
-========================================================= */
-
-@media (max-width: 400px) {
-  .footer-container {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .footer-brand-logo {
-    width: 52px;
-    height: 52px;
-  }
-
-  .footer-brand-text h2 {
-    font-size: 17px;
-  }
-
-  .footer-card {
-    padding: 18px;
-  }
-
-  .footer-card-content {
-    flex-direction: column;
-  }
-
-  .footer-card-icon-box {
-    width: 50px;
-    height: 50px;
-  }
-
-  .tagline-line {
-    display: none;
-  }
-
-  .tagline-content {
-    width: 100%;
-    justify-content: center;
   }
 }

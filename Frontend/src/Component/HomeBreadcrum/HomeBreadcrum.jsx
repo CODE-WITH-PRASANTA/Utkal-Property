@@ -601,7 +601,7 @@ const HomeBreadcrum = () => {
         =================================================== */}
         <div className="HomeBreadcrum-left">
           <div className="HomeBreadcrum-badgeTag">
-            Utkal Property Services
+            Utkal Property  Management Services
           </div>
 
           <h1 className="HomeBreadcrum-title">

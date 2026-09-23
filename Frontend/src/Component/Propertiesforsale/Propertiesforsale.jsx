@@ -394,7 +394,7 @@ const Propertiesforsale = () => {
             Best Property Consultant in Bhubaneswar — <span className="highlight-green">Verified Properties for Sale</span>
           </h1>
           <p className="Propertiesforsale-subheading">
-            Get expert guidance from the <strong>best property consultant in Bhubaneswar</strong>. Buy handpicked RERA-approved luxury villas, duplexes, residential land, and premium apartments across Patia, Jaydev Vihar, Pahala, Khandagiri, and Sundarpada with 100% transparent documentation and verified title deeds.
+           Get expert guidance from the best property consultant in Bhubaneswar to  Buy handpicked RERA-approved luxury villas,  residential land and premium apartments across Bhubaneswar,Puri , Cuttack and Other Areas of Odisha  with 100% transparent documentation and  verified Properties.
           </p>
         </header>
 
