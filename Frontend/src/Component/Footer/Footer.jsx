@@ -1,10 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./Footer.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Footer.css';
 
-import logo from "../../assets/logo.webp";
-import footerImage from "../../assets/footerImage.avif";
+// Import assets from src/assets/
+import logo from '../../assets/logo.webp';
+import footerImage from '../../assets/footerImage.avif';
 
+// Importing icons from react-icons
 import {
   FaPhoneAlt,
   FaChevronRight,
@@ -13,514 +15,221 @@ import {
   FaInstagram,
   FaLinkedinIn,
   FaTwitter,
-} from "react-icons/fa";
-
-import { FaHouseUser, FaBuildingCircleCheck } from "react-icons/fa6";
-import { FiPhoneCall, FiMail, FiMapPin } from "react-icons/fi";
-import { BiHomeAlt2 } from "react-icons/bi";
+} from 'react-icons/fa';
+import { FaHouseUser, FaBuildingCircleCheck } from 'react-icons/fa6';
+import { FiPhoneCall, FiMail } from 'react-icons/fi';
+import { BiHomeAlt2 } from 'react-icons/bi';
 
 const Footer = () => {
-  const primaryPhone = "8338905897";
-  const secondaryPhone = "7077600666";
-
   return (
     <footer className="footer-container" aria-label="Site Footer">
-      {/* =====================================================
-          TOP BRAND HEADER
-      ====================================================== */}
+      {/* Brand Header Row */}
       <div className="footer-brand-row">
         <div className="footer-brand-mark">
           <div className="footer-brand-logo">
-            <img
-              src={logo}
-              alt="Utkal Property Logo"
-              className="footer-logo-img"
-              width="52"
-              height="52"
-              loading="lazy"
+            <img 
+              src={logo} 
+              alt="Utkal Property Logo" 
+              className="footer-logo-img" 
+              width="48"
+              height="48"
+              loading="lazy" 
               decoding="async"
             />
           </div>
-
           <div className="footer-brand-text">
             <h2>
-              UTKAL <span>PROPERTY</span>
+              UTKAL<span>PROPERTY</span> PVT. LTD.
             </h2>
-
-            <p>
-              Your trusted property partner in Bhubaneswar
-            </p>
+            <p>A Unit of Legwork Services Pvt Ltd</p>
           </div>
         </div>
 
-        {/* SOCIAL LINKS */}
-        <div
-          className="footer-social-row"
-          aria-label="Social Media Links"
-        >
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="footer-social-icon"
-            aria-label="Visit Facebook"
-          >
-            <FaFacebookF />
+        <div className="footer-social-row" aria-label="Social Media Links">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="footer-social-icon" aria-label="Visit Facebook">
+            <FaFacebookF size={14} aria-hidden="true" />
           </a>
-
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="footer-social-icon"
-            aria-label="Visit Twitter"
-          >
-            <FaTwitter />
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="footer-social-icon" aria-label="Visit Twitter">
+            <FaTwitter size={14} aria-hidden="true" />
           </a>
-
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="footer-social-icon"
-            aria-label="Visit Instagram"
-          >
-            <FaInstagram />
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-social-icon" aria-label="Visit Instagram">
+            <FaInstagram size={14} aria-hidden="true" />
           </a>
-
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="footer-social-icon"
-            aria-label="Visit LinkedIn"
-          >
-            <FaLinkedinIn />
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="footer-social-icon" aria-label="Visit LinkedIn">
+            <FaLinkedinIn size={14} aria-hidden="true" />
           </a>
         </div>
       </div>
 
-      {/* =====================================================
-          BUY / SELL CTA CARDS
-      ====================================================== */}
+      {/* Top Banner Cards */}
       <div className="footer-top-cards">
-        {/* BUY PROPERTY CARD */}
-        <div className="footer-card footer-buy-card">
-          <div className="footer-card-glow" />
-
+        {/* Card 1 */}
+        <div className="footer-card">
           <div className="footer-card-content">
-            <div className="footer-card-icon-box">
+            <div className="footer-card-icon-box card-icon-orange" aria-hidden="true">
               <FaHouseUser className="card-large-icon" />
             </div>
-
             <div className="footer-card-text">
-              <span className="footer-card-small-label">
-                FIND YOUR HOME
-              </span>
-
-              <h3 className="footer-card-title">
-                You need a house
-              </h3>
-
+              <h3 className="footer-card-title">You need a house</h3>
               <p className="footer-card-desc">
-                Your perfect home is waiting for you.
-              </p>
-
-              <p className="footer-card-support-text">
-                Tell us your needs, and we will help you find the
-                perfect suggestion for your dream home.
+                Tell us your needs, we will give you thousands of suggestions for the dream home.
               </p>
             </div>
           </div>
-
           <div className="footer-card-btn-wrapper">
-            <a
-              href={`tel:+91${primaryPhone}`}
-              className="footer-card-btn"
-              aria-label="Call Utkal Property"
-            >
-              <FaPhoneAlt className="btn-react-icon" />
-              Contact Us
-              <FaArrowRight className="btn-arrow" />
+            <a href="tel:+918338908897" className="footer-card-btn" aria-label="Call to buy a house">
+              <FaPhoneAlt className="btn-react-icon" aria-hidden="true" />
+              Contact Seller
             </a>
           </div>
         </div>
 
-        {/* SELL PROPERTY CARD */}
-        <div className="footer-card footer-sell-card">
-          <div className="footer-card-glow" />
-
+        {/* Card 2 */}
+        <div className="footer-card">
           <div className="footer-card-content">
-            <div className="footer-card-icon-box">
+            <div className="footer-card-icon-box card-icon-yellow" aria-hidden="true">
               <FaBuildingCircleCheck className="card-large-icon" />
             </div>
-
             <div className="footer-card-text">
-              <span className="footer-card-small-label">
-                SELL YOUR PROPERTY
-              </span>
-
-              <h3 className="footer-card-title">
-                Sell your house
-              </h3>
-
+              <h3 className="footer-card-title">Sell your house</h3>
               <p className="footer-card-desc">
-                Gain direct access to thousands of properties as a
-                home buyer.
+                We will connect you to thousands of people who need to buy a home.
               </p>
             </div>
           </div>
-
           <div className="footer-card-btn-wrapper">
-            <Link
-              to="/sell-property"
-              className="footer-card-btn"
-              aria-label="Sell your property with Utkal Property"
-            >
-              <BiHomeAlt2 className="btn-react-icon" />
+            <Link to="/sell-property" className="footer-card-btn" aria-label="Sell your property with Utkal Property">
+              <BiHomeAlt2 className="btn-react-icon" aria-hidden="true" />
               Sell Property
-              <FaArrowRight className="btn-arrow" />
             </Link>
           </div>
         </div>
       </div>
 
-      {/* =====================================================
-          MAIN FOOTER CONTENT
-      ====================================================== */}
+      {/* Main Footer Links & Info Grid */}
       <div className="footer-main-content">
-        {/* =================================================
-            OFFICE ADDRESS
-        ================================================= */}
+        {/* Column 1: Office Address */}
         <div className="footer-column footer-office-address">
-          <h4 className="footer-column-title">
-            Office Address
-          </h4>
+          <h4 className="footer-column-title">Office Address</h4>
 
-          {/* HEAD OFFICE */}
           <div className="address-group">
-            <div className="address-heading">
-              <span className="address-icon">
-                <FiMapPin />
-              </span>
-
-              <span className="address-label">
-                Head Office
-              </span>
-            </div>
-
+            <span className="address-label">Corporate office:</span>
             <p className="address-text bold-address">
-              Plot No-55, Ln 2,
-              <br />
-              Jagannath Vihar, Baramunda,
-              <br />
-              Bhubaneswar, Odisha 751003
+              Plot No-55, Lane-2, Road-2,<br />
+              Jagrath Vihar, Baramunda,<br />
+              Bhubaneswar, Pin-751007
             </p>
           </div>
 
-          {/* CORPORATE OFFICE */}
           <div className="address-group">
-            <div className="address-heading">
-              <span className="address-icon">
-                <FiMapPin />
-              </span>
-
-              <span className="address-label">
-                Corporate Office
-              </span>
-            </div>
-
+            <span className="address-label">Branch:</span>
             <p className="address-text">
-              IDCO Tower, Janpath,
-              <br />
-              Unit-2, Bhubaneswar,
-              <br />
-              Odisha 751001
-            </p>
-          </div>
-
-          {/* BRANCH OFFICE */}
-          <div className="address-group">
-            <div className="address-heading">
-              <span className="address-icon">
-                <FiMapPin />
-              </span>
-
-              <span className="address-label">
-                Branch Office
-              </span>
-            </div>
-
-            <p className="address-text">
-              LIG-35, Satya Nagar,
-              <br />
-              Infront of LEELA Apartment,
-              <br />
-              Toshali Apartment Compound.
+              LIG-35, Satyauryan, Po-Sahid Nagar,<br />
+              Bhubaneswar (Infront of Lodia Apartment,<br />
+              Toshali AAH Complex)
             </p>
           </div>
         </div>
 
-        {/* =================================================
-            CONTACT
-        ================================================= */}
+        {/* Column 2: Contact Seller */}
         <div className="footer-column footer-contact-seller">
-          <h4 className="footer-column-title">
-            Contact Us
-          </h4>
+          <h4 className="footer-column-title">Contact Seller</h4>
 
-          {/* PROPERTY ADVISOR */}
+          {/* Agent Item */}
           <div className="contact-agent-row">
             <div className="agent-avatar-wrapper">
               <img
                 src={footerImage}
-                alt="Property Advisor"
+                alt="Krushna Chandra Panda - Property Advisor"
                 className="agent-avatar"
-                width="48"
-                height="48"
+                width="40"
+                height="40"
                 loading="lazy"
                 decoding="async"
               />
             </div>
-
             <div className="agent-info">
-              <span className="agent-name">
-                PROPERTY ADVISOR
-              </span>
-
-              <span className="agent-subname">
-                Utkal Property
-              </span>
-
-              <a
-                href={`tel:+91${primaryPhone}`}
-                className="agent-phone"
-              >
-                +91 83389 05897
-              </a>
+              <span className="agent-name">Property Advisor</span>
+              <span className="agent-subname" style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff' }}>Krushna Chandra Panda</span>
+              <a href="tel:+918338908897" className="agent-phone" aria-label="Call Krushna Chandra Panda">+91 83389 08897</a>
             </div>
-
-            <a
-              href={`tel:+91${primaryPhone}`}
-              className="agent-action-btn"
-              aria-label="Call Utkal Property"
-            >
-              <FaPhoneAlt size={13} />
+            <a href="tel:+918338908897" className="agent-action-btn" aria-label="Call Krushna Chandra Panda">
+              <FaChevronRight size={12} aria-hidden="true" />
             </a>
           </div>
 
-          {/* PHONE 1 */}
+          {/* Hotline / Office Phone */}
           <div className="contact-detail-row">
-            <div className="contact-icon-wrapper">
-              <FiPhoneCall />
+            <div className="contact-icon-wrapper" aria-hidden="true">
+              <FiPhoneCall size={20} />
             </div>
-
             <div className="contact-detail-text">
-              <span className="detail-label">
-                Contact Number
-              </span>
-
-              <a
-                href={`tel:+91${primaryPhone}`}
-                className="detail-value bold-value"
-              >
-                +91 83389 05897
-              </a>
+              <span className="detail-label">Office Hotline:</span>
+              <a href="tel:+917077606668" className="detail-value bold-value" aria-label="Call Office Hotline">+91 70776 06668</a>
             </div>
           </div>
 
-          {/* PHONE 2 */}
+          {/* Email */}
           <div className="contact-detail-row">
-            <div className="contact-icon-wrapper">
-              <FiPhoneCall />
+            <div className="contact-icon-wrapper" aria-hidden="true">
+              <FiMail size={20} />
             </div>
-
             <div className="contact-detail-text">
-              <span className="detail-label">
-                Alternate Number
-              </span>
-
-              <a
-                href={`tel:+91${secondaryPhone}`}
-                className="detail-value bold-value"
-              >
-                +91 70776 00666
-              </a>
-            </div>
-          </div>
-
-          {/* EMAIL */}
-          <div className="contact-detail-row">
-            <div className="contact-icon-wrapper">
-              <FiMail />
-            </div>
-
-            <div className="contact-detail-text">
-              <span className="detail-label">
-                Email
-              </span>
-
-              <a
-                href="mailto:support@utkalproperty.com"
-                className="detail-value"
-              >
+              <span className="detail-label">Email:</span>
+              <a href="mailto:support@utkalproperty.com" className="detail-value" aria-label="Email Utkal Property Support">
                 support@utkalproperty.com
               </a>
             </div>
           </div>
         </div>
 
-        {/* =================================================
-            COMPANY LINKS
-        ================================================= */}
+        {/* Column 3: Our Company */}
         <div className="footer-column footer-our-company">
-          <h4 className="footer-column-title">
-            Our Company
-          </h4>
-
+          <h4 className="footer-column-title">Our Company</h4>
           <ul className="company-links-list">
-            <li>
-              <Link to="/properties">
-                <FaChevronRight className="bullet-icon" />
-                Property For Sale
-              </Link>
-            </li>
-
-            <li>
-              <Link to="/about">
-                <FaChevronRight className="bullet-icon" />
-                About Us
-              </Link>
-            </li>
-
-            <li>
-              <Link to="/our-team">
-                <FaChevronRight className="bullet-icon" />
-                Our Agents
-              </Link>
-            </li>
-
-            <li>
-              <Link to="/faq">
-                <FaChevronRight className="bullet-icon" />
-                FAQ
-              </Link>
-            </li>
-
-            <li>
-              <Link to="/contact">
-                <FaChevronRight className="bullet-icon" />
-                Contact Us
-              </Link>
-            </li>
-
-            <li>
-              <Link to="/sell-property">
-                <FaChevronRight className="bullet-icon" />
-                Sell Property
-              </Link>
-            </li>
+            <li><Link to="/properties"><FaChevronRight className="bullet-icon" aria-hidden="true" /> Property For Sale</Link></li>
+            <li><Link to="/about"><FaChevronRight className="bullet-icon" aria-hidden="true" /> About Us</Link></li>
+            <li><Link to="/our-team"><FaChevronRight className="bullet-icon" aria-hidden="true" /> Our Agents</Link></li>
+            <li><Link to="/faq"><FaChevronRight className="bullet-icon" aria-hidden="true" /> FAQ</Link></li>
+            <li><Link to="/contact"><FaChevronRight className="bullet-icon" aria-hidden="true" /> Contact Us</Link></li>
           </ul>
         </div>
 
-        {/* =================================================
-            NEWSLETTER
-        ================================================= */}
+        {/* Column 4: Newsletter */}
         <div className="footer-column footer-newsletter">
-          <h4 className="footer-column-title">
-            Stay Connected
-          </h4>
+          <h4 className="footer-column-title">Newsletter</h4>
+          <p className="newsletter-subtitle">Sign up to receive the latest property articles</p>
 
-          <p className="newsletter-subtitle">
-            Get the latest property updates, new listings and
-            helpful real-estate insights directly in your inbox.
-          </p>
-
-          <form
-            className="newsletter-form"
-            onSubmit={(e) => e.preventDefault()}
-            aria-label="Newsletter Subscription Form"
-          >
-            <div className="newsletter-input-wrapper">
-              <FiMail className="newsletter-input-icon" />
-
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="newsletter-input"
-                aria-label="Email address for newsletter"
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="newsletter-submit-btn"
-            >
-              Sign Up
-              <FaArrowRight className="btn-arrow" />
+          <form className="newsletter-form" onSubmit={(e) => e.preventDefault()} aria-label="Newsletter Subscription Form">
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="newsletter-input"
+              aria-label="Email address for newsletter"
+              required
+            />
+            <button type="submit" className="newsletter-submit-btn" aria-label="Subscribe to newsletter">
+              Sign Up <FaArrowRight className="btn-arrow" aria-hidden="true" />
             </button>
           </form>
 
           <div className="newsletter-terms">
-            <input
-              type="checkbox"
-              id="terms-checkbox"
-              className="terms-checkbox"
-              required
-            />
-
-            <label
-              htmlFor="terms-checkbox"
-              className="terms-label"
-            >
+            <input type="checkbox" id="terms-checkbox" className="terms-checkbox" required />
+            <label htmlFor="terms-checkbox" className="terms-label">
               I have read and agree to the terms &amp; conditions
             </label>
           </div>
         </div>
       </div>
 
-      {/* =====================================================
-          FOOTER TAGLINE
-      ====================================================== */}
-      <div className="footer-tagline">
-        <div className="tagline-line" />
-
-        <div className="tagline-content">
-          <BiHomeAlt2 className="tagline-icon" />
-
-          <span>
-            Your perfect home is waiting for you.
-          </span>
-        </div>
-
-        <div className="tagline-line" />
-      </div>
-
-      {/* =====================================================
-          BOTTOM BAR
-      ====================================================== */}
+      {/* Bottom Bar */}
       <div className="footer-bottom-bar">
-        <p>
-          © {new Date().getFullYear()} Utkal Property. All
-          Rights Reserved.
-        </p>
-
+        <p>© {new Date().getFullYear()} Utkal Property. Developed By PRWEBSTOCK.</p>
         <div className="footer-bottom-links">
-          <Link to="/privacy-policy">
-            Privacy Policy
-          </Link>
-
-          <span className="footer-bottom-dot">•</span>
-
-          <Link to="/terms">
-            Terms of Service
-          </Link>
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          <span className="footer-bottom-dot" aria-hidden="true">•</span>
+          <Link to="/terms">Terms of Service</Link>
         </div>
-
-        <p className="footer-developed">
-          Developed By <strong>PRWEBSTOCK</strong>
-        </p>
       </div>
     </footer>
   );
