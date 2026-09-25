@@ -1,4 +1,3 @@
-
 :root {
   --sp-bg: #f8fafc;
   --sp-card-bg: #ffffff;
@@ -44,10 +43,6 @@
 
 /* Full-Width Banner Styling */
 .sell-property-banner {
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border: 1px solid #bbf7d0;
-  border-radius: var(--sp-radius);
-  padding: 24px 32px;
   background: linear-gradient(135deg, #f0f7f2 0%, #e1efe4 100%);
   border: 1px solid rgba(18, 98, 41, 0.2);
   border-radius: var(--utkal-radius);
@@ -67,7 +62,6 @@
 }
 
 .sell-property-banner-badge {
-  background: #18522e;
   background: linear-gradient(135deg, #126229 0%, #0e4c20 100%);
   color: #fff;
   padding: 12px 18px;
@@ -78,7 +72,6 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
   box-shadow: 0 4px 14px rgba(18, 98, 41, 0.3);
   letter-spacing: 0.5px;
 }
@@ -96,8 +89,6 @@
 }
 
 .sell-property-banner-text h1 .highlight-green {
-  color: #18522e;
-  font-weight: 800;
   font-size: 26px;
   font-weight: 800;
   color: var(--utkal-navy);
@@ -116,11 +107,6 @@
 
 /* Full-Width Main Form Wrapper */
 .sell-property-form-wrapper {
-  background: var(--sp-card-bg);
-  border: 1px solid var(--sp-border);
-  border-radius: var(--sp-radius);
-  padding: 32px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   background: #ffffff;
   border: 1px solid var(--utkal-border);
   border-radius: var(--utkal-radius);
@@ -132,7 +118,6 @@
 .sell-property-section {
   margin-bottom: 32px;
   padding-bottom: 28px;
-  border-bottom: 1px solid #e2e8f0;
   border-bottom: 1px solid #f1f5f9;
   width: 100%;
 }
@@ -144,14 +129,6 @@
 }
 
 .sell-property-section-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: #0f172a;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-  letter-spacing: -0.01em;
   font-size: 17px;
   font-weight: 700;
   color: var(--utkal-navy);
@@ -168,10 +145,6 @@
 }
 
 .title-indicator {
-  width: 5px;
-  height: 22px;
-  background-color: var(--sp-indicator-blue);
-  border-radius: 4px;
   display: inline-block;
   width: 4px;
   height: 18px;
@@ -197,15 +170,10 @@
   color: #18522e;
 }
 
-.sell-property-input, 
+.sell-property-input,
 .sell-property-select {
   width: 100%;
   background-color: #ffffff;
-  border: 1.5px solid var(--sp-border);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 13px;
-  color: var(--sp-text-main);
   border: 1px solid var(--utkal-border);
   border-radius: 10px;
   padding: 12px 16px;
@@ -217,18 +185,31 @@
 
 .sell-property-input:hover,
 .sell-property-select:hover {
-  border-color: #94a3b8;}
-  
+  border-color: #94a3b8;
+}
+
 .sell-property-input::placeholder {
   color: #94a3b8;
 }
 
-.sell-property-input:focus, 
+.sell-property-input:focus,
 .sell-property-select:focus {
-  border-color: var(--sp-indicator-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
   border-color: var(--utkal-green);
   box-shadow: 0 0 0 3px rgba(18, 98, 41, 0.15);
+}
+
+.sell-property-input.has-error,
+.sell-property-select.has-error {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.sell-property-field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #dc2626;
 }
 
 .sell-property-select {
@@ -241,7 +222,6 @@
   cursor: pointer;
 }
 
-/* Grid Variations */
 /* Full Width Grid Variations */
 .sell-property-grid-3 {
   display: grid;
@@ -291,11 +271,6 @@
 
 /* Image Upload Zone */
 .sell-property-upload-zone {
-  border: 2px dashed #bbf7d0;
-  background-color: var(--sp-primary-light);
-  border-radius: 10px;
-  padding: 32px;
-  width: 100%;
   border: 2px dashed rgba(18, 98, 41, 0.3);
   background-color: rgba(18, 98, 41, 0.04);
   border-radius: 12px;
@@ -310,10 +285,15 @@
   width: 100%;
 }
 
-.sell-property-upload-zone:hover {
-  background-color: #dcfce7;
+.sell-property-upload-zone:hover,
+.sell-property-upload-zone.drag-active {
   background-color: rgba(18, 98, 41, 0.08);
   border-color: var(--utkal-green);
+}
+
+.sell-property-upload-zone.upload-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .upload-icon {
@@ -328,6 +308,11 @@
 
 .sell-property-upload-zone span {
   font-size: 13px;
+  color: var(--utkal-text-muted);
+}
+
+.sell-property-upload-zone small {
+  font-size: 12px;
   color: var(--utkal-text-muted);
 }
 
@@ -355,6 +340,19 @@
   object-fit: cover;
 }
 
+.sell-property-preview-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: linear-gradient(to top, rgba(12, 29, 46, 0.55), transparent 60%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
 .remove-img-btn {
   position: absolute;
   top: 6px;
@@ -375,6 +373,30 @@
 
 .remove-img-btn:hover {
   background: #18522e;
+}
+
+/* Status Banner */
+.sell-property-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.sell-property-status-success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+}
+
+.sell-property-status-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
 }
 
 /* ============================================================ */
@@ -443,19 +465,6 @@
 
 .sp-summary-table tbody tr:last-child td {
   border-bottom: none;
-}
-
-/* Input & Dropdown Styling for Summary Table */
-.sp-summary-input, 
-.sp-summary-select {
-  padding: 8px 12px;
-  font-size: 12.5px;
-  background-color: #fafafa;
-}
-
-.sp-summary-input:focus, 
-.sp-summary-select:focus {
-  background-color: #ffffff;
 }
 
 /* File Upload Button inside Table */
@@ -573,7 +582,6 @@
 }
 
 .sell-property-submit-btn {
-  background: #18522e;
   background: var(--utkal-green);
   color: #ffffff;
   border: none;
@@ -584,9 +592,6 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.3);
-  transition: opacity 0.2s, transform 0.1s;
   gap: 10px;
   box-shadow: 0 4px 14px rgba(18, 98, 41, 0.35);
   transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
@@ -598,6 +603,28 @@
   box-shadow: 0 6px 18px rgba(18, 98, 41, 0.45);
 }
 
+.sell-property-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sp-submit-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  animation: sp-spin 0.7s linear infinite;
+}
+
+@keyframes sp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* =========================================================
    FORM SUMMARY LIVE PREVIEW
 ========================================================= */
@@ -605,31 +632,19 @@
 .sp-summary-preview {
   width: 100%;
   min-height: 42px;
-
   display: flex;
   align-items: center;
-
   padding: 10px 14px;
-
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-
   background: #f8fafc;
-
   color: #1e293b;
-
   font-size: 14px;
   font-weight: 500;
-
   line-height: 1.4;
-
   box-sizing: border-box;
-
   word-break: break-word;
-
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .sp-summary-preview:not(.is-empty) {
@@ -643,40 +658,282 @@
   font-style: italic;
 }
 
-
-/* =========================================================
-   SELECT / RADIO PREVIEW
-========================================================= */
-
-.sp-summary-select,
-.sp-summary-input {
-  pointer-events: none;
+.sp-summary-preview-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
 }
 
-
-/* =========================================================
-   SUMMARY TABLE
-========================================================= */
-
-.sp-summary-table
-  .sp-type-cell {
-  vertical-align: middle;
+.sp-summary-room-note {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--sp-primary);
+  padding: 0 2px;
 }
 
+/* ============================================================ */
+/* BHK room-summary chip (sits under the BHK select)             */
+/* ============================================================ */
+
+.sp-room-summary-chip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: var(--sp-primary-light);
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  font-family: inherit;
+}
+
+.sp-room-summary-chip:hover {
+  background-color: #dcfce7;
+  border-color: #86efac;
+}
+
+.sp-room-summary-text {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--sp-primary);
+  text-align: left;
+}
+
+.sp-room-edit-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--sp-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ============================================================ */
+/* Room configuration popup                                     */
+/* ============================================================ */
+
+.sp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 29, 46, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: sp-fade-in 0.15s ease-out;
+}
+
+@keyframes sp-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.sp-modal-box {
+  background: #ffffff;
+  border-radius: var(--utkal-radius);
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(12, 29, 46, 0.25);
+  animation: sp-slide-up 0.2s ease-out;
+}
+
+@keyframes sp-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sp-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 24px 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.sp-modal-header h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--utkal-navy);
+  margin-bottom: 4px;
+}
+
+.sp-modal-header p {
+  font-size: 12.5px;
+  color: var(--utkal-text-muted);
+  line-height: 1.4;
+}
+
+.sp-modal-close {
+  background: #f1f5f9;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 13px;
+  color: var(--utkal-text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.sp-modal-close:hover {
+  background-color: #e2e8f0;
+}
+
+.sp-modal-body {
+  padding: 18px 24px 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-modal-divider {
+  display: flex;
+  align-items: center;
+  margin: 14px 0 6px;
+}
+
+.sp-modal-divider span {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: var(--utkal-text-muted);
+}
+
+.sp-room-stepper-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.sp-room-stepper-row:last-child {
+  border-bottom: none;
+}
+
+.sp-room-stepper-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--utkal-navy);
+}
+
+.sp-room-stepper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sp-room-stepper button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--utkal-green);
+  background: #ffffff;
+  color: var(--utkal-green);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s, color 0.15s;
+  line-height: 1;
+}
+
+.sp-room-stepper button:hover {
+  background-color: var(--utkal-green);
+  color: #ffffff;
+}
+
+.sp-room-stepper span {
+  min-width: 18px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--utkal-navy);
+}
+
+.sp-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px 22px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.sp-modal-btn-secondary,
+.sp-modal-btn-primary {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.sp-modal-btn-secondary {
+  background: #f1f5f9;
+  color: var(--utkal-text-muted);
+}
+
+.sp-modal-btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+.sp-modal-btn-primary {
+  background: var(--utkal-green);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(18, 98, 41, 0.3);
+}
+
+.sp-modal-btn-primary:hover {
+  background-color: var(--utkal-green-hover);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .sp-modal-box {
+    max-width: 100%;
+  }
+}
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
 @media (max-width: 768px) {
-
   .sp-summary-preview {
     min-height: 40px;
     font-size: 13px;
     padding: 9px 12px;
   }
-
 }
+
 /* Responsive Media Queries */
 @media (max-width: 1200px) {
   .sell-property-container {
@@ -691,8 +948,8 @@
 }
 
 @media (max-width: 768px) {
-  .sell-property-grid-3, 
-  .sell-property-grid-4, 
+  .sell-property-grid-3,
+  .sell-property-grid-4,
   .sell-property-grid-price {
     grid-template-columns: 1fr;
   }

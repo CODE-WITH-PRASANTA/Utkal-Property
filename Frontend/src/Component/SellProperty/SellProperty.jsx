@@ -28,6 +28,7 @@ const INITIAL_FORM_STATE = {
 
   builtUpArea: "",
   carpetArea: "",
+  saleableArea: "",
   bhk: "Select",
   bathrooms: "Select",
   balconies: "Select",
@@ -105,6 +106,13 @@ const FIELD_CONFIG_MAP = {
     required: false,
     type: "input",
     placeholder: "Enter carpet area",
+  },
+
+  saleableArea: {
+    label: "Saleable Area (sq ft)",
+    required: false,
+    type: "input",
+    placeholder: "Enter saleable area",
   },
 
   bhk: {
@@ -252,6 +260,51 @@ const UNSET_VALUES = [
 ];
 
 /* =========================================================
+   ROOM CONFIGURATION (opens after a BHK is picked)
+========================================================= */
+
+// Sensible starting point for each BHK value; the person can still
+// adjust every count in the popup before saving.
+const BHK_DEFAULT_ROOMS = {
+  "1 BHK": { bedrooms: 1, hall: 1, kitchen: 1 },
+  "2 BHK": { bedrooms: 2, hall: 1, kitchen: 1 },
+  "3 BHK": { bedrooms: 3, hall: 1, kitchen: 1 },
+  "4+ BHK": { bedrooms: 4, hall: 1, kitchen: 1 },
+};
+
+const ADDITIONAL_ROOM_TYPES = [
+  { key: "studyRoom", label: "Study Room" },
+  { key: "poojaRoom", label: "Pooja Room" },
+  { key: "servantRoom", label: "Servant Room" },
+  { key: "storeRoom", label: "Store Room" },
+];
+
+const EMPTY_ADDITIONAL_ROOMS = {
+  studyRoom: 0,
+  poojaRoom: 0,
+  servantRoom: 0,
+  storeRoom: 0,
+};
+
+const buildRoomSummaryText = (roomConfig) => {
+  if (!roomConfig) return "";
+
+  const parts = [
+    `${roomConfig.bedrooms} Bedroom${roomConfig.bedrooms > 1 ? "s" : ""}`,
+    `${roomConfig.hall} Hall`,
+    `${roomConfig.kitchen} Kitchen`,
+  ];
+
+  const extras = ADDITIONAL_ROOM_TYPES.filter(
+    (room) => roomConfig.additionalRooms?.[room.key] > 0
+  ).map(
+    (room) => `${roomConfig.additionalRooms[room.key]} ${room.label}`
+  );
+
+  return [...parts, ...extras].join(" • ");
+};
+
+/* =========================================================
    COMPONENT
 ========================================================= */
 
@@ -267,6 +320,12 @@ const SellProperty = () => {
   const [fieldErrors, setFieldErrors] = useState({});
 
   const [dragActive, setDragActive] = useState(false);
+
+  /* Room configuration popup state */
+  const [roomConfig, setRoomConfig] = useState(null);
+  const [draftRoomConfig, setDraftRoomConfig] = useState(null);
+  const [roomModalOpen, setRoomModalOpen] = useState(false);
+  const [prevBhkValue, setPrevBhkValue] = useState("Select");
 
   const fileInputRef = useRef(null);
   const summaryFileInputRef = useRef(null);
@@ -307,6 +366,91 @@ const SellProperty = () => {
     if (submitStatus?.type === "error") {
       setSubmitStatus(null);
     }
+  };
+
+  /* =========================================================
+     ROOM CONFIGURATION (BHK popup)
+  ========================================================= */
+
+  const handleBhkChange = (value) => {
+    const previousValue = formData.bhk;
+
+    handleInputChange("bhk", value);
+
+    if (value === "Select") {
+      setRoomConfig(null);
+      setDraftRoomConfig(null);
+      return;
+    }
+
+    const defaults = BHK_DEFAULT_ROOMS[value] || {
+      bedrooms: 1,
+      hall: 1,
+      kitchen: 1,
+    };
+
+    setPrevBhkValue(previousValue);
+
+    setDraftRoomConfig({
+      bedrooms: defaults.bedrooms,
+      hall: roomConfig?.hall ?? defaults.hall,
+      kitchen: roomConfig?.kitchen ?? defaults.kitchen,
+      additionalRooms:
+        roomConfig?.additionalRooms || { ...EMPTY_ADDITIONAL_ROOMS },
+    });
+
+    setRoomModalOpen(true);
+  };
+
+  const openRoomModalForEdit = () => {
+    if (!roomConfig) return;
+
+    setDraftRoomConfig({
+      ...roomConfig,
+      additionalRooms: { ...roomConfig.additionalRooms },
+    });
+
+    setRoomModalOpen(true);
+  };
+
+  const adjustDraftRoomCount = (field, delta, isAdditional = false) => {
+    setDraftRoomConfig((prev) => {
+      if (!prev) return prev;
+
+      if (isAdditional) {
+        const current = prev.additionalRooms[field] || 0;
+        const next = Math.max(0, Math.min(9, current + delta));
+
+        return {
+          ...prev,
+          additionalRooms: {
+            ...prev.additionalRooms,
+            [field]: next,
+          },
+        };
+      }
+
+      const current = prev[field] || 0;
+      const next = Math.max(1, Math.min(9, current + delta));
+
+      return {
+        ...prev,
+        [field]: next,
+      };
+    });
+  };
+
+  const saveRoomConfig = () => {
+    setRoomConfig(draftRoomConfig);
+    setRoomModalOpen(false);
+  };
+
+  const cancelRoomConfig = () => {
+    if (!roomConfig) {
+      handleInputChange("bhk", prevBhkValue);
+    }
+
+    setRoomModalOpen(false);
   };
 
   /* =========================================================
@@ -504,6 +648,17 @@ const SellProperty = () => {
         "Please enter a valid carpet area.";
     }
 
+    /* Saleable area validation */
+    if (
+      formData.saleableArea &&
+      !/^[0-9,.\s]+$/.test(
+        formData.saleableArea
+      )
+    ) {
+      errors.saleableArea =
+        "Please enter a valid saleable area.";
+    }
+
     /* PIN validation */
     if (
       formData.pinCode &&
@@ -543,6 +698,10 @@ const SellProperty = () => {
         );
       }
     );
+
+    if (roomConfig) {
+      payload.append("roomConfig", JSON.stringify(roomConfig));
+    }
 
     uploadedImages.forEach((image) => {
       payload.append(
@@ -625,6 +784,9 @@ const SellProperty = () => {
 
       setFieldErrors({});
 
+      setRoomConfig(null);
+      setDraftRoomConfig(null);
+
       window.setTimeout(() => {
         document
           .querySelector(
@@ -692,6 +854,7 @@ const SellProperty = () => {
       rows: [
         "builtUpArea",
         "carpetArea",
+        "saleableArea",
         "bhk",
         "bathrooms",
         "balconies",
@@ -769,6 +932,22 @@ const SellProperty = () => {
               {MAX_IMAGES}
             </li>
           </ul>
+        </div>
+      );
+    }
+
+    if (key === "bhk") {
+      return (
+        <div className="sp-summary-preview-column">
+          <div className="sp-summary-preview">
+            {formData.bhk || "-"}
+          </div>
+
+          {roomConfig && formData.bhk !== "Select" && (
+            <div className="sp-summary-room-note">
+              {buildRoomSummaryText(roomConfig)}
+            </div>
+          )}
         </div>
       );
     }
@@ -1099,7 +1278,7 @@ const SellProperty = () => {
             Property Details
           </h3>
 
-          <div className="sell-property-grid-3">
+          <div className="sell-property-grid-4">
 
             <div className="sell-property-form-group">
 
@@ -1175,6 +1354,41 @@ const SellProperty = () => {
             <div className="sell-property-form-group">
 
               <label className="sell-property-label">
+                Saleable Area (sq ft)
+              </label>
+
+              <input
+                type="text"
+                inputMode="decimal"
+                className={`sell-property-input ${
+                  fieldErrors.saleableArea
+                    ? "has-error"
+                    : ""
+                }`}
+                placeholder={
+                  FIELD_CONFIG_MAP
+                    .saleableArea
+                    .placeholder
+                }
+                value={formData.saleableArea}
+                onChange={(event) =>
+                  handleInputChange(
+                    "saleableArea",
+                    event.target.value
+                  )
+                }
+              />
+
+              {fieldErrors.saleableArea && (
+                <span className="sell-property-field-error">
+                  {fieldErrors.saleableArea}
+                </span>
+              )}
+            </div>
+
+            <div className="sell-property-form-group">
+
+              <label className="sell-property-label">
                 BHK{" "}
                 <span>*</span>
               </label>
@@ -1187,10 +1401,7 @@ const SellProperty = () => {
                 }`}
                 value={formData.bhk}
                 onChange={(event) =>
-                  handleInputChange(
-                    "bhk",
-                    event.target.value
-                  )
+                  handleBhkChange(event.target.value)
                 }
               >
                 {FIELD_CONFIG_MAP.bhk.options.map(
@@ -1209,6 +1420,22 @@ const SellProperty = () => {
                 <span className="sell-property-field-error">
                   {fieldErrors.bhk}
                 </span>
+              )}
+
+              {roomConfig && formData.bhk !== "Select" && (
+                <button
+                  type="button"
+                  className="sp-room-summary-chip"
+                  onClick={openRoomModalForEdit}
+                >
+                  <span className="sp-room-summary-text">
+                    {buildRoomSummaryText(roomConfig)}
+                  </span>
+
+                  <span className="sp-room-edit-label">
+                    ✎ Edit
+                  </span>
+                </button>
               )}
             </div>
           </div>
@@ -1899,6 +2126,205 @@ const SellProperty = () => {
         </div>
 
       </form>
+
+      {/* ROOM CONFIGURATION POPUP */}
+
+      {roomModalOpen && draftRoomConfig && (
+        <div
+          className="sp-modal-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="sp-room-modal-title"
+          onClick={cancelRoomConfig}
+        >
+          <div
+            className="sp-modal-box"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="sp-modal-header">
+              <div>
+                <h3 id="sp-room-modal-title">
+                  Set room details
+                </h3>
+
+                <p>
+                  For {formData.bhk} — adjust the exact
+                  count for each room type
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="sp-modal-close"
+                onClick={cancelRoomConfig}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="sp-modal-body">
+
+              <div className="sp-room-stepper-row">
+                <span className="sp-room-stepper-label">
+                  Bedrooms
+                </span>
+
+                <div className="sp-room-stepper">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      adjustDraftRoomCount("bedrooms", -1)
+                    }
+                    aria-label="Decrease bedrooms"
+                  >
+                    −
+                  </button>
+
+                  <span>{draftRoomConfig.bedrooms}</span>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      adjustDraftRoomCount("bedrooms", 1)
+                    }
+                    aria-label="Increase bedrooms"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="sp-room-stepper-row">
+                <span className="sp-room-stepper-label">
+                  Hall / living room
+                </span>
+
+                <div className="sp-room-stepper">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      adjustDraftRoomCount("hall", -1)
+                    }
+                    aria-label="Decrease hall count"
+                  >
+                    −
+                  </button>
+
+                  <span>{draftRoomConfig.hall}</span>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      adjustDraftRoomCount("hall", 1)
+                    }
+                    aria-label="Increase hall count"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="sp-room-stepper-row">
+                <span className="sp-room-stepper-label">
+                  Kitchen
+                </span>
+
+                <div className="sp-room-stepper">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      adjustDraftRoomCount("kitchen", -1)
+                    }
+                    aria-label="Decrease kitchen count"
+                  >
+                    −
+                  </button>
+
+                  <span>{draftRoomConfig.kitchen}</span>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      adjustDraftRoomCount("kitchen", 1)
+                    }
+                    aria-label="Increase kitchen count"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="sp-modal-divider">
+                <span>Additional rooms</span>
+              </div>
+
+              {ADDITIONAL_ROOM_TYPES.map((room) => (
+                <div
+                  className="sp-room-stepper-row"
+                  key={room.key}
+                >
+                  <span className="sp-room-stepper-label">
+                    {room.label}
+                  </span>
+
+                  <div className="sp-room-stepper">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        adjustDraftRoomCount(
+                          room.key,
+                          -1,
+                          true
+                        )
+                      }
+                      aria-label={`Decrease ${room.label}`}
+                    >
+                      −
+                    </button>
+
+                    <span>
+                      {draftRoomConfig.additionalRooms[room.key]}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        adjustDraftRoomCount(
+                          room.key,
+                          1,
+                          true
+                        )
+                      }
+                      aria-label={`Increase ${room.label}`}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="sp-modal-footer">
+              <button
+                type="button"
+                className="sp-modal-btn-secondary"
+                onClick={cancelRoomConfig}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="sp-modal-btn-primary"
+                onClick={saveRoomConfig}
+              >
+                Save room details
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
