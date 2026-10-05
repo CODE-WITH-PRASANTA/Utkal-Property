@@ -55,6 +55,22 @@ const Overview = ({
                 />
               </div>
 
+              <div className="overview-form-group">
+                <label className="overview-label">
+                  SUPER BUILT-UP AREA (SQ FT)
+                </label>
+
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  name="superBuiltUpArea"
+                  value={propertyData.superBuiltUpArea || ""}
+                  onChange={handleInputChange}
+                  placeholder="Enter super built-up area (e.g., 1500)"
+                  className="overview-input"
+                />
+              </div>
+
               {/* NO OF HOUSE / VILLA */}
 
               <div className="overview-form-group">

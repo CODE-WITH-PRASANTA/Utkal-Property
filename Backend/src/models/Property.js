@@ -345,6 +345,12 @@ const propertySchema = new mongoose.Schema(
       trim: true,
     },
 
+    superBuiltUpArea: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
     noOfHouseVilla: {
       type: Number,
       default: 0,

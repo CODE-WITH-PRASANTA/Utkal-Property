@@ -186,6 +186,7 @@ exports.createProperty = async (req, res) => {
 
       // OVERVIEW
       projectArea,
+      superBuiltUpArea,
       noOfHouseVilla,
       totalFloors,
       facing,
@@ -557,6 +558,10 @@ exports.createProperty = async (req, res) => {
 
         projectArea:
           projectArea?.trim() ||
+          "",
+
+        superBuiltUpArea:
+          superBuiltUpArea?.trim() ||
           "",
 
         noOfHouseVilla:
@@ -1311,6 +1316,10 @@ exports.updateProperty = async (req, res) => {
 
     if (body.projectArea !== undefined) {
       property.projectArea = body.projectArea;
+    }
+
+    if (body.superBuiltUpArea !== undefined) {
+      property.superBuiltUpArea = body.superBuiltUpArea;
     }
 
     if (body.noOfHouseVilla !== undefined) {

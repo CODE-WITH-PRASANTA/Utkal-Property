@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import "./AddNewProperty.css";
 
@@ -20,6 +20,9 @@ const AddNewProperty = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const isSellListingMode =
+    searchParams.get("source") === "sell-properties";
 
   // ==========================================
   // EDIT MODE
@@ -72,6 +75,7 @@ const AddNewProperty = () => {
 
     // OVERVIEW
     projectArea: "",
+    superBuiltUpArea: "",
 
     noOfHouseVilla: "",
 
@@ -207,12 +211,21 @@ const AddNewProperty = () => {
 
        
 
-        const response = await API.get(`/properties/${id}`);
+        const response = await API.get(
+          isSellListingMode
+            ? `/sell-properties/${id}`
+            : `/properties/${id}`,
+        );
 
       
 
         const property =
           response.data?.property || response.data?.data || response.data;
+        const propertyDetails =
+          property?.propertyDetails &&
+          typeof property.propertyDetails === "object"
+            ? property.propertyDetails
+            : {};
 
         if (!property) {
           alert("Property not found");
@@ -225,109 +238,204 @@ const AddNewProperty = () => {
         // ======================================
 
         setPropertyData({
-          propertyName: property.name || property.propertyName || "",
+          ...propertyDetails,
+
+          propertyName:
+            propertyDetails.propertyName ||
+            property.name ||
+            property.propertyName ||
+            property.propertyTitle ||
+            "",
 
           // ====================================
           // PARENT CATEGORY
           // ====================================
 
-          categoryParent: property.categoryParent || "",
+          categoryParent:
+            propertyDetails.categoryParent ||
+            property.categoryParent ||
+            (isSellListingMode ? property.category : "") ||
+            "",
 
           // ====================================
           // CHILD CATEGORY
           // ====================================
 
-          category: property.category || "",
+          category:
+            propertyDetails.category ||
+            property.propertyCategory ||
+            (isSellListingMode ? property.propertyType : property.category) ||
+            "",
 
-          propertyType: property.type || property.propertyType || "",
+          propertyType:
+            propertyDetails.propertyType ||
+            property.type ||
+            property.propertyType ||
+            "",
 
-          status: property.status || "Active",
+          status:
+            propertyDetails.status ||
+            (isSellListingMode ? "Active" : property.status) ||
+            "Active",
 
-          projectSize: property.projectSize ?? "",
+          projectSize: propertyDetails.projectSize ?? property.projectSize ?? "",
 
-          completionStatus: property.completionStatus || "Under Construction",
+          completionStatus:
+            propertyDetails.completionStatus ||
+            property.completionStatus ||
+            "Under Construction",
 
-          shortDescription: property.shortDescription || "",
+          shortDescription:
+            propertyDetails.shortDescription || property.shortDescription || "",
 
-          propertyPrice: property.price ?? property.propertyPrice ?? "",
+          propertyPrice:
+            propertyDetails.propertyPrice ??
+            property.price ??
+            property.propertyPrice ??
+            property.expectedPrice ??
+            "",
 
-          pricePerSqFt: property.pricePerSqft ?? property.pricePerSqFt ?? "",
+          pricePerSqFt:
+            propertyDetails.pricePerSqFt ??
+            property.pricePerSqft ??
+            property.pricePerSqFt ??
+            "",
 
-          reraNumber: property.rera || property.reraNumber || "",
+          reraNumber:
+            propertyDetails.reraNumber ||
+            property.rera ||
+            property.reraNumber ||
+            "",
 
-          highlights: Array.isArray(property.highlights)
-            ? property.highlights
-            : [],
+          highlights: Array.isArray(propertyDetails.highlights)
+            ? propertyDetails.highlights
+            : Array.isArray(property.highlights)
+              ? property.highlights
+              : [],
 
           // LOCATION
 
-          location: property.location || "",
+          location:
+            propertyDetails.location ||
+            property.location ||
+            (isSellListingMode ? property.locality : "") ||
+            "",
 
-          city: property.city || "",
+          city: propertyDetails.city || property.city || "",
 
-          state: property.state || "",
+          state: propertyDetails.state || property.state || "",
 
-          country: property.country || "",
+          country: propertyDetails.country || property.country || "",
 
           // OVERVIEW
 
-          projectArea: property.projectArea || property.totalArea || "",
+          projectArea:
+            propertyDetails.projectArea ||
+            property.projectArea ||
+            property.totalArea ||
+            (isSellListingMode ? property.builtUpArea : "") ||
+            "",
 
-          noOfHouseVilla: property.noOfHouseVilla ?? property.totalUnits ?? "",
+          superBuiltUpArea:
+            propertyDetails.superBuiltUpArea ??
+            property.superBuiltUpArea ??
+            "",
 
-          totalFloors: property.totalFloors ?? "",
+          noOfHouseVilla:
+            propertyDetails.noOfHouseVilla ??
+            property.noOfHouseVilla ??
+            property.totalUnits ??
+            "",
 
-          facing: property.facing || "",
+          totalFloors: propertyDetails.totalFloors ?? property.totalFloors ?? "",
 
-          plotArea: property.plotArea || property.plotSize || "",
+          facing: propertyDetails.facing || property.facing || "",
 
-          bedrooms: property.bedrooms ?? "",
+          plotArea:
+            propertyDetails.plotArea ||
+            property.plotArea ||
+            property.plotSize ||
+            "",
 
-          bathrooms: property.bathrooms ?? "",
+          bedrooms:
+            propertyDetails.bedrooms ??
+            property.bedrooms ??
+            (isSellListingMode
+              ? String(property.bhk || "").match(/\d+/)?.[0] || ""
+              : ""),
 
-          balconies: property.balconies ?? "",
+          bathrooms: propertyDetails.bathrooms ?? property.bathrooms ?? "",
 
-          parking: property.parking || "",
+          balconies: propertyDetails.balconies ?? property.balconies ?? "",
+
+          parking: propertyDetails.parking || property.parking || "",
 
           transactionType:
-            property.transactionType || property.statusType || "For Sale",
+            propertyDetails.transactionType ||
+            property.transactionType ||
+            property.statusType ||
+            (isSellListingMode && property.propertyFor === "Rent"
+              ? "Rent"
+              : isSellListingMode && property.propertyFor === "Lease"
+                ? "Lease"
+                : "For Sale"),
 
-          propertyOverlooking: property.propertyOverlooking || "",
+          propertyOverlooking:
+            propertyDetails.propertyOverlooking ||
+            property.propertyOverlooking ||
+            "",
 
-          maintenancePerMonth: property.maintenancePerMonth ?? "",
+          maintenancePerMonth:
+            propertyDetails.maintenancePerMonth ??
+            property.maintenancePerMonth ??
+            "",
 
-          expectedRentalReturn: property.expectedRentalReturn ?? "",
+          expectedRentalReturn:
+            propertyDetails.expectedRentalReturn ??
+            property.expectedRentalReturn ??
+            "",
 
           // AMENITIES
 
-          amenities: Array.isArray(property.amenities)
-            ? property.amenities
-            : [],
+          amenities: Array.isArray(propertyDetails.amenities)
+            ? propertyDetails.amenities
+            : Array.isArray(property.amenities)
+              ? property.amenities
+              : [],
 
           // NEARBY
 
-          nearbyPlaces: Array.isArray(property.nearbyPlaces)
-            ? property.nearbyPlaces
-            : [],
+          nearbyPlaces: Array.isArray(propertyDetails.nearbyPlaces)
+            ? propertyDetails.nearbyPlaces
+            : Array.isArray(property.nearbyPlaces)
+              ? property.nearbyPlaces
+              : [],
 
           // SEO
 
-          metaTitle: property.metaTitle || "",
+          metaTitle: propertyDetails.metaTitle || property.metaTitle || "",
 
-          metaDescription: property.metaDescription || "",
+          metaDescription:
+            propertyDetails.metaDescription || property.metaDescription || "",
 
-          urlSlug: property.urlSlug || "",
+          urlSlug: propertyDetails.urlSlug || property.urlSlug || "",
 
           // PUBLISH
 
-          publishStatus: property.publishStatus ?? true,
+          publishStatus: propertyDetails.publishStatus ?? property.publishStatus ?? true,
 
           featuredProperty:
-            property.featured ?? property.featuredProperty ?? false,
+            propertyDetails.featuredProperty ??
+            property.featured ??
+            property.featuredProperty ??
+            false,
 
-          publishDate: formatDateForInput(property.publishDate),
+          publishDate: formatDateForInput(
+            propertyDetails.publishDate || property.publishDate,
+          ),
 
-          promoteProperty: property.promoteProperty ?? false,
+          promoteProperty:
+            propertyDetails.promoteProperty ?? property.promoteProperty ?? false,
         });
 
         // ======================================
@@ -338,6 +446,14 @@ const AddNewProperty = () => {
 
         if (Array.isArray(property.propertyImages)) {
           oldImages = property.propertyImages;
+        }
+
+        if (
+          oldImages.length === 0 &&
+          isSellListingMode &&
+          Array.isArray(property.images)
+        ) {
+          oldImages = property.images;
         }
 
         // Support old image field
@@ -394,7 +510,7 @@ const AddNewProperty = () => {
     };
 
     fetchProperty();
-  }, [id, isEditMode]);
+  }, [id, isEditMode, isSellListingMode]);
 
   // ==========================================
   // PUBLISH / UPDATE
@@ -529,6 +645,8 @@ const AddNewProperty = () => {
 
       form.append("projectArea", propertyData.projectArea || "");
 
+      form.append("superBuiltUpArea", propertyData.superBuiltUpArea || "");
+
       form.append("noOfHouseVilla", propertyData.noOfHouseVilla || "0");
 
       form.append("totalFloors", propertyData.totalFloors || "0");
@@ -626,7 +744,20 @@ const AddNewProperty = () => {
             : ""),
       }));
 
+      let nextFloorPlanImageIndex = 0;
+      floorPlans.forEach((plan, index) => {
+        if (plan.floorPlanSketch instanceof File) {
+          floorPlanData[index].floorPlanImageIndex =
+            nextFloorPlanImageIndex;
+          nextFloorPlanImageIndex += 1;
+        }
+      });
+
       form.append("floorPlans", JSON.stringify(floorPlanData));
+
+      if (isSellListingMode) {
+        form.append("propertyDetails", JSON.stringify(propertyData));
+      }
 
       // ======================================
       // SEO
@@ -713,7 +844,12 @@ const AddNewProperty = () => {
 
       let response;
 
-      if (isEditMode) {
+      if (isSellListingMode) {
+        response = await API.put(
+          `/sell-properties/${id}/details`,
+          form,
+        );
+      } else if (isEditMode) {
         response = await API.put(`/properties/${id}`, form);
       } else {
         response = await API.post("/properties", form);
@@ -730,7 +866,7 @@ const AddNewProperty = () => {
 
       localStorage.removeItem("property_draft");
 
-      navigate("/properties/all");
+      navigate(isSellListingMode ? "/PropertyListing" : "/properties/all");
     } catch (error) {
       console.error("================================");
 

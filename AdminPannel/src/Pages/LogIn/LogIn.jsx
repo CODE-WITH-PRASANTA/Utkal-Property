@@ -1,71 +1,58 @@
 import React, { useState } from 'react';
-import { signIn } from 'aws-amplify/auth';
 
 // Standard & Reliable React Icons (FontAwesome & Feather)
-import { 
-  FaUser, 
-  FaLock, 
-  FaEye, 
-  FaEyeSlash, 
-  FaBuilding, 
-  FaShieldAlt, 
+import {
+  FaUser,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaBuilding,
+  FaShieldAlt,
   FaExclamationTriangle,
-  FaSpinner 
+  FaSpinner,
 } from 'react-icons/fa';
 
 import './LogIn.css';
+
+// Hardcoded admin credentials
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = '123456';
 
 const LogIn = ({ onLoginSuccess }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
-  
+
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
-    // Mock bypass login check
-    if (userId.trim().toLowerCase() === 'utkal' && password === '12345') {
-      setIsLoading(false);
-      if (onLoginSuccess) {
-        onLoginSuccess({ username: 'utkal', role: 'Super Admin', isMock: true });
-      }
-      return;
-    }
+    // Simulate small network delay so the spinner is visible
+    setTimeout(() => {
+      const u = userId.trim().toLowerCase();
+      const p = password;
 
-    // AWS Cognito Login
-    try {
-      const { isSignedIn, nextStep } = await signIn({
-        username: userId,
-        password: password,
-      });
+      if (u === ADMIN_USER && p === ADMIN_PASS) {
+        const userData = {
+          username: u,
+          role: 'Super Admin',
+          isMock: true,
+          loginAt: new Date().toISOString(),
+        };
 
-      if (isSignedIn) {
         if (onLoginSuccess) {
-          onLoginSuccess({ username: userId, role: 'Admin', isMock: false });
+          onLoginSuccess(userData);
         }
-      } else if (nextStep && nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED') {
-        setError('New password required. Please reset password.');
       } else {
-        setError('Additional authentication steps required.');
-      }
-    } catch (err) {
-      console.error('AWS Auth Error:', err);
-      if (err.name === 'UserNotFoundException' || err.name === 'NotAuthorizedException') {
         setError('Invalid User ID or Password.');
-      } else if (err.name === 'UserNotConfirmedException') {
-        setError('Account is not confirmed yet.');
-      } else {
-        setError(err.message || 'An error occurred during authentication.');
+        setIsLoading(false);
       }
-    } finally {
-      setIsLoading(false);
-    }
+    }, 400);
   };
 
   return (
@@ -99,14 +86,16 @@ const LogIn = ({ onLoginSuccess }) => {
 
           {/* User ID Field */}
           <div className="ul-input-group">
-            <label className="ul-label" htmlFor="userId">User ID / Email</label>
+            <label className="ul-label" htmlFor="userId">
+              User ID / Email
+            </label>
             <div className="ul-input-wrapper">
               <FaUser className="ul-input-icon" />
               <input
                 type="text"
                 id="userId"
                 className="ul-input-field"
-                placeholder="e.g. utkal"
+                placeholder="e.g. admin"
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
                 disabled={isLoading}
@@ -118,7 +107,9 @@ const LogIn = ({ onLoginSuccess }) => {
 
           {/* Password Field */}
           <div className="ul-input-group">
-            <label className="ul-label" htmlFor="password">Password</label>
+            <label className="ul-label" htmlFor="password">
+              Password
+            </label>
             <div className="ul-input-wrapper">
               <FaLock className="ul-input-icon" />
               <input
@@ -156,14 +147,18 @@ const LogIn = ({ onLoginSuccess }) => {
               />
               <span>Remember session</span>
             </label>
-            <a href="#forgot" className="ul-forgot-link" onClick={(e) => e.preventDefault()}>
+            <a
+              href="#forgot"
+              className="ul-forgot-link"
+              onClick={(e) => e.preventDefault()}
+            >
               Forgot Password?
             </a>
           </div>
 
           {/* Submit Action Button */}
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="ul-submit-btn"
             disabled={isLoading}
           >
@@ -176,6 +171,11 @@ const LogIn = ({ onLoginSuccess }) => {
               'Sign In to Dashboard'
             )}
           </button>
+
+          {/* Demo credentials hint */}
+          <p className="ul-demo-hint">
+            Demo credentials: <strong>admin</strong> / <strong>123456</strong>
+          </p>
         </form>
 
         {/* Security Footer */}

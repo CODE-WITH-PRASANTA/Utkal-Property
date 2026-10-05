@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { signOut, getCurrentUser } from "aws-amplify/auth";
 
 // =====================================================
 // LAYOUT
@@ -52,9 +51,6 @@ import Testimonial from "./Pages/Testimonial/Testimonial";
 import Gallery from "./Pages/Gallery/Gallery";
 import OurTeam from "./Pages/OurTeam/OurTeam";
 import PropertyListing from "./Components/PropertyListing/PropertyListing";
-// import AddNewProperty from "./Pages/AddNewProperty/AddNewProperty";
-
-// import AdminPropertyReviews from "./Components/AdminPropertyReviews/AdminPropertyReviews";
 
 // =====================================================
 // PROTECTED ROUTE GUARD
@@ -92,47 +88,21 @@ function App() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [user, setUser] = useState(null);
 
-  // Check Authentication State on Mount
+  // Restore session from localStorage on mount
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Check local session first
-        const storedUser = localStorage.getItem("utkal_user_session");
-
-        if (storedUser) {
-          const parsed = JSON.parse(storedUser);
-          setUser(parsed);
-          setIsAuthenticated(true);
-          return;
-        }
-
-        // Check AWS Amplify authentication
-        const currentUser = await getCurrentUser();
-
-        if (currentUser) {
-          const sessionUser = {
-            username: currentUser.username,
-            userId: currentUser.userId,
-            isMock: false,
-          };
-          setUser(sessionUser);
-          setIsAuthenticated(true);
-          localStorage.setItem(
-            "utkal_user_session",
-            JSON.stringify(sessionUser)
-          );
-        }
-      } catch (error) {
-        console.error("Authentication check failed:", error);
-        setUser(null);
-        setIsAuthenticated(false);
-        localStorage.removeItem("utkal_user_session");
-      } finally {
-        setIsCheckingAuth(false);
+    try {
+      const storedUser = localStorage.getItem("utkal_user_session");
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        setUser(parsed);
+        setIsAuthenticated(true);
       }
-    };
-
-    checkAuth();
+    } catch (err) {
+      console.error("Failed to restore session:", err);
+      localStorage.removeItem("utkal_user_session");
+    } finally {
+      setIsCheckingAuth(false);
+    }
   }, []);
 
   // Handle Login Success
@@ -143,18 +113,10 @@ function App() {
   };
 
   // Handle Logout
-  const handleLogout = async () => {
-    try {
-      if (user && !user.isMock) {
-        await signOut();
-      }
-    } catch (error) {
-      console.error("Logout failed:", error);
-    } finally {
-      localStorage.removeItem("utkal_user_session");
-      setUser(null);
-      setIsAuthenticated(false);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("utkal_user_session");
+    setUser(null);
+    setIsAuthenticated(false);
   };
 
   return (
@@ -220,7 +182,7 @@ function App() {
           <Route path="/team" element={<OurTeam />} />
           <Route path="/PropertyListing" element={<PropertyListing />} />
 
-          {/* Catch-all 404 Route */}
+          {/* Catch-all */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Routes>

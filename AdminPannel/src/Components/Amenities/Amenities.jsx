@@ -28,40 +28,61 @@ const BASE_URL = "http://localhost:5000";
 ===================================================== */
 
 const BASIC_ICONS = [
-  "🏊", // Swimming Pool
-  "🏋️", // Gym
-  "🧘", // Wellness
-  "🛡️", // Security
-  "📹", // CCTV
-  "🌳", // Garden
-  "🏢", // Building
-  "🚗", // Parking
+  { icon: "🏊", label: "Swimming pool" },
+  { icon: "🏋️", label: "Gym" },
+  { icon: "🧘", label: "Wellness" },
+  { icon: "🛡️", label: "Security" },
+  { icon: "📹", label: "CCTV" },
+  { icon: "🌳", label: "Garden" },
+  { icon: "🏢", label: "Building" },
+  { icon: "🚗", label: "Parking" },
 ];
 
 const MORE_ICONS = [
-  "🛏️", // Bedroom
-  "🚿", // Bathroom
-  "📺", // TV
-  "❄️", // AC
-  "🔥", // Fireplace
-  "🍳", // Kitchen
-  "☕", // Cafe
-  "🍽️", // Dining
-  "📶", // WiFi
-  "🔒", // Secure
-  "🅿️", // Parking
-  "🏠", // House
-  "🏡", // Villa
-  "🌊", // Water View
-  "🏖️", // Beach
-  "🌴", // Landscaping
-  "🛋️", // Living Room
-  "🧺", // Laundry
-  "🧹", // Housekeeping
-  "🧯", // Fire Safety
-  "🚪", // Door
-  "🛗", // Elevator
-  "⚡", // Power Backup
+  { icon: "🛏️", label: "Bedroom" },
+  { icon: "🚿", label: "Bathroom" },
+  { icon: "📺", label: "TV" },
+  { icon: "❄️", label: "Air conditioning" },
+  { icon: "🔥", label: "Fireplace" },
+  { icon: "🍳", label: "Kitchen" },
+  { icon: "☕", label: "Cafe" },
+  { icon: "🍽️", label: "Dining" },
+  { icon: "📶", label: "Wi-Fi" },
+  { icon: "🔒", label: "Secure access" },
+  { icon: "🅿️", label: "Covered parking" },
+  { icon: "🏠", label: "House" },
+  { icon: "🏡", label: "Villa" },
+  { icon: "🌊", label: "Water view" },
+  { icon: "🏖️", label: "Beach access" },
+  { icon: "🌴", label: "Landscaping" },
+  { icon: "🛋️", label: "Living room" },
+  { icon: "🧺", label: "Laundry" },
+  { icon: "🧹", label: "Housekeeping" },
+  { icon: "🧯", label: "Fire safety" },
+  { icon: "🚪", label: "Secure doors" },
+  { icon: "🛗", label: "Elevator" },
+  { icon: "⚡", label: "Power backup" },
+  { icon: "🏛️", label: "Clubhouse" },
+  { icon: "🛝", label: "Children's play area" },
+  { icon: "🏃", label: "Jogging track" },
+  { icon: "🏀", label: "Sports court" },
+  { icon: "🎾", label: "Tennis court" },
+  { icon: "🐕", label: "Pet-friendly" },
+  { icon: "🧱", label: "Gated community" },
+  { icon: "📞", label: "Intercom" },
+  { icon: "🛎️", label: "Concierge" },
+  { icon: "🌅", label: "Balcony" },
+  { icon: "🏙️", label: "Rooftop terrace" },
+  { icon: "☀️", label: "Solar power" },
+  { icon: "🚰", label: "24/7 water supply" },
+  { icon: "🌧️", label: "Rainwater harvesting" },
+  { icon: "🔋", label: "EV charging" },
+  { icon: "🗑️", label: "Waste management" },
+  { icon: "🧰", label: "Maintenance service" },
+  { icon: "🧑‍💻", label: "Co-working space" },
+  { icon: "🎬", label: "Home theatre" },
+  { icon: "🪟", label: "Double-glazed windows" },
+  { icon: "🫧", label: "Washing machine" },
 ];
 
 /* =====================================================
@@ -439,10 +460,10 @@ const AddAmenityModal = ({
 
               <div className="amx-icon-grid">
                 {BASIC_ICONS.map(
-                  (icon, index) => (
+                  ({ icon, label }, index) => (
                     <button
                       type="button"
-                      key={`basic-${index}`}
+                      key={`basic-${label}`}
                       style={{
                         "--amx-i": index,
                       }}
@@ -456,7 +477,9 @@ const AddAmenityModal = ({
                           icon
                         )
                       }
-                      title={icon}
+                      title={label}
+                      aria-label={label}
+                      aria-pressed={selectedIcon === icon}
                     >
                       <span>{icon}</span>
 
@@ -471,10 +494,10 @@ const AddAmenityModal = ({
 
                 {showMoreIcons &&
                   MORE_ICONS.map(
-                    (icon, index) => (
+                    ({ icon, label }, index) => (
                       <button
                         type="button"
-                        key={`more-${index}`}
+                        key={`more-${label}`}
                         style={{
                           "--amx-i":
                             index +
@@ -490,7 +513,9 @@ const AddAmenityModal = ({
                             icon
                           )
                         }
-                        title={icon}
+                        title={label}
+                        aria-label={label}
+                        aria-pressed={selectedIcon === icon}
                       >
                         <span>{icon}</span>
 

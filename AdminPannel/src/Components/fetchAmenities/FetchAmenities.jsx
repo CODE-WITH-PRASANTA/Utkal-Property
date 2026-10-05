@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./FetchAmenities.css";
-import API from "../../api/Axios";
+import API, { IMG_URL } from "../../api/Axios";
+
+const getAmenityImageUrl = (imagePath) => {
+  if (!imagePath) return "";
+  if (/^https?:\/\//i.test(imagePath)) return imagePath;
+
+  return `${IMG_URL}/${imagePath.replace(/^\/+/, "")}`;
+};
 
 const FetchAmenities = ({
   propertyData,
@@ -310,7 +317,7 @@ const FetchAmenities = ({
 
                   {item.image ? (
                     <img
-                      src={item.image}
+                      src={getAmenityImageUrl(item.image)}
                       alt={itemName}
                       className="fap-image"
                     />

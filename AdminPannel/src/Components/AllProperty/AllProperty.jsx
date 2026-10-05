@@ -8,6 +8,7 @@ const AllProperty = ({
   setPropertyImages,
   handlePublish,
   publishing,
+  isEditMode,
 }) => {
   // =====================================================
   // MODAL PREVIEW
@@ -359,159 +360,13 @@ const AllProperty = ({
           1. PROPERTY IMAGES
       ================================================= */}
 
-      <div className="property-card">
-
-        <div className="card-header-row">
-
-          <div className="title-with-icon">
-
-            <span className="purple-icon">
-              ☁️
-            </span>
-
-            <h3 className="section-title">
-
-              Property Images{" "}
-
-              <span className="required-star">
-                *
-              </span>
-
-            </h3>
-
-          </div>
-
-          <span className="badge-primary">
-            Primary
-          </span>
-
-        </div>
-
-        {/* =============================================
-            FILE INPUT
-        ============================================= */}
-
-        <div
-          className="dropzone-area"
-          onClick={triggerFileSelect}
-        >
-
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={
-              handleFilesUpload
-            }
-            multiple
-            accept="image/*"
-            style={{
-              display: "none",
-            }}
-          />
-
-          <div className="dropzone-content">
-
-            <span className="upload-cloud-icon">
-              ☁️
-            </span>
-
-            <p className="dropzone-text">
-
-              Drag & drop images here{" "}
-
-              <span className="browse-text">
-                or click to browse
-              </span>
-
-            </p>
-
-            <p className="dropzone-subtext">
-              Recommended: 1200×800px,
-              JPG/PNG, Max 5MB
-            </p>
-
-          </div>
-
-        </div>
-
-        {/* =============================================
-            THUMBNAILS
-        ============================================= */}
-
-        <div className="thumbnail-row">
-
-          {imagePreviews.map(
-            (img, index) => (
-
-              <div
-                key={index}
-                className="thumb-wrapper"
-              >
-
-                <img
-                  src={img}
-                  alt={`Thumbnail ${
-                    index + 1
-                  }`}
-                  className="thumb-img"
-                />
-
-                {/* Primary */}
-
-                {index === 0 && (
-
-                  <span className="badge-primary">
-                    Primary
-                  </span>
-
-                )}
-
-                {/* Set Primary */}
-
-                {index !== 0 && (
-
-                  <button
-                    type="button"
-                    onClick={(e) =>
-                      handleSetPrimaryImage(
-                        index,
-                        e
-                      )
-                    }
-                  >
-                    Primary
-                  </button>
-
-                )}
-
-                {/* Remove */}
-
-                <button
-                  type="button"
-                  onClick={(e) =>
-                    handleRemoveImage(
-                      index,
-                      e
-                    )
-                  }
-                >
-                  ✕
-                </button>
-
-              </div>
-
-            )
-          )}
-
-        </div>
-
-      </div>
+      
 
       {/* =================================================
           2. LIVE PREVIEW
       ================================================= */}
 
-      <div className="property-card">
+      {/* <div className="property-card">
 
         <div className="title-with-icon">
 
@@ -603,7 +458,7 @@ const AllProperty = ({
 
         </div>
 
-      </div>
+      </div> */}
 
       {/* =================================================
           3. SEO SETTINGS
@@ -932,8 +787,12 @@ const AllProperty = ({
           >
 
             {publishing
-              ? "Publishing..."
-              : "🚀 Publish Property"}
+              ? isEditMode
+                ? "Saving..."
+                : "Publishing..."
+              : isEditMode
+                ? "Save Changes"
+                : "🚀 Publish Property"}
 
           </button>
 

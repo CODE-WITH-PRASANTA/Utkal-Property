@@ -3113,6 +3113,42 @@
   pointer-events: none;
 }
 
+@keyframes amx-property-icon-shine {
+  from {
+    transform: translateX(-75%) rotate(25deg);
+  }
+
+  to {
+    transform: translateX(75%) rotate(25deg);
+  }
+}
+
+.amx-preset-icon::before {
+  content: "";
+
+  position: absolute;
+
+  z-index: 1;
+
+  top: -35%;
+  bottom: -35%;
+  left: -55%;
+
+  width: 45%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    );
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
 
 /* =====================================================
    HOVER
@@ -3151,6 +3187,15 @@
 
 .amx-preset-icon:hover::after {
   opacity: 1;
+}
+
+.amx-preset-icon:hover::before {
+  opacity: 1;
+
+  animation:
+    amx-property-icon-shine
+    0.75s
+    ease-out;
 }
 
 
@@ -3491,6 +3536,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .amx-preset-icon,
+  .amx-preset-icon::before,
+  .amx-preset-icon::after,
+  .amx-preset-icon > span,
   .amx-more-icon-button,
   .amx-more-arrow,
   .amx-current-selection {

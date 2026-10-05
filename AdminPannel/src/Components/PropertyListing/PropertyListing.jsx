@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 import API, { IMG_URL } from "../../api/axios";
 import {
   FiHome,
@@ -113,6 +114,7 @@ const EMPTY_FORM = {
 ========================================================= */
 
 const PropertyListing = () => {
+  const navigate = useNavigate();
 
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -366,41 +368,13 @@ const PropertyListing = () => {
   };
 
   const handleEdit = (property) => {
-    setEditingProperty(property);
-    setSelectedFiles([]);
+    const id = getId(property);
+    if (!id) {
+      alert("Cannot edit this property because it has no ID.");
+      return;
+    }
 
-    setFormData({
-      propertyTitle: property?.propertyTitle || "",
-      propertyType: property?.propertyType || "Apartment",
-      propertyFor: property?.propertyFor || "Sell",
-      category: property?.category || "Residential",
-      expectedPrice: property?.expectedPrice ?? property?.price ?? "",
-      negotiable: property?.negotiable || "Yes",
-
-      builtUpArea: property?.builtUpArea || "",
-      carpetArea: property?.carpetArea || "",
-      bhk: property?.bhk || "",
-      bathrooms: property?.bathrooms || "",
-      balconies: property?.balconies || "",
-      floor: property?.floor ?? "",
-      totalFloors: property?.totalFloors ?? "",
-      furnishingStatus: property?.furnishingStatus || "",
-      propertyAge: property?.propertyAge || "",
-      parking: property?.parking || "",
-
-      state: property?.state || "",
-      city: property?.city || "",
-      locality: property?.locality || "",
-      landmark: property?.landmark || "",
-      pinCode: property?.pinCode || "",
-
-      phone: property?.phone || "",
-      email: property?.email || "",
-      status: normalizeStatus(getStatus(property)),
-      images: property?.images || [],
-    });
-
-    setShowForm(true);
+    navigate(`/properties/edit/${encodeURIComponent(id)}?source=sell-properties`);
   };
 
   const handleFormChange = (event) => {

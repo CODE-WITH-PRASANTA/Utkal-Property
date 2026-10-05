@@ -581,10 +581,7 @@ const FloatingForm = ({
 
      
 
-      console.log(
-        "Fetching locations from:",
-        `${API.defaults.baseURL}/locations`
-      );
+     
 
 
       const response =
@@ -594,10 +591,7 @@ const FloatingForm = ({
 
      
 
-      console.log(
-        "Location API Response:",
-        response.data
-      );
+    
 
 
       const normalized =
@@ -607,10 +601,6 @@ const FloatingForm = ({
 
      
 
-      console.log(
-        "Normalized Locations:",
-        normalized
-      );
 
 
       setLocationData(
@@ -1107,27 +1097,7 @@ const FloatingForm = ({
     
 
 
-      console.log(
-        "===================================="
-      );
-
-      console.log(
-        "SUBMITTING FLOATING FORM"
-      );
-
-      console.log(
-        "API:",
-        `${API.defaults.baseURL}/leads`
-      );
-
-      console.log(
-        "LEAD DATA:",
-        leadData
-      );
-
-      console.log(
-        "===================================="
-      );
+     
 
 
       /* ===================================================
@@ -1142,11 +1112,7 @@ const FloatingForm = ({
 
     
 
-      console.log(
-        "LEAD CREATED:",
-        response.data
-      );
-
+     
 
       /* ===================================================
          SUCCESS

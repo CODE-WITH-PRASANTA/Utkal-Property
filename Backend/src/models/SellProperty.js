@@ -4,32 +4,44 @@ const sellPropertySchema = new mongoose.Schema(
   {
     propertyTitle: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
 
     propertyType: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
 
     propertyFor: {
       type: String,
-      required: true,
       trim: true,
+      default: "Sell",
     },
 
     category: {
       type: String,
-      required: true,
+      trim: true,
+      default: "Residential",
+    },
+
+    categoryParent: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    propertyCategory: {
+      type: String,
+      default: "",
       trim: true,
     },
 
     expectedPrice: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
 
     negotiable: {
@@ -39,8 +51,14 @@ const sellPropertySchema = new mongoose.Schema(
 
     builtUpArea: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
+    },
+
+    superBuiltUpArea: {
+      type: String,
+      trim: true,
+      default: "",
     },
 
     carpetArea: {
@@ -90,20 +108,20 @@ const sellPropertySchema = new mongoose.Schema(
 
     state: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
 
     city: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
 
     locality: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
 
     landmark: {
@@ -141,6 +159,67 @@ const sellPropertySchema = new mongoose.Schema(
     images: {
       type: [String],
       default: [],
+    },
+
+    propertyImages: {
+      type: [String],
+      default: [],
+    },
+
+    primaryImage: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    propertyDetails: {
+      type: mongoose.Schema.Types.Mixed,
+      default: () => ({}),
+    },
+
+    amenities: {
+      type: [String],
+      default: [],
+    },
+
+    nearbyPlaces: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: [],
+    },
+
+    highlights: {
+      type: [String],
+      default: [],
+    },
+
+    documents: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: [],
+    },
+
+    floorPlans: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: [],
+    },
+
+    featured: {
+      type: Boolean,
+      default: false,
+    },
+
+    publishStatus: {
+      type: Boolean,
+      default: true,
+    },
+
+    publishDate: {
+      type: Date,
+      default: null,
+    },
+
+    promoteProperty: {
+      type: Boolean,
+      default: false,
     },
   },
   {

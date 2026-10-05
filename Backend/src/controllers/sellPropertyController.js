@@ -1,5 +1,16 @@
 const SellProperty = require("../models/SellProperty");
 
+const parseJsonField = (value, fallback) => {
+  if (value === undefined || value === null || value === "") {
+    return fallback;
+  }
+
+  return typeof value === "string" ? JSON.parse(value) : value;
+};
+
+const parseBooleanField = (value) =>
+  value === true || value === "true";
+
 exports.createSellProperty = async (req, res) => {
   try {
     console.log("======================================");
@@ -32,9 +43,203 @@ exports.createSellProperty = async (req, res) => {
     console.error(error);
     console.error("======================================");
 
-    return res.status(500).json({
+    const isValidationError = error.name === "ValidationError";
+
+    return res.status(isValidationError ? 400 : 500).json({
       success: false,
-      message: "Failed to list property",
+      message: isValidationError
+        ? "Invalid property details"
+        : "Failed to list property",
+      error: error.message,
+    });
+  }
+};
+
+exports.updateSellPropertyDetails = async (req, res) => {
+  try {
+    const property = await SellProperty.findById(req.params.id);
+
+    if (!property) {
+      return res.status(404).json({
+        success: false,
+        message: "Property not found",
+      });
+    }
+
+    const body = req.body;
+    const propertyDetails = parseJsonField(body.propertyDetails, null);
+
+    if (
+      !propertyDetails ||
+      typeof propertyDetails !== "object" ||
+      Array.isArray(propertyDetails)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Property details must be a JSON object",
+      });
+    }
+
+    property.propertyDetails = propertyDetails;
+
+    if (body.name !== undefined) {
+      property.propertyTitle = body.name.trim();
+    }
+
+    if (body.type !== undefined) {
+      property.propertyType = body.type;
+    }
+
+    if (body.categoryParent !== undefined) {
+      property.categoryParent = body.categoryParent;
+      property.category = body.categoryParent;
+    }
+
+    if (body.category !== undefined) {
+      property.propertyCategory = body.category;
+    }
+
+    if (body.price !== undefined) {
+      property.expectedPrice = body.price;
+    }
+
+    if (body.projectArea !== undefined) {
+      property.builtUpArea = body.projectArea;
+    }
+
+    if (body.superBuiltUpArea !== undefined) {
+      property.superBuiltUpArea = body.superBuiltUpArea;
+    } else if (propertyDetails.superBuiltUpArea !== undefined) {
+      property.superBuiltUpArea = propertyDetails.superBuiltUpArea;
+    }
+
+    if (body.bedrooms !== undefined && body.bedrooms !== "") {
+      property.bhk = `${body.bedrooms} BHK`;
+    }
+
+    for (const field of ["bathrooms", "balconies", "totalFloors", "parking"]) {
+      if (body[field] !== undefined) {
+        property[field] = body[field];
+      }
+    }
+
+    if (body.location !== undefined) {
+      property.locality = body.location;
+    }
+
+    for (const field of ["city", "state"]) {
+      if (body[field] !== undefined) {
+        property[field] = body[field];
+      }
+    }
+
+    if (body.transactionType !== undefined) {
+      const transactionType = body.transactionType.toLowerCase();
+      property.propertyFor =
+        transactionType === "rent"
+          ? "Rent"
+          : transactionType === "lease"
+            ? "Lease"
+            : "Sell";
+    }
+
+    if (body.highlights !== undefined) {
+      property.highlights = parseJsonField(body.highlights, []);
+    }
+
+    if (body.amenities !== undefined) {
+      property.amenities = parseJsonField(body.amenities, []);
+    }
+
+    if (body.nearbyPlaces !== undefined) {
+      property.nearbyPlaces = parseJsonField(body.nearbyPlaces, []);
+    }
+
+    if (body.featured !== undefined) {
+      property.featured = parseBooleanField(body.featured);
+    }
+
+    if (body.publishStatus !== undefined) {
+      property.publishStatus = parseBooleanField(body.publishStatus);
+    }
+
+    if (body.publishDate !== undefined) {
+      property.publishDate = body.publishDate || null;
+    }
+
+    if (body.promoteProperty !== undefined) {
+      property.promoteProperty = parseBooleanField(body.promoteProperty);
+    }
+
+    if (body.existingPropertyImages !== undefined) {
+      const existingImages = parseJsonField(
+        body.existingPropertyImages,
+        [],
+      );
+      const uploadedImages = req.processedPropertyImages || [];
+
+      property.propertyImages = [...existingImages, ...uploadedImages];
+      property.images = property.propertyImages;
+      property.primaryImage = property.propertyImages[0] || "";
+    } else if (
+      Array.isArray(req.processedPropertyImages) &&
+      req.processedPropertyImages.length > 0
+    ) {
+      property.propertyImages = [
+        ...(property.propertyImages || []),
+        ...req.processedPropertyImages,
+      ];
+      property.images = property.propertyImages;
+      property.primaryImage = property.propertyImages[0] || "";
+    }
+
+    if (body.existingDocuments !== undefined || req.processedDocuments?.length) {
+      const existingDocuments = parseJsonField(
+        body.existingDocuments,
+        property.documents || [],
+      );
+      property.documents = [
+        ...existingDocuments,
+        ...(req.processedDocuments || []),
+      ];
+    }
+
+    if (body.floorPlans !== undefined) {
+      const floorPlans = parseJsonField(body.floorPlans, []);
+      const uploadedFloorPlanImages = req.processedFloorPlanImages || [];
+
+      property.floorPlans = floorPlans.map((plan, index) => {
+        const uploadIndex = Number.isInteger(Number(plan.floorPlanImageIndex))
+          ? Number(plan.floorPlanImageIndex)
+          : index;
+
+        return {
+          ...plan,
+          floorPlanSketch:
+            uploadedFloorPlanImages[uploadIndex] ||
+            plan.floorPlanSketch ||
+            plan.existingFloorPlanSketch ||
+            "",
+        };
+      });
+    }
+
+    const savedProperty = await property.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Property updated successfully",
+      property: savedProperty,
+    });
+  } catch (error) {
+    console.error("UPDATE SELL PROPERTY DETAILS ERROR:", error);
+
+    return res.status(error instanceof SyntaxError ? 400 : 500).json({
+      success: false,
+      message:
+        error instanceof SyntaxError
+          ? "Invalid JSON property data"
+          : "Failed to update property",
       error: error.message,
     });
   }
