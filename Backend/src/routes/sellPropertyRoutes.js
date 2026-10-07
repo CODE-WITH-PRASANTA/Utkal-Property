@@ -41,7 +41,7 @@ router.put(
   updateSellPropertyDetails
 );
 
-router.patch(
+router.put(
   '/:id/status',
   updateSellPropertyStatus
 );

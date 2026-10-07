@@ -868,7 +868,7 @@ const AddNewProperty = () => {
 
       navigate(isSellListingMode ? "/PropertyListing" : "/properties/all");
     } catch (error) {
-      console.error("================================");
+     
 
       console.error(
         isEditMode ? "UPDATE PROPERTY ERROR" : "PUBLISH PROPERTY ERROR",
@@ -876,7 +876,7 @@ const AddNewProperty = () => {
 
       console.error(error.response?.data || error);
 
-      console.error("================================");
+     
 
       alert(
         error.response?.data?.message ||

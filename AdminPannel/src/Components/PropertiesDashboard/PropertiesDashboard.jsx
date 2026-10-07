@@ -67,11 +67,7 @@ const PropertiesDashboard = () => {
         API.get("/properties/price-range"),
       ]);
 
-      console.log("TOP LOCATIONS:", locationsRes.data);
-
-      console.log("PROPERTY TYPES:", typesRes.data);
-
-      console.log("PRICE RANGES:", priceRes.data);
+      
 
       setTopLocations(
         locationsRes.data.locations || locationsRes.data.data || [],
@@ -113,7 +109,7 @@ const PropertiesDashboard = () => {
     } catch (error) {
       console.log(error);
 
-      setLoading(false);
+      setLoading(false);          
     }
   };
 

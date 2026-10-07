@@ -412,36 +412,37 @@ const PropertyListing = () => {
         }));
       }
 
-      let updatedDoc = null;
-      try {
-        const response = await API.patch(`${PROPERTY_ENDPOINT}/${id}/status`, {
-          status: newStatus,
-        });
-        updatedDoc = response.data?.property || response.data;
-      } catch (patchErr) {
-        const response = await API.put(`${PROPERTY_ENDPOINT}/${id}`, {
-          status: newStatus,
-        });
-        updatedDoc = response.data?.property || response.data;
-      }
+      const response = await API.put(`${PROPERTY_ENDPOINT}/${id}/status`, {
+        status: newStatus,
+      });
+      const updatedDoc = response.data?.property || response.data;
 
-      if (updatedDoc && typeof updatedDoc === "object") {
+      if (newStatus === "Approved") {
+        setProperties((previous) =>
+          previous.filter((item) => getId(item) !== id)
+        );
+        setViewingProperty((previous) =>
+          getId(previous) === id ? null : previous
+        );
+      } else if (updatedDoc && typeof updatedDoc === "object") {
         setProperties((previous) =>
           previous.map((item) =>
             getId(item) === id ? { ...item, ...updatedDoc } : item
           )
         );
 
-        if (viewingProperty && getId(viewingProperty) === id) {
-          setViewingProperty((previous) => ({
-            ...previous,
-            ...updatedDoc,
-          }));
-        }
+        setViewingProperty((previous) =>
+          getId(previous) === id ? { ...previous, ...updatedDoc } : previous
+        );
       }
     } catch (err) {
       console.error("STATUS UPDATE ERROR:", err);
-      alert("Failed to update status on server. Reverting changes.");
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        "Unknown server error";
+      alert(`Failed to update status: ${message}. Refreshing listings.`);
       fetchProperties();
     } finally {
       setStatusUpdatingId(null);

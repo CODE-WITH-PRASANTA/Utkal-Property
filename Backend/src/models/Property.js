@@ -164,6 +164,89 @@ const propertySchema = new mongoose.Schema(
       trim: true,
     },
 
+    sourceSellPropertyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SellProperty",
+      default: undefined,
+    },
+
+    propertyFor: {
+      type: String,
+      default: "Sell",
+      trim: true,
+    },
+
+    propertyCategory: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    negotiable: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    carpetArea: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    floor: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    furnishingStatus: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    propertyAge: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    landmark: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    pinCode: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    submittedBy: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    propertyDetails: {
+      type: mongoose.Schema.Types.Mixed,
+      default: () => ({}),
+    },
+
     featured: {
       type: Boolean,
       default: false,
@@ -603,6 +686,16 @@ propertySchema.index({
 propertySchema.index({
   status: 1,
 });
+
+propertySchema.index(
+  { sourceSellPropertyId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      sourceSellPropertyId: { $type: "objectId" },
+    },
+  }
+);
 
 propertySchema.index({
   category: 1,

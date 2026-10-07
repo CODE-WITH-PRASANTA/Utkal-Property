@@ -1,4 +1,5 @@
 const SellProperty = require("../models/SellProperty");
+const Property = require("../models/Property");
 
 const parseJsonField = (value, fallback) => {
   if (value === undefined || value === null || value === "") {
@@ -10,6 +11,134 @@ const parseJsonField = (value, fallback) => {
 
 const parseBooleanField = (value) =>
   value === true || value === "true";
+
+const getNumericValue = (value) => {
+  const numericValue = Number(String(value ?? "").replace(/[₹,\s]/g, ""));
+  return Number.isFinite(numericValue) && numericValue >= 0
+    ? numericValue
+    : 0;
+};
+
+const getCountValue = (value) => {
+  const numericValue = Number.parseInt(String(value ?? ""), 10);
+  return Number.isFinite(numericValue) && numericValue >= 0
+    ? numericValue
+    : 0;
+};
+
+const syncApprovedProperty = async (sellProperty) => {
+  const isApproved = sellProperty.status === "Approved";
+  const categoryParent =
+    String(sellProperty.propertyFor || "").toLowerCase() === "rent"
+      ? "Rent"
+      : String(sellProperty.category || "").toLowerCase() === "commercial"
+        ? "Commercial"
+        : "Residential";
+  const images = sellProperty.images?.length
+    ? sellProperty.images
+    : sellProperty.propertyImages || [];
+  const propertyType = sellProperty.propertyType || sellProperty.category || "Property";
+  const location = [sellProperty.locality, sellProperty.city]
+    .filter(Boolean)
+    .join(", ") || sellProperty.city || sellProperty.state || "Location not specified";
+  const transactionType =
+    String(sellProperty.propertyFor || "").toLowerCase() === "rent"
+      ? "For Rent"
+      : String(sellProperty.propertyFor || "").toLowerCase() === "lease"
+        ? "For Lease"
+        : "For Sale";
+  const floorPlans = (sellProperty.floorPlans || []).map((plan, index) => ({
+    planTitle: plan.planTitle || `Floor Plan ${index + 1}`,
+    planType: plan.planType || propertyType,
+    beds: getCountValue(plan.beds),
+    baths: getCountValue(plan.baths),
+    balconies: getCountValue(plan.balconies),
+    pujaRoom: getCountValue(plan.pujaRoom),
+    servantRoom: getCountValue(plan.servantRoom),
+    storeRoom: getCountValue(plan.storeRoom),
+    sbaSqft: getNumericValue(plan.sbaSqft),
+    plotSqft: getNumericValue(plan.plotSqft),
+    floorPlanSketch: plan.floorPlanSketch || plan.existingFloorPlanSketch || "",
+  }));
+  const nearbyPlaces = (sellProperty.nearbyPlaces || []).map((place) => ({
+    category: place.category || "",
+    name: place.name || "",
+    distance: place.distance || "",
+    distanceValue: getNumericValue(place.distanceValue),
+    unit: place.unit === "Meter" ? "Meter" : "Km",
+    icon: place.icon || "",
+    status: place.status === "Inactive" ? "Inactive" : "Active",
+  }));
+
+  const propertyData = {
+    sourceSellPropertyId: sellProperty._id,
+    name: sellProperty.propertyTitle || "Untitled Property",
+    propertyFor: sellProperty.propertyFor || "Sell",
+    propertyCategory: sellProperty.propertyCategory || "",
+    negotiable: sellProperty.negotiable || "",
+    categoryParent,
+    category: sellProperty.propertyCategory || propertyType,
+    type: propertyType,
+    subType: sellProperty.category || propertyType,
+    status: isApproved ? "Active" : "Inactive",
+    statusType: transactionType,
+    transactionType,
+    price: getNumericValue(sellProperty.expectedPrice),
+    location,
+    city: sellProperty.city || "",
+    state: sellProperty.state || "",
+    projectArea: sellProperty.builtUpArea || "",
+    superBuiltUpArea: sellProperty.superBuiltUpArea || "",
+    carpetArea: sellProperty.carpetArea || "",
+    bedrooms: getCountValue(sellProperty.bhk),
+    bathrooms: getCountValue(sellProperty.bathrooms),
+    balconies: String(sellProperty.balconies ?? ""),
+    floor: sellProperty.floor || "",
+    totalFloors: getCountValue(sellProperty.totalFloors),
+    furnishingStatus: sellProperty.furnishingStatus || "",
+    propertyAge: sellProperty.propertyAge || "",
+    parking: sellProperty.parking || "",
+    landmark: sellProperty.landmark || "",
+    pinCode: sellProperty.pinCode || "",
+    phone: sellProperty.phone || "",
+    email: sellProperty.email || "",
+    submittedBy: sellProperty.submittedBy || "",
+    propertyDetails: sellProperty.propertyDetails || {},
+    propertyImages: images,
+    primaryImage: images[0] || "",
+    image: images[0] || "",
+    amenities: sellProperty.amenities || [],
+    highlights: sellProperty.highlights || [],
+    nearbyPlaces,
+    floorPlans,
+    documents: (sellProperty.documents || [])
+      .map((document) => ({
+        file:
+          typeof document === "string"
+            ? document
+            : document.file || document.path || document.url || "",
+        originalName:
+          typeof document === "string"
+            ? ""
+            : document.originalName || document.name || "",
+      }))
+      .filter((document) => document.file),
+    publishStatus: sellProperty.publishStatus !== false,
+    publishDate: sellProperty.publishDate || null,
+    featured: sellProperty.featured === true,
+  };
+
+  return Property.findOneAndUpdate(
+    { sourceSellPropertyId: sellProperty._id },
+    { $set: propertyData },
+    {
+      new: true,
+      upsert: isApproved,
+      runValidators: true,
+      setDefaultsOnInsert: true,
+    }
+  );
+};
 
 exports.createSellProperty = async (req, res) => {
   try {
@@ -31,6 +160,14 @@ exports.createSellProperty = async (req, res) => {
 
     const newProperty = new SellProperty(propertyData);
     const savedProperty = await newProperty.save();
+
+    if (savedProperty.status === "Approved") {
+      const promotedProperty = await syncApprovedProperty(savedProperty);
+      if (!promotedProperty) {
+        throw new Error("Could not save the approved listing to the Properties collection");
+      }
+      await savedProperty.deleteOne();
+    }
 
     return res.status(201).json({
       success: true,
@@ -225,6 +362,13 @@ exports.updateSellPropertyDetails = async (req, res) => {
     }
 
     const savedProperty = await property.save();
+    if (savedProperty.status === "Approved") {
+      const promotedProperty = await syncApprovedProperty(savedProperty);
+      if (!promotedProperty) {
+        throw new Error("Could not synchronize the listing to the Properties collection");
+      }
+      await savedProperty.deleteOne();
+    }
 
     return res.status(200).json({
       success: true,
@@ -307,7 +451,7 @@ exports.updateSellProperty = async (req, res) => {
     const updatedProperty = await SellProperty.findByIdAndUpdate(
       req.params.id,
       updateData,
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!updatedProperty) {
@@ -315,6 +459,16 @@ exports.updateSellProperty = async (req, res) => {
         success: false,
         message: "Property not found",
       });
+    }
+
+    if (updatedProperty.status === "Approved") {
+      const promotedProperty = await syncApprovedProperty(updatedProperty);
+      if (!promotedProperty) {
+        throw new Error("Could not synchronize the listing to the Properties collection");
+      }
+      await updatedProperty.deleteOne();
+    } else {
+      await syncApprovedProperty(updatedProperty);
     }
 
     return res.status(200).json({
@@ -336,30 +490,55 @@ exports.updateSellProperty = async (req, res) => {
 exports.updateSellPropertyStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    if (!status) {
+    const allowedStatuses = ["Pending", "Approved", "Rejected", "Inactive"];
+    if (!allowedStatuses.includes(status)) {
       return res.status(400).json({
         success: false,
-        message: "Status is required",
+        message: "A valid property status is required",
       });
     }
 
-    const updatedProperty = await SellProperty.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    );
+    const sellProperty = await SellProperty.findById(req.params.id);
 
-    if (!updatedProperty) {
+    if (!sellProperty) {
       return res.status(404).json({
         success: false,
         message: "Property not found",
       });
     }
 
+    const previousStatus = sellProperty.status;
+    sellProperty.status = status;
+    const updatedProperty = await sellProperty.save();
+
+    let promotedProperty;
+    try {
+      promotedProperty = await syncApprovedProperty(updatedProperty);
+      if (status === "Approved" && !promotedProperty) {
+        throw new Error("Could not save the approved listing to the Properties collection");
+      }
+    } catch (syncError) {
+      sellProperty.status = previousStatus;
+      try {
+        await sellProperty.save();
+      } catch (rollbackError) {
+        console.error("ROLLBACK SELL PROPERTY STATUS ERROR:", rollbackError);
+      }
+      throw syncError;
+    }
+
+    if (status === "Approved") {
+      await updatedProperty.deleteOne();
+    }
+
     return res.status(200).json({
       success: true,
-      message: "Property status updated successfully",
+      message:
+        status === "Approved"
+          ? "Property approved and moved to the Properties collection"
+          : "Property status updated successfully",
       property: updatedProperty,
+      movedProperty: status === "Approved" ? promotedProperty : undefined,
     });
   } catch (error) {
     console.error("UPDATE SELL PROPERTY STATUS ERROR:", error);
@@ -374,9 +553,7 @@ exports.updateSellPropertyStatus = async (req, res) => {
 
 exports.deleteSellProperty = async (req, res) => {
   try {
-    const property = await SellProperty.findByIdAndDelete(
-      req.params.id
-    );
+    const property = await SellProperty.findById(req.params.id);
 
     if (!property) {
       return res.status(404).json({
@@ -384,6 +561,9 @@ exports.deleteSellProperty = async (req, res) => {
         message: "Property not found",
       });
     }
+
+    await Property.deleteOne({ sourceSellPropertyId: property._id });
+    await property.deleteOne();
 
     return res.status(200).json({
       success: true,

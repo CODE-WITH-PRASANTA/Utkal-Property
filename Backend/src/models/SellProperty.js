@@ -165,6 +165,7 @@ const sellPropertySchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    
 
     primaryImage: {
       type: String,
